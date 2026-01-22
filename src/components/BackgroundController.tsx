@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useBackground } from "@/lib/background-context";
 import { useLanguage } from "@/lib/language-context";
-import { sendGAEvent } from "@next/third-parties/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, Image as ImageIcon, Upload, RotateCcw, X, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
 
@@ -168,7 +167,7 @@ const PRESET_IMAGES = [
   "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=3540&auto=format&fit=crop", // Misty Forest
 ];
 
-import { cn } from "@/lib/utils";
+import { cn, trackEvent } from "@/lib/utils";
 
 export function BackgroundController({ className }: { className?: string }) {
   const { settings, setBackground, resetBackground } = useBackground();
@@ -194,12 +193,12 @@ export function BackgroundController({ className }: { className?: string }) {
 
   const handleColorSelect = (color: string) => {
     setBackground('color', color);
-    sendGAEvent({ event: 'select_background_color', value: color });
+    trackEvent('select_background_color', color);
   };
 
   const handleImageSelect = (imageUrl: string) => {
     setBackground('image', imageUrl);
-    sendGAEvent({ event: 'select_background_image', value: 'preset' });
+    trackEvent('select_background_image', 'preset');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +210,7 @@ export function BackgroundController({ className }: { className?: string }) {
       const result = event.target?.result as string;
       if (result) {
         setBackground('image', result);
-        sendGAEvent({ event: 'upload_background_image' });
+        trackEvent('upload_background_image');
       }
     };
     reader.readAsDataURL(file);
@@ -219,7 +218,7 @@ export function BackgroundController({ className }: { className?: string }) {
 
   const handleReset = () => {
     resetBackground();
-    sendGAEvent({ event: 'reset_background' });
+    trackEvent('reset_background');
   };
 
   return (

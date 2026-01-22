@@ -7,7 +7,7 @@ import { Mail, Github, MessageCircle, X, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import qrcodeImage from "@/assets/qrcode.png";
-import { sendGAEvent } from "@next/third-parties/google";
+import { trackEvent } from "@/lib/utils";
 
 export function QRCodeCard() {
   const { t } = useLanguage();
@@ -23,16 +23,16 @@ export function QRCodeCard() {
     setTimeout(() => setShowEmail(false), 3000);
     // Copy to clipboard
     navigator.clipboard.writeText("zaizaiely@gmail.com"); // Replace with actual email
-    sendGAEvent({ event: 'copy_email' });
+    trackEvent('copy_email');
   };
 
   const handleGitHubClick = () => {
-    sendGAEvent({ event: 'view_github' });
+    trackEvent('view_github');
     window.open("https://github.com/zaizai-isle"); // Replace with actual GitHub URL
   };
 
   const handleWeChatClick = () => {
-    sendGAEvent({ event: 'view_wechat_qr' });
+    trackEvent('view_wechat_qr');
     setShowQRCode(true);
   };
 
@@ -66,7 +66,7 @@ export function QRCodeCard() {
       setHasLiked(true);
       localStorage.setItem('portfolio_has_liked', 'true');
       triggerHeartAnimation();
-      sendGAEvent({ event: 'like_portfolio' });
+      trackEvent('like_portfolio');
     }
   };
 

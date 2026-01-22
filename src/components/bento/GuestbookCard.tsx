@@ -6,8 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/lib/language-context";
-import { cn } from "@/lib/utils";
-import { sendGAEvent } from "@next/third-parties/google";
+import { cn, trackEvent } from "@/lib/utils";
 
 interface Message {
   id?: string;
@@ -99,7 +98,7 @@ export function GuestbookCard() {
     if (!inputValue.trim()) return;
 
     setLoading(true);
-    sendGAEvent({ event: 'sign_guestbook' });
+    trackEvent('sign_guestbook');
     
     // Optimistic update
     const tempId = Date.now().toString();

@@ -3,8 +3,7 @@
 import { useLanguage } from "@/lib/language-context";
 import { Languages } from "lucide-react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { sendGAEvent } from "@next/third-parties/google";
+import { cn, trackEvent } from "@/lib/utils";
 
 export function LanguageSwitcher({ className }: { className?: string }) {
   const { language, setLanguage } = useLanguage();
@@ -12,7 +11,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const toggleLanguage = () => {
     const newLang = language === 'zh' ? 'en' : 'zh';
     setLanguage(newLang);
-    sendGAEvent({ event: 'switch_language', value: newLang });
+    trackEvent('switch_language', newLang);
   };
 
   return (

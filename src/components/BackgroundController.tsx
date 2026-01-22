@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useBackground } from "@/lib/background-context";
 import { useLanguage } from "@/lib/language-context";
+import { sendGAEvent } from "@next/third-parties/google";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, Image as ImageIcon, Upload, RotateCcw, X, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
 
@@ -193,10 +194,12 @@ export function BackgroundController({ className }: { className?: string }) {
 
   const handleColorSelect = (color: string) => {
     setBackground('color', color);
+    sendGAEvent({ event: 'select_background_color', value: color });
   };
 
   const handleImageSelect = (imageUrl: string) => {
     setBackground('image', imageUrl);
+    sendGAEvent({ event: 'select_background_image', value: 'preset' });
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,9 +211,15 @@ export function BackgroundController({ className }: { className?: string }) {
       const result = event.target?.result as string;
       if (result) {
         setBackground('image', result);
+        sendGAEvent({ event: 'upload_background_image' });
       }
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleReset = () => {
+    resetBackground();
+    sendGAEvent({ event: 'reset_background' });
   };
 
   return (
@@ -308,7 +317,7 @@ export function BackgroundController({ className }: { className?: string }) {
                   <div className="grid grid-cols-6 gap-2">
                     {/* Reset Button */}
                     <button
-                      onClick={resetBackground}
+                      onClick={handleReset}
                       className="w-full aspect-square rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-400 transition-colors border border-gray-100"
                       title={t('bg.reset')}
                     >

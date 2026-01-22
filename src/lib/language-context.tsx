@@ -13,7 +13,7 @@ interface Translations {
 
 const translations: Translations = {
   // Identity Card
-  'identity.name': { zh: '再再', en: 'Zaizai' },
+  'identity.name': { zh: '再再', en: 'Zaizaiely' },
   'identity.role': { zh: 'AI 产品设计师 · 项目经理', en: 'AI Product Designer · PM' },
   'identity.slogan': { zh: '再做一点，再想一点，惊喜总在发生', en: 'Build more, think more, find the spark.' },
   'identity.tag.mbti': { zh: 'INFP', en: 'INFP' },
@@ -52,7 +52,7 @@ const translations: Translations = {
   'page.works.title': { zh: '精选作品', en: 'Selected Works' },
   'page.works.desc': { zh: '探索我最新的 AI 产品设计', en: 'Explore my latest AI product designs' },
   'page.works.view': { zh: '查看作品集', en: 'View Portfolio' },
-  'page.footer': { zh: '© 2026 再再. 保留所有权利。', en: '© 2026 Zaizai. All rights reserved.' },
+  'page.footer': { zh: '© 2026 再再🏝️. 保留所有权利。', en: '© 2026 Zaizaiely.Stay still, stay curious.🏝️ All rights reserved.' },
 
   // Background Settings
   'bg.settings': { zh: '背景设置', en: 'Background Settings' },

@@ -4,15 +4,22 @@ import { useLanguage } from "@/lib/language-context";
 import { Languages } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export function LanguageSwitcher({ className }: { className?: string }) {
   const { language, setLanguage } = useLanguage();
+
+  const toggleLanguage = () => {
+    const newLang = language === 'zh' ? 'en' : 'zh';
+    setLanguage(newLang);
+    sendGAEvent({ event: 'switch_language', value: newLang });
+  };
 
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
+      onClick={toggleLanguage}
       className={cn(
         "bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-white/20 hover:shadow-xl transition-all text-gray-700 relative overflow-hidden group flex items-center justify-center",
         className

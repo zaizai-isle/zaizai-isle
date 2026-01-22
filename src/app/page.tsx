@@ -42,9 +42,9 @@ export default function Home() {
         transition={{ delay: 0.5 }}
         className="mt-12 text-center"
       >
-        <footer className="mt-16 text-gray-400 text-sm">
+        <footer className="mt-16 text-sm text-white mix-blend-difference font-medium z-50 relative">
           {t('page.footer')}
-          <span className="block mt-2 text-xs opacity-30">v1.1.1</span>
+          <span className="block mt-2 text-xs opacity-60">v1.1.1</span>
         </footer>
       </motion.div>
     </main>

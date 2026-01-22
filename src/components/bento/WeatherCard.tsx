@@ -61,7 +61,7 @@ export function WeatherCard() {
     <BentoCard 
       colSpan={2} 
       rowSpan={1} 
-      className="h-full flex flex-col justify-between bg-[#8291a0]/80 backdrop-blur-xl text-white p-4 overflow-hidden relative shadow-lg hover:bg-[#8c9ba9]/80"
+      className="h-full min-h-[200px] flex flex-col justify-between bg-[#8291a0]/80 backdrop-blur-xl text-white p-4 overflow-hidden relative shadow-lg hover:bg-[#8c9ba9]/80"
       borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
     >
       {/* Background gradient effect */}
@@ -103,9 +103,9 @@ export function WeatherCard() {
       </div>
 
       {/* Footer Cards */}
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-3 z-10 w-full">
+      <div className="grid grid-cols-2 gap-2 md:gap-3 z-10 w-full">
         {/* Humidity */}
-        <div className="bg-black/10 rounded-full px-3 py-2 flex items-center justify-between border border-white/10 shadow-sm">
+        <div className="bg-black/10 rounded-full px-2 py-2 flex items-center justify-between border border-white/10 shadow-sm">
           <div className="flex items-center text-white/70 text-xs gap-1.5">
             <Droplets className="w-3.5 h-3.5 opacity-70" />
             <span>{t('weather.humidity')}</span>
@@ -116,7 +116,7 @@ export function WeatherCard() {
         </div>
 
         {/* Wind */}
-        <div className="bg-black/10 rounded-full px-3 py-2 flex items-center justify-between border border-white/10 shadow-sm">
+        <div className="bg-black/10 rounded-full px-2 py-2 flex items-center justify-between border border-white/10 shadow-sm">
           <div className="flex items-center text-white/70 text-xs gap-1.5">
             <Wind className="w-3.5 h-3.5 opacity-70" />
             <span>{t('weather.wind')}</span>

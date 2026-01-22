@@ -42,6 +42,7 @@ export default function Home() {
       >
         <footer className="mt-16 text-gray-400 text-sm">
           {t('page.footer')}
+          <span className="block mt-2 text-xs opacity-30">v1.1.0</span>
         </footer>
       </motion.div>
     </main>

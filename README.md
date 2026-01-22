@@ -10,10 +10,8 @@
   <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
 </p>
 
-<p align="center">
-  Build more, think more, find the spark.<br>
-  再做一点，再想一点，惊喜总在发生。
-</p>
+> **Build more, think more, find the spark.** >
+> **再做一点，再想一点，惊喜总在发生。**
 
 
 ### 🦉 Design Philosophy / 设计笔记
@@ -48,14 +46,6 @@ Zaizai Isle is a digital sanctuary where design meets logic.
 <br>
 </details>
 
-<h6 align="center"> ──────────── 📊 Activity ──────────── </h6>
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=zaizai-isle&show_icons=true&theme=transparent&hide_border=true&title_color=6b46c1&text_color=666&icon_color=6b46c1&bg_color=00000000" height="150" alt="GitHub Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=zaizai-isle&layout=compact&theme=transparent&hide_border=true&title_color=6b46c1&text_color=666&bg_color=00000000" height="150" alt="Top Langs" />
-</p>
-
-<h6 align="center"> ────────────────────────────────────── </h6>
 
 ### ✉️ Reach the Isle
 <p align="left">

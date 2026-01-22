@@ -66,11 +66,12 @@ export function StatsCard() {
         
         const width = element.offsetWidth;
         const height = element.offsetHeight;
-        const padding = 40;
+        const padding = 60;
 
         const dataUrl = await toPng(element, { 
           cacheBust: true,
-          backgroundColor: '#f3f4f6', // Use light gray background instead of #e0e5ec
+          pixelRatio: 2,
+          backgroundColor: '#e5e5e7', // Match body background color
           width: width + padding * 2,
           height: height + padding * 2,
           style: {
@@ -79,7 +80,7 @@ export function StatsCard() {
         });
         
         const link = document.createElement('a');
-        link.download = `zaizai-portfolio-${new Date().toISOString().split('T')[0]}.png`;
+        link.download = `Zaizai Isle-${new Date().toISOString().split('T')[0]}.png`;
         link.href = dataUrl;
         link.click();
       }

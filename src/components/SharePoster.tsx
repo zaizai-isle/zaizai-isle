@@ -118,8 +118,7 @@ export function SharePoster() {
               className="w-full h-full rounded-full object-cover"
             />
           </div>
-          {/* Decorative halo */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500/20 to-purple-500/20 blur-xl scale-125" />
+          {/* Decorative halo removed as requested */}
         </div>
 
         {/* Identity Info */}
@@ -130,7 +129,7 @@ export function SharePoster() {
 
         {/* Slogan */}
         <p className={cn(
-          "text-lg font-medium leading-[1.5] text-center max-w-[280px] bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-orange-500 to-gray-900",
+          "text-lg font-medium leading-[1.5] text-center w-full px-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-orange-500 to-gray-900",
           language === 'en' && "italic"
         )}>
           {t('identity.slogan')}
@@ -144,41 +143,45 @@ export function SharePoster() {
         </div>
 
         {/* Contact Info Box */}
-        <div className="mt-10 w-full bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/50 shadow-lg flex flex-col gap-4">
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-xl">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-              <Mail className="w-5 h-5" />
+        <div className="mt-10 w-full bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/50 shadow-lg flex items-center justify-between gap-4">
+          <div className="flex flex-col gap-4 flex-1 min-w-0">
+            {/* Email */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div className="flex-col min-w-0">
+                <p className="text-sm font-semibold text-gray-800 break-all">zaizaiely@gmail.com</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-xs text-gray-500 font-medium">Email</p>
-              <p className="text-sm font-semibold text-gray-800">zaizaiely@gmail.com</p>
+            
+            {/* WeChat */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <div className="flex-col min-w-0">
+                <p className="text-sm font-semibold text-gray-800">13052586797</p>
+              </div>
             </div>
           </div>
-          
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-xl">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-              <MessageCircle className="w-5 h-5" />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs text-gray-500 font-medium">WeChat</p>
-              <p className="text-xs text-gray-400">Scan QR code to add</p>
-            </div>
-            <div className="w-12 h-12 bg-white rounded-lg p-1 shadow-sm">
-              <Image src={qrcodeImage} alt="WeChat QR" className="w-full h-full object-contain" />
-            </div>
+
+          {/* QR Code */}
+          <div className="w-24 h-24 bg-white rounded-xl p-1.5 shadow-sm shrink-0">
+            <Image src={qrcodeImage} alt="WeChat QR" className="w-full h-full object-contain" />
           </div>
         </div>
 
       </div>
 
       {/* Footer */}
-      <div className="relative z-10 w-full p-6 pb-8">
+      <div className="relative z-10 w-full px-8 pb-8">
         <div className="border-t border-gray-300/30 pt-4 flex justify-between items-end">
-          <div>
+          <div className="flex-1 mr-4">
             <p className="text-sm font-bold text-gray-800">Zaizai Isle</p>
-            <p className="text-[10px] text-gray-500 mt-0.5">{t('page.footer')}</p>
+            <p className="text-[10px] text-gray-500 mt-0.5 truncate">{t('page.footer')}</p>
           </div>
-          <p className="text-[10px] text-gray-400 font-mono">{today}</p>
+          <p className="text-[10px] text-gray-400 font-mono shrink-0">{today}</p>
         </div>
       </div>
     </div>

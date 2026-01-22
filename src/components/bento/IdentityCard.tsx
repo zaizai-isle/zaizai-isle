@@ -4,6 +4,7 @@ import { BentoCard } from "./BentoCard";
 import { motion } from "framer-motion";
 import NextImage from "next/image";
 import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
+import avatarImage from "@/assets/avatar-v1.png";
 
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";

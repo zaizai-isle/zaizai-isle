@@ -4,16 +4,20 @@ import { BentoCard } from "./BentoCard";
 import { ArrowUpRight, X, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
+
+import projectBanana from "@/assets/project-banana-v3.jpg";
+import projectExam from "@/assets/project-exam.jpg";
+import projectAiTrainer from "@/assets/project-ai-trainer.jpg";
 
 export function WorksCard() {
   const { t } = useLanguage();
   const [previewProject, setPreviewProject] = useState<{
     title: string;
-    image: string;
+    image: string | StaticImageData;
     link: string;
   } | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -50,16 +54,17 @@ export function WorksCard() {
              <div 
                 onClick={() => setPreviewProject({
                   title: "Everything is Banana",
-                  image: "/project-banana-v3.jpg",
+                  image: projectBanana,
                   link: "https://app-7s7fn2uu96o1.appmiaoda.com"
                 })}
                 className="aspect-[3/2] w-full bg-gray-100 rounded-lg border border-gray-200 relative overflow-hidden group/item cursor-pointer"
               >
                 <Image 
-                  src="/project-banana-v3.jpg" 
+                  src={projectBanana} 
                   alt="Everything is Banana" 
                   fill 
                   className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                  placeholder="blur"
                 />
               </div>
              
@@ -67,16 +72,17 @@ export function WorksCard() {
              <div 
                onClick={() => setPreviewProject({
                   title: "Smart Exam Platform",
-                  image: "/project-exam.jpg",
+                  image: projectExam,
                   link: "https://app-7vpd7214bjlt.appmiaoda.com"
                })}
                className="aspect-[3/2] w-full bg-gray-100 rounded-lg border border-gray-200 relative overflow-hidden group/item cursor-pointer"
              >
                <Image 
-                 src="/project-exam.jpg" 
+                 src={projectExam} 
                  alt="Smart Exam Platform" 
                  fill 
                  className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                 placeholder="blur"
                />
              </div>
              
@@ -84,16 +90,17 @@ export function WorksCard() {
              <div 
                onClick={() => setPreviewProject({
                   title: "AI Trainer Assistant",
-                  image: "/project-ai-trainer.jpg",
+                  image: projectAiTrainer,
                   link: "https://www.doubao.com/code/launch/detail/66403617282?from=from_launch_share_link"
                })}
                className="aspect-[3/2] w-full bg-gray-100 rounded-lg border border-gray-200 relative overflow-hidden group/item cursor-pointer"
              >
                <Image 
-                 src="/project-ai-trainer.jpg" 
+                 src={projectAiTrainer} 
                  alt="AI Trainer Assistant" 
                  fill 
                  className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                 placeholder="blur"
                />
              </div>
           </div>

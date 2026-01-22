@@ -15,9 +15,7 @@
   再做一点，再想一点，惊喜总在发生。
 </p>
 
----
-
-### 🧭 Navigation / 导览
+<h6 align="center"> ──────────── 🧭 Navigation ──────────── </h6>
 
 <div align="center">
 
@@ -26,7 +24,7 @@
 
 </div>
 
----
+<h6 align="center"> ────────────────────────────────────── </h6>
 
 ### 🦉 Design Philosophy / 设计笔记
 
@@ -41,21 +39,26 @@
 #### 03. The Interaction / 核心交互
 动效遵循“延迟反馈”逻辑：再多停留一秒，惊喜才会发生。这种设计旨在奖赏那些像鲸头鹳一样拥有耐心的探索者。
 
----
+<br>
 
 <details> 
 <summary><b>🌍 English Version / 英文版介绍 (Click to Expand)</b></summary>
 
 <br>
 
-Zaizai Isle is a digital sanctuary where design meets logic.  
-01. Inspiration: Inspired by the Shoebill, representing stillness and focus in the AI era.  
-02. Aesthetics: A Clean & Cold visual style focused on breathability and silence.  
-03. Interaction: Designed with the philosophy that subtle persistence leads to unexpected sparks.
+### ✧ Behind the Isle
+Zaizai Isle is a digital sanctuary where design meets logic. 
 
+**▸ Inspiration** Inspired by the Shoebill, representing the "Stillness" and "Focus" required in the AI era. 
+
+**▸ Aesthetics** A Clean & Cold visual style focused on high breathability and filtered silence.  
+
+**▸ Interaction** Designed with the philosophy that subtle persistence leads to unexpected sparks.
+
+<br>
 </details>
 
----
+<h6 align="center"> ────────────────────────────────────── </h6>
 
 ### ✉️ Reach the Isle
 <p align="left">

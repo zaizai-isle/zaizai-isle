@@ -15,7 +15,7 @@ export default function Home() {
   
   return (
     <main className="max-w-4xl w-full mx-auto p-4 md:p-0" id="portfolio-container">
-      <div className="grid grid-cols-1 md:grid-cols-[repeat(4,200px)] gap-4 auto-rows-[minmax(200px,auto)] md:auto-rows-[200px] justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-[repeat(4,200px)] gap-4 auto-rows-auto md:auto-rows-[200px] justify-center">
         {/* Row 1 & 2 Left: Identity Card (2x2) */}
         <IdentityCard />
         
@@ -23,7 +23,7 @@ export default function Home() {
         <WeatherCard />
 
         {/* Row 2 Right: Stats & QRCode */}
-        <div className="grid grid-cols-2 gap-4 md:contents">
+        <div className="grid grid-cols-2 gap-4 md:contents [&>*]:aspect-square md:[&>*]:aspect-auto">
           <StatsCard />
           <QRCodeCard />
         </div>

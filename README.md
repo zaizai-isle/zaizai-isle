@@ -15,6 +15,13 @@
   再做一点，再想一点，惊喜总在发生。
 </p>
 
+<h6 align="center"> ──────────── 📊 Activity ──────────── </h6>
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=zaizai-isle&show_icons=true&theme=transparent&hide_border=true&title_color=6b46c1&text_color=666&icon_color=6b46c1&bg_color=00000000" height="150" alt="GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=zaizai-isle&layout=compact&theme=transparent&hide_border=true&title_color=6b46c1&text_color=666&bg_color=00000000" height="150" alt="Top Langs" />
+</p>
+
 <h6 align="center"> ──────────── 🧭 Navigation ──────────── </h6>
 
 <div align="center">

@@ -10,8 +10,10 @@
   <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
 </p>
 
-> **Build more, think more, find the spark.** >
-> **再做一点，再想一点，惊喜总在发生。**
+<h2 align="center">
+  Build more, think more, find the spark.<br>
+  再做一点，再想一点，惊喜总在发生。
+</h2>
 
 
 ### 🦉 Design Philosophy / 设计笔记

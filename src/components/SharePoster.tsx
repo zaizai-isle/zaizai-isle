@@ -111,7 +111,7 @@ export function SharePoster() {
         
         {/* Avatar Section */}
         <div className="relative mb-6">
-          <div className="w-[100px] h-[100px] rounded-full bg-white p-1 shadow-xl relative z-10">
+          <div className="w-[110px] h-[110px] rounded-full shadow-lg relative z-10">
             <Image 
               src={avatarImage} 
               alt="Avatar" 

@@ -134,12 +134,13 @@ export const IdentityCard = () => {
       <div className="relative mb-12 mt-4 group">
         <div className="w-[90px] h-[90px] rounded-full bg-gray-200 overflow-hidden relative z-10 border border-[#EEEEEE] bg-white">
           <NextImage 
-            src="/avatar-v1.png"  
+            src={avatarImage}
             alt={t('identity.name')}   
             width={90} 
             height={90} 
             className="w-full h-full object-cover"
             priority
+            placeholder="blur"
           />
         </div>
       </div>

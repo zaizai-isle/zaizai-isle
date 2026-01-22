@@ -7,6 +7,7 @@ import { GuestbookCard } from "@/components/bento/GuestbookCard";
 import { QRCodeCard } from "@/components/bento/QRCodeCard";
 import { WorksCard } from "@/components/bento/WorksCard";
 import { ToolsCard } from "@/components/bento/ToolsCard";
+import { SharePoster } from "@/components/SharePoster";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 
@@ -15,6 +16,11 @@ export default function Home() {
   
   return (
     <main className="max-w-4xl w-full mx-auto p-4 md:p-0" id="portfolio-container">
+      {/* Hidden Share Poster for Image Generation */}
+      <div className="fixed left-[-9999px] top-0 pointer-events-none">
+        <SharePoster />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-[repeat(4,200px)] gap-4 auto-rows-auto md:auto-rows-[200px] justify-center">
         {/* Row 1 & 2 Left: Identity Card (2x2) */}
         <IdentityCard />

@@ -59,28 +59,20 @@ export function StatsCard() {
     }
     
     try {
-      const element = document.getElementById('portfolio-container');
+      // Target the hidden SharePoster element instead of the main container
+      const element = document.getElementById('share-poster');
       if (element) {
         // Add a small delay to ensure styles are stable
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        const width = element.offsetWidth;
-        const height = element.offsetHeight;
-        const padding = 60;
-
         const dataUrl = await toPng(element, { 
           cacheBust: true,
-          pixelRatio: 2,
-          backgroundColor: '#e5e5e7', // Match body background color
-          width: width + padding * 2,
-          height: height + padding * 2,
-          style: {
-            margin: `${padding}px`,
-          }
+          pixelRatio: 2, // 2x resolution for high quality
+          // No need for extra padding or background color as the poster handles it
         });
         
         const link = document.createElement('a');
-        link.download = `Zaizai Isle-${new Date().toISOString().split('T')[0]}.png`;
+        link.download = `Zaizai Isle-Share-${new Date().toISOString().split('T')[0]}.png`;
         link.href = dataUrl;
         link.click();
       }

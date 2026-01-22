@@ -103,7 +103,7 @@ export function WeatherCard() {
       </div>
 
       {/* Footer Cards */}
-      <div className="grid grid-cols-2 gap-3 z-10">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-3 z-10 w-full">
         {/* Humidity */}
         <div className="bg-black/10 rounded-full px-3 py-2 flex items-center justify-between border border-white/10 shadow-sm">
           <div className="flex items-center text-white/70 text-xs gap-1.5">

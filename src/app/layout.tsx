@@ -40,8 +40,8 @@ export default function RootLayout({
             </div>
           </LanguageProvider>
         </BackgroundProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
     </html>
   );
 }

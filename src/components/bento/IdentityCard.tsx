@@ -139,7 +139,6 @@ export const IdentityCard = () => {
             width={90} 
             height={90} 
             className="w-full h-full object-cover"
-            priority
             placeholder="blur"
           />
         </div>

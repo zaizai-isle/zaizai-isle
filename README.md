@@ -9,15 +9,16 @@
   <img src="https://img.shields.io/badge/Status-Building%20&%20Thinking-success?style=flat-square" />
   <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
   <br/>
-  <a href="https://zaizai-isle.github.io/zaizai-isle/">
-    <img src="https://img.shields.io/badge/✨_Live_Site-Visit_Zaizai_Isle-2ea44f?style=flat-square" />
-  </a>
+ 
 </p>
+
+[🌐 Visit the Isle / 访问小岛](https://zaizai-isle.github.io)
 
 <h2 align="center">
   Build more, think more, find the spark.<br>
   再做一点，再想一点，惊喜总在发生。
 </h2>
+
 
 
 ### 🦉 Design Philosophy / 设计笔记
@@ -66,23 +67,3 @@ Zaizai Isle is a digital sanctuary where design meets logic.
 </p>
 
 ---
-
-## Technical Details
-
-This is a [Next.js](https://nextjs.org) project.
-
-### Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

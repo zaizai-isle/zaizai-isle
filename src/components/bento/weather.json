@@ -1,0 +1,8 @@
+{
+  "temp": 12,
+  "condition": "Cloudy",
+  "location": "weather.shanghai",
+  "humidity": 70,
+  "windSpeed": 12,
+  "feelsLike": 10
+}

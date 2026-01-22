@@ -71,8 +71,17 @@ export function StatsCard() {
           // No need for extra padding or background color as the poster handles it
         });
         
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hour = String(now.getHours()).padStart(2, '0');
+        const minute = String(now.getMinutes()).padStart(2, '0');
+        const second = String(now.getSeconds()).padStart(2, '0');
+        const timestamp = `${year}${month}${day}${hour}${minute}${second}`;
+
         const link = document.createElement('a');
-        link.download = `Zaizai Isle-Share-${new Date().toISOString().split('T')[0]}.png`;
+        link.download = `Zaizai Isle-Share-${timestamp}.png`;
         link.href = dataUrl;
         link.click();
       }

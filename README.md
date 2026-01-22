@@ -1,7 +1,7 @@
 # 🏝️ Zaizai Isle | Personal Sanctuary
 
 <p align="center">
-  <img src="assets/T.jpg" width="100%" alt="Zaizai Isle Banner" />
+  <img src="public/T.jpg" width="100%" alt="Zaizai Isle Banner" />
 </p>
 
 <p align="center">

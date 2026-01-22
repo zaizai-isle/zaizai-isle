@@ -1,6 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏝️ Zaizai Isle | Personal Sanctuary
 
-## Getting Started
+<p align="center">
+  <img src="assets/T.jpg" width="100%" alt="Zaizai Isle Banner" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Role-AI%20Product%20Designer-blueviolet?style=flat-square" />
+  <img src="https://img.shields.io/badge/Status-Building%20&%20Thinking-success?style=flat-square" />
+  <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
+</p>
+
+<h2 align="center">
+  Build more, think more, find the spark.<br>
+  再做一点，再想一点，惊喜总在发生。
+</h2>
+
+
+### 🦉 Design Philosophy / 设计笔记
+
+> 在数字潮汐中，寻找那块不动的礁石。
+
+#### 01. The Spirit / 灵感：鲸头鹳
+全站设计以鲸头鹳为图腾。它代表了 AI 时代稀缺的特质：极致的静止、深度的观察。这种“禅意”构成了小岛的底色——外在波澜不惊，内在逻辑精密。
+
+#### 02. The Visual / 视觉风格
+追求“极致清冷”的呼吸感。通过大量的留白与低饱和色的调，过滤掉互联网的嘈杂，只留下纯粹的思考内容。
+
+#### 03. The Interaction / 核心交互
+动效遵循“延迟反馈”逻辑：再多停留一秒，惊喜才会发生。这种设计旨在奖赏那些像鲸头鹳一样拥有耐心的探索者。
+
+<br>
+
+<details> 
+<summary><b>🌍 English Version / 英文版介绍 (Click to Expand)</b></summary>
+
+<br>
+
+### ✧ Behind the Isle
+Zaizai Isle is a digital sanctuary where design meets logic. 
+
+**▸ Inspiration** Inspired by the Shoebill, representing the "Stillness" and "Focus" required in the AI era. 
+
+**▸ Aesthetics** A Clean & Cold visual style focused on high breathability and filtered silence.  
+
+**▸ Interaction** Designed with the philosophy that subtle persistence leads to unexpected sparks.
+
+<br>
+</details>
+
+
+### ✉️ Reach the Isle
+<p align="left">
+  <a href="mailto:zaizaiely@gmail.com"><img src="https://img.shields.io/badge/Email-zaizaiely%40gmail.com-white?style=flat-square&logo=gmail"></a>
+  <a href="https://github.com/zaizai-isle"><img src="https://img.shields.io/badge/GitHub-zaizai--isle-black?style=flat-square&logo=github"></a>
+</p>
+
+<p align="right">
+  <i>Stay still, stay curious.</i><br>
+  —— Zaizai 🏝️
+</p>
+
+---
+
+## Technical Details
+
+This is a [Next.js](https://nextjs.org) project.
+
+### Getting Started
 
 First, run the development server:
 
@@ -15,22 +81,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

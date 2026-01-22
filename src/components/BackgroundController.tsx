@@ -193,12 +193,12 @@ export function BackgroundController({ className }: { className?: string }) {
 
   const handleColorSelect = (color: string) => {
     setBackground('color', color);
-    trackEvent('select_background_color', color);
+    trackEvent('select_background_color', { color });
   };
 
   const handleImageSelect = (imageUrl: string) => {
     setBackground('image', imageUrl);
-    trackEvent('select_background_image', 'preset');
+    trackEvent('select_background_image', { type: 'preset' });
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

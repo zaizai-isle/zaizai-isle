@@ -66,7 +66,7 @@ export function QRCodeCard() {
       setHasLiked(true);
       localStorage.setItem('portfolio_has_liked', 'true');
       triggerHeartAnimation();
-      trackEvent('like_portfolio');
+      trackEvent('like_portfolio', { value: likes + 1 });
     }
   };
 

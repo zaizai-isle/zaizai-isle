@@ -11,7 +11,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const toggleLanguage = () => {
     const newLang = language === 'zh' ? 'en' : 'zh';
     setLanguage(newLang);
-    trackEvent('switch_language', newLang);
+    trackEvent('switch_language', { language: newLang });
   };
 
   return (

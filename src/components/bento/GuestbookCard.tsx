@@ -98,7 +98,7 @@ export function GuestbookCard() {
     if (!inputValue.trim()) return;
 
     setLoading(true);
-    trackEvent('sign_guestbook');
+    trackEvent('sign_guestbook', { method: 'form_submit' });
     
     // Optimistic update
     const tempId = Date.now().toString();

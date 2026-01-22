@@ -21,7 +21,7 @@ export function QRCodeCard() {
     // Auto hide after 3 seconds
     setTimeout(() => setShowEmail(false), 3000);
     // Copy to clipboard
-    navigator.clipboard.writeText("phyche.kwok@gmail.com"); // Replace with actual email
+    navigator.clipboard.writeText("zaizaiely@gmail.com"); // Replace with actual email
   };
 
   const handleGitHubClick = () => {

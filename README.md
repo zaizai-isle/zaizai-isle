@@ -1,20 +1,16 @@
-# 🏝️ Zaizai Isle | Personal Sanctuary
+# 🏝️ Welcome to Zaizai Isle
 
 <p align="center">
-  <img src="public/T.jpg" width="100%" alt="Zaizai Isle Banner" />
+  <img src="public/T.jpg" width="100%" alt="Zaizai Isle - AI Product Designer" />
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Role-AI%20Product%20Designer-blueviolet?style=flat-square" />
   <img src="https://img.shields.io/badge/Status-Building%20&%20Thinking-success?style=flat-square" />
   <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
-  <br/>
-  <a href="https://zaizai-isle.github.io/zaizai-isle/">
-    <img src="https://img.shields.io/badge/✨_Live_Site-Visit_Zaizai_Isle-2ea44f?style=flat-square" />
-  </a>
 </p>
 
-[🌐 Visit the Isle / 访问小岛](https://zaizai-isle.github.io/zaizai-isle/)
+[✨ Visit the Isle / 访问小岛](https://zaizai-isle.github.io/zaizai-isle/)
 
 <h2 align="center">
   Build more, think more, find the spark.<br>
@@ -60,12 +56,14 @@ Zaizai Isle is a digital sanctuary where design meets logic.
 <p align="left">
   <a href="mailto:zaizaiely@gmail.com"><img src="https://img.shields.io/badge/Email-zaizaiely%40gmail.com-white?style=flat-square&logo=gmail"></a>
   <a href="https://github.com/zaizai-isle"><img src="https://img.shields.io/badge/GitHub-zaizai--isle-black?style=flat-square&logo=github"></a>
-  <a href="https://zaizai-isle.github.io/zaizai-isle/"><img src="https://img.shields.io/badge/Website-Live_Demo-2ea44f?style=flat-square&logo=google-chrome&logoColor=white"></a>
+<a href="https://zaizai-isle.github.io/zaizai-isle/">
+    <img src="https://img.shields.io/badge/✨_Live_Site-Visit_Zaizai_Isle-2ea44f?style=flat-square" />
+  </a>
 </p>
 
 <p align="right">
   <i>Stay still, stay curious.</i><br>
-  —— Zaizai 🏝️
+  —— Zaizaiely 🏝️
 </p>
 
 ---

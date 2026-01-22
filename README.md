@@ -28,7 +28,7 @@
 ---
 
 ### ✉️ Reach the Isle
-- **Email:** zaizaiely@...
+- **Email:** zaizaiely@gmail.com
 - **GitHub:** [zaizai-isle](https://github.com/zaizai-isle)
 
 <p align="right"><i>“Stay still, stay curious.”</i></p>

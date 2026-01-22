@@ -23,8 +23,10 @@ export default function Home() {
         <WeatherCard />
 
         {/* Row 2 Right: Stats & QRCode */}
-        <StatsCard />
-        <QRCodeCard />
+        <div className="grid grid-cols-2 gap-4 md:contents">
+          <StatsCard />
+          <QRCodeCard />
+        </div>
 
         {/* Row 3 */}
         <GuestbookCard />

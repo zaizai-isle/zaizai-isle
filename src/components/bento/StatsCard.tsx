@@ -95,7 +95,7 @@ export function StatsCard() {
       onClick={handleDownload} 
       colSpan={1} 
       rowSpan={1} 
-      className="h-full cursor-pointer justify-between bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all"
+      className="h-full cursor-pointer justify-between bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all p-4 md:p-5"
       borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
     >
       <div className="flex justify-between items-start relative z-10">
@@ -112,7 +112,7 @@ export function StatsCard() {
       </div>
       
       <div>
-        <div className="text-4xl font-bold mb-1 flex items-baseline">
+        <div className="text-3xl md:text-4xl font-bold mb-1 flex items-baseline">
           <Counter value={downloadCount} />
           <span className="text-sm font-normal text-gray-400 ml-1">+</span>
         </div>

@@ -9,10 +9,12 @@
   <img src="https://img.shields.io/badge/Status-Building%20&%20Thinking-success?style=flat-square" />
   <img src="https://img.shields.io/badge/Vibe-Minimalist%20&%20Zen-lightgrey?style=flat-square" />
   <br/>
- 
+  <a href="https://zaizai-isle.github.io/zaizai-isle/">
+    <img src="https://img.shields.io/badge/✨_Live_Site-Visit_Zaizai_Isle-2ea44f?style=flat-square" />
+  </a>
 </p>
 
-[🌐 Visit the Isle / 访问小岛](https://zaizai-isle.github.io)
+[🌐 Visit the Isle / 访问小岛](https://zaizai-isle.github.io/zaizai-isle/)
 
 <h2 align="center">
   Build more, think more, find the spark.<br>

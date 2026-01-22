@@ -1,7 +1,7 @@
 ## Hi there 👋
 
 # 🏝️ Welcome to Zaizai Isle
-
+<p align="center"> <img src="assets/T.jpg" width="100%" alt="Zaizai Isle Banner" /> </p>
 <p align="left">
   <img src="https://img.shields.io/badge/Role-AI%20Product%20Designer-blueviolet?style=flat-square" />
   <img src="https://img.shields.io/badge/Status-Building%20&%20Thinking-success?style=flat-square" />
@@ -9,23 +9,37 @@
 
 > **Build more, think more, find the spark.** > **再做一点，再想一点，惊喜总在发生。**
 
----
+🏝️ Zaizai Isle | Personal Website
 
-### 🦉 About the Inhabitant
-我是 **再再**。这里是我的私人岛屿。  
-正如湿地中静立的鲸头鹳，我偏爱在静谧中捕捉逻辑的火花。
 
-* **Doing:** 专注 AI 产品设计与交付，把复杂的逻辑变简单。
-* **Thinking:** 观察技术浪潮，但在自己的节奏里打磨惊喜。
-* **Living:** 咖啡、静止、偶尔的灵光一现。
+Build more, think more, find the spark. 再做一点，再想一点，惊喜总在发生。
 
----
+这是我的个人主页仓库。我在这里通过代码和设计，构建了一个属于再再的小岛。
 
-### 🌊 Island Logs
-* 📍 [Project A] - 描述你的第一个惊喜
-* 📍 [Project B] - 描述你的第二个构建
+🌐 访问地址
+直接点击这里进入小岛： zaizai-isle.github.io
 
----
+🦉 设计笔记
+灵感：鲸头鹳 全站设计以鲸头鹳为灵感。这种生物以极致的静止与观察力著称，它代表了快节奏 AI 时代下的“禅意”：外在静谧，内在深邃。
+
+视觉风格 我追求极致的清冷与静谧感。通过留白与低饱和度的色调，这座小岛旨在成为数字喧嚣中的一缕清风。
+
+核心交互逻辑 所有的动效设计都遵循“再做一点，惊喜发生”的逻辑。正如静候时机的鲸头鹳，这里的交互设计旨在奖赏耐心与细微的探索。
+
+<details> <summary><b>English Version / 英文版介绍</b></summary>
+
+🏝️ Zaizai Isle | Personal Website
+This is the repository for my personal sanctuary. Through code and design, I have constructed a digital "isle" that belongs to Zaizai.
+
+🦉 Design Philosophy
+The Spirit Animal: Shoebill The entire site is inspired by the Shoebill—a creature known for its profound stillness and observant nature. It represents the "Zen" in a fast-paced AI era: silent on the outside, but deeply analytical on the inside.
+
+Visual Aesthetic I pursued a sense of "Clean & Cold" and serenity. By utilizing negative space and a muted palette, the Isle aims to be a breath of fresh air amidst the digital noise.
+
+Core Interaction Logic Every motion and transition follows the philosophy: "Do a little more, and the spark will happen." Just like the Shoebill waiting for its moment, the design rewards patience and subtle exploration.
+
+</details>
+
 
 ### ✉️ Reach the Isle
 - **Email:** zaizaiely@gmail.com

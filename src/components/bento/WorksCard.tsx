@@ -14,6 +14,7 @@ import projectExam from "@/assets/project-exam.jpg";
 import projectAiTrainer from "@/assets/project-ai-trainer.jpg";
 
 export function WorksCard() {
+  // Updated to use imported images for reliable path resolution
   const { t } = useLanguage();
   const [previewProject, setPreviewProject] = useState<{
     title: string;

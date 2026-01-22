@@ -13,6 +13,20 @@ interface BentoCardProps {
 }
 
 export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onClick, borderGradient, borderWidth = 1 }: BentoCardProps) {
+  const colSpanClasses: Record<number, string> = {
+    1: "md:col-span-1",
+    2: "md:col-span-2",
+    3: "md:col-span-3",
+    4: "md:col-span-4",
+  };
+
+  const rowSpanClasses: Record<number, string> = {
+    1: "md:row-span-1",
+    2: "md:row-span-2",
+    3: "md:row-span-3",
+    4: "md:row-span-4",
+  };
+
   return (
     <motion.div
       onClick={onClick}
@@ -20,12 +34,10 @@ export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onCli
       transition={{ type: "spring", stiffness: 300 }}
       className={cn(
         "bg-white/60 backdrop-blur-2xl rounded-[24px] p-5 shadow-sm flex flex-col relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:bg-white/70",
+        colSpanClasses[colSpan],
+        rowSpanClasses[rowSpan],
         className
       )}
-      style={{
-        gridColumn: `span ${colSpan}`,
-        gridRow: `span ${rowSpan}`,
-      }}
     >
       <div 
         className="pointer-events-none absolute inset-0 rounded-[24px] z-50"

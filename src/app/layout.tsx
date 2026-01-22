@@ -12,8 +12,14 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Zaizai | AI Product Designer",
-  description: "Personal homepage of Zaizai, an AI Product Designer & Project Manager.",
+  title: "Zaizai Isle | AI Product Designer",
+  description: "Zaizai Isle - A digital sanctuary for AI Product Design. Build more, think more, find the spark. 专注 AI 产品设计与交付，在静谧中捕捉逻辑的火花。",
+  keywords: ["Zaizai", "Zaizai Isle", "AI Product Designer", "UIUX", "Minimalist Design", "Shoebill", "产品经理", "AI设计", "极简主义"],
+  openGraph: {
+    title: "Zaizai Isle | Personal Sanctuary",
+    description: "Build more, think more, find the spark.",
+    images: "https://zaizai-isle.github.io/zaizai-isle/T.jpg",
+  },
 };
 
 export default function RootLayout({

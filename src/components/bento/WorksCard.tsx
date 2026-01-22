@@ -50,7 +50,7 @@ export function WorksCard() {
              </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
              {/* Mini project previews or tags */}
              <div 
                 onClick={() => setPreviewProject({

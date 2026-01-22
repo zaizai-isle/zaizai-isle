@@ -6,6 +6,7 @@ import { useLanguage } from "@/lib/language-context";
 import { Mail, Github, MessageCircle, X, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import qrcodeImage from "@/assets/qrcode.png";
 
 export function QRCodeCard() {
   const { t } = useLanguage();
@@ -176,12 +177,12 @@ export function QRCodeCard() {
             </button>
             <div className="bg-white p-2 rounded-xl shadow-lg border border-gray-100">
               <Image 
-                src="/qrcode.png?v=2"
+                src={qrcodeImage}
                 alt="WeChat QR Code"
                 width={120}
                 height={120}
                 className="w-[120px] h-[120px] object-contain"
-                unoptimized
+                placeholder="blur"
               />
             </div>
           </motion.div>

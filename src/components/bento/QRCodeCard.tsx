@@ -83,7 +83,7 @@ export function QRCodeCard() {
       className="h-full justify-center items-center text-black relative bg-white/10 hover:bg-white/15"
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
-      <div className="grid grid-cols-2 grid-rows-2 w-full h-full p-3 gap-2 md:p-3 md:gap-4">
+      <div className="grid grid-cols-2 grid-rows-2 w-full h-full p-0 gap-2 md:p-3 md:gap-4">
         {/* WeChat */}
         <button 
           onClick={handleWeChatClick}

@@ -25,10 +25,16 @@ const translations: Translations = {
   'weather.cloudy': { zh: '多云', en: 'Cloudy' },
   'weather.sunny': { zh: '晴朗', en: 'Sunny' },
   'weather.rainy': { zh: '下雨', en: 'Rainy' },
+  'weather.snowy': { zh: '下雪', en: 'Snowy' },
+  'weather.thunderstorm': { zh: '雷雨', en: 'Thunderstorm' },
+  'weather.foggy': { zh: '有雾', en: 'Foggy' },
+  'weather.drizzle': { zh: '毛毛雨', en: 'Drizzle' },
   'weather.feels_like': { zh: '体感', en: 'Feels like' },
   'weather.humidity': { zh: '湿度', en: 'Humidity' },
   'weather.wind': { zh: '风速', en: 'Wind' },
   'weather.shanghai': { zh: '上海', en: 'Shanghai' },
+  'weather.high': { zh: '最高', en: 'H' },
+  'weather.low': { zh: '最低', en: 'L' },
 
   // Stats Card
   'stats.downloads': { zh: '总下载量', en: 'Total Downloads' },

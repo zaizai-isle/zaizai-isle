@@ -46,11 +46,11 @@ export function WorksCard() {
                </p>
              </div>
              <div 
-               className="p-2 bg-black text-white rounded-full group-hover:scale-110 transition-transform shrink-0 cursor-pointer"
-               onClick={() => window.open('/PRODUCT_DOCUMENTATION.md', '_blank')}
-             >
-               <ArrowUpRight className="w-5 h-5" />
-             </div>
+                className="p-2 bg-black text-white rounded-full group-hover:scale-110 transition-transform shrink-0 cursor-pointer"
+                onClick={() => window.open('/zaizai-isle/PRODUCT_DOCUMENTATION.md', '_blank')}
+              >
+                <ArrowUpRight className="w-5 h-5" />
+              </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">

@@ -131,7 +131,7 @@ export const IdentityCard = () => {
         <Sparkle className="top-[20%] right-[30%] w-4 h-4 text-yellow-300/60" delay={3} />
       </div>
 
-      <div className="relative mb-12 mt-4">
+      <div className="relative mb-6 mt-4">
         <div className="w-[105px] h-[105px] rounded-full bg-gray-200 overflow-hidden relative z-10 border border-gray-100 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-transform duration-300 hover:scale-105">
           <NextImage 
             src={avatarImage}

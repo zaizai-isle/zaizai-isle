@@ -45,7 +45,10 @@ export function WorksCard() {
                  {t('page.works.desc')}
                </p>
              </div>
-             <div className="p-2 bg-black text-white rounded-full group-hover:scale-110 transition-transform shrink-0">
+             <div 
+               className="p-2 bg-black text-white rounded-full group-hover:scale-110 transition-transform shrink-0 cursor-pointer"
+               onClick={() => window.open('/PRODUCT_DOCUMENTATION.md', '_blank')}
+             >
                <ArrowUpRight className="w-5 h-5" />
              </div>
           </div>

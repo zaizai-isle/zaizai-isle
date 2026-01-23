@@ -87,7 +87,7 @@ export function ToolsCard() {
     >
       {/* Header for Mobile */}
       <div className="md:hidden mb-2">
-        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+        <h3 className="text-[18px] font-semibold text-white flex items-center gap-2">
           <Zap className="w-5 h-5 text-yellow-400" />
           {t('tools.title')}
         </h3>

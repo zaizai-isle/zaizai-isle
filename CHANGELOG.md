@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.1] - 2026-01-23
+
+### Changed
+- **Visual Refinements**:
+  - Unified font sizes for all Bento Card titles (`h3`) to 18px for better consistency.
+  - Adjusted text colors in Weather Card (Date, Weather Condition, Feels Like, and Bottom Capsule) to `text-white/50` for a more balanced and softer look.
+
 ## [v1.2.0] - 2026-01-23
 
 ### Added

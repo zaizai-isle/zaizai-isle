@@ -40,7 +40,7 @@ export function WorksCard() {
         <div className="relative z-10 flex flex-col h-full justify-between">
           <div className="flex justify-between items-start gap-5">
              <div className="flex-1 min-w-0">
-               <h3 className="text-xl font-bold text-gray-900 truncate">{t('page.works.title')}</h3>
+               <h3 className="text-[18px] font-bold text-gray-900 truncate">{t('page.works.title')}</h3>
                <p className="text-sm text-gray-500 mt-1 truncate">
                  {t('page.works.desc')}
                </p>

@@ -248,13 +248,13 @@ export function WeatherCard() {
               <MapPin className="w-3.5 h-3.5 text-white/60 drop-shadow-md" />
               <h3 
                 onClick={fetchWeather}
-                className="text-sm font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
+                className="text-[18px] font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
               >
                 {loading ? t('weather.locating') : t(weather?.location || '')}
                 {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
               </h3>
             </div>
-            <div className="text-xs font-medium text-white/60 pl-4.5">
+            <div className="text-xs font-medium text-white/50 pl-4.5">
               {date}
             </div>
           </div>
@@ -266,7 +266,7 @@ export function WeatherCard() {
                 {weather?.temp}
                 <span className="text-xl font-normal">°</span>
               </div>
-              <div className="text-xs font-medium text-white/60 drop-shadow-md flex items-center gap-2">
+              <div className="text-xs font-medium text-white/50 drop-shadow-md flex items-center gap-2">
                 <span>{getWeatherLabel(weather?.condition || '')}</span>
                 <span>{t('weather.feels_like')} {weather?.feelsLike}°</span>
               </div>

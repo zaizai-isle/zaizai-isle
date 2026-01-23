@@ -147,7 +147,7 @@ export function GuestbookCard() {
       className="h-full min-h-[220px] md:min-h-0 flex flex-col justify-between bg-black/40 backdrop-blur-2xl text-white overflow-hidden shadow-lg hover:bg-black/50 transition-colors"
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
-      <h3 className="text-lg font-semibold text-white mb-2 z-10 w-fit flex items-baseline gap-2">
+      <h3 className="text-[18px] font-semibold text-white mb-2 z-10 w-fit flex items-baseline gap-2">
         {t('guestbook.title')}
         <span className="text-sm font-normal opacity-80">({totalCount})</span>
       </h3>

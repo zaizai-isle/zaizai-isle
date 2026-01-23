@@ -4,7 +4,7 @@ import { IdentityCard } from "@/components/bento/IdentityCard";
 import { WeatherCard } from "@/components/bento/WeatherCard";
 import { StatsCard } from "@/components/bento/StatsCard";
 import { GuestbookCard } from "@/components/bento/GuestbookCard";
-import { QRCodeCard } from "@/components/bento/QRCodeCard";
+import { SocialCard } from "@/components/bento/SocialCard";
 import { WorksCard } from "@/components/bento/WorksCard";
 import { ToolsCard } from "@/components/bento/ToolsCard";
 import { SharePoster } from "@/components/SharePoster";
@@ -31,7 +31,7 @@ export default function Home() {
         {/* Row 2 Right: Stats & QRCode */}
         <div className="grid grid-cols-2 gap-4 md:contents">
           <StatsCard />
-          <QRCodeCard />
+          <SocialCard />
         </div>
 
         {/* Row 3 */}

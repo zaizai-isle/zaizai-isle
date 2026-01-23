@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import qrcodeImage from "@/assets/qrcode.png";
 import { trackEvent } from "@/lib/utils";
 
-export function QRCodeCard() {
+export function SocialCard() {
   const { t } = useLanguage();
   const [showQRCode, setShowQRCode] = useState(false);
   const [showEmail, setShowEmail] = useState(false);

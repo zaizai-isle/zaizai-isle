@@ -18,9 +18,9 @@ export default function DocsPage() {
   });
 
   return (
-    <div className="w-full max-w-[1400px] h-[85vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden mx-auto border border-white/20 ring-1 ring-black/5">
+    <div className="w-full max-w-[1400px] h-[93vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden mx-auto border border-white/20 ring-1 ring-black/5">
       {/* Top Navigation Bar */}
-      <div className="shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+      <div className="shrink-0 bg-white border-b border-gray-100 px-6 py-2.5 flex items-center justify-between z-10">
         <div className="flex items-center gap-4">
           <Link 
             href="/" 

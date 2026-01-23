@@ -47,7 +47,7 @@ export function WorksCard() {
              </div>
              <div 
                 className="p-2 bg-black text-white rounded-full group-hover:scale-110 transition-transform shrink-0 cursor-pointer"
-                onClick={() => window.open('/zaizai-isle/PRODUCT_DOCUMENTATION.md', '_blank')}
+                onClick={() => window.open('/zaizai-isle/docs', '_blank')}
               >
                 <ArrowUpRight className="w-5 h-5" />
               </div>

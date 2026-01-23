@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export default function DocsPage() {
-  const filePath = path.join(process.cwd(), 'PRODUCT_DOCUMENTATION.md');
+  const filePath = path.join(process.cwd(), 'docs', 'PRODUCT_DOCUMENTATION.md');
   const content = fs.readFileSync(filePath, 'utf8');
 
   // Extract headings for TOC

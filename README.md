@@ -34,6 +34,13 @@
 
 <br>
 
+### 🚀 Recent Updates / 最新动态 (v1.2.0)
+- **Weather Card 2.0**: 全新升级的天气组件，支持实时数据、动态渐变背景与 3D 风格图标。
+- **Mobile Optimization**: 针对移动端优化的卡片高度与布局，确保在小屏设备上的舒适阅读体验。
+- **Interactive Details**: 天气图标增加悬停抖动动画，细节处更具灵动感。
+
+<br>
+
 <details> 
 <summary><b>🌍 English Version / 英文版介绍 (Click to Expand)</b></summary>
 

@@ -50,7 +50,7 @@ export default function Home() {
       >
         <footer className="mt-16 text-sm text-white mix-blend-difference font-medium z-50 relative opacity-60">
           {t('page.footer')}
-          <span className="block mt-2 text-xs opacity-60">v1.1.1</span>
+          <span className="block mt-2 text-xs opacity-60">v1.2.0</span>
         </footer>
       </motion.div>
     </main>

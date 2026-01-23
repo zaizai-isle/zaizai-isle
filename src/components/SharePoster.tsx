@@ -122,7 +122,10 @@ export function SharePoster() {
         </div>
 
         {/* Identity Info */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-[2px]">{t('identity.name')}</h1>
+        <h1 className={cn(
+          "text-3xl font-bold text-gray-900 mb-2",
+          language === 'en' ? "tracking-normal" : "tracking-[2px]"
+        )}>{t('identity.name')}</h1>
         <p className="text-[15px] text-[#666666] font-normal tracking-wide mb-4">
           {t('identity.role')}
         </p>

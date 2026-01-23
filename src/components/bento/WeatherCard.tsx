@@ -2,7 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { MapPin, RefreshCw, Droplets, Wind, ArrowDown, ArrowUp } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, RefreshCw, Droplets, Wind, ArrowDown, ArrowUp, Thermometer, Sun, Moon, MoonStar, Cloud, CloudRain, CloudSnow, CloudLightning, CloudFog, CloudDrizzle, CloudSun, CloudMoon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 
@@ -18,278 +19,90 @@ interface WeatherData {
   maxTemp: number;
 }
 
-// Custom 3D Frosted Glass Icons
-const GlassyWeatherIcon = ({ condition, isDay }: { condition: string; isDay: boolean }) => {
-  // Common Gradients & Filters
-  const defs = (
+// Weather Gradients & Filters Definitions
+const WeatherDefs = () => (
+  <svg width="0" height="0" className="absolute pointer-events-none">
     <defs>
-      {/* Sun Gradient: Rich Orange/Yellow */}
-      <radialGradient id="sun-gradient" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
-        <stop offset="0%" stopColor="#FFF7ED" />
-        <stop offset="30%" stopColor="#FDB813" />
+      {/* Sun: Solid Orange/Gold Gradient */}
+      <linearGradient id="sun-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#FDB813" />
         <stop offset="100%" stopColor="#EA580C" />
-      </radialGradient>
-      
-      {/* Moon Gradient: Silver/Gray */}
-      <radialGradient id="moon-gradient" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
-        <stop offset="0%" stopColor="#F8FAFC" />
-        <stop offset="100%" stopColor="#64748B" />
-      </radialGradient>
-
-      {/* Cloud Gradient: Frosted Glass Look */}
-      <linearGradient id="cloud-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="white" stopOpacity="0.95" />
-        <stop offset="50%" stopColor="#F1F5F9" stopOpacity="0.85" />
-        <stop offset="100%" stopColor="#E2E8F0" stopOpacity="0.7" />
       </linearGradient>
-      
-      {/* Rain Gradient: Liquid Blue */}
+
+      {/* Moon: Solid Silver/Blue Gradient */}
+      <linearGradient id="moon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#F1F5F9" />
+        <stop offset="100%" stopColor="#94A3B8" />
+      </linearGradient>
+
+      {/* Cloud: Solid White/Grey Gradient */}
+      <linearGradient id="cloud-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="100%" stopColor="#CBD5E1" />
+      </linearGradient>
+
+      {/* Rain: Solid Blue Gradient */}
       <linearGradient id="rain-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor="#60A5FA" />
         <stop offset="100%" stopColor="#2563EB" />
       </linearGradient>
 
-      {/* Lightning Gradient */}
+      {/* Lightning: Solid Yellow Gradient */}
       <linearGradient id="lightning-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#FEF08A" />
-        <stop offset="100%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#EAB308" />
       </linearGradient>
 
-      {/* Soft Drop Shadow for depth */}
-      <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="2" dy="4" stdDeviation="3" floodColor="#000" floodOpacity="0.1" />
-      </filter>
-      
-      {/* Stronger Shadow for Floating Effect */}
-      <filter id="float-shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="4" dy="8" stdDeviation="6" floodColor="#1E293B" floodOpacity="0.2" />
-      </filter>
+      {/* CloudSun: Solid White to Orange */}
+      <linearGradient id="cloud-sun-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="20%" stopColor="#FFFFFF" />
+        <stop offset="100%" stopColor="#FDB813" />
+      </linearGradient>
 
-      {/* Inner Glow / Edge Highlight for Glass Effect */}
-      <filter id="glass-edge">
-        <feGaussianBlur stdDeviation="1.5" result="blur" />
-        <feComposite in="SourceGraphic" in2="blur" operator="arithmetic" k2="1" k3="-1" result="edge" />
-        <feFlood floodColor="white" floodOpacity="0.8" />
-        <feComposite in2="edge" operator="in" result="highlight" />
-        <feMerge>
-            <feMergeNode in="SourceGraphic" />
-            <feMergeNode in="highlight" />
-        </feMerge>
-      </filter>
-      
-      {/* Blur for background elements (simulating frosted glass look behind) */}
-      <filter id="blur-glow">
-        <feGaussianBlur stdDeviation="6" />
+      {/* CloudMoon: Solid White to Blue */}
+      <linearGradient id="cloud-moon-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="20%" stopColor="#E2E8F0" />
+        <stop offset="100%" stopColor="#60A5FA" />
+      </linearGradient>
+
+      {/* Soft Drop Shadow for Depth */}
+      <filter id="icon-shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000" floodOpacity="0.15" />
       </filter>
     </defs>
-  );
+  </svg>
+);
 
-  // Reusable shapes
-  const SunShape = ({ className = "", style = {}, r = 14 }) => (
-    <circle cx="48" cy="20" r={r} fill="url(#sun-gradient)" filter="url(#soft-shadow)" className={className} style={style} />
-  );
-
-  const MoonShape = ({ className = "", style = {} }) => (
-    <path
-      d="M48 32A14 14 0 1 1 32 16 16 16 0 0 0 48 32z"
-      fill="url(#moon-gradient)"
-      filter="url(#soft-shadow)"
-      className={className}
-      style={style}
-    />
-  );
-
-  const CloudShape = ({ x = 0, y = 0, scale = 1, opacity = 1, filter = "url(#float-shadow)" }) => (
-    <g transform={`translate(${x}, ${y}) scale(${scale})`} opacity={opacity}>
-      {/* Main Cloud Body */}
-      <path
-        d="M44 44H20c-6.6 0-12-5.4-12-12 0-6 4.4-11 10.2-11.8 1.6-8.6 9.1-15.2 18.2-15.2 10.3 0 18.8 8.4 18.8 18.8 0 .8-.1 1.6-.2 2.3 5.3 1.2 9.2 5.9 9.2 11.5 0 6.6-5.4 12-12 12z"
-        fill="url(#cloud-gradient)"
-        filter={filter}
-      />
-      {/* Top Edge Highlight (simulating light hitting the glass edge) */}
-      <path
-        d="M20 20c-6.6 0-12 5.4-12 12 0 1.5.3 2.9.8 4.2"
-        fill="none"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        opacity="0.9"
-        transform="translate(0, 0.5)"
-      />
-      <path
-        d="M18.2 15c1.6-8.6 9.1-15.2 18.2-15.2 6.5 0 12.3 3.3 15.6 8.5"
-        fill="none"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        opacity="0.9"
-        transform="translate(0, 0.5)"
-      />
-      {/* Subtle Rim Light around the whole shape */}
-      <path
-        d="M44 44H20c-6.6 0-12-5.4-12-12 0-6 4.4-11 10.2-11.8 1.6-8.6 9.1-15.2 18.2-15.2 10.3 0 18.8 8.4 18.8 18.8 0 .8-.1 1.6-.2 2.3 5.3 1.2 9.2 5.9 9.2 11.5 0 6.6-5.4 12-12 12z"
-        fill="none"
-        stroke="white"
-        strokeWidth="1"
-        strokeOpacity="0.4"
-      />
-    </g>
-  );
-
-  const RainDrops = () => (
-    <g filter="url(#soft-shadow)">
-      <rect x="24" y="46" width="5" height="12" rx="2.5" fill="url(#rain-gradient)" transform="rotate(15 27 53)" />
-      <rect x="36" y="46" width="5" height="12" rx="2.5" fill="url(#rain-gradient)" transform="rotate(15 39 53)" />
-      <rect x="48" y="44" width="5" height="12" rx="2.5" fill="url(#rain-gradient)" transform="rotate(15 51 51)" />
-    </g>
-  );
-
-  // Icon Compositions
-  const SunnyIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16 drop-shadow-lg">
-      {defs}
-      {/* Rays */}
-      <g stroke="url(#sun-gradient)" strokeWidth="3" strokeLinecap="round" opacity="0.6">
-        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
-          <line key={angle} x1="32" y1="4" x2="32" y2="9" transform={`rotate(${angle} 32 32)`} />
-        ))}
-      </g>
-      {/* Big Sun */}
-      <circle cx="32" cy="32" r="16" fill="url(#sun-gradient)" filter="url(#float-shadow)" />
-      {/* Specular Highlight */}
-      <ellipse cx="26" cy="26" rx="6" ry="4" fill="white" opacity="0.3" transform="rotate(-45 26 26)" />
-    </svg>
-  );
-
-  const ClearNightIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16 drop-shadow-lg">
-      {defs}
-      <path
-        d="M42 36A18 18 0 1 1 24 14 18 18 0 0 0 42 36z"
-        fill="url(#moon-gradient)"
-        filter="url(#float-shadow)"
-      />
-      {/* Specular */}
-      <circle cx="30" cy="22" r="3" fill="white" opacity="0.2" />
-      {/* Stars */}
-      <circle cx="52" cy="12" r="1.5" fill="white" opacity="0.8" filter="url(#blur-glow)" />
-      <circle cx="58" cy="22" r="1" fill="white" opacity="0.6" />
-    </svg>
-  );
-
-  const CloudSunIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      {/* 1. Sun in background */}
-      <SunShape />
-      
-      {/* 2. Glow effect overlapping cloud area (simulating light passing through frosted glass) */}
-      <circle cx="48" cy="20" r="18" fill="#F97316" filter="url(#blur-glow)" opacity="0.6" />
-      
-      {/* 3. Cloud in front */}
-      <CloudShape x={-2} y={4} />
-    </svg>
-  );
-
-  const CloudMoonIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      <MoonShape style={{ transform: 'translate(10px, -5px)' }} />
-      <circle cx="58" cy="11" r="14" fill="#94A3B8" filter="url(#blur-glow)" opacity="0.4" />
-      <CloudShape x={-2} y={4} />
-    </svg>
-  );
-
-  const CloudyIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      {/* Back cloud, slightly darker/smaller */}
-      <CloudShape x={10} y={-6} scale={0.7} opacity={0.6} filter="url(#soft-shadow)" />
-      {/* Front cloud */}
-      <CloudShape x={-4} y={4} />
-    </svg>
-  );
-
-  const RainIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      <RainDrops />
-      <CloudShape x={0} y={0} />
-    </svg>
-  );
-  
-  const SunRainIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      {/* Sun behind */}
-      <SunShape r={16} />
-      {/* Glow through cloud */}
-      <circle cx="48" cy="20" r="20" fill="#F97316" filter="url(#blur-glow)" opacity="0.5" />
-      
-      <RainDrops />
-      <CloudShape x={-2} y={2} />
-    </svg>
-  );
-
-  const SnowIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      <CloudShape x={0} y={0} />
-      <g fill="white" opacity="0.9" filter="url(#soft-shadow)">
-        <circle cx="20" cy="50" r="3" />
-        <circle cx="32" cy="56" r="3" />
-        <circle cx="44" cy="50" r="3" />
-        {/* Simple snowflakes cross */}
-        <path d="M20 47v6 M17 50h6" stroke="white" strokeWidth="1" strokeLinecap="round" />
-        <path d="M32 53v6 M29 56h6" stroke="white" strokeWidth="1" strokeLinecap="round" />
-        <path d="M44 47v6 M41 50h6" stroke="white" strokeWidth="1" strokeLinecap="round" />
-      </g>
-    </svg>
-  );
-
-  const ThunderIcon = () => (
-    <svg viewBox="0 0 64 64" className="w-16 h-16">
-      {defs}
-      {/* Glow behind lightning */}
-      <path
-        d="M32 38L24 48H30L28 58L38 46H32L36 38Z"
-        fill="#F59E0B"
-        filter="url(#blur-glow)"
-        opacity="0.6"
-        transform="translate(0, 4)"
-      />
-      <path
-        d="M32 38L24 48H30L28 58L38 46H32L36 38Z"
-        fill="url(#lightning-gradient)"
-        stroke="white"
-        strokeWidth="1"
-        filter="url(#soft-shadow)"
-      />
-      <CloudShape x={0} y={-4} />
-    </svg>
-  );
-
-  // Logic to choose icon
-  switch (condition) {
-    case 'Sunny':
-      return isDay ? <SunnyIcon /> : <ClearNightIcon />;
+// Standard Lucide Icons with Styling
+const WeatherIcon = ({ condition, isDay }: { condition: string; isDay: boolean }) => {
+      const iconProps = {
+        className: "w-16 h-16",
+        strokeWidth: 1.5,
+        style: { filter: "url(#icon-shadow)" }
+      };
+    
+      switch (condition) {
+        case 'Sunny':
+      return isDay 
+        ? <Sun {...iconProps} stroke="url(#sun-gradient)" fill="url(#sun-gradient)" />
+        : <MoonStar {...iconProps} stroke="url(#moon-gradient)" fill="url(#moon-gradient)" strokeWidth={0} />;
     case 'Rainy':
+      return <CloudRain {...iconProps} stroke="url(#rain-gradient)" fill="url(#rain-gradient)" />;
     case 'Drizzle':
-      // Use SunRain if it's day, looks nicer and matches reference "sun behind cloud with rain"
-      // If it's night or user prefers standard, we could split, but "SunRain" implies sun.
-      // Let's use SunRain for Day, and Rain (no sun) for Night/Default
-      return isDay ? <SunRainIcon /> : <RainIcon />;
+      return <CloudDrizzle {...iconProps} stroke="url(#rain-gradient)" fill="url(#rain-gradient)" />;
     case 'Snowy':
-      return <SnowIcon />;
+      return <CloudSnow {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" />;
     case 'Thunderstorm':
-      return <ThunderIcon />;
-    case 'Cloudy':
+      return <CloudLightning {...iconProps} stroke="url(#lightning-gradient)" fill="url(#lightning-gradient)" />;
     case 'Foggy':
-      return <CloudyIcon />;
+      return <CloudFog {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" />;
+    case 'Cloudy':
+      return <Cloud {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" strokeWidth={0} />;
     default:
-      // Default to Part Cloudy
-      return isDay ? <CloudSunIcon /> : <CloudMoonIcon />;
+      // Part Cloudy
+      return isDay 
+        ? <CloudSun {...iconProps} stroke="url(#cloud-sun-gradient)" fill="url(#cloud-sun-gradient)" />
+        : <CloudMoon {...iconProps} stroke="url(#cloud-moon-gradient)" fill="url(#cloud-moon-gradient)" />;
   }
 };
 
@@ -302,7 +115,7 @@ export function WeatherCard() {
     humidity: 45,
     windSpeed: 12,
     feelsLike: 8,
-    isDay: true,
+    isDay: new Date().getHours() >= 6 && new Date().getHours() < 18,
     minTemp: 4,
     maxTemp: 12
   });
@@ -359,7 +172,11 @@ export function WeatherCard() {
 
   useEffect(() => {
     const now = new Date();
-    setDate(now.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { month: 'short', day: 'numeric', weekday: 'long' }));
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const weekday = now.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { weekday: 'short' });
+    setDate(`${year}.${month}.${day} ${weekday}`);
     fetchWeather(); 
   }, [language]);
 
@@ -369,28 +186,28 @@ export function WeatherCard() {
     const isDay = weather.isDay;
     const condition = weather.condition;
 
-    // Translucent Frosted Glass Gradients (Lighter & Lower Opacity)
+    // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay 
-        ? "bg-gradient-to-br from-[#3FA2F6]/50 to-[#6EB5FF]/50" // Light Blue Glass
-        : "bg-gradient-to-br from-[#1B1A55]/50 to-[#070F2B]/50"; // Dark Glass
+        ? "bg-gradient-to-b from-[#2980B9]/80 to-[#6DD5FA]/80" // Bright Blue Sky
+        : "bg-gradient-to-b from-[#0F2027]/80 via-[#203A43]/80 to-[#2C5364]/80"; // Deep Night
     } else if (condition === 'Rainy' || condition === 'Drizzle' || condition === 'Thunderstorm') {
       return isDay
-        ? "bg-gradient-to-br from-[#607D8B]/50 to-[#90A4AE]/50" // Grey Blue Glass
-        : "bg-gradient-to-br from-[#2C3E50]/50 to-[#4CA1AF]/50"; 
+        ? "bg-gradient-to-b from-[#373B44]/80 to-[#4286f4]/80" // Stormy Blue-Grey
+        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Dark Storm
     } else if (condition === 'Snowy') {
       return isDay
-        ? "bg-gradient-to-br from-[#83a4d4]/50 to-[#b6fbff]/50" 
-        : "bg-gradient-to-br from-[#141E30]/50 to-[#243B55]/50"; 
+        ? "bg-gradient-to-b from-[#83a4d4]/80 to-[#b6fbff]/80" // Icy Blue
+        : "bg-gradient-to-b from-[#141E30]/80 to-[#243B55]/80"; // Dark Ice
     } else if (condition === 'Foggy' || condition === 'Cloudy') {
       return isDay
-        ? "bg-gradient-to-br from-[#5D6D7E]/50 to-[#BFC9CA]/50" 
-        : "bg-gradient-to-br from-[#232526]/50 to-[#414345]/50"; 
+        ? "bg-gradient-to-b from-[#5D6D7E]/80 to-[#BFC9CA]/80" // Cloudy Grey
+        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Night Cloud
     } else {
       // Default
       return isDay
-        ? "bg-gradient-to-br from-[#4facfe]/50 to-[#00f2fe]/50"
-        : "bg-gradient-to-br from-[#0f172a]/50 to-[#334155]/50";
+        ? "bg-gradient-to-b from-[#4facfe]/80 to-[#00f2fe]/80"
+        : "bg-gradient-to-b from-[#0f172a]/80 to-[#334155]/80";
     }
   };
 
@@ -417,6 +234,7 @@ export function WeatherCard() {
       )}
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
+      <WeatherDefs />
       {/* Background ambient glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
       
@@ -425,34 +243,32 @@ export function WeatherCard() {
         {/* Left: Typography Stack */}
         <div className="flex flex-col h-full w-full">
           {/* Location & Date */}
-          <div className="flex items-baseline gap-1.5 flex-none">
+          <div className="flex flex-col gap-1 mb-2 flex-none">
             <div className="flex items-center gap-1">
-              <h3 className="text-lg font-semibold tracking-wide text-white drop-shadow-md">
-                {loading ? t('weather.locating') : t(weather?.location || '')}
-              </h3>
-              <button 
+              <MapPin className="w-3.5 h-3.5 text-white/60 drop-shadow-md" />
+              <h3 
                 onClick={fetchWeather}
-                className="p-1 opacity-50 hover:opacity-100 transition-opacity rounded-full bg-white/10 ml-1"
-                disabled={loading}
-                title={t('weather.refresh') || 'Refresh'}
+                className="text-sm font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
               >
-                 <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
-              </button>
+                {loading ? t('weather.locating') : t(weather?.location || '')}
+                {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
+              </h3>
             </div>
-            <div className="text-xs font-medium text-white/70">
+            <div className="text-xs font-medium text-white/60 pl-4.5">
               {date}
             </div>
           </div>
           
           {/* Big Temperature & Condition - Vertically Centered */}
-          <div className="flex-1 flex flex-col justify-center pb-2">
-            <div className="flex items-center gap-3">
-              <div className="flex items-start text-7xl font-light tracking-tighter text-white drop-shadow-lg -ml-1">
+          <div className="flex-1 flex flex-col justify-center pl-4.5 pb-2">
+            <div className="flex flex-col items-start">
+              <div className="flex items-start text-5xl font-semibold tracking-tighter text-white drop-shadow-lg -ml-0.5 leading-none">
                 {weather?.temp}
-                <span className="text-4xl mt-1 font-normal">°</span>
+                <span className="text-xl font-normal">°</span>
               </div>
-              <div className="text-xl font-medium text-white/90 drop-shadow-md pt-2">
-                {getWeatherLabel(weather?.condition || '')}
+              <div className="text-xs font-medium text-white/60 drop-shadow-md flex items-center gap-2">
+                <span>{getWeatherLabel(weather?.condition || '')}</span>
+                <span>{t('weather.feels_like')} {weather?.feelsLike}°</span>
               </div>
             </div>
           </div>
@@ -460,42 +276,38 @@ export function WeatherCard() {
 
         {/* Right: Big Glassy Icon */}
         <div className="flex flex-col justify-center h-full">
-           <div className="transform scale-150 mr-4 filter drop-shadow-2xl">
-              <GlassyWeatherIcon condition={weather?.condition || 'Sunny'} isDay={weather?.isDay || true} />
-           </div>
+           <motion.div 
+             className="transform scale-150 mr-4 filter drop-shadow-2xl"
+             whileHover={{ 
+               rotate: [0, -10, 10, -5, 5, 0],
+               transition: { duration: 0.5 }
+             }}
+           >
+              <WeatherIcon condition={weather?.condition || 'Sunny'} isDay={weather?.isDay ?? true} />
+           </motion.div>
         </div>
       </div>
 
       {/* Bottom Section: Unified Stats Row with Translucent Pill Background */}
-      <div className="flex items-center justify-between mt-2 z-10 w-full text-xs font-medium text-white/80 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm border border-white/10 shadow-sm">
+      <div className="flex items-center justify-between z-10 w-full text-xs font-medium text-white/50 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm border border-white/10 shadow-sm">
          {/* H/L */}
          <div className="flex items-center gap-1">
+            <Thermometer className="w-3 h-3" />
             <span>{weather?.maxTemp}°</span>
             <span className="opacity-50">/</span>
             <span>{weather?.minTemp}°</span>
          </div>
          
-         {/* Divider */}
-         <div className="w-px h-3 bg-gradient-to-b from-white/0 via-white/20 to-white/0" />
-         
-         {/* Feels Like */}
-         <div className="flex items-center gap-2">
-            <span>{t('weather.feels_like')} {weather?.feelsLike}°</span>
+         {/* Humidity */}
+         <div className="flex items-center gap-1">
+            <Droplets className="w-3 h-3" />
+            <span>{weather?.humidity}%</span>
          </div>
 
-         {/* Divider */}
-         <div className="w-px h-3 bg-gradient-to-b from-white/0 via-white/20 to-white/0" />
-
-         {/* Stats (Humidity & Wind) */}
-         <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-               <Droplets className="w-3 h-3" />
-               <span>{weather?.humidity}%</span>
-            </div>
-            <div className="flex items-center gap-1">
-               <Wind className="w-3 h-3" />
-               <span>{weather?.windSpeed}km/h</span>
-            </div>
+         {/* Wind */}
+         <div className="flex items-center gap-1">
+            <Wind className="w-3 h-3" />
+            <span>{weather?.windSpeed}km/h</span>
          </div>
       </div>
     </BentoCard>

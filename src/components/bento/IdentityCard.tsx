@@ -144,7 +144,10 @@ export const IdentityCard = () => {
         </div>
       </div>
       
-      <h1 className="relative z-10 text-3xl font-bold text-gray-900 mb-2 tracking-[2px]">{t('identity.name')}</h1>
+      <h1 className={cn(
+        "relative z-10 text-3xl font-bold text-gray-900 mb-2",
+        language === 'en' ? "tracking-normal" : "tracking-[2px]"
+      )}>{t('identity.name')}</h1>
       <p className="relative z-10 text-[15px] text-[#666666] font-normal tracking-wide">
         {t('identity.role')}
       </p>

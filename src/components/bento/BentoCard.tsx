@@ -35,7 +35,7 @@ export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onCli
       whileHover={{ y: -5, boxShadow: "0 20px 40px -15px rgba(0,0,0,0.1)" }}
       transition={{ type: "spring", stiffness: 300 }}
       className={cn(
-        "bg-white/60 backdrop-blur-2xl rounded-[24px] p-5 shadow-sm flex flex-col relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:bg-white/70",
+        "bg-white/60 backdrop-blur-2xl rounded-[24px] p-5 shadow-sm flex flex-col relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:bg-white/70 min-h-[200px] md:min-h-0",
         colSpanClasses[colSpan],
         rowSpanClasses[rowSpan],
         className

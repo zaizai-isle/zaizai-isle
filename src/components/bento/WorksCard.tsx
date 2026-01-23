@@ -1,6 +1,6 @@
 "use client";
 
-import { BentoCard } from "./BentoCard";
+import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { ArrowUpRight, X, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export function WorksCard() {
         colSpan={2} 
         rowSpan={1} 
         className="h-full justify-between group relative overflow-hidden"
-        borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
+        borderGradient={VERTICAL_BORDER_GRADIENT}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent opacity-50" />
         

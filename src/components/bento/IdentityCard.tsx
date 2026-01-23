@@ -1,6 +1,6 @@
 "use client";
 
-import { BentoCard } from "./BentoCard";
+import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { motion } from "framer-motion";
 import NextImage from "next/image";
 import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
@@ -131,13 +131,13 @@ export const IdentityCard = () => {
         <Sparkle className="top-[20%] right-[30%] w-4 h-4 text-yellow-300/60" delay={3} />
       </div>
 
-      <div className="relative mb-6 mt-12">
-        <div className="w-[105px] h-[105px] rounded-full bg-gray-200 overflow-hidden relative z-10 border border-gray-100 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-transform duration-300 hover:scale-105">
+      <div className="relative mb-8 mt-0 group">
+        <div className="w-[108px] h-[108px] rounded-full bg-white/50 relative z-10 border border-black/5 shadow-sm overflow-hidden transition-transform duration-300 ease-out hover:scale-105">
           <NextImage 
             src={avatarImage}
             alt={t('identity.name')}   
-            width={105} 
-            height={105} 
+            width={108} 
+            height={108} 
             className="w-full h-full object-cover"
             placeholder="blur"
           />
@@ -156,7 +156,7 @@ export const IdentityCard = () => {
         {t('identity.slogan')}
       </p>
       
-      <div className="relative z-10 mt-6 flex gap-3 justify-center">
+      <div className="relative z-10 mt-1 flex gap-3 justify-center">
         <Tag variant="emerald" icon={Drama}>{t('identity.tag.mbti')}</Tag>
         <Tag variant="yellow" icon={Lightbulb}>{t('identity.tag.product')}</Tag>
         <Tag variant="rose" icon={PartyPopper}>{t('identity.tag.design')}</Tag>

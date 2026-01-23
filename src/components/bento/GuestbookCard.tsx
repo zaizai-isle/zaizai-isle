@@ -1,6 +1,6 @@
 "use client";
 
-import { BentoCard } from "./BentoCard";
+import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { Rocket } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -145,7 +145,7 @@ export function GuestbookCard() {
       colSpan={2} 
       rowSpan={1} 
       className="h-full min-h-[220px] md:min-h-0 flex flex-col justify-between bg-black/40 backdrop-blur-2xl text-white overflow-hidden shadow-lg hover:bg-black/50 transition-colors"
-      borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
+      borderGradient={VERTICAL_BORDER_GRADIENT}
     >
       <h3 className="text-lg font-semibold text-white mb-2 z-10 w-fit flex items-baseline gap-2">
         {t('guestbook.title')}

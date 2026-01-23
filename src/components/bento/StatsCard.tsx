@@ -1,6 +1,6 @@
 "use client";
 
-import { BentoCard } from "./BentoCard";
+import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { ArrowUpRight, Download, Loader2 } from "lucide-react";
 import { motion, useSpring, useTransform, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -98,7 +98,7 @@ export function StatsCard() {
       colSpan={1} 
       rowSpan={1} 
       className="h-full cursor-pointer justify-between bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all p-4 md:p-5"
-      borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
+      borderGradient={VERTICAL_BORDER_GRADIENT}
     >
       <div className="flex justify-between items-start relative z-10">
         <div className="p-2 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">

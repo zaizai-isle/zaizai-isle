@@ -1,6 +1,6 @@
 "use client";
 
-import { BentoCard } from "./BentoCard";
+import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { useLanguage } from "@/lib/language-context";
 import { Upload, Download, Image as ImageIcon, Sparkles, Bot, Brain, Zap, Cpu, RotateCcw, MessageSquare, Palette, Smile, Sparkle, Sailboat, Drill, MessageSquareCode } from "lucide-react";
 import { useState, useRef } from "react";
@@ -82,8 +82,8 @@ export function ToolsCard() {
     <BentoCard
       colSpan={4}
       rowSpan={1}
-      className="flex flex-col md:flex-row gap-6 p-6 bg-[#314062]/80 hover:bg-[#3b4b6f]/80 backdrop-blur-2xl border border-white/10 shadow-xl"
-      borderGradient="linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 100%)"
+      className="flex flex-col md:flex-row gap-6 p-6 bg-[#314062]/80 hover:bg-[#3b4b6f]/80 backdrop-blur-2xl shadow-xl"
+      borderGradient={VERTICAL_BORDER_GRADIENT}
     >
       {/* Header for Mobile */}
       <div className="md:hidden mb-2">

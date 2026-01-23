@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
+export const VERTICAL_BORDER_GRADIENT = "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)";
+
 interface BentoCardProps {
   children: ReactNode;
   className?: string;

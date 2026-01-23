@@ -18,6 +18,11 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Offset for sticky header */
+}
+
 body {
   background-color: #e5e5e7;
   background-image: 
@@ -45,4 +50,16 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+}
+
+/* Specific scrollbar for TOC */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 20px;
 }

@@ -62,7 +62,7 @@ export default function DocsPage() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar">
           <div className="max-w-4xl mx-auto py-12 px-8 md:px-16">
-            <article className="prose prose-slate max-w-none prose-headings:scroll-mt-24 prose-h1:text-3xl prose-h1:font-bold prose-h1:tracking-tight prose-h2:text-2xl prose-h2:font-semibold prose-h2:mt-10 prose-h2:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-img:rounded-xl prose-img:shadow-lg">
+            <article className="prose prose-slate max-w-none prose-headings:scroll-mt-24 prose-h1:text-3xl prose-h1:font-bold prose-h1:tracking-tight prose-h2:text-2xl prose-h2:font-semibold prose-h2:mt-10 prose-h2:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-img:rounded-xl prose-img:shadow-lg" suppressHydrationWarning>
               <ReactMarkdown rehypePlugins={[rehypeSlug]}>
                 {content}
               </ReactMarkdown>

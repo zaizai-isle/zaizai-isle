@@ -75,3 +75,9 @@ Zaizai Isle is a digital sanctuary where design meets logic.
 </p>
 
 ---
+
+> ⚠️ **Copyright Notice / 版权声明**
+>
+> 本项目仅用于个人展示，代码与设计版权归本人所有，未经授权禁止商用或二次分发。
+>
+> This project is for personal showcase only. All code and design rights are reserved. Commercial use or redistribution without authorization is prohibited.

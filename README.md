@@ -1,7 +1,7 @@
 # 🏝️ Welcome to Zaizai Isle
 
 <p align="center">
-  <img src="public/T.jpg" width="100%" alt="Zaizai Isle - AI Product Designer" />
+  <img src="public/Zaizai-Isle_Shoebill.png" width="100%" alt="Zaizai Isle - AI Product Designer" />
 </p>
 
 <p align="center">

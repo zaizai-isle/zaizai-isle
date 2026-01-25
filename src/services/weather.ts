@@ -167,6 +167,94 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
   return data;
 };
 
+// 1. 定义WMO天气代码到天气描述的基础映射 
+const weatherCodeToDesc: Record<number, string> = { 
+  0: '晴朗', 
+  1: '主要晴朗', 
+  2: '少云', 
+  3: '多云', 
+  20: '薄雾', 
+  23: '霾', 
+  26: '扬沙', 
+  45: '雾', 
+  48: '冻雾', 
+  51: '毛毛雨（轻）', 
+  53: '毛毛雨（中）', 
+  55: '毛毛雨（浓）', 
+  56: '冻毛毛雨（轻）', 
+  57: '冻毛毛雨（浓）', 
+  61: '小雨', 
+  63: '中雨', 
+  65: '大雨', 
+  66: '冻雨（轻）', 
+  67: '冻雨（浓）', 
+  71: '小雪', 
+  73: '中雪', 
+  75: '大雪', 
+  77: '雪粒', 
+  80: '阵雨（轻）', 
+  81: '阵雨（中）', 
+  82: '阵雨（浓）', 
+  85: '阵雪（轻）', 
+  86: '阵雪（浓）', 
+  95: '雷暴（轻/中）', 
+  96: '雷暴伴冰雹（轻）', 
+  99: '雷暴伴冰雹（浓）', 
+  43: '沙尘暴', 
+  44: '强沙尘暴' 
+}; 
+
+// 2. 核心映射：WMO代码 → 图标编码（区分白天/夜晚） 
+const weatherCodeToIcon: Record<number, { day: number; night: number }> = { 
+  // 晴/少云/多云系列 
+  0: { day: 100, night: 150 }, 
+  1: { day: 100, night: 150 }, 
+  2: { day: 102, night: 152 }, // 少云 
+  3: { day: 101, night: 151 }, // 多云 
+  104: { day: 104, night: 104 }, // 阴（单独处理） 
+  
+  // 雾/霾/沙尘系列 
+  20: { day: 500, night: 500 }, // 薄雾 
+  23: { day: 502, night: 502 }, // 霾 
+  26: { day: 503, night: 503 }, // 扬沙 
+  45: { day: 501, night: 501 }, // 雾 
+  48: { day: 501, night: 501 }, // 冻雾 
+  43: { day: 507, night: 507 }, // 沙尘暴 
+  44: { day: 508, night: 508 }, // 强沙尘暴 
+  
+  // 雨系列 
+  51: { day: 309, night: 309 }, // 毛毛雨（轻） 
+  53: { day: 309, night: 309 }, // 毛毛雨（中） 
+  55: { day: 309, night: 309 }, // 毛毛雨（浓） 
+  56: { day: 313, night: 313 }, // 冻毛毛雨（轻） 
+  57: { day: 313, night: 313 }, // 冻毛毛雨（浓） 
+  61: { day: 305, night: 305 }, // 小雨 
+  63: { day: 306, night: 306 }, // 中雨 
+  65: { day: 307, night: 307 }, // 大雨 
+  66: { day: 313, night: 313 }, // 冻雨（轻） 
+  67: { day: 313, night: 313 }, // 冻雨（浓） 
+  80: { day: 300, night: 350 }, // 阵雨（轻） 
+  81: { day: 300, night: 350 }, // 阵雨（中） 
+  82: { day: 301, night: 351 }, // 阵雨（浓） 
+  
+  // 雪系列 
+  71: { day: 400, night: 400 }, // 小雪 
+  73: { day: 401, night: 401 }, // 中雪 
+  75: { day: 402, night: 402 }, // 大雪 
+  77: { day: 499, night: 499 }, // 雪粒 
+  85: { day: 407, night: 457 }, // 阵雪（轻） 
+  86: { day: 407, night: 457 }, // 阵雪（浓） 
+  
+  // 雷暴系列 
+  95: { day: 302, night: 302 }, // 雷暴 
+  96: { day: 303, night: 303 }, // 雷暴伴冰雹（轻） 
+  99: { day: 304, night: 304 }, // 雷暴伴冰雹（浓） 
+  
+  // 混合天气 
+  36: { day: 404, night: 404 }, // 雨夹雪 
+  38: { day: 406, night: 456 }  // 阵雨夹雪 
+}; 
+
 // Open-Meteo Implementation (Existing logic refactored)
 const fetchOpenMeteo = async (): Promise<WeatherData> => {
   const response = await fetch(
@@ -176,27 +264,58 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
   const current = data.current;
   const daily = data.daily;
   
-  let condition = "Cloudy";
-  const code = current.weather_code;
+  const wmoCode = current.weather_code;
+  const isDay = !!current.is_day;
   
-  // WMO Mapping
-  if (code === 0) condition = "Sunny";
-  else if (code === 1 || code === 2) condition = "PartlyCloudy";
-  else if (code === 3) condition = "Cloudy";
-  else if (code === 45 || code === 48) condition = "Foggy";
-  else if (code >= 51 && code <= 55) condition = "Drizzle";
-  else if ((code >= 61 && code <= 65) || (code >= 80 && code <= 82)) condition = "Rainy";
-  else if ((code >= 71 && code <= 77) || code === 85 || code === 86) condition = "Snowy";
-  else if (code >= 95) condition = "Thunderstorm";
+  // Get weather description
+  const weatherDesc = weatherCodeToDesc[wmoCode] || `Unknown(${wmoCode})`;
+  
+  // Get icon code
+  const iconMap = weatherCodeToIcon[wmoCode] || { day: 100, night: 150 };
+  const iconCode = isDay ? iconMap.day : iconMap.night;
+  
+  // Special handling: Overcast -> 104
+  // WMO Code 3 is usually Overcast, but user map says 'Cloudy' (101/151).
+  // If we want to strictly follow user logic:
+  // const finalIconCode = (wmoCode === 3 && weatherDesc.includes('阴')) ? 104 : iconCode;
+  // Since weatherDesc[3] is '多云', it won't trigger. 
+  // However, let's keep the user's logic structure just in case they update the map.
+  const finalIconCode = (wmoCode === 3 && weatherDesc.includes('阴')) ? 104 : iconCode;
+
+  // Map to internal condition string for backward compatibility
+  let condition = "Sunny";
+  // We can use the iconCode or wmoCode to determine the condition string
+  if (finalIconCode === 100 || finalIconCode === 150) condition = "Sunny";
+  else if (finalIconCode === 101 || finalIconCode === 151 || finalIconCode === 102 || finalIconCode === 152) condition = "PartlyCloudy";
+  else if (finalIconCode === 104) condition = "Cloudy";
+  else if (finalIconCode >= 500 && finalIconCode <= 515) condition = "Foggy";
+  else if ((finalIconCode >= 300 && finalIconCode <= 304) || finalIconCode === 350 || finalIconCode === 351) condition = "Rainy"; // Showers/Storms
+  else if (finalIconCode >= 305 && finalIconCode <= 308) condition = "Rainy"; // Rain
+  else if (finalIconCode >= 309 && finalIconCode <= 313) condition = "Drizzle"; // Drizzle
+  else if (finalIconCode >= 400 && finalIconCode <= 499) condition = "Snowy";
+  else if (finalIconCode >= 302 && finalIconCode <= 304) condition = "Thunderstorm"; // Note: 302-304 overlap with rain, but are thunderstorm
+  
+  // Refine condition based on WMO code for better accuracy if icon code is ambiguous
+  if (wmoCode === 0) condition = "Sunny";
+  else if (wmoCode === 1 || wmoCode === 2) condition = "PartlyCloudy";
+  else if (wmoCode === 3) condition = "Cloudy";
+  else if (wmoCode === 45 || wmoCode === 48 || wmoCode === 20 || wmoCode === 23 || wmoCode === 26 || wmoCode === 43 || wmoCode === 44) condition = "Foggy";
+  else if (wmoCode >= 51 && wmoCode <= 57) condition = "Drizzle";
+  else if (wmoCode >= 61 && wmoCode <= 67) condition = "Rainy";
+  else if (wmoCode >= 80 && wmoCode <= 82) condition = "Rainy";
+  else if (wmoCode >= 71 && wmoCode <= 77) condition = "Snowy";
+  else if (wmoCode === 85 || wmoCode === 86) condition = "Snowy";
+  else if (wmoCode >= 95) condition = "Thunderstorm";
 
   return {
     temp: Math.round(current.temperature_2m),
     condition,
+    iconCode: finalIconCode,
     location: "weather.shanghai",
     humidity: current.relative_humidity_2m,
     windSpeed: Math.round(current.wind_speed_10m),
     feelsLike: Math.round(current.apparent_temperature),
-    isDay: !!current.is_day,
+    isDay: isDay,
     minTemp: Math.round(daily.temperature_2m_min[0]),
     maxTemp: Math.round(daily.temperature_2m_max[0])
   };

@@ -41,6 +41,12 @@ const paths = {
     drops: "M2.293 13.707A1 1 0 0 1 2 13c0-.5.555-1.395 1-2 .445.605 1 1.5 1 2a1 1 0 0 1-1.707.707Zm10 0A1 1 0 0 1 12 13c0-.5.555-1.395 1-2 .445.605 1 1.5 1 2a1 1 0 0 1-1.707.707ZM7 15a1 1 0 1 0 2 0c0-.5-.555-1.395-1-2-.445.605-1 1.5-1 2Z"
   },
 
+  // Drizzle (Custom) - 2 Drops
+  drizzle: {
+    cloud: "M4.727 3.217A4.99 4.99 0 0 1 7.9 10a4.988 4.988 0 0 1-3.773-1.719 3 3 0 1 1-.586-5.732A4.998 4.998 0 0 1 7.9 0a4.999 4.999 0 0 1 4.38 2.587 3 3 0 1 1-.553 5.63Z",
+    drops: "M2.293 13.707A1 1 0 0 1 2 13c0-.5.555-1.395 1-2 .445.605 1 1.5 1 2a1 1 0 0 1-1.707.707Zm10 0A1 1 0 0 1 12 13c0-.5.555-1.395 1-2 .445.605 1 1.5 1 2a1 1 0 0 1-1.707.707Z"
+  },
+
   // Thunder (302-fill) - Separated Paths
   thunder: {
     // Cloud part only
@@ -227,7 +233,6 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
       );
 
     case 'Rainy':
-    case 'Drizzle':
       return (
         <svg viewBox="0 0 16 16" className={className}>
           {/* Layer 1: Cloud Background (original path) */}
@@ -238,6 +243,20 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
           />
           {/* Layer 2: Drops only on top (Blue) */}
           <path d={paths.rain.drops} fill="url(#rain-gradient)" />
+        </svg>
+      );
+
+    case 'Drizzle':
+      return (
+        <svg viewBox="0 0 16 16" className={className}>
+          {/* Layer 1: Cloud Background (original path) */}
+          <path 
+            d={paths.drizzle.cloud} 
+            fill="url(#cloud-gradient)" 
+            style={shadowStyle}
+          />
+          {/* Layer 2: 2 Drops only on top (Blue) */}
+          <path d={paths.drizzle.drops} fill="url(#rain-gradient)" />
         </svg>
       );
 

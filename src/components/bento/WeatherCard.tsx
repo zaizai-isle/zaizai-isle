@@ -49,7 +49,7 @@ export function WeatherCard() {
     try {
       // Use 'open-meteo' (Free, No Key) or 'qweather' (Needs Key in .env.local)
       // To switch to QWeather: fetchWeatherWithCache('qweather', language)
-      const data = await fetchWeatherWithCache('qweather', language);
+      const data = await fetchWeatherWithCache('open-meteo', language);
   
       
       if (data) {
@@ -90,10 +90,14 @@ export function WeatherCard() {
       return isDay 
         ? "bg-gradient-to-b from-[#2980B9]/80 to-[#6DD5FA]/80" // Bright Blue Sky
         : "bg-gradient-to-b from-[#0F2027]/80 via-[#203A43]/80 to-[#2C5364]/80"; // Deep Night
-    } else if (condition === 'Rainy' || condition === 'Drizzle' || condition === 'Thunderstorm') {
+    } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
         ? "bg-gradient-to-b from-[#373B44]/80 to-[#4286f4]/80" // Stormy Blue-Grey
         : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Dark Storm
+    } else if (condition === 'Drizzle') {
+      return isDay
+        ? "bg-gradient-to-b from-[#5D6D7E]/80 to-[#6DD5FA]/80" // Lighter Rainy Blue
+        : "bg-gradient-to-b from-[#2C3E50]/80 to-[#4CA1AF]/80"; // Night Drizzle
     } else if (condition === 'Snowy') {
       return isDay
         ? "bg-gradient-to-b from-[#83a4d4]/80 to-[#b6fbff]/80" // Icy Blue

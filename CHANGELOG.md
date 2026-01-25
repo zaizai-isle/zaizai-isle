@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.3] - 2026-01-25
+### Added
+- **Smart Weather Caching**:
+  - Implemented 3-layer caching strategy: Local Browser (5min) -> Supabase Global (15min) -> QWeather API.
+  - Ensures global API usage stays within ~100 calls/day regardless of visitor traffic.
+- **Deployment**:
+  - Added `NEXT_PUBLIC_QWEATHER_KEY` to GitHub Actions workflow for production builds.
+
+### Changed
+- **Weather Card**:
+  - Added auto-refresh timer (every 5 minutes) to keep data fresh for long-staying users.
+
+## [v1.2.2] - 2026-01-25
+
+### Added
+- **Weather Icon Optimization**:
+  - Integrated `WeatherIconsMap` for pre-processed, zero-latency icon rendering.
+  - Implemented `process-icons.ts` script to auto-generate optimized SVGs with glassmorphism effects and gradients.
+  - Added robust fallback to standard icons if API data is missing.
+
+### Changed
+- **Weather Card UI**:
+  - Reduced main weather icon size (`w-12 h-12`) and adjusted position (`-mt-2`) for better layout balance.
+  - Enhanced Sun icon rendering: Fixed missing glow effect by enabling `overflow-visible` on SVG containers.
+- **Service Robustness**:
+  - Improved error handling in `weather.ts` to correctly identify and log QWeather API 403 (Invalid Host) errors.
+
 ## [v1.2.1] - 2026-01-23
 
 ### Changed
@@ -39,3 +66,37 @@ All notable changes to this project will be documented in this file.
 - Fixed Moon icon visibility in night mode.
 - Fixed linter errors in SVG component nesting.
 - Resolved layout crowding issues in the bottom capsule bar.
+
+## [v1.1.0] - 2026-01-22
+
+### Added
+- **Deployment & Analytics**:
+  - Integrated Google Analytics (GA4) for comprehensive user interaction tracking.
+  - Configured SEO Metadata and Open Graph (OG) images for optimized social sharing previews.
+  - Added GitHub Actions workflow for automated deployment to GitHub Pages.
+- **System**:
+  - Implemented `basePath` support for subdirectory hosting on GitHub Pages.
+
+### Fixed
+- **Asset Loading**:
+  - Resolved image 404 errors by switching from string paths to static imports.
+  - Fixed Favicon loading issue in static export mode.
+  - Corrected `next.config.mjs` settings to support custom base paths.
+
+## [v1.0.0] - 2026-01-20
+
+### Added
+- **Initial Release**:
+  - Launch of **Zaizai Isle** - A personal portfolio site for an AI Product Designer.
+- **Core Architecture**:
+  - Built with **Next.js 14** (App Router), **Tailwind CSS**, and **TypeScript**.
+  - **Bento Grid System**: A responsive, masonry-style layout engine using CSS Grid.
+- **Components**:
+  - **Identity Card**: Personal introduction, avatar, and "Open to Work" status indicator.
+  - **Works Card**: Portfolio showcase with project links and descriptions.
+  - **Map Card**: Interactive location visualization using Mapbox/Custom styling.
+  - **Social Card**: QR Code for WeChat and links to social platforms.
+  - **Tech Stack**: Infinite scrolling marquee of development tools and skills.
+  - **Guestbook**: Real-time message board integration powered by **Supabase**.
+  - **Animations**: Smooth entry and hover effects using **Framer Motion**.
+

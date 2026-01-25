@@ -3,13 +3,17 @@
 import { cn } from "@/lib/utils";
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { motion } from "framer-motion";
-import { MapPin, RefreshCw, Droplets, Wind, ArrowDown, ArrowUp, Thermometer, Sun, Moon, MoonStar, Cloud, CloudRain, CloudSnow, CloudLightning, CloudFog, CloudDrizzle, CloudSun, CloudMoon } from "lucide-react";
+import { MapPin, RefreshCw, Droplets, Wind, Thermometer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-context";
+import { FrostedGlassIcon, WeatherDefs } from "../FrostedGlassIcon";
+import { fetchWeatherWithCache } from "@/services/weather";
 
-interface WeatherData {
+
+export interface WeatherData {
   temp: number;
   condition: string;
+  iconCode?: number;
   location: string;
   humidity: number;
   windSpeed: number;
@@ -19,92 +23,10 @@ interface WeatherData {
   maxTemp: number;
 }
 
-// Weather Gradients & Filters Definitions
-const WeatherDefs = () => (
-  <svg width="0" height="0" className="absolute pointer-events-none">
-    <defs>
-      {/* Sun: Solid Orange/Gold Gradient */}
-      <linearGradient id="sun-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#FDB813" />
-        <stop offset="100%" stopColor="#EA580C" />
-      </linearGradient>
+// Weather Gradients & Filters Definitions - Imported from FrostedGlassIcon
 
-      {/* Moon: Solid Silver/Blue Gradient */}
-      <linearGradient id="moon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#F1F5F9" />
-        <stop offset="100%" stopColor="#94A3B8" />
-      </linearGradient>
 
-      {/* Cloud: Solid White/Grey Gradient */}
-      <linearGradient id="cloud-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#FFFFFF" />
-        <stop offset="100%" stopColor="#CBD5E1" />
-      </linearGradient>
 
-      {/* Rain: Solid Blue Gradient */}
-      <linearGradient id="rain-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#60A5FA" />
-        <stop offset="100%" stopColor="#2563EB" />
-      </linearGradient>
-
-      {/* Lightning: Solid Yellow Gradient */}
-      <linearGradient id="lightning-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#FEF08A" />
-        <stop offset="100%" stopColor="#EAB308" />
-      </linearGradient>
-
-      {/* CloudSun: Solid White to Orange */}
-      <linearGradient id="cloud-sun-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="20%" stopColor="#FFFFFF" />
-        <stop offset="100%" stopColor="#FDB813" />
-      </linearGradient>
-
-      {/* CloudMoon: Solid White to Blue */}
-      <linearGradient id="cloud-moon-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="20%" stopColor="#E2E8F0" />
-        <stop offset="100%" stopColor="#60A5FA" />
-      </linearGradient>
-
-      {/* Soft Drop Shadow for Depth */}
-      <filter id="icon-shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000" floodOpacity="0.15" />
-      </filter>
-    </defs>
-  </svg>
-);
-
-// Standard Lucide Icons with Styling
-const WeatherIcon = ({ condition, isDay }: { condition: string; isDay: boolean }) => {
-      const iconProps = {
-        className: "w-16 h-16",
-        strokeWidth: 1.5,
-        style: { filter: "url(#icon-shadow)" }
-      };
-    
-      switch (condition) {
-        case 'Sunny':
-      return isDay 
-        ? <Sun {...iconProps} stroke="url(#sun-gradient)" fill="url(#sun-gradient)" />
-        : <MoonStar {...iconProps} stroke="url(#moon-gradient)" fill="url(#moon-gradient)" strokeWidth={0} />;
-    case 'Rainy':
-      return <CloudRain {...iconProps} stroke="url(#rain-gradient)" fill="url(#rain-gradient)" />;
-    case 'Drizzle':
-      return <CloudDrizzle {...iconProps} stroke="url(#rain-gradient)" fill="url(#rain-gradient)" />;
-    case 'Snowy':
-      return <CloudSnow {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" />;
-    case 'Thunderstorm':
-      return <CloudLightning {...iconProps} stroke="url(#lightning-gradient)" fill="url(#lightning-gradient)" />;
-    case 'Foggy':
-      return <CloudFog {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" />;
-    case 'Cloudy':
-      return <Cloud {...iconProps} stroke="url(#cloud-gradient)" fill="url(#cloud-gradient)" strokeWidth={0} />;
-    default:
-      // Part Cloudy
-      return isDay 
-        ? <CloudSun {...iconProps} stroke="url(#cloud-sun-gradient)" fill="url(#cloud-sun-gradient)" />
-        : <CloudMoon {...iconProps} stroke="url(#cloud-moon-gradient)" fill="url(#cloud-moon-gradient)" />;
-  }
-};
 
 export function WeatherCard() {
   const { t, language } = useLanguage();
@@ -125,44 +47,14 @@ export function WeatherCard() {
   const fetchWeather = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=31.2304&longitude=121.4737&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=temperature_2m_max,temperature_2m_min&wind_speed_unit=kmh&timezone=Asia%2FShanghai"
-      );
-      const data = await response.json();
-      const current = data.current;
-      const daily = data.daily;
+      // Use 'open-meteo' (Free, No Key) or 'qweather' (Needs Key in .env.local)
+      // To switch to QWeather: fetchWeatherWithCache('qweather', language)
+      const data = await fetchWeatherWithCache('qweather', language);
+  
       
-      let condition = "Cloudy";
-      const code = current.weather_code;
-      
-      // WMO Weather interpretation codes (WW)
-      if (code === 0) {
-        condition = "Sunny";
-      } else if (code === 1 || code === 2 || code === 3) {
-        condition = "Cloudy"; // Actually Partly Cloudy for 1/2
-      } else if (code === 45 || code === 48) {
-        condition = "Foggy";
-      } else if (code >= 51 && code <= 55) {
-        condition = "Drizzle";
-      } else if ((code >= 61 && code <= 65) || (code >= 80 && code <= 82)) {
-        condition = "Rainy";
-      } else if ((code >= 71 && code <= 77) || code === 85 || code === 86) {
-        condition = "Snowy";
-      } else if (code >= 95) {
-        condition = "Thunderstorm";
+      if (data) {
+        setWeather(data);
       }
-      
-      setWeather({
-        temp: Math.round(current.temperature_2m),
-        condition: condition,
-        location: "weather.shanghai",
-        humidity: current.relative_humidity_2m,
-        windSpeed: Math.round(current.wind_speed_10m),
-        feelsLike: Math.round(current.apparent_temperature),
-        isDay: !!current.is_day,
-        minTemp: Math.round(daily.temperature_2m_min[0]),
-        maxTemp: Math.round(daily.temperature_2m_max[0])
-      });
     } catch (error) {
       console.error("Failed to fetch weather", error);
     } finally {
@@ -178,6 +70,13 @@ export function WeatherCard() {
     const weekday = now.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { weekday: 'short' });
     setDate(`${year}.${month}.${day} ${weekday}`);
     fetchWeather(); 
+
+    // Refresh every 5 minutes
+    const interval = setInterval(() => {
+      fetchWeather();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, [language]);
 
   const getBackgroundClass = () => {
@@ -203,6 +102,10 @@ export function WeatherCard() {
       return isDay
         ? "bg-gradient-to-b from-[#5D6D7E]/80 to-[#BFC9CA]/80" // Cloudy Grey
         : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Night Cloud
+    } else if (condition === 'Windy') {
+      return isDay
+        ? "bg-gradient-to-b from-[#485563]/80 to-[#29323c]/80" // Windy Grey
+        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Night Wind
     } else {
       // Default
       return isDay
@@ -220,6 +123,7 @@ export function WeatherCard() {
       case 'Thunderstorm': return t('weather.thunderstorm');
       case 'Foggy': return t('weather.foggy');
       case 'Drizzle': return t('weather.drizzle');
+      case 'Windy': return t('weather.windy');
       default: return condition;
     }
   };
@@ -277,13 +181,17 @@ export function WeatherCard() {
         {/* Right: Big Glassy Icon */}
         <div className="flex flex-col justify-center h-full">
            <motion.div 
-             className="transform scale-150 mr-4 filter drop-shadow-2xl"
+             className="transform scale-150 mr-4"
              whileHover={{ 
                rotate: [0, -10, 10, -5, 5, 0],
                transition: { duration: 0.5 }
              }}
            >
-              <WeatherIcon condition={weather?.condition || 'Sunny'} isDay={weather?.isDay ?? true} />
+              <FrostedGlassIcon 
+                condition={weather?.condition || 'Sunny'} 
+                isDay={weather?.isDay ?? true} 
+                iconCode={weather?.iconCode}
+              />
            </motion.div>
         </div>
       </div>

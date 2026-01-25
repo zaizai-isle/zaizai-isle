@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="qi-503-fill" viewBox="0 0 16 16">
+  <defs>
+    <!-- 滤镜定义：玻璃投影 -->
+    <filter id="glass-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="rgba(0,0,0,0.15)"/>
+    </filter>
+    <filter id="sun-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="rgba(250,108,33,0.4)"/>
+    </filter>
+    <!-- 太阳系 -->
+    <linearGradient id="sun-gradient-day" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD358"/>
+      <stop offset="100%" stop-color="#FA6C21"/>
+    </linearGradient>
+    <!-- 月亮系 -->
+    <linearGradient id="moon-gradient-night" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#DCEEFF"/>
+    </linearGradient>
+    <!-- 云朵系 (玻璃质感渐变) -->
+    <linearGradient id="cloud-gradient-day" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="cloud-gradient-night" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0.2"/>
+    </linearGradient>
+    <!-- 雨滴系 -->
+    <linearGradient id="raindrop-gradient-normal" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#56CCF2"/>
+      <stop offset="100%" stop-color="#2F80ED"/>
+    </linearGradient>
+    <linearGradient id="raindrop-gradient-heavy" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#2F80ED"/>
+      <stop offset="100%" stop-color="#1B4F93"/>
+    </linearGradient>
+    <!-- 雪花系 -->
+    <linearGradient id="snowflake-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#E1F5FE" stop-opacity="0.8"/>
+    </linearGradient>
+    <!-- 雷电系 -->
+    <linearGradient id="thunder-gradient" x1="10.11%" y1="0%" x2="63.87%" y2="100%">
+      <stop offset="0%" stop-color="#FFD200"/>
+      <stop offset="100%" stop-color="#FF4D00"/>
+    </linearGradient>
+    <!-- 雾霾/沙尘系 -->
+    <linearGradient id="haze-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDF5E6" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FddfAF" stop-opacity="0.7"/>
+    </linearGradient>
+  
+  <style>
+    /* 太阳系 */
+    .sun-day { 
+        fill: url(#sun-gradient-day); 
+        filter: url(#sun-glow);
+    }
+    .sun-ray { fill: #FFA500; opacity: 0.8; }
+    
+    /* 月亮系 */
+    .moon-night { 
+        fill: url(#moon-gradient-night); 
+        filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)); 
+    }
+    .moon-star { fill: #ffffff; opacity: 0.9; }
+    
+    /* 云朵系 - 核心玻璃质感 */
+    .cloud-day { 
+        fill: url(#cloud-gradient-day); 
+        stroke: rgba(255,255,255,0.8);
+        stroke-width: 0.2px;
+        filter: url(#glass-shadow);
+    }
+    .cloud-night { 
+        fill: url(#cloud-gradient-night); 
+        stroke: rgba(255,255,255,0.4);
+        stroke-width: 0.2px;
+        filter: url(#glass-shadow);
+    }
+
+    /* 雨滴系 */
+    .raindrop-normal { 
+        fill: url(#raindrop-gradient-normal); 
+        stroke: rgba(255,255,255,0.3);
+        stroke-width: 0.2px;
+    }
+    .raindrop-heavy { 
+        fill: url(#raindrop-gradient-heavy); 
+        stroke: rgba(255,255,255,0.2);
+        stroke-width: 0.2px;
+    }
+    
+    /* 雪花系 */
+    .snowflake { 
+        fill: url(#snowflake-gradient); 
+        stroke: rgba(255,255,255,0.5);
+        stroke-width: 0.2px;
+        filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+    }
+    
+    /* 雷电系 */
+    .thunder { 
+        fill: url(#thunder-gradient); 
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); 
+    }
+
+    /* 雾霾系 */
+    .fog-light { 
+        fill: rgba(255,255,255,0.6); 
+        stroke: rgba(255,255,255,0.3);
+        stroke-width: 0.1px;
+    }
+    .haze-light { 
+        fill: url(#haze-gradient); 
+        stroke: rgba(253, 223, 175, 0.4);
+        stroke-width: 0.1px;
+    }
+  </style>
+</defs>
+
+<path class="haze-light" d="M4.5 1.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z M8.5 1.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z M5.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z M3.5 5.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z M5.75 7.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z M2.5 10.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z M2.75 15.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z M6 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z M9.75 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z M15.999 5.106c0-1.863-2.498-3.458-6.03-4.106 1.904.808 3.099 1.968 3.099 3.257 0 2.44-4.275 4.418-9.55 4.418A19.596 19.596 0 0 1 0 8.363a16.95 16.95 0 0 0 6.452 1.16 17.35 17.35 0 0 0 6.099-1.018c.006.058.01.117.01.176 0 1.83-3.206 3.313-7.16 3.313a14.628 14.628 0 0 1-2.64-.234 12.7 12.7 0 0 0 4.837.871 13.361 13.361 0 0 0 4.267-.653c0 .02.006.039.006.058 0 1.373-2.405 2.484-5.371 2.484a10.992 10.992 0 0 1-1.98-.174 9.53 9.53 0 0 0 3.629.653c2.965 0 5.371-1.113 5.371-2.486a1.502 1.502 0 0 0-.143-.57 1.454 1.454 0 0 0-.35-.466c1.079-.58 1.734-1.335 1.734-2.16a2.084 2.084 0 0 0-.231-.836 2.016 2.016 0 0 0-.548-.66 3.332 3.332 0 0 0 1.36-1.078A3.49 3.49 0 0 0 16 5.106h-.001Z" />
+</svg>

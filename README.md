@@ -12,67 +12,67 @@
 
 [✨ Visit the Isle / 访问小岛](https://zaizai-isle.github.io/zaizai-isle/)
 
-<h2 align="center">
-  Build more, think more, find the spark.<br>
-  再做一点，再想一点，惊喜总在发生。
-</h2>
+## About · 关于
 
+**Zaizai Isle** 是一个以 *Vibe Coding* 方式构建的轻量级个人网站与实验空间。
 
+它不是：
+- 传统意义上的简历站  
+- 单纯的作品展示页  
+- 为了炫技而存在的技术 Demo  
 
-### 🦉 Design Philosophy / 设计笔记
+它更像是：
+- 一个持续生长的个人数字空间  
+- 用来承载想法、工具与实验的地方  
+- AI 辅助下进行产品设计与交付的真实案例  
 
-> 在数字潮汐中，寻找那块不动的礁石。
+整个站点采用渐进式构建方式。  
+每一次更新更关注判断力、可用性与整体体验，而不是功能数量。
 
-#### 01. The Spirit / 灵感：鲸头鹳
-全站设计以鲸头鹳为图腾。它代表了 AI 时代稀缺的特质：极致的静止、深度的观察。这种“禅意”构成了小岛的底色——外在波澜不惊，内在逻辑精密。
+有些模块已经稳定，  
+有些仍在演进中。  
+它们存在的原因很简单：在当下，它们值得被做出来。
 
-#### 02. The Visual / 视觉风格
-追求“极致清冷”的呼吸感。通过大量的留白与低饱和色的调，过滤掉互联网的嘈杂，只留下纯粹的思考内容。
+如果你在这里获得了一点启发，  
+或发现了一个不经意的小惊喜，  
+那这个网站就已经完成了它的使命。
 
-#### 03. The Interaction / 核心交互
-动效遵循“延迟反馈”逻辑：再多停留一秒，惊喜才会发生。这种设计旨在奖赏那些像鲸头鹳一样拥有耐心的探索者。
+**再做一点，再想一点，  
+惊喜总会在不经意间发生。**
 
-<br>
+---
 
-### 🚀 Recent Updates / 最新动态 (v1.2.1)
-- **Visual Polish**: 统一了卡片标题字号 (18px) 和天气信息颜色，提升整体视觉一致性。
-- **Weather Card 2.0**: 全新升级的天气组件，支持实时数据、动态渐变背景与 3D 风格图标。
-- **Mobile Optimization**: 针对移动端优化的卡片高度与布局，确保在小屏设备上的舒适阅读体验。
-- **Interactive Details**: 天气图标增加悬停抖动动画，细节处更具灵动感。
+<details>
+<summary><strong>English Version</strong></summary>
 
-<br>
+<br />
 
-<details> 
-<summary><b>🌍 English Version / 英文版介绍 (Click to Expand)</b></summary>
+**Zaizai Isle** is a lightweight personal website built as a real-world case of *Vibe Coding*.
 
-<br>
+It is not:
+- a traditional resume site  
+- a static portfolio showcase  
+- a technical demo for its own sake  
 
-### ✧ Behind the Isle
-Zaizai Isle is a digital sanctuary where design meets logic. 
+Instead, it is:
+- a small, evolving personal space on the web  
+- a place to experiment with ideas, tools, and interactions  
+- a practical demonstration of AI-assisted product design and delivery  
 
-**▸ Inspiration** Inspired by the Shoebill, representing the "Stillness" and "Focus" required in the AI era. 
+The site is built incrementally.  
+Each update prioritizes judgment, usability, and overall experience — not feature count.
 
-**▸ Aesthetics** A Clean & Cold visual style focused on high breathability and filtered silence.  
+Some parts are refined.  
+Some are still evolving.  
+Everything exists because it felt worth building at that moment.
 
-**▸ Interaction** Designed with the philosophy that subtle persistence leads to unexpected sparks.
+If something here turns out to be useful,  
+or unexpectedly interesting,  
+then the site is doing what it’s meant to do.
 
-<br>
+**Build more, think more, find the spark.**
+
 </details>
-
-
-### ✉️ Reach the Isle
-<p align="left">
-  <a href="mailto:zaizaiely@gmail.com"><img src="https://img.shields.io/badge/Email-zaizaiely%40gmail.com-white?style=flat-square&logo=gmail"></a>
-  <a href="https://github.com/zaizai-isle"><img src="https://img.shields.io/badge/GitHub-zaizai--isle-black?style=flat-square&logo=github"></a>
-<a href="https://zaizai-isle.github.io/zaizai-isle/">
-    <img src="https://img.shields.io/badge/✨_Live_Site-Visit_Zaizai_Isle-2ea44f?style=flat-square" />
-  </a>
-</p>
-
-<p align="right">
-  <i>Stay still, stay curious.</i><br>
-  —— Zaizaiely 🏝️
-</p>
 
 ---
 

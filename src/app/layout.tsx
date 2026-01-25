@@ -13,12 +13,24 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Zaizai Isle | AI Product Designer",
-  description: "Zaizai Isle - A digital sanctuary for AI Product Design. Build more, think more, find the spark. 专注 AI 产品设计与交付，在静谧中捕捉逻辑的火花。",
-  keywords: ["Zaizai", "Zaizai Isle", "AI Product Designer", "UIUX", "Minimalist Design", "Shoebill", "产品经理", "AI设计", "极简主义"],
+  description: "Zaizai Isle — Personal site of an AI Product Designer. Focused on AI-driven product design, UX systems, and end-to-end delivery. Build more, think more, find the spark.",
+  keywords: ["Zaizai",
+  "Zaizai Isle",
+  "AI Product Designer",
+  "AI Product Manager",
+  "AI UX Design",
+  "AI-driven Design",
+  "Product Design",
+  "End-to-End Delivery",
+  "AI产品设计",
+  "AI产品经理",
+  "极简设计",
+  "产品设计",
+  "Shoebill"],
   openGraph: {
     title: "Zaizai Isle | AI Product Designer",
-    description: "Zaizai Isle - A digital sanctuary for AI Product Design. Build more, think more, find the spark. 专注 AI 产品设计与交付，在静谧中捕捉逻辑的火花。",     
-    images: "https://zaizai-isle.github.io/zaizai-isle/T.jpg",
+    description: "Zaizai Isle — Personal site of an AI Product Designer. Focused on AI-driven product design, UX systems, and end-to-end delivery. Build more, think more, find the spark.",     
+    images: "https://zaizai-isle.github.io/zaizai-isle/Zaizai-Isle_Shoebill.png",
   },
 };
 

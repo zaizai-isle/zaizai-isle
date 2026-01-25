@@ -63,3 +63,27 @@ body {
   background-color: #e5e7eb;
   border-radius: 20px;
 }
+
+/* Weather Icon Animations */
+@keyframes rain {
+  0% { transform: translateY(-1px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(3px); opacity: 0; }
+}
+.animate-rain {
+  animation: rain 1s infinite linear;
+}
+
+@keyframes flash {
+  0%, 90%, 100% { opacity: 1; }
+  92% { opacity: 0.5; }
+  94% { opacity: 1; }
+  96% { opacity: 0.5; }
+}
+.animate-flash {
+  animation: flash 5s infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

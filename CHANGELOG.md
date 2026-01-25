@@ -2,32 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v1.2.3] - 2026-01-25
+## [v1.2.2] - 2026-01-25
 ### Added
 - **Smart Weather Caching**:
   - Implemented 3-layer caching strategy: Local Browser (5min) -> Supabase Global (15min) -> QWeather API.
-  - Ensures global API usage stays within ~100 calls/day regardless of visitor traffic.
 - **Deployment**:
-  - Added `NEXT_PUBLIC_QWEATHER_KEY` to GitHub Actions workflow for production builds.
-
-### Changed
-- **Weather Card**:
-  - Added auto-refresh timer (every 5 minutes) to keep data fresh for long-staying users.
-
-## [v1.2.2] - 2026-01-25
-
-### Added
+  - Added `NEXT_PUBLIC_QWEATHER_KEY` to GitHub Actions workflow.
 - **Weather Icon Optimization**:
   - Integrated `WeatherIconsMap` for pre-processed, zero-latency icon rendering.
   - Implemented `process-icons.ts` script to auto-generate optimized SVGs with glassmorphism effects and gradients.
-  - Added robust fallback to standard icons if API data is missing.
 
 ### Changed
 - **Weather Card UI**:
-  - Reduced main weather icon size (`w-12 h-12`) and adjusted position (`-mt-2`) for better layout balance.
-  - Enhanced Sun icon rendering: Fixed missing glow effect by enabling `overflow-visible` on SVG containers.
+  - Reduced main weather icon size (`w-12 h-12`) and adjusted position (`-mt-2`).
+  - Enhanced Sun icon rendering: Fixed missing glow effect.
+  - Added auto-refresh timer (every 5 minutes).
 - **Service Robustness**:
-  - Improved error handling in `weather.ts` to correctly identify and log QWeather API 403 (Invalid Host) errors.
+  - Improved error handling in `weather.ts`.
 
 ## [v1.2.1] - 2026-01-23
 

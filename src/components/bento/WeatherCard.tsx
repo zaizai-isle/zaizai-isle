@@ -89,7 +89,7 @@ export function WeatherCard() {
     if (condition === 'Sunny') {
       return isDay 
         ? "bg-gradient-to-b from-[#7cb9e8]/80 to-[#4a90e2]/80" // Bright Blue Sky
-        : "bg-gradient-to-b from-[#0F2027]/80 via-[#1e293b]/80 to-[#1c2a3f]/80"; // Deep Night
+        : "bg-gradient-to-b from-[#0F2027]/80 to-[#1c2a3f]/80"; // Deep Night
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
         ? "bg-gradient-to-b from-[#373B44]/80 to-[#4286f4]/80" // Stormy Blue-Grey

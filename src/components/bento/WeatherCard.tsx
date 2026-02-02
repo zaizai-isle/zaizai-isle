@@ -88,33 +88,33 @@ export function WeatherCard() {
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay 
-        ? "bg-gradient-to-b from-[#2980B9]/80 to-[#6DD5FA]/80" // Bright Blue Sky
-        : "bg-gradient-to-b from-[#0F2027]/80 via-[#203A43]/80 to-[#2C5364]/80"; // Deep Night
+        ? "bg-gradient-to-b from-[#7cb9e8]/80 to-[#4a90e2]/80" // Bright Blue Sky
+        : "bg-gradient-to-b from-[#0F2027]/80 via-[#1e293b]/80 to-[#1c2a3f]/80"; // Deep Night
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
         ? "bg-gradient-to-b from-[#373B44]/80 to-[#4286f4]/80" // Stormy Blue-Grey
-        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Dark Storm
+        : "bg-gradient-to-b from-[#1e293b]/80 to-[#0f172a]/80"; // Dark Storm
     } else if (condition === 'Drizzle') {
       return isDay
-        ? "bg-gradient-to-b from-[#5D6D7E]/80 to-[#6DD5FA]/80" // Lighter Rainy Blue
-        : "bg-gradient-to-b from-[#2C3E50]/80 to-[#4CA1AF]/80"; // Night Drizzle
+        ? "bg-gradient-to-b from-[#9ca3af]/80 to-[#7a869a]/80" // Lighter Rainy Blue
+        : "bg-gradient-to-b from-[#334155]/80 to-[#141f39]/80"; // Night Drizzle
     } else if (condition === 'Snowy') {
       return isDay
-        ? "bg-gradient-to-b from-[#83a4d4]/80 to-[#b6fbff]/80" // Icy Blue
-        : "bg-gradient-to-b from-[#141E30]/80 to-[#243B55]/80"; // Dark Ice
+        ? "bg-gradient-to-b from-[#e8f4f8]/80 to-[#bfd7e9]/80" // Icy Blue
+        : "bg-gradient-to-b from-[#64748b]/80 to-[#334155]/80"; // Dark Ice
     } else if (condition === 'Foggy' || condition === 'Cloudy') {
       return isDay
-        ? "bg-gradient-to-b from-[#5D6D7E]/80 to-[#BFC9CA]/80" // Cloudy Grey
-        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Night Cloud
+        ? "bg-gradient-to-b from-[#e9edf0/80 to-[#d1d9df]/80" // Cloudy Grey
+        : "bg-gradient-to-b from-[#334155]/80 to-[#1e293b]/80"; // Night Cloud
     } else if (condition === 'Windy') {
       return isDay
         ? "bg-gradient-to-b from-[#485563]/80 to-[#29323c]/80" // Windy Grey
-        : "bg-gradient-to-b from-[#232526]/80 to-[#414345]/80"; // Night Wind
+        : "bg-gradient-to-b from-[#475162]/80 to-[#1a2338]/80"; // Night Wind
     } else {
       // Default
       return isDay
-        ? "bg-gradient-to-b from-[#4facfe]/80 to-[#00f2fe]/80"
-        : "bg-gradient-to-b from-[#0f172a]/80 to-[#334155]/80";
+        ? "bg-gradient-to-b from-[#7e8b96]/80 to-[#2c3e50]/80"
+        : "bg-gradient-to-b from-[#2c3e50]/80 to-[#141E30]/80";
     }
   };
 

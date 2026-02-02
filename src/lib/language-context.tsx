@@ -38,6 +38,7 @@ const translations: Translations = {
 
   // Stats Card
   'stats.downloads': { zh: '总下载量', en: 'Total Downloads' },
+  'stats.visitors': { zh: '访客数量', en: 'Visitors' },
   'stats.click_to_download': { zh: '点击下载卡片', en: 'Click to download card' },
 
   // Social Card
@@ -47,6 +48,7 @@ const translations: Translations = {
   'social.email': { zh: '邮箱', en: 'Email' },
   'social.github': { zh: 'GitHub', en: 'GitHub' },
   'social.email.copied': { zh: '邮箱已复制', en: 'Email copied' },
+  'social.like.thanks': { zh: '感谢喜欢', en: 'Thanks for liking' },
 
   // Guestbook Card
   'guestbook.title': { zh: '留言板', en: 'Guestbook' },

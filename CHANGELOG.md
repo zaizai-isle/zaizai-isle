@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.3] - 2026-01-30
+
+### Added
+- **Stats Card**:
+  - Implemented **Visitor Count** functionality: Tracks page visits (default 532) with session-based incrementing.
+  - Added **Supabase Integration**: Visitor data attempts to sync with the database, with a robust local fallback.
+- **Interaction Feedback**:
+  - Added a "Thanks for liking" (感谢喜欢) toast notification when clicking the Like button on the Social Card.
+
+### Changed
+- **Stats Card UI**:
+  - **Redesigned Layout**: Switched to a cleaner, vertically stacked, and centered layout.
+  - **Simplified Visuals**: Removed download and user icons for a more minimal aesthetic.
+- **Toolbox**:
+  - **Display Limit**: Restricted the main toolbox grid to show a maximum of 8 items to maintain visual balance.
+- **Internationalization**:
+  - Added translation support for "Visitors" (访客数量).
+
 ## [v1.2.2] - 2026-01-25
 
 ### Added

@@ -1,10 +1,13 @@
 "use client";
 
-import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
+import { BentoCard } from "./BentoCard";
 import { motion } from "framer-motion";
-import NextImage from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion as fmMotion } from "framer-motion";
 import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
+import NextImage from "next/image";
 import avatarImage from "@/assets/avatar-v1.png";
+ 
 
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
@@ -89,6 +92,87 @@ const Cloud = ({
 
 export const IdentityCard = () => {
   const { t, language } = useLanguage();
+  const [frame, setFrame] = useState(0);
+  const timerRef = useRef<number | null>(null);
+  const [activeUrl, setActiveUrl] = useState<string>("/shoebill-sprite-transparent.png");
+  const [loaded, setLoaded] = useState<boolean>(true);
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  type StateName = "idle" | "happy" | "excited" | "sleepy" | "working" | "alert" | "dragging";
+  const [petState, setPetState] = useState<StateName>("idle");
+  const frameWidth = 265;
+  const frameHeight = 275;
+  const stateRowMap: Record<StateName, number> = {
+    idle: 0,
+    happy: 1,
+    excited: 2,
+    sleepy: 3,
+    working: 4,
+    alert: 5,
+    dragging: 6,
+  };
+  const row = stateRowMap[petState] ?? 0;
+  const targetSize = 108;
+  const framesPerRow = 8;
+  const rows = 7;
+  const scale = Math.min(targetSize / frameWidth, targetSize / frameHeight);
+  const scaledW = frameWidth * scale;
+  const scaledH = frameHeight * scale;
+  const bgX = -(frame * scaledW);
+  const bgY = -(row * scaledH);
+  const bgSize = `${framesPerRow * scaledW}px ${rows * scaledH}px`;
+
+  useEffect(() => {
+    if (timerRef.current) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    const id = window.setInterval(() => {
+      setFrame((prev) => (prev + 1) % 8);
+    }, 240);
+    timerRef.current = id;
+    return () => {
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const prefix =
+      typeof window !== "undefined" &&
+      (window.location.pathname.startsWith("/zaizai-isle") ||
+        window.location.pathname.includes("/zaizai-isle"))
+        ? "/zaizai-isle"
+        : "";
+    const candidates = [
+      "/shoebill-sprite-transparent.png",
+      "/shoebill-sprite.png",
+      "/shoebill_sprite_clean.png",
+    ].map((p) => `${prefix}${p}`);
+    let cancelled = false;
+    (async () => {
+      for (const url of candidates) {
+        const img = new Image();
+        const ok = await new Promise<boolean>((resolve) => {
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(false);
+          img.src = url;
+        });
+        if (cancelled) return;
+        if (ok) {
+          setActiveUrl(url);
+          setLoaded(true);
+          return;
+        }
+      }
+      setLoaded(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <BentoCard 
@@ -132,22 +216,77 @@ export const IdentityCard = () => {
       </div>
 
       <div className="relative mb-8 mt-0 group">
-        <div className="w-[108px] h-[108px] rounded-full bg-white/50 relative z-10 border border-black/5 shadow-sm overflow-hidden transition-transform duration-300 ease-out hover:scale-105">
+        <div
+          className="w-[108px] h-[108px] rounded-full bg-white/50 relative z-10 border border-black/5 shadow-sm overflow-hidden transition-transform duration-300 ease-out hover:scale-105 flex items-center justify-center"
+          onMouseEnter={() => {
+            if (loaded) {
+              const pool: StateName[] = ["idle","happy","excited","sleepy","working","alert","dragging"];
+              const pick = pool[Math.floor(Math.random() * pool.length)];
+              setPetState(pick);
+              setHovering(true);
+            }
+          }}
+          onMouseLeave={() => setHovering(false)}
+        >
           <NextImage 
             src={avatarImage}
             alt={t('identity.name')}   
             width={108} 
             height={108} 
-            className="w-full h-full object-cover"
+            className={`w-full h-full object-cover ${hovering && loaded ? "opacity-0" : "opacity-100"} transition-opacity`}
             placeholder="blur"
           />
+          <div
+            className={`absolute inset-0 ${hovering && loaded ? "opacity-100" : "opacity-0"} transition-opacity`}
+            style={{
+              backgroundImage: `url(${activeUrl})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: `${bgX}px ${bgY}px`,
+              backgroundSize: bgSize,
+            }}
+            aria-label="Shoebill Avatar"
+          />
         </div>
+        {!loaded && (
+          <div className="text-xs text-black/60 mt-2">
+            雪碧图未找到
+          </div>
+        )}
       </div>
       
       <h1 className={cn(
         "relative z-10 text-3xl font-bold text-gray-900 mb-2",
         language === 'en' ? "tracking-normal" : "tracking-[2px]"
-      )}>{t('identity.name')}</h1>
+      )} onClick={() => setSelectorOpen((v) => !v)}>{t('identity.name')}</h1>
+      <AnimatePresence>
+        {selectorOpen && (
+          <fmMotion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-30 flex items-start justify-center"
+          >
+            <button
+              aria-label="close-selector"
+              className="absolute inset-0 bg-transparent"
+              onClick={() => setSelectorOpen(false)}
+            />
+            <div className="mt-4 pointer-events-auto">
+              <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md border border-black/10 rounded-full px-2 py-1 shadow">
+                {(["idle","happy","excited","sleepy","working","alert","dragging"] as StateName[]).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => { setPetState(s); setSelectorOpen(false); }}
+                    className={`px-2.5 py-1 text-[11px] rounded-full transition-all ${petState===s ? "bg-black text-white" : "bg-white text-gray-700 border border-black/10"}`}
+                  >
+                    {s[0].toUpperCase()+s.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </fmMotion.div>
+        )}
+      </AnimatePresence>
       <p className="relative z-10 text-[15px] text-[#666666] font-normal tracking-wide">
         {t('identity.role')}
       </p>

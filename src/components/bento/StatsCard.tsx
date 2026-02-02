@@ -1,9 +1,9 @@
 "use client";
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { ArrowUpRight, Download, Loader2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { motion, useSpring, useTransform, useMotionValue, animate } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toPng } from 'html-to-image';
 import { useLanguage } from "@/lib/language-context";
 import { supabase } from "@/lib/supabase";
@@ -24,23 +24,47 @@ export function StatsCard() {
   const { t } = useLanguage();
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadCount, setDownloadCount] = useState(12045);
+  const [visitorCount, setVisitorCount] = useState(532);
+  const hasIncrementedVisitor = useRef(false);
 
   useEffect(() => {
     // Initial fetch from Supabase (or fallback to default)
-    const fetchCount = async () => {
+    const fetchStats = async () => {
       const client = supabase;
       if (client) {
-        const { data, error } = await client
-          .from('stats')
-          .select('downloads')
-          .single();
-        
-        if (data) {
-          setDownloadCount(Math.max(12045, data.downloads));
+        try {
+          // Fetch downloads and visitors
+          const { data, error } = await client
+            .from('stats')
+            .select('downloads, visitors')
+            .single();
+          
+          if (data) {
+            if (data.downloads) setDownloadCount(Math.max(12045, data.downloads));
+            if (data.visitors) setVisitorCount(Math.max(532, data.visitors));
+          }
+
+          // Increment visitor count (once per session/mount)
+          if (!hasIncrementedVisitor.current) {
+            hasIncrementedVisitor.current = true;
+            setVisitorCount(prev => prev + 1);
+            
+            // Try RPC first, fallback to update
+            const { error: rpcError } = await client.rpc('increment_visitors');
+            if (rpcError) {
+               // Fallback: manual update
+               // Note: This is less safe for concurrency but works for simple cases
+               if (data) {
+                  await client.from('stats').update({ visitors: (data.visitors || 532) + 1 }).eq('id', 1);
+               }
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to fetch stats:', err);
         }
       }
     };
-    fetchCount();
+    fetchStats();
   }, []);
 
   const handleDownload = async () => {
@@ -97,28 +121,39 @@ export function StatsCard() {
       onClick={handleDownload} 
       colSpan={1} 
       rowSpan={1} 
-      className="h-full cursor-pointer justify-between bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all p-4 md:p-5"
+      className="h-full cursor-pointer justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all p-4 md:p-5 relative"
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
-      <div className="flex justify-between items-start relative z-10">
-        <div className="p-2 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors">
-          {isDownloading ? (
-            <Loader2 className="w-5 h-5 text-gray-300 animate-spin" />
-          ) : (
-            <Download className="w-5 h-5 text-gray-300" />
-          )}
-        </div>
-        <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 text-xs text-white/90 font-medium px-3 py-1.5 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-xl z-50 pointer-events-none">
-          {t('stats.click_to_download')}
-        </div>
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 text-xs text-white/90 font-medium px-3 py-1.5 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-xl z-50 pointer-events-none">
+        {t('stats.click_to_download')}
       </div>
       
-      <div>
-        <div className="text-3xl md:text-4xl font-bold mb-1 flex items-baseline">
-          <Counter value={downloadCount} />
-          <span className="text-sm font-normal text-gray-400 ml-1">+</span>
+      <div className="flex flex-col gap-6 w-full px-1">
+        {/* Downloads */}
+        <div className="flex items-center gap-4">
+          <div>
+            <div className="text-2xl md:text-3xl font-bold mb-0.5 flex items-baseline leading-none">
+              <Counter value={downloadCount} />
+              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+            </div>
+            <p className="text-xs text-gray-400 font-medium">
+              {t('stats.downloads')}
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-gray-400 font-medium">{t('stats.downloads')}</p>
+
+        {/* Visitors */}
+        <div className="flex items-center gap-4">
+          <div>
+            <div className="text-2xl md:text-3xl font-bold mb-0.5 flex items-baseline leading-none">
+              <Counter value={visitorCount} />
+              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+            </div>
+            <p className="text-xs text-gray-400 font-medium">
+              {t('stats.visitors')}
+            </p>
+          </div>
+        </div>
       </div>
     </BentoCard>
   );

@@ -13,6 +13,7 @@ export function SocialCard() {
   const { t } = useLanguage();
   const [showQRCode, setShowQRCode] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
+  const [showLikeToast, setShowLikeToast] = useState(false);
   const [likes, setLikes] = useState(12);
   const [hasLiked, setHasLiked] = useState(false);
   const [flyingHearts, setFlyingHearts] = useState<{id: number, x: number, y: number, scale: number, rotate: number}[]>([]);
@@ -67,6 +68,10 @@ export function SocialCard() {
       localStorage.setItem('portfolio_has_liked', 'true');
       triggerHeartAnimation();
       trackEvent('like_portfolio', { value: likes + 1 });
+      
+      // Show toast
+      setShowLikeToast(true);
+      setTimeout(() => setShowLikeToast(false), 3000);
     }
   };
 
@@ -133,7 +138,7 @@ export function SocialCard() {
         <button 
           onClick={handleLikeClick}
           onMouseEnter={handleMouseEnter}
-          className={`flex flex-col items-center justify-center gap-1 transition-transform active:scale-95 w-full h-full rounded-full ${hasLiked ? 'cursor-default' : 'hover:scale-105'}`}
+          className={`flex flex-col items-center justify-center gap-1 transition-transform active:scale-95 w-full h-full rounded-full relative ${hasLiked ? 'cursor-default' : 'hover:scale-105'}`}
         >
           <div className={`relative w-15 h-15 flex items-center justify-center rounded-full transition-colors backdrop-blur-md border border-white/20 ${hasLiked ? 'bg-red-50/80 text-red-500 border-red-100' : 'bg-white/20 text-gray-400 hover:bg-white/40 hover:text-red-400'}`}>
             <Heart className={`w-8 h-8 translate-x-[1px] translate-y-[1px] ${hasLiked ? 'fill-current' : ''}`} />
@@ -158,6 +163,18 @@ export function SocialCard() {
               ))}
             </AnimatePresence>
           </div>
+          <AnimatePresence>
+            {showLikeToast && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50"
+              >
+                {t('social.like.thanks')}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </button>
       </div>
 

@@ -1,9 +1,7 @@
 import { WeatherData } from "@/components/bento/WeatherCard";
-import { supabase } from "@/lib/supabase";
 
 // Configuration
 const LOCAL_CACHE_DURATION = 5 * 60 * 1000; // Local browser cache: 5 minutes
-const GLOBAL_CACHE_DURATION = 15 * 60 * 1000; // Supabase global cache: 15 minutes (approx 96 API calls/day)
 const QWEATHER_API_KEY = process.env.NEXT_PUBLIC_QWEATHER_KEY || "";
 // Note: You need to add NEXT_PUBLIC_QWEATHER_KEY to your .env.local file
 
@@ -61,41 +59,7 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
     }
   }
 
-  // 2. Check Supabase Global Cache (L2 Cache)
-  if (supabase) {
-    try {
-      const globalId = provider === 'qweather' ? 2 : 1;
-      const { data: globalCache } = await supabase
-        .from('weather_cache')
-        .select('*')
-        .eq('id', globalId)
-        .single();
-
-      if (globalCache && globalCache.updated_at) {
-        const globalTime = new Date(globalCache.updated_at).getTime();
-        const now = Date.now();
-
-        // If global cache is fresh enough (within 15 mins)
-        if (now - globalTime < GLOBAL_CACHE_DURATION) {
-          console.log(`Using Supabase global cached weather data`);
-          const weatherData = globalCache.data as WeatherData;
-
-          // Update local cache to sync
-          const cacheEntry: CachedData = {
-            timestamp: Date.now(),
-            data: weatherData
-          };
-          localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
-
-          return weatherData;
-        }
-      }
-    } catch (error) {
-      console.warn("Failed to read from Supabase weather_cache", error);
-    }
-  }
-
-  // 3. Fetch Fresh Data (L3 Source)
+  // 2. Fetch Fresh Data
   console.log(`Fetching fresh weather data from ${provider}`);
   let data: WeatherData | null = null;
 
@@ -110,7 +74,7 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
     return null;
   }
 
-  // 4. Update Caches
+  // 3. Update Caches
   if (data) {
     // Update Local Cache
     const cacheEntry: CachedData = {
@@ -118,22 +82,6 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
       data
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
-
-    // Update Supabase Global Cache
-    if (supabase) {
-      try {
-        const globalId = provider === 'qweather' ? 2 : 1;
-        await supabase.from('weather_cache').upsert({
-          id: globalId,
-          data: data,
-          updated_at: new Date().toISOString(),
-          provider: provider
-        });
-        console.log("Updated Supabase global weather cache");
-      } catch (error) {
-        console.warn("Failed to update Supabase weather_cache", error);
-      }
-    }
   }
 
   return data;

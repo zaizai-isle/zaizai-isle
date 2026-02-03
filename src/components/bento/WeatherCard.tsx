@@ -91,7 +91,7 @@ export function WeatherCard() {
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay 
-        ? mk('#3b76b2ff', '#4086d7ff', DAY_STOP)
+        ? mk('#3b76b2ff', '#689ad4ff', DAY_STOP)
         : mk('#334155', '#1c2a3f', NIGHT_STOP);
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
@@ -107,7 +107,7 @@ export function WeatherCard() {
         : mk('#64748b', '#334155', NIGHT_STOP);
     } else if (condition === 'PartlyCloudy') {
       return isDay
-        ? mk('#2e7bb6ff', '#4a8dd3', DAY_STOP)
+        ? mk('#428dc7ff', '#8bbcf0ff', DAY_STOP)
         : mk('#1b2a3b', '#0f1a2a', NIGHT_STOP);
     } else if (condition === 'Foggy' || condition === 'Cloudy') {
       return isDay

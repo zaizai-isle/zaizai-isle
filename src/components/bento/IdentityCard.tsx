@@ -94,7 +94,7 @@ interface IdentityCardProps {
   spriteUrl?: string;
 }
 
-export const IdentityCard = ({ spriteUrl }: IdentityCardProps) => {
+export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }: IdentityCardProps) => {
   const { t, language } = useLanguage();
   const [frame, setFrame] = useState(0);
   const timerRef = useRef<number | null>(null);
@@ -247,6 +247,7 @@ export const IdentityCard = ({ spriteUrl }: IdentityCardProps) => {
             height={108}
             className={`w-full h-full object-cover ${hovering && loaded ? "opacity-0" : "opacity-100"} transition-opacity`}
             placeholder="blur"
+            priority
           />
           <div
             className={`absolute inset-0 ${hovering && loaded ? "opacity-100" : "opacity-0"} transition-opacity`}

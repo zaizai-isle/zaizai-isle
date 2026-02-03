@@ -50,8 +50,8 @@ export function WeatherCard() {
       // Use 'open-meteo' (Free, No Key) or 'qweather' (Needs Key in .env.local)
       // To switch to QWeather: fetchWeatherWithCache('qweather', language)
       const data = await fetchWeatherWithCache('open-meteo', language);
-  
-      
+
+
       if (data) {
         setWeather(data);
       }
@@ -69,7 +69,7 @@ export function WeatherCard() {
     const day = String(now.getDate()).padStart(2, '0');
     const weekday = now.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { weekday: 'short' });
     setDate(`${year}.${month}.${day} ${weekday}`);
-    fetchWeather(); 
+    fetchWeather();
 
     // Refresh every 5 minutes
     const interval = setInterval(() => {
@@ -90,7 +90,7 @@ export function WeatherCard() {
 
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
-      return isDay 
+      return isDay
         ? mk('#3b76b2ff', '#689ad4ff', DAY_STOP)
         : mk('#334155', '#1c2a3f', NIGHT_STOP);
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
@@ -168,6 +168,7 @@ export function WeatherCard() {
       case 'Foggy': return t('weather.foggy');
       case 'Drizzle': return t('weather.drizzle');
       case 'Windy': return t('weather.windy');
+      // case 'PartlyCloudy': return t('weather.partly_cloudy');
       case 'PartlyCloudy': return t('weather.partly_cloudy');
       case 'Mist': return t('weather.mist');
       case 'Haze': return t('weather.haze');
@@ -199,9 +200,9 @@ export function WeatherCard() {
   };
 
   return (
-    <BentoCard 
-      colSpan={2} 
-      rowSpan={1} 
+    <BentoCard
+      colSpan={2}
+      rowSpan={1}
       className={cn(
         "h-full min-h-[200px] flex flex-col justify-between backdrop-blur-xl text-white p-5 overflow-hidden relative shadow-lg transition-all duration-500 group",
       )}
@@ -211,7 +212,7 @@ export function WeatherCard() {
       <WeatherDefs />
       {/* Background ambient glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-      
+
       {/* Top Section: Main Info & Icon */}
       <div className="flex flex-row justify-between items-start flex-1 w-full z-10">
         {/* Left: Typography Stack */}
@@ -220,7 +221,7 @@ export function WeatherCard() {
           <div className="flex flex-col gap-1 mb-2 flex-none">
             <div className="flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-white/60 drop-shadow-md" />
-              <h3 
+              <h3
                 onClick={fetchWeather}
                 className="text-[18px] font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
               >
@@ -232,7 +233,7 @@ export function WeatherCard() {
               {date}
             </div>
           </div>
-          
+
           {/* Big Temperature & Condition - Vertically Centered */}
           <div className="flex-1 flex flex-col justify-center pl-4.5 pb-2">
             <div className="flex flex-col items-start">
@@ -250,43 +251,43 @@ export function WeatherCard() {
 
         {/* Right: Big Glassy Icon */}
         <div className="flex flex-col justify-center h-full">
-           <motion.div 
-             className="transform scale-150 mr-4"
-             whileHover={{ 
-               rotate: [0, -10, 10, -5, 5, 0],
-               transition: { duration: 0.5 }
-             }}
-           >
-              <FrostedGlassIcon 
-                condition={weather?.condition || 'Sunny'} 
-                isDay={weather?.isDay ?? true} 
-                iconCode={weather?.iconCode}
-              />
-           </motion.div>
+          <motion.div
+            className="transform scale-150 mr-4"
+            whileHover={{
+              rotate: [0, -10, 10, -5, 5, 0],
+              transition: { duration: 0.5 }
+            }}
+          >
+            <FrostedGlassIcon
+              condition={weather?.condition || 'Sunny'}
+              isDay={weather?.isDay ?? true}
+              iconCode={weather?.iconCode}
+            />
+          </motion.div>
         </div>
       </div>
 
       {/* Bottom Section: Unified Stats Row with Translucent Pill Background */}
       <div className="flex items-center justify-between z-10 w-full text-xs font-medium text-white/50 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm border border-white/10 shadow-sm">
-         {/* H/L */}
-         <div className="flex items-center gap-1">
-            <Thermometer className="w-3 h-3" />
-            <span>{weather?.maxTemp}°</span>
-            <span className="opacity-50">/</span>
-            <span>{weather?.minTemp}°</span>
-         </div>
-         
-         {/* Humidity */}
-         <div className="flex items-center gap-1">
-            <Droplets className="w-3 h-3" />
-            <span>{weather?.humidity}%</span>
-         </div>
+        {/* H/L */}
+        <div className="flex items-center gap-1">
+          <Thermometer className="w-3 h-3" />
+          <span>{weather?.maxTemp}°</span>
+          <span className="opacity-50">/</span>
+          <span>{weather?.minTemp}°</span>
+        </div>
 
-         {/* Wind */}
-         <div className="flex items-center gap-1">
-            <Wind className="w-3 h-3" />
-            <span>{weather?.windSpeed}km/h</span>
-         </div>
+        {/* Humidity */}
+        <div className="flex items-center gap-1">
+          <Droplets className="w-3 h-3" />
+          <span>{weather?.humidity}%</span>
+        </div>
+
+        {/* Wind */}
+        <div className="flex items-center gap-1">
+          <Wind className="w-3 h-3" />
+          <span>{weather?.windSpeed}km/h</span>
+        </div>
       </div>
     </BentoCard>
   );

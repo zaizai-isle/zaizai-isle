@@ -76,6 +76,7 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
 
   // 3. Update Caches
   if (data) {
+    console.log(`[Weather Debug] Condition: ${data.condition}, IconCode: ${data.iconCode}`);
     // Update Local Cache
     const cacheEntry: CachedData = {
       timestamp: Date.now(),
@@ -189,6 +190,8 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
 
   const wmoCode = current.weather_code;
   const isDay = !!current.is_day;
+
+  console.log(`[OpenMeteo Debug] Raw WMO Code: ${wmoCode}, Is Day: ${isDay}`);
 
   // Get weather description
   const weatherDesc = weatherCodeToDesc[wmoCode] || `Unknown(${wmoCode})`;

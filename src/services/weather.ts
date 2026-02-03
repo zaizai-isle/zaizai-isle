@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 // Configuration
 const LOCAL_CACHE_DURATION = 5 * 60 * 1000; // Local browser cache: 5 minutes
 const GLOBAL_CACHE_DURATION = 15 * 60 * 1000; // Supabase global cache: 15 minutes (approx 96 API calls/day)
-const QWEATHER_API_KEY = process.env.NEXT_PUBLIC_QWEATHER_KEY || ""; 
+const QWEATHER_API_KEY = process.env.NEXT_PUBLIC_QWEATHER_KEY || "";
 // Note: You need to add NEXT_PUBLIC_QWEATHER_KEY to your .env.local file
 
 export type WeatherProvider = 'open-meteo' | 'qweather';
@@ -38,15 +38,15 @@ const mapQWeatherCode = (code: string): string => {
   // Drizzle is often subset of Rain in QWeather (300-304 are showers/storms, 305-309 light rains)
   // Let's map specific light rains to Drizzle if needed, but QWeather puts them under 3xx.
   // We'll stick to simple mapping for now.
- 
+
   return "Sunny"; // Default
 };
 
 export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-meteo', lang: string = 'en'): Promise<WeatherData | null> => {
   // 1. Check Local Browser Cache (L1 Cache)
-  const cacheKey = `weather_cache_${provider}_${lang}`;
+  const cacheKey = `weather_cache_v2_${provider}_${lang}`;
   const cached = localStorage.getItem(cacheKey);
-  
+
   if (cached) {
     try {
       const parsed: CachedData = JSON.parse(cached);
@@ -74,19 +74,19 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
       if (globalCache && globalCache.updated_at) {
         const globalTime = new Date(globalCache.updated_at).getTime();
         const now = Date.now();
-        
+
         // If global cache is fresh enough (within 15 mins)
         if (now - globalTime < GLOBAL_CACHE_DURATION) {
           console.log(`Using Supabase global cached weather data`);
           const weatherData = globalCache.data as WeatherData;
-          
+
           // Update local cache to sync
           const cacheEntry: CachedData = {
             timestamp: Date.now(),
             data: weatherData
           };
           localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
-          
+
           return weatherData;
         }
       }
@@ -140,54 +140,54 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
 };
 
 // 1. 定义WMO天气代码到天气描述的基础映射 
-const weatherCodeToDesc: Record<number, string> = { 
-  0: '晴朗', 
-  1: '少云', 
-  2: '多云', 
-  3: '阴', 
+const weatherCodeToDesc: Record<number, string> = {
+  0: '晴朗',
+  1: '少云',
+  2: '多云',
+  3: '阴',
   90: '大风',
-  20: '薄雾', 
-  23: '霾', 
-  26: '扬沙', 
-  45: '雾', 
-  48: '冻雾', 
-  51: '毛毛雨（轻）', 
-  53: '毛毛雨（中）', 
-  55: '毛毛雨（浓）', 
-  56: '冻毛毛雨（轻）', 
-  57: '冻毛毛雨（浓）', 
-  61: '小雨', 
-  63: '中雨', 
-  65: '大雨', 
-  66: '冻雨（轻）', 
-  67: '冻雨（浓）', 
-  71: '小雪', 
-  73: '中雪', 
-  75: '大雪', 
-  77: '雪粒', 
-  80: '阵雨（轻）', 
-  81: '阵雨（中）', 
-  82: '阵雨（浓）', 
-  85: '阵雪（轻）', 
-  86: '阵雪（浓）', 
-  95: '雷暴（轻/中）', 
-  96: '雷暴伴冰雹（轻）', 
-  99: '雷暴伴冰雹（浓）', 
-  43: '沙尘暴', 
-  44: '强沙尘暴' 
-}; 
+  20: '薄雾',
+  23: '霾',
+  26: '扬沙',
+  45: '雾',
+  48: '冻雾',
+  51: '毛毛雨（轻）',
+  53: '毛毛雨（中）',
+  55: '毛毛雨（浓）',
+  56: '冻毛毛雨（轻）',
+  57: '冻毛毛雨（浓）',
+  61: '小雨',
+  63: '中雨',
+  65: '大雨',
+  66: '冻雨（轻）',
+  67: '冻雨（浓）',
+  71: '小雪',
+  73: '中雪',
+  75: '大雪',
+  77: '雪粒',
+  80: '阵雨（轻）',
+  81: '阵雨（中）',
+  82: '阵雨（浓）',
+  85: '阵雪（轻）',
+  86: '阵雪（浓）',
+  95: '雷暴（轻/中）',
+  96: '雷暴伴冰雹（轻）',
+  99: '雷暴伴冰雹（浓）',
+  43: '沙尘暴',
+  44: '强沙尘暴'
+};
 
 // 2. 核心映射：WMO代码 → 图标编码（区分白天/夜晚） 
-const weatherCodeToIcon: Record<number, { day: number; night: number }> = { 
+const weatherCodeToIcon: Record<number, { day: number; night: number }> = {
   // 晴/少云/多云系列 
-  0: { day: 100, night: 150 }, 
+  0: { day: 100, night: 150 },
   1: { day: 102, night: 152 }, // 少云（Mainly clear / Few clouds）
   2: { day: 101, night: 151 }, // 多云（Cloudy）
-  3: { day: 104, night: 104 }, 
-  
+  3: { day: 104, night: 104 },
+
   // 风系列（用户定义：WMO 90 → 大风；QWeather 2528）
   90: { day: 2528, night: 2528 },
-  
+
   // 雾/霾/沙尘系列 
   20: { day: 500, night: 500 }, // 薄雾 
   23: { day: 502, night: 502 }, // 霾 
@@ -196,7 +196,7 @@ const weatherCodeToIcon: Record<number, { day: number; night: number }> = {
   48: { day: 501, night: 501 }, // 冻雾 
   43: { day: 507, night: 507 }, // 沙尘暴 
   44: { day: 508, night: 508 }, // 强沙尘暴 
-  
+
   // 雨系列 
   51: { day: 309, night: 309 }, // 毛毛雨（轻） 
   53: { day: 309, night: 309 }, // 毛毛雨（中） 
@@ -211,7 +211,7 @@ const weatherCodeToIcon: Record<number, { day: number; night: number }> = {
   80: { day: 300, night: 350 }, // 阵雨（轻） 
   81: { day: 300, night: 350 }, // 阵雨（中） 
   82: { day: 301, night: 351 }, // 阵雨（浓） 
-  
+
   // 雪系列 
   71: { day: 400, night: 400 }, // 小雪 
   73: { day: 401, night: 401 }, // 中雪 
@@ -219,16 +219,16 @@ const weatherCodeToIcon: Record<number, { day: number; night: number }> = {
   77: { day: 499, night: 499 }, // 雪粒 
   85: { day: 407, night: 457 }, // 阵雪（轻） 
   86: { day: 407, night: 457 }, // 阵雪（浓） 
-  
+
   // 雷暴系列 
   95: { day: 302, night: 302 }, // 雷暴 
   96: { day: 303, night: 303 }, // 雷暴伴冰雹（轻） 
   99: { day: 304, night: 304 }, // 雷暴伴冰雹（浓） 
-  
+
   // 混合天气 
   36: { day: 404, night: 404 }, // 雨夹雪 
   38: { day: 406, night: 456 }  // 阵雨夹雪 
-}; 
+};
 
 // Open-Meteo Implementation (Existing logic refactored)
 const fetchOpenMeteo = async (): Promise<WeatherData> => {
@@ -238,17 +238,17 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
   const data = await response.json();
   const current = data.current;
   const daily = data.daily;
-  
+
   const wmoCode = current.weather_code;
   const isDay = !!current.is_day;
-  
+
   // Get weather description
   const weatherDesc = weatherCodeToDesc[wmoCode] || `Unknown(${wmoCode})`;
-  
+
   // Get icon code
   const iconMap = weatherCodeToIcon[wmoCode] || { day: 100, night: 150 };
   const iconCode = isDay ? iconMap.day : iconMap.night;
-  
+
   // Special handling: Overcast -> 104
   // WMO Code 3 is usually Overcast, but user map says 'Cloudy' (101/151).
   // If we want to strictly follow user logic:
@@ -264,14 +264,13 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
   else if (finalIconCode === 101 || finalIconCode === 151) condition = "Cloudy";
   else if (finalIconCode === 104) condition = "Overcast";
   else if (finalIconCode === 102 || finalIconCode === 152) condition = "FewClouds";
-  else if (finalIconCode === 103 || finalIconCode === 153) condition = "PartlyCloudy";
   else if (finalIconCode >= 500 && finalIconCode <= 515) condition = "Foggy";
   else if ((finalIconCode >= 300 && finalIconCode <= 304) || finalIconCode === 350 || finalIconCode === 351) condition = "Rainy"; // Showers/Storms
   else if (finalIconCode >= 305 && finalIconCode <= 308) condition = "Rainy"; // Rain
   else if (finalIconCode >= 309 && finalIconCode <= 313) condition = "Drizzle"; // Drizzle
   else if (finalIconCode >= 400 && finalIconCode <= 499) condition = "Snowy";
   else if (finalIconCode >= 302 && finalIconCode <= 304) condition = "Thunderstorm"; // Note: 302-304 overlap with rain, but are thunderstorm
-  
+
   // Refine condition based on WMO code for better accuracy if icon code is ambiguous
   if (wmoCode === 0) condition = "Sunny";
   else if (wmoCode === 1) condition = "FewClouds";
@@ -341,7 +340,7 @@ const fetchQWeather = async (lang: string): Promise<WeatherData> => {
     `https://devapi.qweather.com/v7/weather/now?location=${location}&key=${QWEATHER_API_KEY}&lang=${qLang}`
   );
   const nowData = await nowRes.json();
-  
+
   if (nowData.code !== "200") {
     // Handle standard error (with code) or new error format (with error object)
     const errorCode = nowData.code || nowData.error?.status || 'unknown';
@@ -355,19 +354,19 @@ const fetchQWeather = async (lang: string): Promise<WeatherData> => {
     `https://devapi.qweather.com/v7/weather/3d?location=${location}&key=${QWEATHER_API_KEY}&lang=${qLang}`
   );
   const dailyData = await dailyRes.json();
-  
+
   if (dailyData.code !== "200") {
-     const errorCode = dailyData.code || dailyData.error?.status || 'unknown';
-     const errorMsg = dailyData.error?.title || dailyData.code || 'Unknown Error';
-     console.error("QWeather Daily API Error Response:", dailyData);
-     throw new Error(`QWeather Daily API Error: ${errorCode} (${errorMsg})`);
+    const errorCode = dailyData.code || dailyData.error?.status || 'unknown';
+    const errorMsg = dailyData.error?.title || dailyData.code || 'Unknown Error';
+    console.error("QWeather Daily API Error Response:", dailyData);
+    throw new Error(`QWeather Daily API Error: ${errorCode} (${errorMsg})`);
   }
 
   const today = dailyData.daily[0];
   const now = nowData.now;
-  
+
   const iconCode = parseInt(now.icon);
-  const isDay = iconCode < 150; 
+  const isDay = iconCode < 150;
 
   return {
     temp: parseInt(now.temp),

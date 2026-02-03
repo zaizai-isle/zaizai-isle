@@ -168,7 +168,6 @@ export function WeatherCard() {
       case 'Foggy': return t('weather.foggy');
       case 'Drizzle': return t('weather.drizzle');
       case 'Windy': return t('weather.windy');
-      // case 'PartlyCloudy': return t('weather.partly_cloudy');
       case 'PartlyCloudy': return t('weather.partly_cloudy');
       case 'Mist': return t('weather.mist');
       case 'Haze': return t('weather.haze');

@@ -260,11 +260,6 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
             aria-label="Shoebill Avatar"
           />
         </div>
-        {!loaded && (
-          <div className="text-xs text-black/60 mt-2">
-            雪碧图未找到
-          </div>
-        )}
       </div>
 
       <h1 className={cn(

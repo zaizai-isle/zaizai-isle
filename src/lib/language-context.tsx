@@ -131,7 +131,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       if ((savedLang === 'zh' || savedLang === 'en') && alive) {
         setTimeout(() => setLanguage(savedLang as Language), 0);
       }
-    } catch {}
+    } catch { }
     return () => {
       alive = false;
     };
@@ -141,7 +141,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       localStorage.setItem('language', language);
-    } catch {}
+    } catch { }
   }, [language]);
 
   const t = (key: string) => {

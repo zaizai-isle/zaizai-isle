@@ -169,7 +169,7 @@ export function GuestbookCard() {
                 x: "-100vw", 
               }}
               transition={{ 
-                duration: 15 + Math.random() * 5, 
+                duration: 15 + (i % 5), 
                 repeat: Infinity, 
                 ease: "linear",
                 delay: i * 2,

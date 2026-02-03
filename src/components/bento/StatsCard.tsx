@@ -45,7 +45,7 @@ export function StatsCard() {
           }
 
           // Increment visitor count (once per session/mount)
-          if (!hasIncrementedVisitor.current) {
+          if (!hasIncrementedVisitor.current && !error) {
             hasIncrementedVisitor.current = true;
             setVisitorCount(prev => prev + 1);
             
@@ -54,7 +54,7 @@ export function StatsCard() {
             if (rpcError) {
                // Fallback: manual update
                // Note: This is less safe for concurrency but works for simple cases
-               if (data) {
+               if (data && !error) {
                   await client.from('stats').update({ visitors: (data.visitors || 532) + 1 }).eq('id', 1);
                }
             }
@@ -129,29 +129,29 @@ export function StatsCard() {
       </div>
       
       <div className="flex flex-col gap-6 w-full px-1">
-        {/* Downloads */}
-        <div className="flex items-center gap-4">
-          <div>
-            <div className="text-2xl md:text-3xl font-bold mb-0.5 flex items-baseline leading-none">
-              <Counter value={downloadCount} />
-              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
-            </div>
-            <p className="text-xs text-gray-400 font-medium">
-              {t('stats.downloads')}
-            </p>
-          </div>
-        </div>
-
         {/* Visitors */}
         <div className="flex items-center gap-4">
           <div>
-            <div className="text-2xl md:text-3xl font-bold mb-0.5 flex items-baseline leading-none">
-              <Counter value={visitorCount} />
-              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
-            </div>
             <p className="text-xs text-gray-400 font-medium">
               {t('stats.visitors')}
             </p>
+            <div className="text-2xl md:text-3xl font-bold mt-0.5 flex items-baseline leading-none">
+              <Counter value={visitorCount} />
+              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Downloads */}
+        <div className="flex items-center gap-4">
+          <div>
+            <p className="text-xs text-gray-400 font-medium">
+              {t('stats.downloads')}
+            </p>
+            <div className="text-2xl md:text-3xl font-bold mt-0.5 flex items-baseline leading-none">
+              <Counter value={downloadCount} />
+              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+            </div>
           </div>
         </div>
       </div>

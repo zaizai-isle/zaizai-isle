@@ -14,8 +14,8 @@ export function ShoebillCard({ spriteUrl = "/shoebill-sprite-transparent.png" }:
    const [state, setState] = useState<StateName>("idle");
    const [frame, setFrame] = useState(0);
    const timerRef = useRef<number | null>(null);
-  const [activeUrl, setActiveUrl] = useState<string>(spriteUrl);
-  const [loaded, setLoaded] = useState<boolean>(true);
+  const [activeUrl, setActiveUrl] = useState<string>("");
+  const [loaded, setLoaded] = useState<boolean>(false);
  
    const frameWidth = 265;
    const frameHeight = 275;
@@ -31,23 +31,16 @@ export function ShoebillCard({ spriteUrl = "/shoebill-sprite-transparent.png" }:
      dragging: 6,
    };
  
-   const speedMap: Record<StateName, number> = {
-     idle: 280,
-     happy: 280,
-     excited: 260,
-     sleepy: 220,
-     working: 280,
-     alert: 270,
-     dragging: 280,
-   };
- 
    useEffect(() => {
      if (timerRef.current) {
        window.clearInterval(timerRef.current);
        timerRef.current = null;
      }
-     setFrame(0);
-     const speed = speedMap[state] || 240;
+    const speed =
+      state === "excited" ? 260 :
+      state === "sleepy" ? 220 :
+      state === "alert" ? 270 :
+      280;
      const id = window.setInterval(() => {
        setFrame((prev) => (prev + 1) % framesPerRow);
      }, speed);
@@ -60,7 +53,7 @@ export function ShoebillCard({ spriteUrl = "/shoebill-sprite-transparent.png" }:
      };
    }, [state]);
  
-  useEffect(() => {
+   useEffect(() => {
     const prefix =
       typeof window !== "undefined" &&
       (window.location.pathname.startsWith("/zaizai-isle") ||
@@ -97,7 +90,7 @@ export function ShoebillCard({ spriteUrl = "/shoebill-sprite-transparent.png" }:
 
   const bgX = -(frame * frameWidth);
   const bgY = -(stateRowMap[state] * frameHeight);
-  const backgroundImage = `url(${activeUrl})`;
+  const backgroundImage = loaded ? `url(${activeUrl})` : "none";
  
    return (
      <BentoCard

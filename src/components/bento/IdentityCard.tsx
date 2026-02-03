@@ -94,8 +94,8 @@ export const IdentityCard = () => {
   const { t, language } = useLanguage();
   const [frame, setFrame] = useState(0);
   const timerRef = useRef<number | null>(null);
-  const [activeUrl, setActiveUrl] = useState<string>("/shoebill-sprite-transparent.png");
-  const [loaded, setLoaded] = useState<boolean>(true);
+  const [activeUrl, setActiveUrl] = useState<string>("");
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
   type StateName = "idle" | "happy" | "excited" | "sleepy" | "working" | "alert" | "dragging";
@@ -239,7 +239,7 @@ export const IdentityCard = () => {
           <div
             className={`absolute inset-0 ${hovering && loaded ? "opacity-100" : "opacity-0"} transition-opacity`}
             style={{
-              backgroundImage: `url(${activeUrl})`,
+              backgroundImage: loaded ? `url(${activeUrl})` : "none",
               backgroundRepeat: "no-repeat",
               backgroundPosition: `${bgX}px ${bgY}px`,
               backgroundSize: bgSize,

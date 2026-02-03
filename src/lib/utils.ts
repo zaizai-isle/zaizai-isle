@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge"
 // Add type definition for window.gtag
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (command: 'event', eventName: string, params?: Record<string, unknown>) => void;
   }
 }
 
@@ -12,14 +12,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function trackEvent(event: string, params?: Record<string, any>) {
-  if (process.env.NODE_ENV === 'development') {
+export function trackEvent(event: string, params?: Record<string, unknown>) {
+  const isProd = process.env.NODE_ENV === 'production';
+  if (!isProd) {
     console.log(`[GA Debug] Event: ${event}`, params);
+    return;
   }
   
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', event, params);
-  } else if (process.env.NODE_ENV === 'development') {
+  } else {
     console.warn('[GA Debug] window.gtag is not defined');
   }
 }

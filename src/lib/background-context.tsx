@@ -45,8 +45,8 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
         if (localSettings) {
           setSettings(JSON.parse(localSettings));
         }
-      } catch (e) {
-        console.warn('Failed to load settings from localStorage', e);
+      } catch {
+        console.warn('Failed to load settings from localStorage');
       }
 
       // 2. Try Supabase
@@ -109,7 +109,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
              console.warn('Supabase save error:', error.message);
            }
         }
-      } catch (e) {
+      } catch {
         // Silent failure
       }
     };

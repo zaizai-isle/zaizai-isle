@@ -39,6 +39,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || "";
   return (
     <html lang="zh-CN">
       <body className={`${inter.className} antialiased min-h-screen p-4 md:p-8 flex items-center justify-center`}>
@@ -52,7 +54,7 @@ export default function RootLayout({
             </div>
           </LanguageProvider>
         </BackgroundProvider>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+        {isProd && gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );

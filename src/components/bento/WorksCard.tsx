@@ -5,7 +5,7 @@ import { ArrowUpRight, X, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 
@@ -21,11 +21,7 @@ export function WorksCard() {
     image: string | StaticImageData;
     link: string;
   } | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState<boolean>(() => typeof document !== 'undefined');
 
   return (
     <>

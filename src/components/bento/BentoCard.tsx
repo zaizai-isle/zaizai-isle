@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 
 export const VERTICAL_BORDER_GRADIENT = "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)";
 
@@ -12,9 +12,10 @@ interface BentoCardProps {
   onClick?: () => void;
   borderGradient?: string;
   borderWidth?: number;
+  style?: CSSProperties;
 }
 
-export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onClick, borderGradient, borderWidth = 1 }: BentoCardProps) {
+export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onClick, borderGradient, borderWidth = 1, style }: BentoCardProps) {
   const colSpanClasses: Record<number, string> = {
     1: "md:col-span-1",
     2: "md:col-span-2",
@@ -40,6 +41,7 @@ export function BentoCard({ children, className, colSpan = 1, rowSpan = 1, onCli
         rowSpanClasses[rowSpan],
         className
       )}
+      style={style}
     >
       <div 
         className="pointer-events-none absolute inset-0 rounded-[24px] z-50"

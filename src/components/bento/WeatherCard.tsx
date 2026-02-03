@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { motion } from "framer-motion";
 import { MapPin, RefreshCw, Droplets, Wind, Thermometer } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { FrostedGlassIcon, WeatherDefs } from "../FrostedGlassIcon";
 import { fetchWeatherWithCache } from "@/services/weather";
@@ -37,14 +37,14 @@ export function WeatherCard() {
     humidity: 45,
     windSpeed: 12,
     feelsLike: 8,
-    isDay: new Date().getHours() >= 6 && new Date().getHours() < 18,
+    isDay: true,
     minTemp: 4,
     maxTemp: 12
   });
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState<string>("");
 
-  const fetchWeather = async () => {
+  const fetchWeather = useCallback(async () => {
     setLoading(true);
     try {
       // Use 'open-meteo' (Free, No Key) or 'qweather' (Needs Key in .env.local)
@@ -60,7 +60,7 @@ export function WeatherCard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [language]);
 
   useEffect(() => {
     const now = new Date();
@@ -77,44 +77,51 @@ export function WeatherCard() {
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [language]);
+  }, [language, fetchWeather]);
 
-  const getBackgroundClass = () => {
-    if (!weather) return "bg-[#8291a0]/40";
+  const getBackgroundStyle = () => {
+    if (!weather) return "linear-gradient(to bottom,#8291a0 0%,#8291a0 35%,#2c3e50 100%)";
 
     const isDay = weather.isDay;
     const condition = weather.condition;
+    const DAY_STOP = 35;    // 顶部颜色占比（白天）
+    const NIGHT_STOP = 40;  // 顶部颜色占比（夜晚）
+    const mk = (a: string, b: string, stop: number) => `linear-gradient(to bottom, ${a} 0%, ${a} ${stop}%, ${b} 100%)`;
 
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay 
-        ? "bg-gradient-to-b from-[#7cb9e8]/80 to-[#4a90e2]/80" // Bright Blue Sky
-        : "bg-gradient-to-b from-[#0F2027]/80 to-[#1c2a3f]/80"; // Deep Night
+        ? mk('#3b76b2ff', '#4086d7ff', DAY_STOP)
+        : mk('#334155', '#1c2a3f', NIGHT_STOP);
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
-        ? "bg-gradient-to-b from-[#373B44]/80 to-[#4286f4]/80" // Stormy Blue-Grey
-        : "bg-gradient-to-b from-[#1e293b]/80 to-[#0f172a]/80"; // Dark Storm
+        ? mk('#373B44', '#4286f4', DAY_STOP)
+        : mk('#1e293b', '#0f172a', NIGHT_STOP);
     } else if (condition === 'Drizzle') {
       return isDay
-        ? "bg-gradient-to-b from-[#9ca3af]/80 to-[#7a869a]/80" // Lighter Rainy Blue
-        : "bg-gradient-to-b from-[#334155]/80 to-[#141f39]/80"; // Night Drizzle
+        ? mk('#9ca3af', '#7a869a', DAY_STOP)
+        : mk('#334155', '#141f39', NIGHT_STOP);
     } else if (condition === 'Snowy') {
       return isDay
-        ? "bg-gradient-to-b from-[#e8f4f8]/80 to-[#bfd7e9]/80" // Icy Blue
-        : "bg-gradient-to-b from-[#64748b]/80 to-[#334155]/80"; // Dark Ice
+        ? mk('#e8f4f8', '#bfd7e9', DAY_STOP)
+        : mk('#64748b', '#334155', NIGHT_STOP);
+    } else if (condition === 'PartlyCloudy') {
+      return isDay
+        ? mk('#2e7bb6ff', '#4a8dd3', DAY_STOP)
+        : mk('#1b2a3b', '#0f1a2a', NIGHT_STOP);
     } else if (condition === 'Foggy' || condition === 'Cloudy') {
       return isDay
-        ? "bg-gradient-to-b from-[#e9edf0/80 to-[#d1d9df]/80" // Cloudy Grey
-        : "bg-gradient-to-b from-[#334155]/80 to-[#1e293b]/80"; // Night Cloud
+        ? mk('#e9edf0', '#d1d9df', DAY_STOP)
+        : mk('#334155', '#1e293b', NIGHT_STOP);
     } else if (condition === 'Windy') {
       return isDay
-        ? "bg-gradient-to-b from-[#485563]/80 to-[#29323c]/80" // Windy Grey
-        : "bg-gradient-to-b from-[#475162]/80 to-[#1a2338]/80"; // Night Wind
+        ? mk('#485563', '#29323c', DAY_STOP)
+        : mk('#475162', '#1a2338', NIGHT_STOP);
     } else {
       // Default
       return isDay
-        ? "bg-gradient-to-b from-[#7e8b96]/80 to-[#2c3e50]/80"
-        : "bg-gradient-to-b from-[#2c3e50]/80 to-[#141E30]/80";
+        ? mk('#7e8b96', '#2c3e50', DAY_STOP)
+        : mk('#2c3e50', '#141E30', NIGHT_STOP);
     }
   };
 
@@ -128,6 +135,7 @@ export function WeatherCard() {
       case 'Foggy': return t('weather.foggy');
       case 'Drizzle': return t('weather.drizzle');
       case 'Windy': return t('weather.windy');
+      case 'PartlyCloudy': return t('weather.partly_cloudy');
       default: return condition;
     }
   };
@@ -138,8 +146,8 @@ export function WeatherCard() {
       rowSpan={1} 
       className={cn(
         "h-full min-h-[200px] flex flex-col justify-between backdrop-blur-xl text-white p-5 overflow-hidden relative shadow-lg transition-all duration-500 group",
-        getBackgroundClass()
       )}
+      style={{ backgroundImage: getBackgroundStyle() }}
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
       <WeatherDefs />

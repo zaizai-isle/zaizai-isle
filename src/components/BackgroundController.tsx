@@ -50,8 +50,10 @@ const CustomScrollArea = ({ children, className }: { children: React.ReactNode; 
     element.addEventListener('scroll', updateThumb);
     window.addEventListener('resize', updateThumb);
 
-    // Initial update
-    updateThumb();
+    // Initial update (defer to avoid synchronous state updates during effect)
+    setTimeout(() => {
+      updateThumb();
+    }, 0);
 
     return () => {
       observer.disconnect();

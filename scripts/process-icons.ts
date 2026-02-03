@@ -203,7 +203,7 @@ function splitPathData(d: string): string[] {
   const segments = d.match(/([MmLlHhVvCcSsQqTtAaZz][^MmLlHhVvCcSsQqTtAaZz]*)/g);
   if (!segments) return [];
   
-  let paths: string[] = [];
+  const paths: string[] = [];
   let currentPathCmds: string[] = [];
   let lastStart = { x: 0, y: 0 };
   
@@ -336,7 +336,7 @@ function applyColorRules(content: string, code: number): string {
   
   if (matches.length === 0) return content;
   
-  let allSubPaths: string[] = [];
+  const allSubPaths: string[] = [];
   matches.forEach(m => {
     const d = m[1];
     const subs = splitPathData(d);

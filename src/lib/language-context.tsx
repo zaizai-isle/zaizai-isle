@@ -35,6 +35,7 @@ const translations: Translations = {
   'weather.shanghai': { zh: '上海', en: 'Shanghai' },
   'weather.high': { zh: '最高', en: 'H' },
   'weather.low': { zh: '最低', en: 'L' },
+  'weather.partly_cloudy': { zh: '晴间多云', en: 'Partly Cloudy' },
 
   // Stats Card
   'stats.downloads': { zh: '总下载量', en: 'Total Downloads' },
@@ -93,17 +94,24 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('zh');
 
-  // Load saved language preference
   useEffect(() => {
-    const savedLang = localStorage.getItem('language') as Language;
-    if (savedLang) {
-      setLanguage(savedLang);
-    }
+    let alive = true;
+    try {
+      const savedLang = localStorage.getItem('language') as Language | null;
+      if ((savedLang === 'zh' || savedLang === 'en') && alive) {
+        setTimeout(() => setLanguage(savedLang as Language), 0);
+      }
+    } catch {}
+    return () => {
+      alive = false;
+    };
   }, []);
 
   // Save language preference
   useEffect(() => {
-    localStorage.setItem('language', language);
+    try {
+      localStorage.setItem('language', language);
+    } catch {}
   }, [language]);
 
   const t = (key: string) => {

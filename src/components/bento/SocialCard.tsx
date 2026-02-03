@@ -4,7 +4,7 @@ import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { Mail, Github, MessageCircle, X, Heart } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import qrcodeImage from "@/assets/qrcode.png";
 import { trackEvent } from "@/lib/utils";
@@ -15,8 +15,21 @@ export function SocialCard() {
   const [showEmail, setShowEmail] = useState(false);
   const [showLikeToast, setShowLikeToast] = useState(false);
   const [likes, setLikes] = useState(12);
-  const [hasLiked, setHasLiked] = useState(false);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [flyingHearts, setFlyingHearts] = useState<{id: number, x: number, y: number, scale: number, rotate: number}[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    try {
+      const saved = localStorage.getItem('portfolio_has_liked');
+      if (saved && alive) {
+        setTimeout(() => setHasLiked(true), 0);
+      }
+    } catch {}
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const handleEmailClick = () => {
     setShowEmail(true);
@@ -37,12 +50,7 @@ export function SocialCard() {
     setShowQRCode(true);
   };
 
-  useEffect(() => {
-    const savedLike = localStorage.getItem('portfolio_has_liked');
-    if (savedLike) {
-      setHasLiked(true);
-    }
-  }, []);
+  
 
   const triggerHeartAnimation = () => {
     // Generate flying hearts

@@ -22,7 +22,7 @@ type ToolId = 'chatgpt' | 'claude' | 'midjourney' | 'figma' | 'gemini' | 'huggin
 interface ToolConfig {
   id: ToolId;
   name: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   url: string;
   color: string;
   bg: string;

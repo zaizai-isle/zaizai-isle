@@ -49,7 +49,7 @@ const Sparkle = ({ className }: { className?: string }) => (
   </div>
 );
 
-const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.ReactNode; variant?: 'emerald' | 'yellow' | 'rose'; icon?: any }) => {
+const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.ReactNode; variant?: 'emerald' | 'yellow' | 'rose'; icon?: React.ComponentType<{ className?: string }> }) => {
   const variants = {
     emerald: "bg-[#0f1c36] text-emerald-50",
     yellow: "bg-[#281730] text-yellow-50",

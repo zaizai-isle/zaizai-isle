@@ -14,28 +14,7 @@ interface CachedData {
   data: WeatherData;
 }
 
-// QWeather Response Types
-interface QWeatherNowResponse {
-  code: string;
-  now: {
-    temp: string;
-    icon: string;
-    text: string;
-    windSpeed: string;
-    humidity: string;
-    feelsLike: string;
-  };
-}
-
-interface QWeatherDailyResponse {
-  code: string;
-  daily: Array<{
-    tempMax: string;
-    tempMin: string;
-    sunrise: string;
-    sunset: string;
-  }>;
-}
+// QWeather Response Types (removed unused interfaces to satisfy lint)
 
 // Mapping QWeather icon codes to our conditions
 const mapQWeatherCode = (code: string): string => {
@@ -46,29 +25,17 @@ const mapQWeatherCode = (code: string): string => {
   // Note: 101-103 are often partly cloudy. Let's refine based on WMO map logic
   if (c === 101 || c === 102 || c === 103 || c === 151 || c === 152 || c === 153) return "PartlyCloudy";
   if (c === 104 || c === 154) return "Cloudy";
-  
+  // Thunderstorm override (subset of Rain)
+  if (c === 302 || c === 303 || c === 304) return "Thunderstorm";
   if (c >= 300 && c <= 399) return "Rainy"; // Rain
   if (c >= 400 && c <= 499) return "Snowy"; // Snow
   if (c >= 500 && c <= 515) return "Foggy"; // Fog / Haze
   if (c >= 200 && c <= 299) return "Windy"; // Wind
 
-  
   // Drizzle is often subset of Rain in QWeather (300-304 are showers/storms, 305-309 light rains)
   // Let's map specific light rains to Drizzle if needed, but QWeather puts them under 3xx.
   // We'll stick to simple mapping for now.
-  
-  if (c >= 200 && c <= 299) return "Thunderstorm"; // Wind/Storm (Wait, 2xx is wind?)
-  // QWeather 2xx is Wind/Storm? No, standard is:
-  // 1xx: Sunny/Cloudy
-  // 2xx: Wind (rarely used as condition icon)
-  // 3xx: Rain
-  // 4xx: Snow
-  // 5xx: Fog/Haze
-  // 9xx: Others
-  
-  // Thunderstorm is often in 3xx (e.g. 302 Thundershower)
-  if (c === 302 || c === 303 || c === 304) return "Thunderstorm";
-  
+ 
   return "Sunny"; // Default
 };
 
@@ -94,10 +61,11 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
   // 2. Check Supabase Global Cache (L2 Cache)
   if (supabase) {
     try {
-      const { data: globalCache, error } = await supabase
+      const globalId = provider === 'qweather' ? 2 : 1;
+      const { data: globalCache } = await supabase
         .from('weather_cache')
         .select('*')
-        .eq('id', 1)
+        .eq('id', globalId)
         .single();
 
       if (globalCache && globalCache.updated_at) {
@@ -151,8 +119,9 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
     // Update Supabase Global Cache
     if (supabase) {
       try {
+        const globalId = provider === 'qweather' ? 2 : 1;
         await supabase.from('weather_cache').upsert({
-          id: 1,
+          id: globalId,
           data: data,
           updated_at: new Date().toISOString(),
           provider: provider

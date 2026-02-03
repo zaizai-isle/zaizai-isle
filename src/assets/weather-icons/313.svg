@@ -55,6 +55,11 @@
       <stop offset="0%" stop-color="#FDF5E6" stop-opacity="0.9"/>
       <stop offset="100%" stop-color="#FddfAF" stop-opacity="0.7"/>
     </linearGradient>
+    <!-- 大风系 -->
+    <linearGradient id="wind-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0F2F1"/>
+    </linearGradient>
   
   <style>
     /* 太阳系 */
@@ -121,6 +126,14 @@
         fill: url(#haze-gradient); 
         stroke: rgba(253, 223, 175, 0.4);
         stroke-width: 0.1px;
+    }
+    
+    /* 大风系 */
+    .wind { 
+        fill: url(#wind-gradient); 
+        stroke: rgba(255,255,255,0.4);
+        stroke-width: 0.1px;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
     }
   </style>
 </defs>

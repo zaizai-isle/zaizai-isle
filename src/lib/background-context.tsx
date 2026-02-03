@@ -51,6 +51,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
 
       // 2. Try Supabase
       try {
+        if (process.env.NODE_ENV !== 'production') return;
         if (!supabase) return;
 
         const userId = getUserId();
@@ -92,6 +93,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
 
     const saveSettings = async () => {
       try {
+        if (process.env.NODE_ENV !== 'production') return;
         if (!supabase) return;
 
         const userId = getUserId();

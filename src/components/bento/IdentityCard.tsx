@@ -7,7 +7,7 @@ import { AnimatePresence, motion as fmMotion } from "framer-motion";
 import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
 import NextImage from "next/image";
 import avatarImage from "@/assets/avatar-v1.png";
- 
+
 
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.Re
     yellow: "bg-[#281730] text-yellow-50 hover:bg-yellow-900",
     rose: "bg-[#2d0e36] text-rose-50 hover:bg-rose-900",
   };
-  
+
   const iconColors = {
     emerald: "text-emerald-500",
     yellow: "text-yellow-500",
@@ -41,7 +41,7 @@ const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.Re
 
 const Sparkle = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
   <motion.div
-    animate={{ 
+    animate={{
       scale: [0.8, 1.2, 0.8],
       opacity: [0.5, 1, 0.5],
     }}
@@ -54,19 +54,19 @@ const Sparkle = ({ className, delay = 0 }: { className?: string; delay?: number 
   </motion.div>
 );
 
-const Cloud = ({ 
-  className, 
-  delay = 0, 
+const Cloud = ({
+  className,
+  delay = 0,
   opacity = 1,
   variant = 'default'
-}: { 
-  className?: string; 
-  delay?: number; 
+}: {
+  className?: string;
+  delay?: number;
   opacity?: number;
   variant?: 'default' | 'warm' | 'cool' | 'purple';
 }) => {
   const getGradient = (v: string) => {
-    switch(v) {
+    switch (v) {
       case 'warm': return "from-orange-200/40 via-orange-100/20 to-transparent border-orange-200/30";
       case 'cool': return "from-blue-200/40 via-blue-100/20 to-transparent border-blue-200/30";
       case 'purple': return "from-purple-200/40 via-purple-100/20 to-transparent border-purple-200/30";
@@ -77,7 +77,7 @@ const Cloud = ({
   const gradientClass = getGradient(variant);
 
   return (
-    <motion.div 
+    <motion.div
       animate={{ y: [0, -8, 0] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
       className={cn("absolute flex items-end", className)}
@@ -90,7 +90,11 @@ const Cloud = ({
   );
 };
 
-export const IdentityCard = () => {
+interface IdentityCardProps {
+  spriteUrl?: string;
+}
+
+export const IdentityCard = ({ spriteUrl }: IdentityCardProps) => {
   const { t, language } = useLanguage();
   const [frame, setFrame] = useState(0);
   const timerRef = useRef<number | null>(null);
@@ -142,15 +146,23 @@ export const IdentityCard = () => {
   useEffect(() => {
     const prefix =
       typeof window !== "undefined" &&
-      (window.location.pathname.startsWith("/zaizai-isle") ||
-        window.location.pathname.includes("/zaizai-isle"))
+        (window.location.pathname.startsWith("/zaizai-isle") ||
+          window.location.pathname.includes("/zaizai-isle"))
         ? "/zaizai-isle"
         : "";
-    const candidates = [
+
+    const baseFiles = [
+      spriteUrl,
       "/shoebill-sprite-transparent.png",
       "/shoebill-sprite.png",
       "/shoebill_sprite_clean.png",
-    ].map((p) => `${prefix}${p}`);
+    ].filter((s): s is string => !!s);
+
+    const candidates = baseFiles.flatMap((p) => {
+      if (p.startsWith("http") || p.startsWith("data:")) return [p];
+      return prefix ? [`${prefix}${p}`, p] : [p];
+    });
+
     let cancelled = false;
     (async () => {
       for (const url of candidates) {
@@ -172,12 +184,12 @@ export const IdentityCard = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [spriteUrl]);
 
   return (
-    <BentoCard 
-      colSpan={2} 
-      rowSpan={2} 
+    <BentoCard
+      colSpan={2}
+      rowSpan={2}
       className="bg-white/20 hover:bg-white/25 h-full justify-center items-center text-center relative overflow-hidden group p-8"
       borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
       borderWidth={1}
@@ -186,27 +198,27 @@ export const IdentityCard = () => {
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Base Background - Very subtle warm/cool split */}
         <div className="absolute inset-0 bg-gradient-to-br from-orange-50/20 via-white/40 to-blue-50/20" />
-        
+
         {/* Back Layer Clouds (Softer, lower opacity) */}
         <div className="absolute bottom-[-10%] left-[-10%] w-full h-1/2 opacity-60">
-            <Cloud variant="warm" className="left-[10%] bottom-0 scale-120" delay={0} opacity={0.6} />
-            <Cloud variant="cool" className="right-[20%] bottom-[-20px] scale-125" delay={1} opacity={0.6} />
-            <Cloud variant="purple" className="left-[40%] bottom-[-40px] scale-110" delay={2} opacity={0.5} />
+          <Cloud variant="warm" className="left-[10%] bottom-0 scale-120" delay={0} opacity={0.6} />
+          <Cloud variant="cool" className="right-[20%] bottom-[-20px] scale-125" delay={1} opacity={0.6} />
+          <Cloud variant="purple" className="left-[40%] bottom-[-40px] scale-110" delay={2} opacity={0.5} />
         </div>
 
         {/* Middle Layer Clouds (More defined) */}
         <div className="absolute bottom-[-15%] w-full h-1/2">
-             <Cloud variant="warm" className="-left-[5%] bottom-[20%] scale-100" delay={0.5} opacity={0.8} />
-             <Cloud variant="cool" className="-right-[5%] bottom-[15%] scale-125" delay={1.5} opacity={0.8} />
-             <Cloud variant="default" className="left-[30%] bottom-[5%] scale-100" delay={2.5} opacity={0.9} />
+          <Cloud variant="warm" className="-left-[5%] bottom-[20%] scale-100" delay={0.5} opacity={0.8} />
+          <Cloud variant="cool" className="-right-[5%] bottom-[15%] scale-125" delay={1.5} opacity={0.8} />
+          <Cloud variant="default" className="left-[30%] bottom-[5%] scale-100" delay={2.5} opacity={0.9} />
         </div>
 
         {/* Front Layer Clouds (White, crisp edges) */}
         <div className="absolute bottom-[-20%] w-full h-1/2 z-10">
-            <Cloud variant="default" className="-left-[10%] bottom-[5%] scale-80" delay={1} />
-            <Cloud variant="default" className="right-[10%] bottom-[25%] scale-95" delay={2} />
-            <Cloud variant="default" className="left-[20%] bottom-[10%] scale-105" delay={3} />
-            <Cloud variant="default" className="-right-[15%] bottom-[8%] scale-75" delay={2.5} />
+          <Cloud variant="default" className="-left-[10%] bottom-[5%] scale-80" delay={1} />
+          <Cloud variant="default" className="right-[10%] bottom-[25%] scale-95" delay={2} />
+          <Cloud variant="default" className="left-[20%] bottom-[10%] scale-105" delay={3} />
+          <Cloud variant="default" className="-right-[15%] bottom-[8%] scale-75" delay={2.5} />
         </div>
 
         {/* Floating Sparkles to accent */}
@@ -220,7 +232,7 @@ export const IdentityCard = () => {
           className="w-[108px] h-[108px] rounded-full bg-white/50 relative z-10 border border-black/5 shadow-sm overflow-hidden transition-transform duration-300 ease-out hover:scale-105 flex items-center justify-center"
           onMouseEnter={() => {
             if (loaded) {
-              const pool: StateName[] = ["idle","happy","excited","sleepy","working","alert","dragging"];
+              const pool: StateName[] = ["idle", "happy", "excited", "sleepy", "working", "alert", "dragging"];
               const pick = pool[Math.floor(Math.random() * pool.length)];
               setPetState(pick);
               setHovering(true);
@@ -228,11 +240,11 @@ export const IdentityCard = () => {
           }}
           onMouseLeave={() => setHovering(false)}
         >
-          <NextImage 
+          <NextImage
             src={avatarImage}
-            alt={t('identity.name')}   
-            width={108} 
-            height={108} 
+            alt={t('identity.name')}
+            width={108}
+            height={108}
             className={`w-full h-full object-cover ${hovering && loaded ? "opacity-0" : "opacity-100"} transition-opacity`}
             placeholder="blur"
           />
@@ -253,7 +265,7 @@ export const IdentityCard = () => {
           </div>
         )}
       </div>
-      
+
       <h1 className={cn(
         "relative z-10 text-3xl font-bold text-gray-900 mb-2",
         language === 'en' ? "tracking-normal" : "tracking-[2px]"
@@ -273,13 +285,13 @@ export const IdentityCard = () => {
             />
             <div className="mt-4 pointer-events-auto">
               <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md border border-black/10 rounded-full px-2 py-1 shadow">
-                {(["idle","happy","excited","sleepy","working","alert","dragging"] as StateName[]).map((s) => (
+                {(["idle", "happy", "excited", "sleepy", "working", "alert", "dragging"] as StateName[]).map((s) => (
                   <button
                     key={s}
                     onClick={() => { setPetState(s); setSelectorOpen(false); }}
-                    className={`px-2.5 py-1 text-[11px] rounded-full transition-all ${petState===s ? "bg-black text-white" : "bg-white text-gray-700 border border-black/10"}`}
+                    className={`px-2.5 py-1 text-[11px] rounded-full transition-all ${petState === s ? "bg-black text-white" : "bg-white text-gray-700 border border-black/10"}`}
                   >
-                    {s[0].toUpperCase()+s.slice(1)}
+                    {s[0].toUpperCase() + s.slice(1)}
                   </button>
                 ))}
               </div>
@@ -297,7 +309,7 @@ export const IdentityCard = () => {
       )}>
         {t('identity.slogan')}
       </p>
-      
+
       <div className="relative z-10 mt-1 flex gap-3 justify-center">
         <Tag variant="emerald" icon={Drama}>{t('identity.tag.mbti')}</Tag>
         <Tag variant="yellow" icon={Lightbulb}>{t('identity.tag.product')}</Tag>

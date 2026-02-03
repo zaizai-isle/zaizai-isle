@@ -22,14 +22,13 @@ jobs:
         with:
           fetch-depth: 0
       - name: Fix git safe directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        run: git config --global --add safe.directory '*'
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npx next export
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

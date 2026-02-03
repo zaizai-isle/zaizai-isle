@@ -7,6 +7,7 @@ const iconCodes = [
   102, 152, // Few Clouds
   103, 153, // Partly Cloudy
   104,      // Overcast
+  2528,     // Windy (Strong Wind)
   300, 350, // Shower Rain
   301, 351, // Heavy Shower Rain
   302,      // Thundershower
@@ -122,6 +123,12 @@ const GRADIENT_DEFS = `
       <stop offset="0%" stop-color="#FDF5E6" stop-opacity="0.9"/>
       <stop offset="100%" stop-color="#FddfAF" stop-opacity="0.7"/>
     </linearGradient>
+
+    <!-- 大风系 -->
+    <linearGradient id="wind-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0F2F1"/>
+    </linearGradient>
   </defs>`;
 
 const STYLE_DEFS = `
@@ -190,6 +197,14 @@ const STYLE_DEFS = `
         fill: url(#haze-gradient); 
         stroke: rgba(253, 223, 175, 0.4);
         stroke-width: 0.1px;
+    }
+    
+    /* 大风系 */
+    .wind { 
+        fill: url(#wind-gradient); 
+        stroke: rgba(255,255,255,0.4);
+        stroke-width: 0.1px;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
     }
   </style>
 `;
@@ -360,6 +375,7 @@ function applyColorRules(content: string, code: number): string {
   const isSnow = (code >= 400 && code < 500);
   const isFog = (code >= 500 && code <= 515);
   const isThunder = [302, 303, 304].includes(code);
+  const isWind = (code >= 2000 && code < 3000);
   
   // Sort candidates by size (diagonal) to find major elements
   const sortedBySize = [...analyzedPaths].sort((a, b) => b.diagonal - a.diagonal);
@@ -532,6 +548,14 @@ function applyColorRules(content: string, code: number): string {
           } else {
              p.type = 'fog-light';
           }
+      }
+    });
+  }
+  // --- Group E: Wind (2xxx) ---
+  else if (isWind) {
+    analyzedPaths.forEach(p => {
+      if (p.type === 'unknown') {
+        p.type = 'wind';
       }
     });
   }

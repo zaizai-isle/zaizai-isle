@@ -19,18 +19,21 @@ interface CachedData {
 // Mapping QWeather icon codes to our conditions
 const mapQWeatherCode = (code: string): string => {
   const c = parseInt(code);
-  if (c === 100 || c === 150) return "Sunny"; // Sunny / Clear
-  if (c >= 101 && c <= 104) return "Cloudy"; // Cloudy / Overcast
-  if (c >= 151 && c <= 154) return "Cloudy"; // Cloudy Night
-  // Note: 101-103 are often partly cloudy. Let's refine based on WMO map logic
-  if (c === 101 || c === 102 || c === 103 || c === 151 || c === 152 || c === 153) return "PartlyCloudy";
-  if (c === 104 || c === 154) return "Cloudy";
+  if (c === 100 || c === 150) return "Sunny";
+  // Align condition text with icon semantics:
+  // 101/151 -> Cloudy, 102/103/152/153 -> PartlyCloudy, 104/154 -> Overcast
+  if (c === 104) return "Overcast";
+  if (c === 101 || c === 151) return "Cloudy";
+  if (c === 102 || c === 152) return "FewClouds";
+  if (c === 103 || c === 153) return "PartlyCloudy";
   // Thunderstorm override (subset of Rain)
   if (c === 302 || c === 303 || c === 304) return "Thunderstorm";
+  // Wind family (QWeather uses 2xxx for wind icons, e.g., 2528)
+  if (c >= 2000 && c < 3000) return "Windy";
   if (c >= 300 && c <= 399) return "Rainy"; // Rain
   if (c >= 400 && c <= 499) return "Snowy"; // Snow
   if (c >= 500 && c <= 515) return "Foggy"; // Fog / Haze
-  if (c >= 200 && c <= 299) return "Windy"; // Wind
+  if (c >= 200 && c <= 299) return "Windy"; // Legacy wind range (fallback)
 
   // Drizzle is often subset of Rain in QWeather (300-304 are showers/storms, 305-309 light rains)
   // Let's map specific light rains to Drizzle if needed, but QWeather puts them under 3xx.
@@ -139,9 +142,10 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
 // 1. 定义WMO天气代码到天气描述的基础映射 
 const weatherCodeToDesc: Record<number, string> = { 
   0: '晴朗', 
-  1: '主要晴朗', 
-  2: '少云', 
-  3: '多云', 
+  1: '少云', 
+  2: '多云', 
+  3: '阴', 
+  90: '大风',
   20: '薄雾', 
   23: '霾', 
   26: '扬沙', 
@@ -177,10 +181,12 @@ const weatherCodeToDesc: Record<number, string> = {
 const weatherCodeToIcon: Record<number, { day: number; night: number }> = { 
   // 晴/少云/多云系列 
   0: { day: 100, night: 150 }, 
-  1: { day: 100, night: 150 }, 
-  2: { day: 102, night: 152 }, // 少云 
-  3: { day: 101, night: 151 }, // 多云 
-  104: { day: 104, night: 104 }, // 阴（单独处理） 
+  1: { day: 102, night: 152 }, // 少云（Mainly clear / Few clouds）
+  2: { day: 101, night: 151 }, // 多云（Cloudy）
+  3: { day: 104, night: 104 }, 
+  
+  // 风系列（用户定义：WMO 90 → 大风；QWeather 2528）
+  90: { day: 2528, night: 2528 },
   
   // 雾/霾/沙尘系列 
   20: { day: 500, night: 500 }, // 薄雾 
@@ -255,8 +261,10 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
   let condition = "Sunny";
   // We can use the iconCode or wmoCode to determine the condition string
   if (finalIconCode === 100 || finalIconCode === 150) condition = "Sunny";
-  else if (finalIconCode === 101 || finalIconCode === 151 || finalIconCode === 102 || finalIconCode === 152) condition = "PartlyCloudy";
-  else if (finalIconCode === 104) condition = "Cloudy";
+  else if (finalIconCode === 101 || finalIconCode === 151) condition = "Cloudy";
+  else if (finalIconCode === 104) condition = "Overcast";
+  else if (finalIconCode === 102 || finalIconCode === 152) condition = "FewClouds";
+  else if (finalIconCode === 103 || finalIconCode === 153) condition = "PartlyCloudy";
   else if (finalIconCode >= 500 && finalIconCode <= 515) condition = "Foggy";
   else if ((finalIconCode >= 300 && finalIconCode <= 304) || finalIconCode === 350 || finalIconCode === 351) condition = "Rainy"; // Showers/Storms
   else if (finalIconCode >= 305 && finalIconCode <= 308) condition = "Rainy"; // Rain
@@ -266,15 +274,39 @@ const fetchOpenMeteo = async (): Promise<WeatherData> => {
   
   // Refine condition based on WMO code for better accuracy if icon code is ambiguous
   if (wmoCode === 0) condition = "Sunny";
-  else if (wmoCode === 1 || wmoCode === 2) condition = "PartlyCloudy";
-  else if (wmoCode === 3) condition = "Cloudy";
-  else if (wmoCode === 45 || wmoCode === 48 || wmoCode === 20 || wmoCode === 23 || wmoCode === 26 || wmoCode === 43 || wmoCode === 44) condition = "Foggy";
-  else if (wmoCode >= 51 && wmoCode <= 57) condition = "Drizzle";
-  else if (wmoCode >= 61 && wmoCode <= 67) condition = "Rainy";
-  else if (wmoCode >= 80 && wmoCode <= 82) condition = "Rainy";
-  else if (wmoCode >= 71 && wmoCode <= 77) condition = "Snowy";
-  else if (wmoCode === 85 || wmoCode === 86) condition = "Snowy";
-  else if (wmoCode >= 95) condition = "Thunderstorm";
+  else if (wmoCode === 1) condition = "FewClouds";
+  else if (wmoCode === 2) condition = "Cloudy";
+  else if (wmoCode === 3) condition = "Overcast";
+  else if (wmoCode === 90) condition = "Windy";
+  else if (wmoCode === 20) condition = "Mist";
+  else if (wmoCode === 23) condition = "Haze";
+  else if (wmoCode === 26) condition = "Sand";
+  else if (wmoCode === 45) condition = "Foggy";
+  else if (wmoCode === 48) condition = "FreezingFog";
+  else if (wmoCode === 43) condition = "Sandstorm";
+  else if (wmoCode === 44) condition = "HeavySandstorm";
+  else if (wmoCode === 51) condition = "LightDrizzle";
+  else if (wmoCode === 53) condition = "ModerateDrizzle";
+  else if (wmoCode === 55) condition = "HeavyDrizzle";
+  else if (wmoCode === 56) condition = "LightFreezingDrizzle";
+  else if (wmoCode === 57) condition = "HeavyFreezingDrizzle";
+  else if (wmoCode === 61) condition = "LightRain";
+  else if (wmoCode === 63) condition = "ModerateRain";
+  else if (wmoCode === 65) condition = "HeavyRain";
+  else if (wmoCode === 66) condition = "LightFreezingRain";
+  else if (wmoCode === 67) condition = "HeavyFreezingRain";
+  else if (wmoCode === 80) condition = "LightShowerRain";
+  else if (wmoCode === 81) condition = "ModerateShowerRain";
+  else if (wmoCode === 82) condition = "HeavyShowerRain";
+  else if (wmoCode === 71) condition = "LightSnow";
+  else if (wmoCode === 73) condition = "ModerateSnow";
+  else if (wmoCode === 75) condition = "HeavySnow";
+  else if (wmoCode === 77) condition = "SnowGrains";
+  else if (wmoCode === 85) condition = "LightShowerSnow";
+  else if (wmoCode === 86) condition = "HeavyShowerSnow";
+  else if (wmoCode === 95) condition = "Thunderstorm";
+  else if (wmoCode === 96) condition = "ThunderstormWithLightHail";
+  else if (wmoCode === 99) condition = "ThunderstormWithHeavyHail";
 
   return {
     temp: Math.round(current.temperature_2m),

@@ -105,14 +105,43 @@ export function WeatherCard() {
       return isDay
         ? mk('#e8f4f8', '#bfd7e9', DAY_STOP)
         : mk('#64748b', '#334155', NIGHT_STOP);
-    } else if (condition === 'PartlyCloudy') {
+    } else if (condition === 'PartlyCloudy' || condition === 'FewClouds') {
       return isDay
         ? mk('#428dc7ff', '#8bbcf0ff', DAY_STOP)
         : mk('#1b2a3b', '#0f1a2a', NIGHT_STOP);
-    } else if (condition === 'Foggy' || condition === 'Cloudy') {
+    } else if (
+      condition === 'Foggy' || condition === 'Cloudy' || condition === 'Overcast' ||
+      condition === 'Mist' || condition === 'Haze' || condition === 'Sand' ||
+      condition === 'Sandstorm' || condition === 'HeavySandstorm' || condition === 'FreezingFog'
+    ) {
       return isDay
         ? mk('#e9edf0', '#d1d9df', DAY_STOP)
         : mk('#334155', '#1e293b', NIGHT_STOP);
+    } else if (
+      condition === 'Rainy' ||
+      condition === 'LightRain' || condition === 'ModerateRain' || condition === 'HeavyRain' ||
+      condition === 'LightFreezingRain' || condition === 'HeavyFreezingRain' ||
+      condition === 'LightShowerRain' || condition === 'ModerateShowerRain' || condition === 'HeavyShowerRain'
+    ) {
+      return isDay
+        ? mk('#373B44', '#4286f4', DAY_STOP)
+        : mk('#1e293b', '#0f172a', NIGHT_STOP);
+    } else if (
+      condition === 'Drizzle' ||
+      condition === 'LightDrizzle' || condition === 'ModerateDrizzle' || condition === 'HeavyDrizzle' ||
+      condition === 'LightFreezingDrizzle' || condition === 'HeavyFreezingDrizzle'
+    ) {
+      return isDay
+        ? mk('#9ca3af', '#7a869a', DAY_STOP)
+        : mk('#334155', '#141f39', NIGHT_STOP);
+    } else if (
+      condition === 'Snowy' ||
+      condition === 'LightSnow' || condition === 'ModerateSnow' || condition === 'HeavySnow' ||
+      condition === 'SnowGrains' || condition === 'LightShowerSnow' || condition === 'HeavyShowerSnow'
+    ) {
+      return isDay
+        ? mk('#e8f4f8', '#bfd7e9', DAY_STOP)
+        : mk('#64748b', '#334155', NIGHT_STOP);
     } else if (condition === 'Windy') {
       return isDay
         ? mk('#485563', '#29323c', DAY_STOP)
@@ -129,13 +158,42 @@ export function WeatherCard() {
     switch (condition) {
       case 'Sunny': return t('weather.sunny');
       case 'Cloudy': return t('weather.cloudy');
+      case 'FewClouds': return t('weather.few_clouds');
+      case 'Overcast': return t('weather.overcast');
       case 'Rainy': return t('weather.rainy');
       case 'Snowy': return t('weather.snowy');
       case 'Thunderstorm': return t('weather.thunderstorm');
+      case 'ThunderstormWithLightHail': return t('weather.thunderstorm_with_light_hail');
+      case 'ThunderstormWithHeavyHail': return t('weather.thunderstorm_with_heavy_hail');
       case 'Foggy': return t('weather.foggy');
       case 'Drizzle': return t('weather.drizzle');
       case 'Windy': return t('weather.windy');
       case 'PartlyCloudy': return t('weather.partly_cloudy');
+      case 'Mist': return t('weather.mist');
+      case 'Haze': return t('weather.haze');
+      case 'Sand': return t('weather.sand');
+      case 'Sandstorm': return t('weather.sandstorm');
+      case 'HeavySandstorm': return t('weather.heavy_sandstorm');
+      case 'FreezingFog': return t('weather.freezing_fog');
+      case 'LightDrizzle': return t('weather.light_drizzle');
+      case 'ModerateDrizzle': return t('weather.moderate_drizzle');
+      case 'HeavyDrizzle': return t('weather.heavy_drizzle');
+      case 'LightFreezingDrizzle': return t('weather.light_freezing_drizzle');
+      case 'HeavyFreezingDrizzle': return t('weather.heavy_freezing_drizzle');
+      case 'LightRain': return t('weather.light_rain');
+      case 'ModerateRain': return t('weather.moderate_rain');
+      case 'HeavyRain': return t('weather.heavy_rain');
+      case 'LightFreezingRain': return t('weather.light_freezing_rain');
+      case 'HeavyFreezingRain': return t('weather.heavy_freezing_rain');
+      case 'LightShowerRain': return t('weather.light_shower_rain');
+      case 'ModerateShowerRain': return t('weather.moderate_shower_rain');
+      case 'HeavyShowerRain': return t('weather.heavy_shower_rain');
+      case 'LightSnow': return t('weather.light_snow');
+      case 'ModerateSnow': return t('weather.moderate_snow');
+      case 'HeavySnow': return t('weather.heavy_snow');
+      case 'SnowGrains': return t('weather.snow_grains');
+      case 'LightShowerSnow': return t('weather.light_shower_snow');
+      case 'HeavyShowerSnow': return t('weather.heavy_shower_snow');
       default: return condition;
     }
   };

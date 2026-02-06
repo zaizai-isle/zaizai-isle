@@ -30,18 +30,8 @@ export interface WeatherData {
 
 export function WeatherCard() {
   const { t, language } = useLanguage();
-  const [weather, setWeather] = useState<WeatherData | null>({
-    temp: 8,
-    condition: "Sunny",
-    location: "weather.shanghai",
-    humidity: 45,
-    windSpeed: 12,
-    feelsLike: 8,
-    isDay: true,
-    minTemp: 4,
-    maxTemp: 12
-  });
-  const [loading, setLoading] = useState(false);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [date, setDate] = useState<string>("");
 
   const fetchWeather = useCallback(async () => {
@@ -91,7 +81,7 @@ export function WeatherCard() {
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay
-        ? mk('#3b76b2ff', '#689ad4ff', DAY_STOP)
+        ? mk('#3b76b2', '#689ad4', DAY_STOP)
         : mk('#334155', '#1c2a3f', NIGHT_STOP);
     } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
       return isDay
@@ -107,10 +97,13 @@ export function WeatherCard() {
         : mk('#64748b', '#334155', NIGHT_STOP);
     } else if (condition === 'PartlyCloudy' || condition === 'FewClouds') {
       return isDay
-        ? mk('#428dc7ff', '#8bbcf0ff', DAY_STOP)
+        ? mk('#428dc7', '#8bbcf0', DAY_STOP)
         : mk('#1b2a3b', '#0f1a2a', NIGHT_STOP);
+    } else if (condition === 'Foggy' || condition === 'Cloudy' || condition === 'Overcast') {
+      return isDay
+        ? mk('#9baebb', '#c8d5df', DAY_STOP)
+        : mk('#64748b', '#334155', NIGHT_STOP);
     } else if (
-      condition === 'Foggy' || condition === 'Cloudy' || condition === 'Overcast' ||
       condition === 'Mist' || condition === 'Haze' || condition === 'Sand' ||
       condition === 'Sandstorm' || condition === 'HeavySandstorm' || condition === 'FreezingFog'
     ) {
@@ -224,7 +217,7 @@ export function WeatherCard() {
                 onClick={fetchWeather}
                 className="text-[18px] font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
               >
-                {loading ? t('weather.locating') : t(weather?.location || '')}
+                {loading ? t('weather.locating') : (weather ? t(weather.location) : t('weather.unavailable'))}
                 {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
               </h3>
             </div>
@@ -237,12 +230,12 @@ export function WeatherCard() {
           <div className="flex-1 flex flex-col justify-center pl-4.5 pb-2">
             <div className="flex flex-col items-start">
               <div className="flex items-start text-5xl font-semibold tracking-tighter text-white drop-shadow-lg -ml-0.5 leading-none">
-                {weather?.temp}
+                {weather?.temp ?? '--'}
                 <span className="text-xl font-normal">°</span>
               </div>
               <div className="text-xs font-medium text-white/50 drop-shadow-md flex items-center gap-2">
-                <span>{getWeatherLabel(weather?.condition || '')}</span>
-                <span>{t('weather.feels_like')} {weather?.feelsLike}°</span>
+                <span>{weather ? getWeatherLabel(weather.condition) : '--'}</span>
+                <span>{t('weather.feels_like')} {weather?.feelsLike ?? '--'}°</span>
               </div>
             </div>
           </div>
@@ -250,19 +243,21 @@ export function WeatherCard() {
 
         {/* Right: Big Glassy Icon */}
         <div className="flex flex-col justify-center h-full">
-          <motion.div
-            className="transform scale-150 mr-4"
-            whileHover={{
-              rotate: [0, -10, 10, -5, 5, 0],
-              transition: { duration: 0.5 }
-            }}
-          >
-            <FrostedGlassIcon
-              condition={weather?.condition || 'Sunny'}
-              isDay={weather?.isDay ?? true}
-              iconCode={weather?.iconCode}
-            />
-          </motion.div>
+          {weather && (
+            <motion.div
+              className="transform scale-150 mr-4"
+              whileHover={{
+                rotate: [0, -10, 10, -5, 5, 0],
+                transition: { duration: 0.5 }
+              }}
+            >
+              <FrostedGlassIcon
+                condition={weather.condition}
+                isDay={weather.isDay}
+                iconCode={weather.iconCode}
+              />
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -271,21 +266,21 @@ export function WeatherCard() {
         {/* H/L */}
         <div className="flex items-center gap-1">
           <Thermometer className="w-3 h-3" />
-          <span>{weather?.maxTemp}°</span>
+          <span>{weather?.maxTemp ?? '-'}°</span>
           <span className="opacity-50">/</span>
-          <span>{weather?.minTemp}°</span>
+          <span>{weather?.minTemp ?? '-'}°</span>
         </div>
 
         {/* Humidity */}
         <div className="flex items-center gap-1">
           <Droplets className="w-3 h-3" />
-          <span>{weather?.humidity}%</span>
+          <span>{weather?.humidity ?? '-'}%</span>
         </div>
 
         {/* Wind */}
         <div className="flex items-center gap-1">
           <Wind className="w-3 h-3" />
-          <span>{weather?.windSpeed}km/h</span>
+          <span>{weather?.windSpeed ?? '-'}km/h</span>
         </div>
       </div>
     </BentoCard>

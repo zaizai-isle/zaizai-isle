@@ -76,74 +76,74 @@ export function WeatherCard() {
     const condition = weather.condition;
     const DAY_STOP = 35;    // 顶部颜色占比（白天）
     const NIGHT_STOP = 40;  // 顶部颜色占比（夜晚）
-    const mk = (a: string, b: string, stop: number) => `linear-gradient(to bottom, ${a} 0%, ${a} ${stop}%, ${b} 100%)`;
+    const hexToRgb = (hex: string) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `${r}, ${g}, ${b}`;
+    };
+
+    const mkGlass = (topHex: string, bottomHex: string, stop: number, topAlpha = 0.8, bottomAlpha = 0.6) => {
+      const topRgb = hexToRgb(topHex);
+      const bottomRgb = hexToRgb(bottomHex);
+      return `linear-gradient(to bottom, rgba(${topRgb}, ${topAlpha}) 0%, rgba(${topRgb}, ${topAlpha}) ${stop}%, rgba(${bottomRgb}, ${bottomAlpha}) 100%)`;
+    };
 
     // Apple Weather-inspired Gradients (Soft & Glassy)
     if (condition === 'Sunny') {
       return isDay
-        ? mk('#3b76b2', '#689ad4', DAY_STOP)
-        : mk('#334155', '#1c2a3f', NIGHT_STOP);
-    } else if (condition === 'Rainy' || condition === 'Thunderstorm') {
-      return isDay
-        ? mk('#373B44', '#4286f4', DAY_STOP)
-        : mk('#1e293b', '#0f172a', NIGHT_STOP);
-    } else if (condition === 'Drizzle') {
-      return isDay
-        ? mk('#9ca3af', '#7a869a', DAY_STOP)
-        : mk('#334155', '#141f39', NIGHT_STOP);
-    } else if (condition === 'Snowy') {
-      return isDay
-        ? mk('#e8f4f8', '#bfd7e9', DAY_STOP)
-        : mk('#64748b', '#334155', NIGHT_STOP);
-    } else if (condition === 'PartlyCloudy' || condition === 'FewClouds') {
-      return isDay
-        ? mk('#428dc7', '#8bbcf0', DAY_STOP)
-        : mk('#1b2a3b', '#0f1a2a', NIGHT_STOP);
-    } else if (condition === 'Foggy' || condition === 'Cloudy' || condition === 'Overcast') {
-      return isDay
-        ? mk('#9baebb', '#c8d5df', DAY_STOP)
-        : mk('#64748b', '#334155', NIGHT_STOP);
-    } else if (
-      condition === 'Mist' || condition === 'Haze' || condition === 'Sand' ||
-      condition === 'Sandstorm' || condition === 'HeavySandstorm' || condition === 'FreezingFog'
-    ) {
-      return isDay
-        ? mk('#e9edf0', '#d1d9df', DAY_STOP)
-        : mk('#334155', '#1e293b', NIGHT_STOP);
+        ? mkGlass('#4a90e2', '#7fb3f0', DAY_STOP)
+        : mkGlass('#334155', '#1c2a3f', NIGHT_STOP);
     } else if (
       condition === 'Rainy' ||
       condition === 'LightRain' || condition === 'ModerateRain' || condition === 'HeavyRain' ||
       condition === 'LightFreezingRain' || condition === 'HeavyFreezingRain' ||
-      condition === 'LightShowerRain' || condition === 'ModerateShowerRain' || condition === 'HeavyShowerRain'
+      condition === 'LightShowerRain' || condition === 'ModerateShowerRain' || condition === 'HeavyShowerRain' ||
+      condition === 'Thunderstorm' || condition === 'ThunderstormWithLightHail' || condition === 'ThunderstormWithHeavyHail'
     ) {
       return isDay
-        ? mk('#373B44', '#4286f4', DAY_STOP)
-        : mk('#1e293b', '#0f172a', NIGHT_STOP);
+        ? mkGlass('#788da2', '#a6b8c9', DAY_STOP)
+        : mkGlass('#1e293b', '#0f172a', NIGHT_STOP);
     } else if (
       condition === 'Drizzle' ||
       condition === 'LightDrizzle' || condition === 'ModerateDrizzle' || condition === 'HeavyDrizzle' ||
       condition === 'LightFreezingDrizzle' || condition === 'HeavyFreezingDrizzle'
     ) {
       return isDay
-        ? mk('#9ca3af', '#7a869a', DAY_STOP)
-        : mk('#334155', '#141f39', NIGHT_STOP);
+        ? mkGlass('#b4bec9', '#9ca7b5', DAY_STOP)
+        : mkGlass('#334155', '#141f39', NIGHT_STOP);
     } else if (
       condition === 'Snowy' ||
       condition === 'LightSnow' || condition === 'ModerateSnow' || condition === 'HeavySnow' ||
       condition === 'SnowGrains' || condition === 'LightShowerSnow' || condition === 'HeavyShowerSnow'
     ) {
       return isDay
-        ? mk('#e8f4f8', '#bfd7e9', DAY_STOP)
-        : mk('#64748b', '#334155', NIGHT_STOP);
+        ? mkGlass('#f0f8ff', '#d9e8f5', DAY_STOP)
+        : mkGlass('#64748b', '#334155', NIGHT_STOP);
+    } else if (condition === 'PartlyCloudy' || condition === 'FewClouds') {
+      return isDay
+        ? mkGlass('#92acc2', '#b0c4d1', DAY_STOP)
+        : mkGlass('#1b2a3b', '#0f1a2a', NIGHT_STOP);
+    } else if (condition === 'Foggy' || condition === 'Cloudy' || condition === 'Overcast') {
+      return isDay
+        ? mkGlass('#afc0ce', '#d2dfe8', DAY_STOP)
+        : mkGlass('#1B1B2A', '#262D47', NIGHT_STOP);
+    } else if (
+      condition === 'Mist' || condition === 'Haze' || condition === 'Sand' ||
+      condition === 'Sandstorm' || condition === 'HeavySandstorm' || condition === 'FreezingFog'
+    ) {
+      return isDay
+        ? mkGlass('#f3f6f9', '#e2e6eb', DAY_STOP)
+        : mkGlass('#334155', '#1e293b', NIGHT_STOP);
     } else if (condition === 'Windy') {
       return isDay
-        ? mk('#485563', '#29323c', DAY_STOP)
-        : mk('#475162', '#1a2338', NIGHT_STOP);
+        ? mkGlass('#607080', '#455566', DAY_STOP)
+        : mkGlass('#475162', '#1a2338', NIGHT_STOP);
     } else {
       // Default
       return isDay
-        ? mk('#7e8b96', '#2c3e50', DAY_STOP)
-        : mk('#2c3e50', '#141E30', NIGHT_STOP);
+        ? mkGlass('#8e9ca8', '#4a5d6e', DAY_STOP)
+        : mkGlass('#2c3e50', '#141E30', NIGHT_STOP);
     }
   };
 
@@ -221,7 +221,7 @@ export function WeatherCard() {
                 {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
               </h3>
             </div>
-            <div className="text-xs font-medium text-white/50 pl-4.5">
+            <div className="text-xs font-medium text-white/50 pl-4.5 drop-shadow-md">
               {date}
             </div>
           </div>
@@ -262,25 +262,25 @@ export function WeatherCard() {
       </div>
 
       {/* Bottom Section: Unified Stats Row with Translucent Pill Background */}
-      <div className="flex items-center justify-between z-10 w-full text-xs font-medium text-white/50 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm border border-white/10 shadow-sm">
+      <div className="flex items-center justify-between z-10 w-full text-xs font-medium text-white/60 bg-white/10 rounded-full px-4 py-2 backdrop-blur-md border border-white/10 shadow-sm drop-shadow-md">
         {/* H/L */}
         <div className="flex items-center gap-1">
-          <Thermometer className="w-3 h-3" />
-          <span>{weather?.maxTemp ?? '-'}°</span>
+          <Thermometer className="w-3 h-3 drop-shadow-sm" />
+          <span className="drop-shadow-sm">{weather?.maxTemp ?? '-'}°</span>
           <span className="opacity-50">/</span>
-          <span>{weather?.minTemp ?? '-'}°</span>
+          <span className="drop-shadow-sm">{weather?.minTemp ?? '-'}°</span>
         </div>
 
         {/* Humidity */}
         <div className="flex items-center gap-1">
-          <Droplets className="w-3 h-3" />
-          <span>{weather?.humidity ?? '-'}%</span>
+          <Droplets className="w-3 h-3 drop-shadow-sm" />
+          <span className="drop-shadow-sm">{weather?.humidity ?? '-'}%</span>
         </div>
 
         {/* Wind */}
         <div className="flex items-center gap-1">
-          <Wind className="w-3 h-3" />
-          <span>{weather?.windSpeed ?? '-'}km/h</span>
+          <Wind className="w-3 h-3 drop-shadow-sm" />
+          <span className="drop-shadow-sm">{weather?.windSpeed ?? '-'} <span className="text-[10px]">km/h</span></span>
         </div>
       </div>
     </BentoCard>

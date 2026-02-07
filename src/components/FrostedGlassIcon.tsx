@@ -83,43 +83,43 @@ export const WeatherDefs = () => (
         <stop offset="0%" stopColor="#FFC000" />
         <stop offset="100%" stopColor="#FF8000" />
       </linearGradient>
-      
+
       {/* Moon: Soft Silver/White */}
       <linearGradient id="moon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#F5F5F5" />
         <stop offset="100%" stopColor="#C0C0C0" />
       </linearGradient>
-      
+
       {/* Cloud: White to Light Blue-Grey for Volume */}
       <linearGradient id="cloud-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#FFFFFF" />
         <stop offset="100%" stopColor="#D0D6E2" />
       </linearGradient>
-      
+
       {/* Rain: Bright Blue */}
       <linearGradient id="rain-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#00C6FF" />
         <stop offset="100%" stopColor="#0072FF" />
       </linearGradient>
-      
+
       {/* Snow: Cyan/Ice */}
       <linearGradient id="snow-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#E0F7FA" />
         <stop offset="100%" stopColor="#81D4FA" />
       </linearGradient>
-      
+
       {/* Thunder: Vibrant Yellow/Gold */}
       <linearGradient id="thunder-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#FFF176" />
         <stop offset="100%" stopColor="#FBC02D" />
       </linearGradient>
-      
+
       {/* Fog Lines: Blue Grey */}
       <linearGradient id="fog-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#90A4AE" />
         <stop offset="100%" stopColor="#546E7A" />
       </linearGradient>
-      
+
       {/* Wind: White/Cyan/Grey */}
       <linearGradient id="wind-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#FFFFFF" />
@@ -133,12 +133,12 @@ export const WeatherDefs = () => (
 
       {/* Sun Glow Filter */}
       <filter id="sun-glow-def" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
         <feMerge>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="SourceGraphic"/>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
         </feMerge>
-        <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="rgba(250,108,33,0.4)"/>
+        <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="rgba(250,108,33,0.4)" />
       </filter>
     </defs>
   </svg>
@@ -157,9 +157,9 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
     const svgContent = WeatherIconsMap[iconCode]
       .replace('width="16"', 'width="100%"')
       .replace('height="16"', 'height="100%"');
-      
+
     return (
-      <div 
+      <div
         className={`${className} [&>svg]:overflow-visible`}
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
@@ -187,15 +187,16 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
       );
 
     case 'PartlyCloudy':
+    case 'FewClouds':
       if (!isDay) {
-         return (
+        return (
           <svg viewBox="0 0 16 16" className={className}>
             {/* Moon Behind (Silver) */}
             <path d={paths.partlyCloudyNight.moon} fill="url(#moon-gradient)" />
-             {/* Cloud (White Glass) */}
-            <path 
-              d={paths.partlyCloudyNight.cloud} 
-              fill="url(#cloud-gradient)" 
+            {/* Cloud (White Glass) */}
+            <path
+              d={paths.partlyCloudyNight.cloud}
+              fill="url(#cloud-gradient)"
               style={shadowStyle}
             />
           </svg>
@@ -205,40 +206,49 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
         <svg viewBox="0 0 16 16" className={`${className} overflow-visible`}>
           {/* Sun Behind (Orange) */}
           <path d={paths.partlyCloudyDay.sun} fill="url(#sun-gradient)" style={{ filter: 'url(#sun-glow-def)' }} />
-           {/* Cloud (White Glass) */}
-          <path 
-            d={paths.partlyCloudyDay.cloud} 
-            fill="url(#cloud-gradient)" 
+          {/* Cloud (White Glass) */}
+          <path
+            d={paths.partlyCloudyDay.cloud}
+            fill="url(#cloud-gradient)"
             style={shadowStyle}
           />
         </svg>
       );
 
     case 'Cloudy':
+    case 'Overcast':
       return (
         <svg viewBox="0 0 16 16" className={className}>
-           {/* Back Cloud */}
-           <path 
-             d={paths.cloudy.back} 
-             fill="url(#cloud-gradient)" 
-             opacity="0.6"
-           />
-           {/* Front Cloud */}
-           <path 
-             d={paths.cloudy.front} 
-             fill="url(#cloud-gradient)" 
-             style={shadowStyle}
-           />
+          {/* Back Cloud */}
+          <path
+            d={paths.cloudy.back}
+            fill="url(#cloud-gradient)"
+            opacity="0.6"
+          />
+          {/* Front Cloud */}
+          <path
+            d={paths.cloudy.front}
+            fill="url(#cloud-gradient)"
+            style={shadowStyle}
+          />
         </svg>
       );
 
     case 'Rainy':
+    case 'LightRain':
+    case 'ModerateRain':
+    case 'HeavyRain':
+    case 'LightShowerRain':
+    case 'ModerateShowerRain':
+    case 'HeavyShowerRain':
+    case 'LightFreezingRain':
+    case 'HeavyFreezingRain':
       return (
         <svg viewBox="0 0 16 16" className={className}>
           {/* Layer 1: Cloud Background (original path) */}
-          <path 
-            d={paths.rain.cloud} 
-            fill="url(#cloud-gradient)" 
+          <path
+            d={paths.rain.cloud}
+            fill="url(#cloud-gradient)"
             style={shadowStyle}
           />
           {/* Layer 2: Drops only on top (Blue) */}
@@ -247,12 +257,17 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
       );
 
     case 'Drizzle':
+    case 'LightDrizzle':
+    case 'ModerateDrizzle':
+    case 'HeavyDrizzle':
+    case 'LightFreezingDrizzle':
+    case 'HeavyFreezingDrizzle':
       return (
         <svg viewBox="0 0 16 16" className={className}>
           {/* Layer 1: Cloud Background (original path) */}
-          <path 
-            d={paths.drizzle.cloud} 
-            fill="url(#cloud-gradient)" 
+          <path
+            d={paths.drizzle.cloud}
+            fill="url(#cloud-gradient)"
             style={shadowStyle}
           />
           {/* Layer 2: 2 Drops only on top (Blue) */}
@@ -261,26 +276,34 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
       );
 
     case 'Thunderstorm':
-       return (
+    case 'ThunderstormWithLightHail':
+    case 'ThunderstormWithHeavyHail':
+      return (
         <svg viewBox="0 0 16 16" className={className}>
           {/* Layer 1: Cloud Background (original path) */}
-          <path 
-            d={paths.thunder.cloud} 
-            fill="url(#cloud-gradient)" 
+          <path
+            d={paths.thunder.cloud}
+            fill="url(#cloud-gradient)"
             style={shadowStyle}
           />
           {/* Layer 2: Bolt only on top (Yellow) */}
           <path d={paths.thunder.bolt} fill="url(#thunder-gradient)" />
         </svg>
       );
-      
+
     case 'Snowy':
-       return (
+    case 'LightSnow':
+    case 'ModerateSnow':
+    case 'HeavySnow':
+    case 'SnowGrains':
+    case 'LightShowerSnow':
+    case 'HeavyShowerSnow':
+      return (
         <svg viewBox="0 0 16 16" className={className}>
           {/* Layer 1: Cloud Background (original path) */}
-          <path 
-            d={paths.snow.cloud} 
-            fill="url(#cloud-gradient)" 
+          <path
+            d={paths.snow.cloud}
+            fill="url(#cloud-gradient)"
             style={shadowStyle}
           />
           {/* Layer 2: Flakes only on top (Cyan) */}
@@ -289,16 +312,22 @@ export const FrostedGlassIcon = ({ condition, isDay, className = "w-12 h-12 -mt-
       );
 
     case 'Foggy':
+    case 'Mist':
+    case 'Haze':
+    case 'Sand':
+    case 'Sandstorm':
+    case 'HeavySandstorm':
+    case 'FreezingFog':
       return (
         <svg viewBox="0 0 16 16" className={className}>
-           {/* Layer 1: Cloud Background (Blurred) */}
-           <path 
-             d={paths.fog.cloud} 
-             fill="url(#cloud-gradient)" 
-             style={{ filter: 'blur(1px)', opacity: 0.8 }}
-           />
-           {/* Layer 2: Lines only on top */}
-           <path d={paths.fog.lines} fill="url(#fog-gradient)" />
+          {/* Layer 1: Cloud Background (Blurred) */}
+          <path
+            d={paths.fog.cloud}
+            fill="url(#cloud-gradient)"
+            style={{ filter: 'blur(1px)', opacity: 0.8 }}
+          />
+          {/* Layer 2: Lines only on top */}
+          <path d={paths.fog.lines} fill="url(#fog-gradient)" />
         </svg>
       );
 

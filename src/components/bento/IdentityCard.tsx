@@ -104,8 +104,8 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
   const [hovering, setHovering] = useState(false);
   type StateName = "idle" | "happy" | "excited" | "sleepy" | "working" | "alert" | "dragging";
   const [petState, setPetState] = useState<StateName>("idle");
-  const frameWidth = 265;
-  const frameHeight = 275;
+  const frameWidth = 276;
+  const frameHeight = 274;
   const stateRowMap: Record<StateName, number> = {
     idle: 0,
     happy: 1,
@@ -116,10 +116,10 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
     dragging: 6,
   };
   const row = stateRowMap[petState] ?? 0;
-  const targetSize = 108;
+  const targetSize = 118;
   const framesPerRow = 8;
   const rows = 7;
-  const scale = Math.min(targetSize / frameWidth, targetSize / frameHeight);
+  const scale = Math.max(targetSize / frameWidth, targetSize / frameHeight);
   const scaledW = frameWidth * scale;
   const scaledH = frameHeight * scale;
   const bgX = -(frame * scaledW);
@@ -245,13 +245,15 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
             alt={t('identity.name')}
             width={108}
             height={108}
-            className={`w-full h-full object-cover ${hovering && loaded ? "opacity-0" : "opacity-100"} transition-opacity`}
+            className={`w-full h-full object-cover scale-[1.05] ${hovering && loaded ? "opacity-0" : "opacity-100"} transition-opacity`}
             placeholder="blur"
             priority
           />
           <div
-            className={`absolute inset-0 ${hovering && loaded ? "opacity-100" : "opacity-0"} transition-opacity`}
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${hovering && loaded ? "opacity-100" : "opacity-0"} transition-opacity`}
             style={{
+              width: scaledW,
+              height: scaledH,
               backgroundImage: loaded ? `url(${activeUrl})` : "none",
               backgroundRepeat: "no-repeat",
               backgroundPosition: `${bgX}px ${bgY}px`,

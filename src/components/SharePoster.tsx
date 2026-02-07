@@ -8,17 +8,17 @@ import { Drama, Lightbulb, PartyPopper, Mail, MessageCircle } from "lucide-react
 import { cn } from "@/lib/utils";
 
 // Static Cloud Component for consistent screenshots
-const Cloud = ({ 
-  className, 
+const Cloud = ({
+  className,
   opacity = 1,
   variant = 'default'
-}: { 
-  className?: string; 
+}: {
+  className?: string;
   opacity?: number;
   variant?: 'default' | 'warm' | 'cool' | 'purple';
 }) => {
   const getGradient = (v: string) => {
-    switch(v) {
+    switch (v) {
       case 'warm': return "from-orange-200/40 via-orange-100/20 to-transparent border-orange-200/30";
       case 'cool': return "from-blue-200/40 via-blue-100/20 to-transparent border-blue-200/30";
       case 'purple': return "from-purple-200/40 via-purple-100/20 to-transparent border-purple-200/30";
@@ -29,7 +29,7 @@ const Cloud = ({
   const gradientClass = getGradient(variant);
 
   return (
-    <div 
+    <div
       className={cn("absolute flex items-end", className)}
       style={{ opacity }}
     >
@@ -55,7 +55,7 @@ const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.Re
     yellow: "bg-[#281730] text-yellow-50",
     rose: "bg-[#2d0e36] text-rose-50",
   };
-  
+
   const iconColors = {
     emerald: "text-emerald-500",
     yellow: "text-yellow-500",
@@ -77,7 +77,7 @@ const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.Re
 
 export function SharePoster() {
   const { t, language } = useLanguage();
-  
+
   const today = new Date().toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'long',
@@ -85,22 +85,22 @@ export function SharePoster() {
   });
 
   return (
-    <div 
+    <div
       id="share-poster"
       className="w-[375px] h-[667px] bg-[#e5e5e7] relative flex flex-col items-center justify-between overflow-hidden text-black font-sans"
     >
       {/* Background Layer - Mimicking IdentityCard */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-blue-50" />
-      
+
       {/* Cloud Decoration (Static Positioning) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-80 scale-110 origin-bottom">
         <div className="absolute top-[10%] left-[-10%] w-full h-1/2 opacity-60">
-            <Cloud variant="warm" className="left-[10%] bottom-0 scale-120" opacity={0.6} />
-            <Cloud variant="cool" className="right-[20%] bottom-[-20px] scale-125" opacity={0.6} />
+          <Cloud variant="warm" className="left-[10%] bottom-0 scale-120" opacity={0.6} />
+          <Cloud variant="cool" className="right-[20%] bottom-[-20px] scale-125" opacity={0.6} />
         </div>
         <div className="absolute top-[20%] w-full h-1/2">
-             <Cloud variant="warm" className="-left-[5%] bottom-[20%] scale-100" opacity={0.8} />
-             <Cloud variant="cool" className="-right-[5%] bottom-[15%] scale-125" opacity={0.8} />
+          <Cloud variant="warm" className="-left-[5%] bottom-[20%] scale-100" opacity={0.8} />
+          <Cloud variant="cool" className="-right-[5%] bottom-[15%] scale-125" opacity={0.8} />
         </div>
         <Sparkle className="top-[15%] left-[20%] w-5 h-5 text-orange-300" />
         <Sparkle className="top-[25%] right-[20%] w-6 h-6 text-blue-300" />
@@ -108,14 +108,14 @@ export function SharePoster() {
 
       {/* Main Content Container */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center pt-16 px-6">
-        
+
         {/* Avatar Section */}
         <div className="relative mb-6">
           <div className="w-[110px] h-[110px] rounded-full shadow-lg relative z-10">
-            <Image 
-              src={avatarImage} 
-              alt="Avatar" 
-              className="w-full h-full rounded-full object-cover"
+            <Image
+              src={avatarImage}
+              alt="Avatar"
+              className="w-full h-full rounded-full object-cover scale-[1.05]"
             />
           </div>
           {/* Decorative halo removed as requested */}
@@ -155,7 +155,7 @@ export function SharePoster() {
                 <p className="text-[13px] font-semibold text-gray-800 whitespace-nowrap">zaizaiely@gmail.com</p>
               </div>
             </div>
-            
+
             {/* WeChat */}
             <div className="flex items-center gap-3">
               <MessageCircle className="w-5 h-5 text-black shrink-0" />

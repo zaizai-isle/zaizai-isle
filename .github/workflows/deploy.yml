@@ -23,10 +23,17 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           git config --global core.autocrlf false
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
       
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
+      - name: Initialize Git Repository
+        run: |
+          git status
+          git log -1 --oneline || echo "Git history available"
       
       - uses: actions/setup-node@v4
         with:

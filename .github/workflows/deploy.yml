@@ -18,6 +18,8 @@ jobs:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+      GIT_TERMINAL_PROMPT: 0
+      SKIP_GIT: true
     steps:
       - name: Setup Git
         run: |
@@ -30,10 +32,26 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Initialize Git Repository
+      - name: Complete Git Repository Setup
         run: |
+          # Ensure we're in a git repository
+          if [ ! -d .git ]; then
+            echo "Error: Not a git repository!"
+            exit 1
+          fi
+          
+          # Configure git identity
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          
+          # Verify git is working
           git status
-          git log -1 --oneline || echo "Git history available"
+          git log -1 --oneline
+          
+          # Ensure HEAD is properly set
+          git rev-parse HEAD
+          
+          echo "Git setup complete and verified"
       
       - uses: actions/setup-node@v4
         with:

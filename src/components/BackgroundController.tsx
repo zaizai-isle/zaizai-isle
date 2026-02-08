@@ -5,6 +5,7 @@ import { useBackground } from "@/lib/background-context";
 import { useLanguage } from "@/lib/language-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, Image as ImageIcon, Upload, RotateCcw, X, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
+import { GlassButton } from "./GlassButton";
 
 const CustomScrollArea = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -17,7 +18,7 @@ const CustomScrollArea = ({ children, className }: { children: React.ReactNode; 
   const updateThumb = useCallback(() => {
     if (!contentRef.current) return;
     const { clientHeight, scrollHeight, scrollTop } = contentRef.current;
-    
+
     if (scrollHeight <= clientHeight) {
       setThumbHeight(0);
       return;
@@ -26,15 +27,15 @@ const CustomScrollArea = ({ children, className }: { children: React.ReactNode; 
     const heightRatio = clientHeight / scrollHeight;
     const height = Math.max(heightRatio * clientHeight, 20); // Min height 20px
     setThumbHeight(height);
-    
+
     const maxScrollTop = scrollHeight - clientHeight;
     const maxThumbTop = clientHeight - height;
-    
+
     // Avoid division by zero
     if (maxScrollTop === 0) {
-        setThumbTop(0);
+      setThumbTop(0);
     } else {
-        setThumbTop((scrollTop / maxScrollTop) * maxThumbTop);
+      setThumbTop((scrollTop / maxScrollTop) * maxThumbTop);
     }
   }, []);
 
@@ -75,16 +76,16 @@ const CustomScrollArea = ({ children, className }: { children: React.ReactNode; 
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!contentRef.current) return;
-      
+
       const { clientHeight, scrollHeight } = contentRef.current;
       const maxScrollTop = scrollHeight - clientHeight;
       const maxThumbTop = clientHeight - thumbHeight;
-      
+
       if (maxThumbTop === 0) return;
 
       const deltaY = e.clientY - startY;
       const deltaScroll = (deltaY / maxThumbTop) * maxScrollTop;
-      
+
       contentRef.current.scrollTop = startScrollTop + deltaScroll;
     };
 
@@ -103,20 +104,20 @@ const CustomScrollArea = ({ children, className }: { children: React.ReactNode; 
 
   return (
     <div className={cn("relative group", className)}>
-      <div 
+      <div
         ref={contentRef}
         className="h-full w-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {children}
       </div>
-      
+
       {/* Scrollbar Track & Thumb */}
       {thumbHeight > 0 && (
         <div className={cn(
           "absolute top-0 right-[-16px] h-full w-[4px] transition-opacity duration-300 bg-transparent",
           isDragging ? "opacity-100" : "opacity-0 group-hover:opacity-100"
         )}>
-          <div 
+          <div
             className={cn(
               "w-full rounded-full cursor-pointer transition-colors",
               isDragging ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"
@@ -226,17 +227,15 @@ export function BackgroundController({ className }: { className?: string }) {
   return (
     <>
       {/* Floating Trigger Button */}
-      <motion.button
-        className={cn(
-          "bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-white/20 hover:scale-105 transition-transform text-gray-700 flex items-center justify-center",
-          className
-        )}
-        whileHover={{ rotate: 90 }}
+      <GlassButton
+        className={className}
+        active={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         title={t('bg.settings')}
+        style={{ rotate: isOpen ? 90 : 0 }}
       >
-        <SwatchBook className="w-5 h-5" />
-      </motion.button>
+        <SwatchBook className="w-4 h-4" />
+      </GlassButton>
 
       {/* Settings Panel */}
       <AnimatePresence>
@@ -263,7 +262,7 @@ export function BackgroundController({ className }: { className?: string }) {
                   <h4 className="text-sm font-medium text-gray-900 mb-3 ml-1">{t('bg.image')}</h4>
                   <div className="grid grid-cols-3 gap-2">
                     {/* Upload Button */}
-                    <div 
+                    <div
                       onClick={() => fileInputRef.current?.click()}
                       className="w-full aspect-[3/2] rounded-lg bg-gray-50 hover:bg-gray-100 flex flex-col items-center justify-center text-gray-400 cursor-pointer transition-colors group border border-gray-100"
                       title={t('bg.upload')}
@@ -296,13 +295,13 @@ export function BackgroundController({ className }: { className?: string }) {
                     onChange={handleFileUpload}
                     className="hidden"
                   />
-                  
+
                   {settings.type === 'image' && !PRESET_IMAGES.includes(settings.value) && (
                     <div className="mt-2 relative rounded-lg overflow-hidden h-24 border border-gray-200">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img 
-                        src={settings.value} 
-                        alt="Current background" 
+                      <img
+                        src={settings.value}
+                        alt="Current background"
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
@@ -345,9 +344,8 @@ export function BackgroundController({ className }: { className?: string }) {
                         style={{ backgroundColor: color }}
                       >
                         {settings.type === 'color' && settings.value === color && (
-                          <Check className={`w-4 h-4 absolute inset-0 m-auto ${
-                            ['#ffffff', '#f3d8c1', '#f6d2cf', '#e6e7e9', '#fde8ea', '#ffd4c2', '#bdc0c4', '#6bc4a5', '#fdb913'].includes(color) ? 'text-black' : 'text-white'
-                          }`} />
+                          <Check className={`w-4 h-4 absolute inset-0 m-auto ${['#ffffff', '#f3d8c1', '#f6d2cf', '#e6e7e9', '#fde8ea', '#ffd4c2', '#bdc0c4', '#6bc4a5', '#fdb913'].includes(color) ? 'text-black' : 'text-white'
+                            }`} />
                         )}
                       </button>
                     ))}

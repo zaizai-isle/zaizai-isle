@@ -38,7 +38,7 @@ export function StatsCard() {
             .from('stats')
             .select('downloads, visitors')
             .single();
-          
+
           if (data) {
             if (data.downloads) setDownloadCount(Math.max(12045, data.downloads));
             if (data.visitors) setVisitorCount(Math.max(532, data.visitors));
@@ -48,15 +48,15 @@ export function StatsCard() {
           if (!hasIncrementedVisitor.current && !error) {
             hasIncrementedVisitor.current = true;
             setVisitorCount(prev => prev + 1);
-            
+
             // Try RPC first, fallback to update
             const { error: rpcError } = await client.rpc('increment_visitors');
             if (rpcError) {
-               // Fallback: manual update
-               // Note: This is less safe for concurrency but works for simple cases
-               if (data && !error) {
-                  await client.from('stats').update({ visitors: (data.visitors || 532) + 1 }).eq('id', 1);
-               }
+              // Fallback: manual update
+              // Note: This is less safe for concurrency but works for simple cases
+              if (data && !error) {
+                await client.from('stats').update({ visitors: (data.visitors || 532) + 1 }).eq('id', 1);
+              }
             }
           }
         } catch (err) {
@@ -70,7 +70,7 @@ export function StatsCard() {
   const handleDownload = async () => {
     if (isDownloading) return;
     setIsDownloading(true);
-    
+
     // Increment local count immediately for better UX
     setDownloadCount(prev => prev + 1);
 
@@ -81,20 +81,20 @@ export function StatsCard() {
       // Assuming there's a 'stats' table with a single row where id=1
       await client.rpc('increment_downloads');
     }
-    
+
     try {
       // Target the hidden SharePoster element instead of the main container
       const element = document.getElementById('share-poster');
       if (element) {
         // Add a small delay to ensure styles are stable
         await new Promise(resolve => setTimeout(resolve, 100));
-        
-        const dataUrl = await toPng(element, { 
+
+        const dataUrl = await toPng(element, {
           cacheBust: true,
           pixelRatio: 2, // 2x resolution for high quality
           // No need for extra padding or background color as the poster handles it
         });
-        
+
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -117,27 +117,28 @@ export function StatsCard() {
   };
 
   return (
-    <BentoCard 
-      onClick={handleDownload} 
-      colSpan={1} 
-      rowSpan={1} 
-      className="h-full cursor-pointer justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] backdrop-blur-xl text-white group shadow-lg hover:from-[#333333] hover:to-[#222222] transition-all p-4 md:p-5 relative"
+    <BentoCard
+      onClick={handleDownload}
+      colSpan={1}
+      rowSpan={1}
+      theme="dark"
+      className="h-full cursor-pointer justify-center group relative overflow-hidden p-4 md:p-5"
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
       <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 text-xs text-white/90 font-medium px-3 py-1.5 bg-black/80 backdrop-blur-md rounded-full border border-white/10 shadow-xl z-50 pointer-events-none">
         {t('stats.click_to_download')}
       </div>
-      
+
       <div className="flex flex-col gap-6 w-full px-1">
         {/* Visitors */}
         <div className="flex items-center gap-4">
           <div>
-            <p className="text-xs text-gray-400 font-medium">
+            <p className="text-xs text-white/40">
               {t('stats.visitors')}
             </p>
-            <div className="text-2xl md:text-3xl font-bold mt-0.5 flex items-baseline leading-none">
+            <div className="text-2xl md:text-3xl text-white/90 font-bold mt-0.5 flex items-baseline leading-none">
               <Counter value={visitorCount} />
-              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+              <span className="text-xs font-normal text-white/40 ml-1">+</span>
             </div>
           </div>
         </div>
@@ -145,12 +146,12 @@ export function StatsCard() {
         {/* Downloads */}
         <div className="flex items-center gap-4">
           <div>
-            <p className="text-xs text-gray-400 font-medium">
+            <p className="text-xs text-white/40">
               {t('stats.downloads')}
             </p>
-            <div className="text-2xl md:text-3xl font-bold mt-0.5 flex items-baseline leading-none">
+            <div className="text-2xl md:text-3xl text-white/90 font-bold mt-0.5 flex items-baseline leading-none">
               <Counter value={downloadCount} />
-              <span className="text-xs font-normal text-gray-400 ml-1">+</span>
+              <span className="text-xs font-normal text-white/40 ml-1">+</span>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/lib/language-context";
 import { cn, trackEvent } from "@/lib/utils";
+import { BentoHeader } from "./BentoCommon";
 
 interface Message {
   id?: string;
@@ -17,16 +18,16 @@ interface Message {
 
 export function GuestbookCard() {
   const { t } = useLanguage();
-  const [messages, setMessages] = useState<Message[]> ([
+  const [messages, setMessages] = useState<Message[]>([
     { id: '1', content: 'Awesome portfolio!', created_at: '2024-01-01' },
     { id: '2', content: 'Love the bento design', created_at: '2024-01-01' },
     { id: '3', content: 'Hi from Tokyo!', created_at: '2024-01-01' },
   ]);
   const [inputValue, setInputValue] = useState("");
-  
+
   // Deduplicate messages for rendering to avoid key collisions
   // Fallback to using content + created_at if id is missing
-  const uniqueMessages = messages.filter((msg, index, self) => 
+  const uniqueMessages = messages.filter((msg, index, self) =>
     index === self.findIndex((m) => {
       if (m.id && msg.id) return m.id === msg.id;
       return m.content === msg.content && m.created_at === msg.created_at;
@@ -57,7 +58,7 @@ export function GuestbookCard() {
             .select('*', { count: 'exact' })
             .order('created_at', { ascending: false })
             .limit(10);
-          
+
           if (error) {
             console.warn('Supabase fetch error:', error);
             return;
@@ -99,7 +100,7 @@ export function GuestbookCard() {
 
     setLoading(true);
     trackEvent('sign_guestbook', { method: 'form_submit' });
-    
+
     // Optimistic update
     const tempId = Date.now().toString();
     const newMessage = {
@@ -107,7 +108,7 @@ export function GuestbookCard() {
       content: inputValue,
       created_at: new Date().toISOString(),
     };
-    
+
     setMessages((prev) => [newMessage, ...prev]);
     setTotalCount((prev) => prev + 1);
     setInputValue("");
@@ -141,19 +142,20 @@ export function GuestbookCard() {
   };
 
   return (
-    <BentoCard 
-      colSpan={2} 
-      rowSpan={1} 
-      className="h-full min-h-[220px] md:min-h-0 flex flex-col justify-between bg-black/40 backdrop-blur-2xl text-white overflow-hidden shadow-lg hover:bg-black/50 transition-colors"
+    <BentoCard
+      colSpan={2}
+      rowSpan={1}
+      theme="dark"
+      className="h-full min-h-[220px] md:min-h-0 flex flex-col justify-between overflow-hidden"
       borderGradient={VERTICAL_BORDER_GRADIENT}
     >
-      <h3 className="text-[18px] font-semibold text-white mb-2 z-10 w-fit flex items-baseline gap-2">
-        {t('guestbook.title')}
-        <span className="text-sm font-normal opacity-80">({totalCount})</span>
-      </h3>
-      
+      <BentoHeader
+        title={`${t('guestbook.title')} (${totalCount})`}
+        className="mb-0"
+      />
+
       {/* Danmaku Area */}
-      <div 
+      <div
         className="absolute inset-x-0 top-12 bottom-16 pointer-events-none overflow-hidden"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
@@ -165,12 +167,12 @@ export function GuestbookCard() {
             <motion.div
               key={`${msg.id || msg.created_at}-${i}`}
               initial={{ x: 0 }}
-              animate={{ 
-                x: "-100vw", 
+              animate={{
+                x: "-100vw",
               }}
-              transition={{ 
-                duration: 15 + (i % 5), 
-                repeat: Infinity, 
+              transition={{
+                duration: 15 + (i % 5),
+                repeat: Infinity,
                 ease: "linear",
                 delay: i * 2,
               }}
@@ -187,23 +189,23 @@ export function GuestbookCard() {
       </div>
 
       <form onSubmit={handleSubmit} className="relative z-10 mt-auto">
-        <div className="relative">
+        <div className="relative flex items-center">
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={t('guestbook.placeholder')}
-            className="w-full bg-transparent border border-white/30 rounded-full pl-4 pr-12 h-10 text-sm focus:outline-none focus:border-white/60 transition-all placeholder:text-white/50 text-white"
+            className="w-full bg-white/5 border border-white/6 rounded-full pl-4 pr-12 h-9 text-xs focus:outline-none focus:border-white/20 transition-all placeholder:text-white/20 text-white/80 backdrop-blur-sm"
           />
           <button
             type="submit"
             disabled={loading}
             className={cn(
-              "absolute right-0.5 top-0.5 h-[calc(100%-4px)] aspect-square flex items-center justify-center rounded-full transition-all hover:scale-105 disabled:opacity-50 backdrop-blur-md border border-white/20 text-gray-700 shadow-sm",
-              inputValue.trim() ? "bg-white" : "bg-white/80 hover:bg-white"
+              "absolute right-0.5 top-0.5 h-[calc(100%-4px)] aspect-square flex items-center justify-center rounded-full transition-all hover:scale-105 disabled:opacity-50 backdrop-blur-md border border-white/10 text-gray-700 shadow-sm",
+              inputValue.trim() ? "bg-white/90" : "bg-white/40 hover:bg-white/60"
             )}
           >
-            <Rocket className="w-4 h-4" />
+            <Rocket className="w-3.5 h-3.5" />
           </button>
         </div>
       </form>

@@ -2,6 +2,105 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.5] - 2026-02-08
+
+### Added
+- **GlassButton Component**:
+  - Extracted unified glass button component for all floating controls (LanguageSwitcher, TextModeSwitcher, BackgroundController).
+  - Symmetric gradient border with 4-stop highlights (135deg, corners bright, middle dim).
+  - Multi-layered inner shadows for realistic depth (`inset 0 1px 2px`, `inset 0 -1px 2px`).
+  - Top-arc highlight layer for 3D glass sphere effect.
+  - Built-in hover animations (scale: 1.05) and tap feedback (scale: 0.95).
+  - Support for `active` state with enhanced background opacity.
+
+- **Text Mode Switcher**:
+  - New floating control for dynamic text color adjustment (☀️ Sun / 🌙 Moon toggle).
+  - Integrated into bottom-right control panel alongside language and background switches.
+  - Automatically syncs with BackgroundContext settings and localStorage.
+  - Default mode: `dark` (for optimal contrast with default light gradient background).
+
+### Changed
+- **System Header (SystemStatus)**: Major UX and visual overhaul
+  - **Positioning**: Changed from `fixed top-0` to `sticky top-0` for natural content flow integration.
+  - **Dynamic Spacing**: Header starts with `mt-16` margin, collapses to `mt-0` when scrolled (smooth 500ms transition).
+  - **Frosted Glass Background**: Activates on scroll (`scrollY > 20`):
+    - Light text mode: `bg-black/10 backdrop-blur-md`
+    - Dark text mode: `bg-white/30 backdrop-blur-md`
+  - **Full-Width Design**: Header now spans entire viewport width (通栏效果):
+    - Removed global `p-4 md:p-8` from body.
+    - Content container uses `mx-auto` to maintain centered layout.
+  - **Border Cleanup**: Removed bottom border for cleaner, seamless appearance.
+  - **Fixed Height**: Strictly enforced `h-14` (56px) for consistent layout calculations.
+  - **Text Color Logic**: 
+    - Default changed from `light` to `dark` (better contrast with default background).
+    - Text/divider colors dynamically adapt to `textMode` setting.
+
+- **Floating Controls Unification**:
+  - All three buttons (Language, TextMode, Background) now use identical styling:
+    - Shape: `rounded-full`
+    - Background: `bg-white/10` with `backdrop-blur-md`
+    - Border: Symmetric gradient `0.3 → 0.02 → 0.01 → 0.4`
+    - Icon size: Standardized to `w-4 h-4`
+    - Text color: `text-white/90`
+  - Replaced individual motion.button implementations with unified GlassButton component.
+
+- **CoreBuildCard (岛屿脉动)**: Complete redesign with poetic narrative approach
+  - **Theme Switch**: `dark` → `glass` for lighter visual weight and better balance across page.
+  - **Visual Redesign**:
+    - Replaced technical radar/sonar with hand-drawn abstract island outline SVG.
+    - Organic bezier curve path with internal terrain detail line.
+    - Breathing animation: Island scales 1 → 1.05 → 1 over 4-second cycle.
+    - SVG path draws with `pathLength` animation and pulsing opacity.
+  - **Content Transformation** (Technical → Poetic):
+    - **Removed**: `LAT: 0.002MS`, `FREQ: 512HZ`, radar grid lines, rotating scan line.
+    - **Added**:
+      - "岛屿正在呼吸" / "The island breathes"
+      - "感知到 127 次生命律动" / "127 vital pulses sensed" (dynamic counter, increments every 8s)
+      - "生态系统：繁荣" / "Ecosystem: Thriving"
+      - "律动频率：稳定" / "Rhythm: Stable"
+  - **Animation Refinement**:
+    - Central emerald dot pulses with breathing rhythm (3s cycle).
+    - Outer glow halo scales and fades in sync (4s cycle).
+    - All animations use `ease-in-out` for natural, organic feel.
+
+- **Layout Adjustments**:
+  - **Body**: Removed `p-4 md:p-8` and `flex-col items-center` to enable full-width header.
+  - **Main Container**: Changed from global centering to `mx-auto` on content div.
+  - **First Section Padding**: Reduced from `pt-20` to `pt-4` (header no longer needs large offset).
+  - **Content Container**: Now uses `pb-8` instead of `py-8` (top space handled by header margin).
+
+- **BackgroundContext**:
+  - Added `textMode` state (`'light' | 'dark'`).
+  - Added `toggleTextMode()` function.
+  - Default value updated to `'dark'` for better contrast with default gradient background.
+  - Settings now persist `textMode` to localStorage and Supabase.
+
+### Fixed
+- **Status Bar Contrast**: Header text now readable on all background conditions (light/dark/custom images).
+- **Content Overlap**: Header no longer overlaps first section content when page loads.
+- **Visual Consistency**: All three floating buttons now have identical glass styling (no more white/solid outliers).
+- **Border Alignment**: Removed black line artifact that appeared on header scroll.
+- **Gradient Symmetry**: GlassButton border gradient now truly symmetric (bright-dim-bright pattern).
+
+### Technical
+- **Component Extraction**: 
+  - Created `GlassButton.tsx` as reusable UI primitive (40 lines, highly composable).
+  - Refactored `LanguageSwitcher.tsx` to use GlassButton (reduced from 31 to 27 lines).
+  - Refactored `TextModeSwitcher.tsx` to use GlassButton (29 lines).
+  - Updated `BackgroundController.tsx` trigger button to GlassButton.
+
+- **Design System Alignment**:
+  - Confirmed all cards use unified border gradient via `BentoCard` mask technique.
+  - Updated default border gradient angle: `135deg` → `125deg` for subtle asymmetry.
+  
+- **Theme Distribution** (Current State):
+  - Light: 2 cards (IdentityCard, WorksCard)
+  - Glass: 2 cards (SocialCard, CoreBuildCard) ← +1 from this release
+  - Dark: 8 cards (StatsCard, TechStackCard, AIHubCard, etc.)
+  - Custom: 1 card (WeatherCard with dynamic gradients)
+
+---
+
 ## [v1.2.3] - 2026-01-30
 
 ### Added

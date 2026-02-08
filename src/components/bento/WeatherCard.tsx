@@ -196,7 +196,7 @@ export function WeatherCard() {
       colSpan={2}
       rowSpan={1}
       className={cn(
-        "h-full min-h-[200px] flex flex-col justify-between backdrop-blur-xl text-white p-5 overflow-hidden relative shadow-lg transition-all duration-500 group",
+        "h-full min-h-[192px] flex flex-col justify-between backdrop-blur-xl text-white p-5 overflow-hidden relative shadow-lg transition-all duration-500 group",
       )}
       style={{ backgroundImage: getBackgroundStyle() }}
       borderGradient={VERTICAL_BORDER_GRADIENT}
@@ -215,13 +215,13 @@ export function WeatherCard() {
               <MapPin className="w-3.5 h-3.5 text-white/60 drop-shadow-md" />
               <h3
                 onClick={fetchWeather}
-                className="text-[18px] font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
+                className="text-base font-semibold tracking-wide text-white drop-shadow-md cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
               >
                 {loading ? t('weather.locating') : (weather ? t(weather.location) : t('weather.unavailable'))}
                 {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
               </h3>
             </div>
-            <div className="text-xs font-medium text-white/50 pl-4.5 drop-shadow-md">
+            <div className="text-xs text-white/40 pl-4.5 drop-shadow-md">
               {date}
             </div>
           </div>
@@ -229,11 +229,11 @@ export function WeatherCard() {
           {/* Big Temperature & Condition - Vertically Centered */}
           <div className="flex-1 flex flex-col justify-center pl-4.5 pb-2">
             <div className="flex flex-col items-start">
-              <div className="flex items-start text-5xl font-semibold tracking-tighter text-white drop-shadow-lg -ml-0.5 leading-none">
+              <div className="flex items-start text-4xl font-semibold tracking-tighter text-white drop-shadow-lg -ml-0.1 leading-none">
                 {weather?.temp ?? '--'}
                 <span className="text-xl font-normal">°</span>
               </div>
-              <div className="text-xs font-medium text-white/50 drop-shadow-md flex items-center gap-2">
+              <div className="text-xs text-white/40 drop-shadow-md flex items-center gap-2">
                 <span>{weather ? getWeatherLabel(weather.condition) : '--'}</span>
                 <span>{t('weather.feels_like')} {weather?.feelsLike ?? '--'}°</span>
               </div>
@@ -262,7 +262,7 @@ export function WeatherCard() {
       </div>
 
       {/* Bottom Section: Unified Stats Row with Translucent Pill Background */}
-      <div className="flex items-center justify-between z-10 w-full text-xs font-medium text-white/60 bg-white/10 rounded-full px-4 py-2 backdrop-blur-md border border-white/10 shadow-sm drop-shadow-md">
+      <div className="flex items-center justify-between z-10 w-full text-xs font-mono uppercase tracking-wider text-white/30 bg-white/5 rounded-full px-4 py-2 backdrop-blur-sm border border-white/6">
         {/* H/L */}
         <div className="flex items-center gap-1">
           <Thermometer className="w-3 h-3 drop-shadow-sm" />

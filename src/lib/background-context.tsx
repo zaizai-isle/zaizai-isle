@@ -4,16 +4,19 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 import { supabase } from './supabase';
 
 export type BackgroundType = 'default' | 'color' | 'image';
+export type TextMode = 'light' | 'dark';
 
 export interface BackgroundSettings {
   type: BackgroundType;
   value: string; // hex color or image url/base64
+  textMode?: TextMode; // 'light' for light text, 'dark' for dark text
 }
 
 interface BackgroundContextType {
   settings: BackgroundSettings;
   setBackground: (type: BackgroundType, value: string) => void;
   resetBackground: () => void;
+  toggleTextMode: () => void;
 }
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
@@ -33,7 +36,8 @@ const getUserId = () => {
 export function BackgroundProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<BackgroundSettings>({
     type: 'default',
-    value: ''
+    value: '',
+    textMode: 'dark' // default to dark text for the default light background
   });
 
   // Load saved settings from LocalStorage and Supabase
@@ -99,17 +103,17 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
         const userId = getUserId();
         const { error } = await supabase
           .from('user_settings')
-          .upsert({ 
-            user_id: userId, 
+          .upsert({
+            user_id: userId,
             background_settings: settings,
             updated_at: new Date().toISOString()
           }, { onConflict: 'user_id' });
 
         if (error) {
-           // Ignore table missing error
-           if (error.code !== 'PGRST205') {
-             console.warn('Supabase save error:', error.message);
-           }
+          // Ignore table missing error
+          if (error.code !== 'PGRST205') {
+            console.warn('Supabase save error:', error.message);
+          }
         }
       } catch {
         // Silent failure
@@ -129,11 +133,18 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
   };
 
   const resetBackground = () => {
-    setSettings({ type: 'default', value: '' });
+    setSettings({ type: 'default', value: '', textMode: 'dark' });
+  };
+
+  const toggleTextMode = () => {
+    setSettings(prev => ({
+      ...prev,
+      textMode: prev.textMode === 'light' ? 'dark' : 'light'
+    }));
   };
 
   return (
-    <BackgroundContext.Provider value={{ settings, setBackground, resetBackground }}>
+    <BackgroundContext.Provider value={{ settings, setBackground, resetBackground, toggleTextMode }}>
       {children}
     </BackgroundContext.Provider>
   );

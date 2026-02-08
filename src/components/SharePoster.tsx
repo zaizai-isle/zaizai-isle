@@ -2,8 +2,8 @@
 
 import { useLanguage } from "@/lib/language-context";
 import Image from "next/image";
-import avatarImage from "@/assets/avatar-v1.png";
-import qrcodeImage from "@/assets/qrcode.png";
+import avatarImage from "@/assets/avatar-v1.jpg";
+import qrcodeImage from "@/assets/qrcode.jpg";
 import { Drama, Lightbulb, PartyPopper, Mail, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 

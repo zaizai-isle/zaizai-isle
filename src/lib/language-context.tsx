@@ -68,8 +68,8 @@ const translations: Translations = {
   'weather.thunderstorm_with_heavy_hail': { zh: '雷暴伴冰雹（浓）', en: 'Thunderstorm with Heavy Hail' },
 
   // Stats Card
-  'stats.downloads': { zh: '总下载量', en: 'Total Downloads' },
-  'stats.visitors': { zh: '访客数量', en: 'Visitors' },
+  'stats.downloads': { zh: '岛屿信物', en: 'Isle Tokens' },
+  'stats.visitors': { zh: '登岛访客', en: 'Isle Arrivals' },
   'stats.click_to_download': { zh: '点击下载卡片', en: 'Click to download card' },
 
   // Social Card
@@ -82,14 +82,14 @@ const translations: Translations = {
   'social.like.thanks': { zh: '感谢喜欢', en: 'Thanks for liking' },
 
   // Guestbook Card
-  'guestbook.title': { zh: '留言板', en: 'Guestbook' },
+  'guestbook.title': { zh: '漂流瓶', en: 'Drift Bottles' },
   'guestbook.placeholder': { zh: '打个招呼...', en: 'Say hi...' },
   'guestbook.send': { zh: '发送', en: 'Send' },
 
   // Page
   'page.contact': { zh: '联系我 ↗', en: 'Contact Me ↗' },
-  'page.works.title': { zh: '精选作品', en: 'Selected Works' },
-  'page.works.desc': { zh: '探索我最新的 AI 产品设计', en: 'Explore my latest AI product designs' },
+  'page.works.title': { zh: '岛屿记录', en: 'Isle Records' },
+  'page.works.desc': { zh: '岛屿生长过程中的一些交互实验与视觉切片', en: 'Interactive experiments and visual slices from the island' },
   'page.works.view': { zh: '查看作品集', en: 'View Portfolio' },
   'page.footer': { zh: '© 2026 再再🏝️. 保留所有权利。', en: '© 2026 Zaizaiely. Stay still, stay curious.🏝️ All rights reserved.' },
 
@@ -103,14 +103,45 @@ const translations: Translations = {
 
   // Tools Card
   'tools.title': { zh: '常用工具栏', en: 'Tools Dashboard' },
-  'tools.compressor.title': { zh: '图片压缩', en: 'Image Compressor' },
+  'tools.compressor.title': { zh: '视觉筛滤', en: 'Visual Sifter' },
   'tools.compressor.drop': { zh: '点击上传图片', en: 'click to upload' },
   'tools.compressor.compressing': { zh: '压缩中...', en: 'Compressing...' },
   'tools.compressor.download': { zh: '下载', en: 'Download' },
   'tools.compressor.original': { zh: '原始大小', en: 'Original' },
   'tools.compressor.compressed': { zh: '压缩后', en: 'Compressed' },
   'tools.compressor.reset': { zh: '重新上传', en: 'Upload New' },
-  'tools.ai.title': { zh: 'AI 工具箱', en: 'AI Hub' },
+  'tools.ai.title': { zh: '灵感罗盘', en: 'Inspiration Compass' },
+  'activity.title': { zh: '岛屿回响', en: 'Isle Echoes' },
+  'tech.title': { zh: '生态岩层', en: 'Tech Strata' },
+  'tech.subtitle': { zh: '潜藏于静默海底，构筑岛屿底层的技术逻辑', en: 'Underlying logic hidden deep beneath the silent sea' },
+  'env.title': { zh: '岛屿气候', en: 'Climate Logic' },
+  'env.content': { zh: '正在这片数字海域中搜寻清晰的叙事频率。气候微调已启动，以确保每一个交互瞬间都足够通透、足够深邃。', en: 'Scanning for narrative clarity in the digital sea. Climate adjustments active: prioritize transparency and depth.' },
+  'core.title': { zh: '岛屿脉动', en: 'Island Pulse' },
+  'core.subtitle': { zh: '实时捕捉整座岛屿的生命律动与环境回响', en: 'Capturing the life rhythm and environmental echoes of the island' },
+  'env.mood': { zh: '◌  岛屿观测中', en: '◌  Observing Isle' },
+  'env.sync': { zh: '同步率 100%', en: 'Sync 100%' },
+
+  // Bedrock Logic - Grounded terms
+  'core.component.cognitive': { zh: '系统逻辑', en: 'System Logic' },
+  'core.component.interface': { zh: '交互界面', en: 'User Interface' },
+  'core.component.storage': { zh: '数据底座', en: 'Data Base' },
+  'core.status.online': { zh: '良好', en: 'Stable' },
+  'core.status.syncing': { zh: '活跃', en: 'Active' },
+  'core.status.static': { zh: '就绪', en: 'Ready' },
+
+  // Echoes Narrative
+  'activity.stable': { zh: '稳定', en: 'Stable' },
+  'activity.log.visitor': { zh: '观测到一名访客登岛。', en: 'A new visitor has arrived on the isle.' },
+  'activity.log.logic': { zh: '深层逻辑模块完成了一次自愈。', en: 'Deep logic module performed a self-healing.' },
+  'activity.log.env_sync': { zh: '环境气候已根据现实维度自动同步。', en: 'Climate synchronized with reality dimensions.' },
+  'activity.log.drift': { zh: '一封漂流瓶被推向叙事公海。', en: 'A drift bottle pushed to the narrative sea.' },
+  'activity.log.kernel': { zh: '内核同步完成', en: 'Kernel synchronization complete' },
+
+  'status.system': { zh: '系统状态', en: 'System' },
+  'status.online': { zh: '在线', en: 'Online' },
+  'status.modules': { zh: '活跃模块', en: 'Modules' },
+  'status.active': { zh: '已激活', en: 'Active' },
+  'status.kernel': { zh: '系统内核', en: 'Kernel' },
 };
 
 interface LanguageContextType {

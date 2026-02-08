@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion as fmMotion } from "framer-motion";
 import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
 import NextImage from "next/image";
-import avatarImage from "@/assets/avatar-v1.png";
+import avatarImage from "@/assets/avatar-v1.jpg";
 
 
 import { useLanguage } from "@/lib/language-context";
@@ -190,7 +190,8 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
     <BentoCard
       colSpan={2}
       rowSpan={2}
-      className="bg-white/20 hover:bg-white/25 h-full justify-center items-center text-center relative overflow-hidden group p-8"
+      theme="light"
+      className="h-full justify-center items-center text-center relative overflow-hidden group p-8"
       borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)"
       borderWidth={1}
     >
@@ -297,7 +298,7 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
           </fmMotion.div>
         )}
       </AnimatePresence>
-      <p className="relative z-10 text-[15px] text-[#666666] font-normal tracking-wide">
+      <p className="relative z-10 text-base text-gray-600 font-normal tracking-wide">
         {t('identity.role')}
       </p>
 

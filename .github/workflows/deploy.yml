@@ -3,13 +3,16 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,19 +22,20 @@ jobs:
       NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Fix git safe directory
-        run: git config --global --add safe.directory '*'
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+      
       - run: npm ci
+      
       - run: npm run build
+      
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
+  
   deploy:
     environment:
       name: github-pages

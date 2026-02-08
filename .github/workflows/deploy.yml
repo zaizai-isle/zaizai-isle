@@ -2,15 +2,17 @@ name: Deploy GH Pages
 on:
   push:
     branches: [ main ]
-    
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,68 +20,22 @@ jobs:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
-      GIT_TERMINAL_PROMPT: 0
-      SKIP_GIT: true
     steps:
-      - name: Setup Git
-        run: |
-          git config --global --add safe.directory '*'
-          git config --global core.autocrlf false
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-      
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Complete Git Repository Setup
-        run: |
-          # Ensure we're in a git repository
-          if [ ! -d .git ]; then
-            echo "Error: Not a git repository!"
-            exit 1
-          fi
-          
-          # Configure git identity
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          
-          # Verify git is working
-          git status
-          git log -1 --oneline
-          
-          # Ensure HEAD is properly set
-          git rev-parse HEAD
-          
-          echo "Git setup complete and verified"
       
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
       
-      - name: Clean install dependencies
-        run: npm ci
+      - run: npm ci
       
-      - name: Build Next.js app
-        run: npm run build
-        env:
-          NODE_ENV: production
-          CI: true
+      - run: npm run build
       
-      - name: Verify output
-        run: |
-          echo "Checking if 'out' directory exists..."
-          ls -la
-          if [ ! -d "out" ]; then
-            echo "Error: 'out' directory not found!"
-            exit 1
-          fi
-          echo "'out' directory structure:"
-          ls -la out/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
+  
   deploy:
     environment:
       name: github-pages

@@ -2,6 +2,7 @@ name: Deploy GH Pages
 on:
   push:
     branches: [ main ]
+    
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,17 +19,39 @@ jobs:
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
     steps:
+      - name: Setup Git
+        run: |
+          git config --global --add safe.directory '*'
+          git config --global core.autocrlf false
+      
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fix git safe directory
-        run: git config --global --add safe.directory '*'
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run build
+          cache: 'npm'
+      
+      - name: Clean install dependencies
+        run: npm ci
+      
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NODE_ENV: production
+          CI: true
+      
+      - name: Verify output
+        run: |
+          echo "Checking if 'out' directory exists..."
+          ls -la
+          if [ ! -d "out" ]; then
+            echo "Error: 'out' directory not found!"
+            exit 1
+          fi
+          echo "'out' directory structure:"
+          ls -la out/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

@@ -79,4 +79,4 @@ then the site is doing what it’s meant to do.
 >
 > 本项目仅用于个人展示。
 >
-> This project is for personal showcase only. All code and design rights are reserved. Commercial use or redistribution without authorization is prohibited.
+> This project is for personal showcase only. All code and design rights are reserved.

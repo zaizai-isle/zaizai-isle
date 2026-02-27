@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "capture": "node scripts/capture.mjs",
+    "vr:core-build": "node scripts/visual-regression-core-build.mjs",
+    "vr:core-build:update": "node scripts/visual-regression-core-build.mjs --update",
     "lint": "eslint"
   },
   "dependencies": {

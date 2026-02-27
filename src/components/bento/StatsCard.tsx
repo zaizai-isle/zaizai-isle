@@ -1,14 +1,15 @@
 "use client";
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { ArrowUpRight } from "lucide-react";
-import { motion, useSpring, useTransform, useMotionValue, animate } from "framer-motion";
+import { motion, useTransform, useMotionValue, animate } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { toPng } from 'html-to-image';
 import { useLanguage } from "@/lib/language-context";
 import { supabase } from "@/lib/supabase";
 
-function Counter({ value }: { value: number }) {
+import React, { memo } from 'react';
+
+const Counter = memo(({ value }: { value: number }) => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
 
@@ -18,7 +19,9 @@ function Counter({ value }: { value: number }) {
   }, [value, count]);
 
   return <motion.span>{rounded}</motion.span>;
-}
+});
+
+Counter.displayName = 'Counter';
 
 export function StatsCard() {
   const { t } = useLanguage();
@@ -119,7 +122,7 @@ export function StatsCard() {
   return (
     <BentoCard
       onClick={handleDownload}
-      colSpan={1}
+      colSpan={2}
       rowSpan={1}
       theme="dark"
       className="h-full cursor-pointer justify-center group relative overflow-hidden p-4 md:p-5"
@@ -136,9 +139,9 @@ export function StatsCard() {
             <p className="text-xs text-white/40">
               {t('stats.visitors')}
             </p>
-            <div className="text-2xl md:text-3xl text-white/90 font-bold mt-0.5 flex items-baseline leading-none">
+            <div className="text-2xl md:text-3xl text-white/90 font-mono font-bold mt-0.5 flex items-baseline leading-none">
               <Counter value={visitorCount} />
-              <span className="text-xs font-normal text-white/40 ml-1">+</span>
+              <span className="text-[10px] font-normal text-white/30 ml-1.5 uppercase tracking-tighter">TRC</span>
             </div>
           </div>
         </div>
@@ -149,9 +152,9 @@ export function StatsCard() {
             <p className="text-xs text-white/40">
               {t('stats.downloads')}
             </p>
-            <div className="text-2xl md:text-3xl text-white/90 font-bold mt-0.5 flex items-baseline leading-none">
+            <div className="text-2xl md:text-3xl text-white/90 font-mono font-bold mt-0.5 flex items-baseline leading-none">
               <Counter value={downloadCount} />
-              <span className="text-xs font-normal text-white/40 ml-1">+</span>
+              <span className="text-[10px] font-normal text-white/30 ml-1.5 uppercase tracking-tighter">LOG</span>
             </div>
           </div>
         </div>

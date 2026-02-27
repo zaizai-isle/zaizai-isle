@@ -1,93 +1,25 @@
 "use client";
 
 import { BentoCard } from "./BentoCard";
-import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion as fmMotion } from "framer-motion";
-import { Drama, Lightbulb, LucideIcon, PartyPopper } from "lucide-react";
+import { Drama, Lightbulb, PartyPopper } from "lucide-react";
 import NextImage from "next/image";
 import avatarImage from "@/assets/avatar-v1.jpg";
 
 
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
+import { Tag, Sparkle, Cloud } from "./IdentityDecorations";
 
-const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.ReactNode; variant?: 'emerald' | 'yellow' | 'rose'; icon?: LucideIcon }) => {
-  const variants = {
-    emerald: "bg-[#0f1c36] text-emerald-50 hover:bg-emerald-900",
-    yellow: "bg-[#281730] text-yellow-50 hover:bg-yellow-900",
-    rose: "bg-[#2d0e36] text-rose-50 hover:bg-rose-900",
-  };
-
-  const iconColors = {
-    emerald: "text-emerald-500",
-    yellow: "text-yellow-500",
-    rose: "text-rose-500",
-  };
-
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -2 }}
-      className={cn(
-        "flex items-center justify-center gap-1.5 w-fit px-3 py-1.5 min-w-max text-xs font-bold text-center rounded-full transition-all md:text-sm border border-white/10 hover:border-white/20 shadow-md hover:shadow-lg backdrop-blur-md cursor-default",
-        variants[variant]
-      )}
-    >
-      {Icon && <Icon className={cn("w-3.5 h-3.5", iconColors[variant])} />}
-      {children}
-    </motion.div>
-  );
-};
-
-const Sparkle = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
-  <motion.div
-    animate={{
-      scale: [0.8, 1.2, 0.8],
-      opacity: [0.5, 1, 0.5],
-    }}
-    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay }}
-    className={cn("absolute", className)}
-  >
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-      <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-    </svg>
-  </motion.div>
-);
-
-const Cloud = ({
-  className,
-  delay = 0,
-  opacity = 1,
-  variant = 'default'
-}: {
-  className?: string;
-  delay?: number;
-  opacity?: number;
-  variant?: 'default' | 'warm' | 'cool' | 'purple';
-}) => {
-  const getGradient = (v: string) => {
-    switch (v) {
-      case 'warm': return "from-orange-200/40 via-orange-100/20 to-transparent border-orange-200/30";
-      case 'cool': return "from-blue-200/40 via-blue-100/20 to-transparent border-blue-200/30";
-      case 'purple': return "from-purple-200/40 via-purple-100/20 to-transparent border-purple-200/30";
-      default: return "from-white/80 via-white/40 to-transparent border-white/40";
-    }
-  };
-
-  const gradientClass = getGradient(variant);
-
-  return (
-    <motion.div
-      animate={{ y: [0, -8, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
-      className={cn("absolute flex items-end", className)}
-      style={{ opacity }}
-    >
-      <div className={cn("w-20 h-20 rounded-full translate-y-8 backdrop-blur-md bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]", gradientClass)} />
-      <div className={cn("w-32 h-32 rounded-full -ml-10 backdrop-blur-xl bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)] z-10", gradientClass)} />
-      <div className={cn("w-24 h-24 rounded-full -ml-12 translate-y-4 backdrop-blur-md bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]", gradientClass)} />
-    </motion.div>
-  );
+const stateRowMap: Record<string, number> = {
+  idle: 0,
+  happy: 1,
+  excited: 2,
+  sleepy: 3,
+  working: 4,
+  alert: 5,
+  dragging: 6,
 };
 
 interface IdentityCardProps {
@@ -106,15 +38,6 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
   const [petState, setPetState] = useState<StateName>("idle");
   const frameWidth = 276;
   const frameHeight = 274;
-  const stateRowMap: Record<StateName, number> = {
-    idle: 0,
-    happy: 1,
-    excited: 2,
-    sleepy: 3,
-    working: 4,
-    alert: 5,
-    dragging: 6,
-  };
   const row = stateRowMap[petState] ?? 0;
   const targetSize = 118;
   const framesPerRow = 8;
@@ -188,7 +111,7 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
 
   return (
     <BentoCard
-      colSpan={2}
+      colSpan={4}
       rowSpan={2}
       theme="light"
       className="h-full justify-center items-center text-center relative overflow-hidden group p-8"

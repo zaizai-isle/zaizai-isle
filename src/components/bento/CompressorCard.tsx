@@ -69,7 +69,7 @@ export function CompressorCard() {
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={4}
             rowSpan={1}
             theme="dark"
             borderGradient={VERTICAL_BORDER_GRADIENT}

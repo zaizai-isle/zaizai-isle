@@ -15,6 +15,7 @@ const PRESENCE_THRESHOLDS = {
     QUIET: 30 * 24 * 60 * 60 * 1000, // 30 days
     RETREAT: 60 * 24 * 60 * 60 * 1000, // 60 days
 };
+const getNow = () => Date.now();
 
 type ToolId = 'chatgpt' | 'claude' | 'midjourney' | 'figma' | 'gemini' | 'huggingface' | 'ollama' | 'comfyui' | 'cloudflare' | 'postman' | 'supabase' | 'notion';
 
@@ -45,35 +46,41 @@ const ALL_TOOLS: ToolConfig[] = [
 
 export function AIHubCard() {
     const { t } = useLanguage();
-    const [toolsUsage, setToolsUsage] = useState<Record<string, number>>({});
-    const [isClient, setIsClient] = useState(false);
+    const [toolsUsage, setToolsUsage] = useState<Record<string, number>>(() => {
+        if (typeof window === 'undefined') return {};
+
+        const savedUsage = localStorage.getItem('tools_presence_v1');
+        if (savedUsage) return JSON.parse(savedUsage) as Record<string, number>;
+
+        const initialUsage: Record<string, number> = {};
+        const now = getNow();
+        ALL_TOOLS.forEach(tool => {
+            if (tool.defaultActive) initialUsage[tool.id] = now;
+            else initialUsage[tool.id] = now - PRESENCE_THRESHOLDS.QUIET - 86400000;
+        });
+        localStorage.setItem('tools_presence_v1', JSON.stringify(initialUsage));
+        return initialUsage;
+    });
     const [showAllToolsModal, setShowAllToolsModal] = useState(false);
+    const [referenceNow, setReferenceNow] = useState(() => getNow());
 
     useEffect(() => {
-        setIsClient(true);
-        const savedUsage = localStorage.getItem('tools_presence_v1');
-        if (savedUsage) {
-            setToolsUsage(JSON.parse(savedUsage));
-        } else {
-            const initialUsage: Record<string, number> = {};
-            const now = Date.now();
-            ALL_TOOLS.forEach(tool => {
-                if (tool.defaultActive) initialUsage[tool.id] = now;
-                else initialUsage[tool.id] = now - PRESENCE_THRESHOLDS.QUIET - 86400000;
-            });
-            setToolsUsage(initialUsage);
-            localStorage.setItem('tools_presence_v1', JSON.stringify(initialUsage));
-        }
+        const timer = window.setInterval(() => {
+            setReferenceNow(getNow());
+        }, 60000);
+
+        return () => window.clearInterval(timer);
     }, []);
 
     const updateToolUsage = (id: string) => {
-        const newUsage = { ...toolsUsage, [id]: Date.now() };
-        setToolsUsage(newUsage);
-        localStorage.setItem('tools_presence_v1', JSON.stringify(newUsage));
+        setToolsUsage((previousUsage) => {
+            const newUsage = { ...previousUsage, [id]: getNow() };
+            localStorage.setItem('tools_presence_v1', JSON.stringify(newUsage));
+            return newUsage;
+        });
     };
 
-    const getToolPresence = (lastUsed: number) => {
-        const now = Date.now();
+    const getToolPresence = (lastUsed: number, now: number) => {
         const diff = now - lastUsed;
         if (diff < PRESENCE_THRESHOLDS.ACTIVE) return 'active';
         if (diff < PRESENCE_THRESHOLDS.QUIET) return 'quiet';
@@ -87,11 +94,13 @@ export function AIHubCard() {
         const retreat: ToolConfig[] = [];
         const vanished: ToolConfig[] = [];
 
-        if (!isClient) return { activeTools: ALL_TOOLS.filter(t => t.defaultActive), quietTools: [], retreatTools: [], vanishedTools: [] };
+        if (typeof window === 'undefined') {
+            return { activeTools: ALL_TOOLS.filter(t => t.defaultActive), quietTools: [], retreatTools: [], vanishedTools: [] };
+        }
 
         ALL_TOOLS.forEach(tool => {
             const lastUsed = toolsUsage[tool.id] || 0;
-            const presence = getToolPresence(lastUsed);
+            const presence = getToolPresence(lastUsed, referenceNow);
             if (presence === 'active') active.push(tool);
             else if (presence === 'quiet') quiet.push(tool);
             else if (presence === 'retreat') retreat.push(tool);
@@ -99,7 +108,7 @@ export function AIHubCard() {
         });
 
         return { activeTools: active, quietTools: quiet, retreatTools: retreat, vanishedTools: vanished };
-    }, [toolsUsage, isClient]);
+    }, [toolsUsage, referenceNow]);
 
     const renderTool = (tool: ToolConfig, isQuiet: boolean = false) => (
         <a
@@ -123,7 +132,7 @@ export function AIHubCard() {
 
     return (
         <BentoCard
-            colSpan={4}
+            colSpan={8}
             rowSpan={1}
             theme="dark"
             className="p-5 overflow-visible"
@@ -153,7 +162,7 @@ export function AIHubCard() {
                     )}
                 </div>
 
-                {isClient && createPortal(
+                {typeof window !== 'undefined' && createPortal(
                     <AnimatePresence>
                         {showAllToolsModal && (
                             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -173,7 +182,7 @@ export function AIHubCard() {
                                                             <tool.icon className={cn("w-5 h-5", tool.color)} />
                                                             <div className="flex-1 min-w-0">
                                                                 <div className="text-sm text-white/90 font-medium">{tool.name}</div>
-                                                                <div className="text-[10px] text-white/40">{getToolPresence(toolsUsage[tool.id] || 0).toUpperCase()}</div>
+                                                                <div className="text-[10px] text-white/40">{getToolPresence(toolsUsage[tool.id] || 0, referenceNow).toUpperCase()}</div>
                                                             </div>
                                                             <button onClick={() => updateToolUsage(tool.id)} className="p-1.5 hover:bg-white/10 rounded-full text-emerald-400 transition-colors"><RotateCcw className="w-4 h-4" /></button>
                                                         </div>

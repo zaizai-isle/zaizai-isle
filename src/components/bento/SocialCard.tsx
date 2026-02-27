@@ -91,7 +91,7 @@ export function SocialCard() {
 
   return (
     <BentoCard
-      colSpan={1}
+      colSpan={2}
       rowSpan={1}
       theme="glass"
       className="h-full justify-center items-center relative"

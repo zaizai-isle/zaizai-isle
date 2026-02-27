@@ -1,18 +1,18 @@
 "use client";
 
-import { IdentityCard } from "@/components/bento/IdentityCard";
-import { WeatherCard } from "@/components/bento/WeatherCard";
-import { StatsCard } from "@/components/bento/StatsCard";
-import { GuestbookCard } from "@/components/bento/GuestbookCard";
-import { SocialCard } from "@/components/bento/SocialCard";
-import { WorksCard } from "@/components/bento/WorksCard";
-import { AIHubCard } from "@/components/bento/AIHubCard";
-import { CompressorCard } from "@/components/bento/CompressorCard";
-import { ActivityCard } from "@/components/bento/ActivityCard";
-import { TechStackCard } from "@/components/bento/TechStackCard";
+import dynamic from "next/dynamic";
+
+const IdentityCard = dynamic(() => import("@/components/bento/IdentityCard").then(mod => mod.IdentityCard), { ssr: false });
+const WeatherCard = dynamic(() => import("@/components/bento/WeatherCard").then(mod => mod.WeatherCard), { ssr: false });
+const StatsCard = dynamic(() => import("@/components/bento/StatsCard").then(mod => mod.StatsCard), { ssr: false });
+const GuestbookCard = dynamic(() => import("@/components/bento/GuestbookCard").then(mod => mod.GuestbookCard), { ssr: false });
+const SocialCard = dynamic(() => import("@/components/bento/SocialCard").then(mod => mod.SocialCard), { ssr: false });
+const WorksCard = dynamic(() => import("@/components/bento/WorksCard").then(mod => mod.WorksCard), { ssr: false });
+const AIHubCard = dynamic(() => import("@/components/bento/AIHubCard").then(mod => mod.AIHubCard), { ssr: false });
+const CompressorCard = dynamic(() => import("@/components/bento/CompressorCard").then(mod => mod.CompressorCard), { ssr: false });
+const ActivityCard = dynamic(() => import("@/components/bento/ActivityCard").then(mod => mod.ActivityCard), { ssr: false });
+const TechStackCard = dynamic(() => import("@/components/bento/TechStackCard").then(mod => mod.TechStackCard), { ssr: false });
 import { SharePoster } from "@/components/SharePoster";
-import { motion } from "framer-motion";
-import { useLanguage } from "@/lib/language-context";
 
 import { CoreBuildCard } from "@/components/bento/CoreBuildCard";
 import { EnvironmentNotes } from "@/components/bento/EnvironmentNotes";
@@ -21,19 +21,7 @@ import { SystemStatus } from "@/components/SystemStatus";
 import { cn } from "@/lib/utils";
 
 export default function Home() {
-  const { t } = useLanguage();
-
-  const SectionTitle = ({ title, subtitle }: { title: string; subtitle: string }) => (
-    <div className="mb-4 ml-2">
-      <div className="flex items-center gap-2 mb-1">
-        <span className="w-1.5 h-6 bg-white/20 rounded-full"></span>
-        <h2 className="text-xl font-bold text-white tracking-tight uppercase">{title}</h2>
-      </div>
-      <p className="text-[10px] font-mono text-white/30 tracking-widest uppercase ml-3.5">{subtitle}</p>
-    </div>
-  );
-
-  const gridClass = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 auto-rows-auto md:auto-rows-[192px]";
+  const gridClass = "grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 xl:grid-cols-12 gap-6 auto-rows-auto md:auto-rows-[220px]";
 
   return (
     <main className="w-full min-h-screen flex flex-col">
@@ -44,7 +32,7 @@ export default function Home() {
 
       <SystemStatus />
 
-      <div className="w-full max-w-[1336px] mx-auto px-4 md:px-8 pb-8 space-y-6">
+      <div className="w-full max-w-screen-2xl mx-auto px-4 md:px-12 pb-8 space-y-6">
 
         {/* SECTION 1: SYSTEM ONLINE LAYER */}
         <section className="pt-0">

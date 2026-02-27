@@ -1,8 +1,11 @@
-import { WeatherData } from "@/components/bento/WeatherCard";
+import { WeatherData } from "@/types/weather";
 
 // Configuration
 const LOCAL_CACHE_DURATION = 5 * 60 * 1000; // Local browser cache: 5 minutes
+const WEATHER_FETCH_TIMEOUT_MS = 12_000;
+const WEATHER_WARNING_COOLDOWN_MS = 60_000;
 const QWEATHER_API_KEY = process.env.NEXT_PUBLIC_QWEATHER_KEY || "";
+const WEATHER_PROXY_URL = process.env.NEXT_PUBLIC_WEATHER_PROXY_URL || "";
 // Note: You need to add NEXT_PUBLIC_QWEATHER_KEY to your .env.local file
 
 export type WeatherProvider = 'open-meteo' | 'qweather';
@@ -11,6 +14,90 @@ interface CachedData {
   timestamp: number;
   data: WeatherData;
 }
+
+interface OpenMeteoResponse {
+  current: {
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    apparent_temperature: number;
+    weather_code: number;
+    wind_speed_10m: number;
+    is_day: number;
+  };
+  daily: {
+    temperature_2m_max: number[];
+    temperature_2m_min: number[];
+  };
+}
+
+const warningTimestamps = new Map<string, number>();
+
+const saveWeatherCache = (cacheKey: string, data: WeatherData) => {
+  const cacheEntry: CachedData = {
+    timestamp: Date.now(),
+    data,
+  };
+  localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
+};
+
+const warnWithCooldown = (key: string, message: string) => {
+  const now = Date.now();
+  const lastTimestamp = warningTimestamps.get(key) || 0;
+  if (now - lastTimestamp < WEATHER_WARNING_COOLDOWN_MS) return;
+  warningTimestamps.set(key, now);
+  console.warn(message);
+};
+
+const isWeatherData = (value: unknown): value is WeatherData => {
+  if (!value || typeof value !== "object") return false;
+  const data = value as Partial<WeatherData>;
+  return (
+    typeof data.temp === "number" &&
+    typeof data.condition === "string" &&
+    typeof data.location === "string" &&
+    typeof data.humidity === "number" &&
+    typeof data.windSpeed === "number" &&
+    typeof data.feelsLike === "number" &&
+    typeof data.isDay === "boolean" &&
+    typeof data.minTemp === "number" &&
+    typeof data.maxTemp === "number"
+  );
+};
+
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  return String(error);
+};
+
+const buildProxyUrl = (provider: WeatherProvider, lang: string) => {
+  if (!WEATHER_PROXY_URL || typeof window === "undefined") return null;
+  const url = WEATHER_PROXY_URL.startsWith("http")
+    ? new URL(WEATHER_PROXY_URL)
+    : new URL(WEATHER_PROXY_URL, window.location.origin);
+  url.searchParams.set("provider", provider);
+  url.searchParams.set("lang", lang);
+  return url.toString();
+};
+
+const fetchJson = async <T>(url: string): Promise<T> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), WEATHER_FETCH_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    }
+    return await response.json() as T;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error(`Request timeout (${WEATHER_FETCH_TIMEOUT_MS}ms)`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
 
 // QWeather Response Types (removed unused interfaces to satisfy lint)
 
@@ -44,24 +131,44 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
   // 1. Check Local Browser Cache (L1 Cache)
   const cacheKey = `weather_cache_v2_${provider}_${lang}`;
   const cached = localStorage.getItem(cacheKey);
+  let staleCache: WeatherData | null = null;
 
   if (cached) {
     try {
       const parsed: CachedData = JSON.parse(cached);
+      staleCache = parsed.data;
       const now = Date.now();
       if (now - parsed.timestamp < LOCAL_CACHE_DURATION) {
-        console.log(`Using local cached weather data from ${provider}`);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`Using local cached weather data from ${provider}`);
+        }
         return parsed.data;
       }
     } catch (e) {
-      console.error("Cache parse error", e);
+      console.warn("Weather cache parse error:", getErrorMessage(e));
       localStorage.removeItem(cacheKey);
     }
   }
 
   // 2. Fetch Fresh Data
-  console.log(`Fetching fresh weather data from ${provider}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`Fetching fresh weather data from ${provider}`);
+  }
   let data: WeatherData | null = null;
+
+  const proxyUrl = buildProxyUrl(provider, lang);
+  if (proxyUrl) {
+    try {
+      const proxyData = await fetchJson<unknown>(proxyUrl);
+      if (!isWeatherData(proxyData)) {
+        throw new Error("Proxy response is not WeatherData");
+      }
+      saveWeatherCache(cacheKey, proxyData);
+      return proxyData;
+    } catch (proxyError) {
+      warnWithCooldown("weather-proxy-failed", `Weather proxy failed: ${getErrorMessage(proxyError)}`);
+    }
+  }
 
   try {
     if (provider === 'qweather') {
@@ -70,19 +177,30 @@ export const fetchWeatherWithCache = async (provider: WeatherProvider = 'open-me
       data = await fetchOpenMeteo();
     }
   } catch (error) {
-    console.error(`Failed to fetch weather from ${provider}`, error);
+    warnWithCooldown(`weather-fetch-${provider}`, `Weather fetch failed (${provider}): ${getErrorMessage(error)}`);
+    if (provider === 'open-meteo' && QWEATHER_API_KEY) {
+      try {
+        const fallbackData = await fetchQWeather(lang);
+        saveWeatherCache(cacheKey, fallbackData);
+        warnWithCooldown("weather-fallback-openmeteo-qweather", "Open-Meteo unavailable, fallback to QWeather succeeded.");
+        return fallbackData;
+      } catch (fallbackError) {
+        warnWithCooldown("weather-fallback-qweather-failed", `QWeather fallback failed: ${getErrorMessage(fallbackError)}`);
+      }
+    }
+    if (staleCache) {
+      warnWithCooldown(`weather-stale-cache-${provider}`, `Using stale weather cache for ${provider}`);
+      return staleCache;
+    }
     return null;
   }
 
   // 3. Update Caches
   if (data) {
-    console.log(`[Weather Debug] Condition: ${data.condition}, IconCode: ${data.iconCode}`);
-    // Update Local Cache
-    const cacheEntry: CachedData = {
-      timestamp: Date.now(),
-      data
-    };
-    localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[Weather Debug] Condition: ${data.condition}, IconCode: ${data.iconCode}`);
+    }
+    saveWeatherCache(cacheKey, data);
   }
 
   return data;
@@ -181,17 +299,21 @@ const weatherCodeToIcon: Record<number, { day: number; night: number }> = {
 
 // Open-Meteo Implementation (Existing logic refactored)
 const fetchOpenMeteo = async (): Promise<WeatherData> => {
-  const response = await fetch(
+  const data = await fetchJson<OpenMeteoResponse>(
     "https://api.open-meteo.com/v1/forecast?latitude=31.2304&longitude=121.4737&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=temperature_2m_max,temperature_2m_min&wind_speed_unit=kmh&timezone=Asia%2FShanghai"
   );
-  const data = await response.json();
+  if (!data?.current || !data?.daily?.temperature_2m_max?.length || !data?.daily?.temperature_2m_min?.length) {
+    throw new Error("Invalid Open-Meteo response shape");
+  }
   const current = data.current;
   const daily = data.daily;
 
   const wmoCode = current.weather_code;
   const isDay = !!current.is_day;
 
-  console.log(`[OpenMeteo Debug] Raw WMO Code: ${wmoCode}, Is Day: ${isDay}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`[OpenMeteo Debug] Raw WMO Code: ${wmoCode}, Is Day: ${isDay}`);
+  }
 
   // Get weather description
   const weatherDesc = weatherCodeToDesc[wmoCode] || `Unknown(${wmoCode})`;
@@ -287,10 +409,19 @@ const fetchQWeather = async (lang: string): Promise<WeatherData> => {
 
   // Fetch Current Weather
   // Using standard 'key' parameter for Dev/Free tier
-  const nowRes = await fetch(
+  const nowData = await fetchJson<{
+    code?: string;
+    error?: { status?: string; title?: string };
+    now?: {
+      icon: string;
+      temp: string;
+      humidity: string;
+      windSpeed: string;
+      feelsLike: string;
+    };
+  }>(
     `https://devapi.qweather.com/v7/weather/now?location=${location}&key=${QWEATHER_API_KEY}&lang=${qLang}`
   );
-  const nowData = await nowRes.json();
 
   if (nowData.code !== "200") {
     // Handle standard error (with code) or new error format (with error object)
@@ -301,10 +432,16 @@ const fetchQWeather = async (lang: string): Promise<WeatherData> => {
   }
 
   // Fetch Daily Forecast (for Min/Max)
-  const dailyRes = await fetch(
+  const dailyData = await fetchJson<{
+    code?: string;
+    error?: { status?: string; title?: string };
+    daily?: Array<{
+      tempMin: string;
+      tempMax: string;
+    }>;
+  }>(
     `https://devapi.qweather.com/v7/weather/3d?location=${location}&key=${QWEATHER_API_KEY}&lang=${qLang}`
   );
-  const dailyData = await dailyRes.json();
 
   if (dailyData.code !== "200") {
     const errorCode = dailyData.code || dailyData.error?.status || 'unknown';
@@ -313,8 +450,11 @@ const fetchQWeather = async (lang: string): Promise<WeatherData> => {
     throw new Error(`QWeather Daily API Error: ${errorCode} (${errorMsg})`);
   }
 
-  const today = dailyData.daily[0];
+  const today = dailyData.daily?.[0];
   const now = nowData.now;
+  if (!today || !now) {
+    throw new Error("Invalid QWeather response shape");
+  }
 
   const iconCode = parseInt(now.icon);
   const isDay = iconCode < 150;

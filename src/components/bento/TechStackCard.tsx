@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function TechStackCard() {
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
 
     const tech = [
         {
@@ -39,7 +39,7 @@ export function TechStackCard() {
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={4}
             rowSpan={2}
             theme="dark"
             borderGradient={VERTICAL_BORDER_GRADIENT}

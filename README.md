@@ -80,3 +80,27 @@ then the site is doing what it’s meant to do.
 > 本项目仅用于个人展示。
 >
 > This project is for personal showcase only. All code and design rights are reserved.
+
+## Visual Regression
+
+- Update baseline: `npm run vr:core-build:update`
+- Verify screenshots: `npm run vr:core-build`
+
+Default URL is `http://127.0.0.1:3000/zaizai-isle/`.  
+Override with `VR_BASE_URL`, for example:  
+`VR_BASE_URL=http://127.0.0.1:3000/zaizai-isle/ npm run vr:core-build`
+
+## Weather Proxy (Optional)
+
+This project currently uses static export (`output: export`), so built-in Next.js `API Route` is not available in production export mode.
+
+If you have your own proxy endpoint, set:
+
+`NEXT_PUBLIC_WEATHER_PROXY_URL=https://your-domain.com/weather`
+
+The frontend will call this URL with query params:
+
+- `provider=open-meteo|qweather`
+- `lang=zh|en`
+
+The endpoint should return normalized `WeatherData` JSON.

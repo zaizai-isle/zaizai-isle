@@ -16,6 +16,30 @@ interface BentoCardProps {
   theme?: 'light' | 'dark' | 'glass';
 }
 
+const colSpanClasses: Record<number, string> = {
+  1: "col-span-1",
+  2: "col-span-2",
+  3: "col-span-3",
+  4: "col-span-4",
+  5: "col-span-5",
+  6: "col-span-6",
+  7: "col-span-7",
+  8: "col-span-8",
+  9: "col-span-9",
+  10: "col-span-10",
+  11: "col-span-11",
+  12: "col-span-12",
+};
+
+const rowSpanClasses: Record<number, string> = {
+  1: "md:row-span-1",
+  2: "md:row-span-2",
+  3: "md:row-span-3",
+  4: "md:row-span-4",
+  5: "md:row-span-5",
+  6: "md:row-span-6",
+};
+
 export function BentoCard({
   children,
   className,
@@ -27,26 +51,10 @@ export function BentoCard({
   style,
   theme = 'dark'
 }: BentoCardProps) {
-  const colSpanClasses: Record<number, string> = {
-    1: "md:col-span-1",
-    2: "md:col-span-2",
-    3: "md:col-span-3",
-    4: "md:col-span-4",
-    5: "md:col-span-5",
-    6: "md:col-span-6",
-  };
 
-  const rowSpanClasses: Record<number, string> = {
-    1: "md:row-span-1",
-    2: "md:row-span-2",
-    3: "md:row-span-3",
-    4: "md:row-span-4",
-    5: "md:row-span-5",
-    6: "md:row-span-6",
-  };
 
   const themeClasses = theme === 'light'
-    ? "bg-white/60 text-gray-900 hover:bg-white/70 shadow-sm shadow-black/5"
+    ? "bg-white/55 text-gray-900 hover:bg-white/70 shadow-sm shadow-black/5"
     : theme === 'glass'
       ? "bg-white/10 text-white hover:bg-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
       : "bg-black/70 text-white hover:bg-black/80 shadow-[0_20px_50px_rgba(0,0,0,0.2)]";

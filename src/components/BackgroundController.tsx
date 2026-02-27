@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useBackground } from "@/lib/background-context";
 import { useLanguage } from "@/lib/language-context";
 import { motion, AnimatePresence } from "framer-motion";
-import { Palette, Image as ImageIcon, Upload, RotateCcw, X, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
+import { RotateCcw, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
 import { GlassButton } from "./GlassButton";
 
 const CustomScrollArea = ({ children, className }: { children: React.ReactNode; className?: string }) => {
@@ -157,17 +157,17 @@ const PRESET_COLORS = [
 ];
 
 const PRESET_IMAGES = [
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=3540&auto=format&fit=crop", // Landscape (Original)
-  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=3546&auto=format&fit=crop", // Beach (Original)
-  "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3540&auto=format&fit=crop", // Starry Sky (Original)
-  "https://images.unsplash.com/photo-1502675135487-e971002a6adb?q=80&w=3540&auto=format&fit=crop", // Yosemite
-  "https://images.unsplash.com/photo-1536257104079-aa99c6460a5a?q=80&w=3540&auto=format&fit=crop", // Lake Tahoe
-  "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=3540&auto=format&fit=crop", // Big Sur Coast
-  "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=3540&auto=format&fit=crop", // Mojave Desert
-  "https://images.unsplash.com/photo-1518066000714-58c45f1a2c0a?q=80&w=3540&auto=format&fit=crop", // Starry Mountain
-  "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=3540&auto=format&fit=crop", // Milky Way
-  "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=3540&auto=format&fit=crop", // Lake Bled
-  "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=3540&auto=format&fit=crop", // Misty Forest
+  "https://images.unsplash.com/photo-1738430275628-3e23fbe995b5?q=80&w=3870&auto=format&fit=crop#light-bg",  // Deep vibe
+  "https://images.unsplash.com/photo-1624801529902-43193947c41a?q=80&w=3874&auto=format&fit=crop#light-bg", // Bright
+  "https://images.unsplash.com/photo-1704513815017-9e637d33149f?q=80&w=3870&auto=format&fit=crop#light-bg",  //
+  "https://images.unsplash.com/photo-1768300835487-f4711bf749de?q=80&w=3871&auto=format&fit=crop#light-bg", // Daylight
+  "https://images.unsplash.com/photo-1507295386538-ddd5e86cd597?q=80&w=3732&auto=format&fit=crop#light-bg", // Daylight
+  "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?q=80&w=3008&auto=format&fit=crop#light-bg", // Bright
+  "https://images.unsplash.com/photo-1728525950004-753aded36b04?q=80&w=3773&auto=format&fit=crop#dark-bg", // Light
+  "https://images.unsplash.com/photo-1644515172713-f340282f2ab1?q=80&w=3870&auto=format&fit=crop#dark-bg",  // 
+  "https://images.unsplash.com/photo-1576262040338-fdbe208fa9c6?q=80&w=3869&auto=format&fit=crop#light-bg",  // 
+  "https://images.unsplash.com/photo-1566830646085-d84daacdf482?q=80&w=3870&auto=format&fit=crop#light-bg", // Daylight
+  "https://images.unsplash.com/photo-1608458319972-eb0c3a00d752?q=80&w=3774&auto=format&fit=crop#light-bg", // Light
 ];
 
 import { cn, trackEvent } from "@/lib/utils";

@@ -1,9 +1,9 @@
 "use client";
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { Rocket } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { SquarePen } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/lib/language-context";
 import { cn, trackEvent } from "@/lib/utils";
@@ -143,7 +143,7 @@ export function GuestbookCard() {
 
   return (
     <BentoCard
-      colSpan={2}
+      colSpan={4}
       rowSpan={1}
       theme="dark"
       className="h-full min-h-[220px] md:min-h-0 flex flex-col justify-between overflow-hidden"
@@ -205,7 +205,7 @@ export function GuestbookCard() {
               inputValue.trim() ? "bg-white/90" : "bg-white/40 hover:bg-white/60"
             )}
           >
-            <Rocket className="w-3.5 h-3.5" />
+            <SquarePen className="w-3.5 h-3.5" />
           </button>
         </div>
       </form>

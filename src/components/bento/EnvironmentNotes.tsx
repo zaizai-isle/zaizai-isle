@@ -10,7 +10,7 @@ export const EnvironmentNotes = () => {
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={4}
             rowSpan={1}
             theme="dark"
         >

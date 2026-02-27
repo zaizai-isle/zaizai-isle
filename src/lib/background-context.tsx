@@ -14,7 +14,7 @@ export interface BackgroundSettings {
 
 interface BackgroundContextType {
   settings: BackgroundSettings;
-  setBackground: (type: BackgroundType, value: string) => void;
+  setBackground: (type: BackgroundType, value: string, textMode?: TextMode) => void;
   resetBackground: () => void;
   toggleTextMode: () => void;
 }
@@ -78,7 +78,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
           // Sync back to local storage
           localStorage.setItem('background_settings', JSON.stringify(data.background_settings));
         }
-      } catch (e) {
+      } catch {
         // Silent failure for Supabase issues
       }
     };
@@ -128,8 +128,23 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [settings]);
 
-  const setBackground = (type: BackgroundType, value: string) => {
-    setSettings({ type, value });
+  const setBackground = (type: BackgroundType, value: string, textMode?: TextMode) => {
+    let mode = textMode;
+
+    // Auto-detect hint from URL if it's an image
+    // #dark-bg -> Needs 'light' text
+    // #light-bg -> Needs 'dark' text
+    if (type === 'image' && !mode) {
+      if (value.includes('#dark-bg')) mode = 'light';
+      else if (value.includes('#light-bg')) mode = 'dark';
+    }
+
+    // Default fallback if still undefined
+    if (!mode) {
+      mode = type === 'default' ? 'dark' : (settings.textMode || 'dark');
+    }
+
+    setSettings({ type, value, textMode: mode });
   };
 
   const resetBackground = () => {

@@ -26,7 +26,7 @@ export function WorksCard() {
   return (
     <>
       <BentoCard
-        colSpan={2}
+        colSpan={4}
         rowSpan={1}
         theme="light"
         className="h-full justify-between group relative overflow-hidden"
@@ -64,7 +64,7 @@ export function WorksCard() {
                 src={projectBanana}
                 alt="Everything is Banana"
                 fill
-                className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                className="object-cover transition-all duration-500 grayscale group-hover/item:grayscale-0 group-hover/item:scale-105"
                 placeholder="blur"
               />
             </div>
@@ -81,7 +81,7 @@ export function WorksCard() {
                 src={projectExam}
                 alt="Smart Exam Platform"
                 fill
-                className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                className="object-cover transition-all duration-500 grayscale group-hover/item:grayscale-0 group-hover/item:scale-105"
                 placeholder="blur"
               />
             </div>
@@ -98,7 +98,7 @@ export function WorksCard() {
                 src={projectAiTrainer}
                 alt="AI Trainer Assistant"
                 fill
-                className="object-cover transition-transform duration-300 group-hover/item:scale-105"
+                className="object-cover transition-all duration-500 grayscale group-hover/item:grayscale-0 group-hover/item:scale-105"
                 placeholder="blur"
               />
             </div>
@@ -154,7 +154,7 @@ export function WorksCard() {
                     target="_blank"
                     className="w-full py-3 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-all active:scale-[0.98] shadow-lg"
                   >
-                    <span>Visit Website</span>
+                    <span>{t('page.works.view')}</span>
                     <ExternalLink className="w-4 h-4" />
                   </Link>
                 </div>

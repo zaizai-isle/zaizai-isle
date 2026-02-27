@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -9,8 +8,6 @@ import { BackgroundWrapper } from "@/components/BackgroundWrapper";
 import { BackgroundController } from "@/components/BackgroundController";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TextModeSwitcher } from "@/components/TextModeSwitcher";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Zaizai Isle | AI Product Designer",
@@ -44,7 +41,7 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID || "";
   return (
     <html lang="zh-CN">
-      <body className={`${inter.className} antialiased min-h-screen relative overflow-x-hidden`}>
+      <body className="antialiased min-h-screen relative overflow-x-hidden">
         <BackgroundProvider>
           <BackgroundWrapper />
           <LanguageProvider>

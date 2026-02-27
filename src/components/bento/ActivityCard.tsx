@@ -2,15 +2,18 @@
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { useLanguage } from "@/lib/language-context";
-import { Activity, Terminal as TerminalIcon, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useMemo } from "react";
 import { BentoHeader, BentoFooter } from "./BentoCommon";
 
+const createLogEntry = (text: string, id: number) => ({
+    id,
+    text,
+    time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+});
+
 export function ActivityCard() {
     const { t } = useLanguage();
-    const [logs, setLogs] = useState<{ id: number; text: string; time: string }[]>([]);
-
     const rawLogs = useMemo(() => [
         t('activity.log.visitor'),
         t('activity.log.logic'),
@@ -18,21 +21,13 @@ export function ActivityCard() {
         t('activity.log.drift'),
         t('activity.log.kernel'),
     ], [t]);
+    const [logs, setLogs] = useState<{ id: number; text: string; time: string }[]>(() =>
+        rawLogs.slice(0, 3).map((text, i) => createLogEntry(text, Date.now() + i))
+    );
 
     useEffect(() => {
-        const initialLogs = rawLogs.slice(0, 3).map((text, i) => ({
-            id: Date.now() + i,
-            text,
-            time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
-        }));
-        setLogs(initialLogs);
-
         const interval = setInterval(() => {
-            const newLog = {
-                id: Date.now(),
-                text: rawLogs[Math.floor(Math.random() * rawLogs.length)],
-                time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
-            };
+            const newLog = createLogEntry(rawLogs[Math.floor(Math.random() * rawLogs.length)], Date.now());
             setLogs(prev => [newLog, ...prev.slice(0, 4)]);
         }, 12000);
 
@@ -41,7 +36,7 @@ export function ActivityCard() {
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={4}
             rowSpan={1}
             theme="dark"
             className="overflow-hidden flex flex-col p-5"

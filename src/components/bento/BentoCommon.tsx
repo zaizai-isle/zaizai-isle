@@ -31,9 +31,9 @@ export function BentoHeader({
             </h3>
             {subtitle && (
                 <p className={cn(
-                    "text-xs font-mono tracking-widest leading-relaxed",
+                    "text-xs font-mono tracking-widest leading-relaxed drop-shadow-sm",
                     language === 'en' && "tracking-tight",
-                    theme === 'light' ? "text-black/50" : "text-white/40"
+                    theme === 'light' ? "text-black/72" : "text-white/75"
                 )}>
                     {subtitle}
                 </p>

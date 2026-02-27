@@ -1,204 +1,146 @@
 "use client";
 
 import { BentoCard } from "./BentoCard";
-import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { cn } from "@/lib/utils";
+import { useBackground } from "@/lib/background-context";
 import { BentoHeader } from "./BentoCommon";
-import { useEffect, useState } from "react";
-
-// 抽象岛屿轮廓（极简SVG）
-const IslandOutline = () => (
-    <motion.svg
-        width="120"
-        height="120"
-        viewBox="0 0 120 120"
-        fill="none"
-        className="drop-shadow-[0_0_15px_rgba(52,211,153,0.15)]"
-        animate={{
-            scale: [1, 1.05, 1],
-        }}
-        transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-        }}
-    >
-        {/* 岛屿主体轮廓 - 有机形状 */}
-        <motion.path
-            d="M 60 30 
-               Q 45 32, 35 40 
-               Q 25 48, 22 60 
-               Q 20 72, 28 82 
-               Q 36 92, 50 95 
-               Q 64 98, 75 93 
-               Q 86 88, 92 78 
-               Q 98 68, 96 58 
-               Q 94 48, 85 40 
-               Q 76 32, 60 30 Z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            className="text-emerald-400/40"
-            animate={{
-                pathLength: [0, 1],
-                opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-                pathLength: {
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                },
-                opacity: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }
-            }}
-        />
-
-        {/* 内部细节线条 - 山脉/地形 */}
-        <motion.path
-            d="M 40 50 Q 50 45, 60 50 Q 70 55, 80 50"
-            stroke="currentColor"
-            strokeWidth="1"
-            fill="none"
-            className="text-emerald-400/25"
-            animate={{
-                opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5
-            }}
-        />
-
-        {/* 中心核心点 */}
-        <motion.circle
-            cx="60"
-            cy="60"
-            r="2"
-            fill="currentColor"
-            className="text-emerald-400/60"
-            animate={{
-                r: [2, 3, 2],
-                opacity: [0.5, 1, 0.5],
-            }}
-            transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-            }}
-        />
-    </motion.svg>
-);
+import { CORE_BUILD_PROGRESS_BLOCKS, createCoreBuildViewModel } from "./core-build.config";
 
 export const CoreBuildCard = () => {
-    const { t, language } = useLanguage();
-    const [pulseCount, setPulseCount] = useState(127);
+    const { t } = useLanguage();
+    const { settings } = useBackground();
+    const textMode = settings.textMode || "dark";
+    const isDarkBackground = textMode === "light";
+    const cardTheme = isDarkBackground ? "glass" : "light";
+    const { groups, progress } = createCoreBuildViewModel();
+    const { buildingStart, buildingBlocks } = progress;
+    const tokens = isDarkBackground
+        ? {
+            summaryText: "text-white/92",
+            progressSettled: "bg-white/72",
+            progressBuilding: "bg-amber-200/90 shadow-[0_0_10px_rgba(251,191,36,0.55)]",
+            progressPending: "bg-white/22",
+            sectionSurface: "border-white/15 bg-white/[0.03]",
+            sectionLabel: "text-white/72",
+            sectionBody: "text-white/92",
+            footer: "text-white/42",
+        }
+        : {
+            summaryText: "text-black/88",
+            progressSettled: "bg-black/52",
+            progressBuilding: "bg-amber-600/90 shadow-[0_0_8px_rgba(217,119,6,0.42)]",
+            progressPending: "bg-black/14",
+            sectionSurface: "border-black/20 bg-black/[0.03]",
+            sectionLabel: "text-black/72",
+            sectionBody: "text-black/90",
+            footer: "text-black/55",
+        };
 
-    // 模拟生命律动计数增长
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setPulseCount(prev => prev + Math.floor(Math.random() * 3));
-        }, 8000);
-        return () => clearInterval(timer);
-    }, []);
+    const toneByGroup = {
+        running: isDarkBackground
+            ? "text-emerald-300 border-emerald-300/30 bg-emerald-300/10"
+            : "text-emerald-800 border-emerald-700/30 bg-emerald-700/12",
+        steady: isDarkBackground
+            ? "text-sky-300 border-sky-300/30 bg-sky-300/10"
+            : "text-sky-800 border-sky-700/30 bg-sky-700/12",
+        building: isDarkBackground
+            ? "text-amber-200 border-amber-200/30 bg-amber-200/10"
+            : "text-amber-800 border-amber-700/35 bg-amber-700/12",
+    } as const;
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={4}
             rowSpan={2}
-            theme="glass"
-            className="flex flex-col p-5 overflow-hidden"
+            theme={cardTheme}
+            className={cn(
+                "js-core-build-card h-full min-h-[460px] sm:min-h-[500px] md:min-h-0 flex flex-col overflow-hidden font-mono p-4 sm:p-5 md:p-6",
+                // !isDarkBackground && "!bg-white/85 shadow-[0_12px_30px_rgba(0,0,0,0.1)]"
+            )}
         >
             <BentoHeader
-                title={t('core.title')}
-                subtitle={t('core.subtitle')}
-                className="mb-0"
-                theme="light"
+                title={t("build.core_build")}
+                subtitle={`${t("build.timeline.stage_label")} · ${t("build.timeline.stage_value")}`}
+                theme={isDarkBackground ? "dark" : "light"}
+                className="mb-2 sm:mb-3"
             />
 
-            {/* 中心区域：岛屿轮廓 */}
-            <div className="flex-1 relative flex flex-col items-center justify-center gap-8">
-                {/* 岛屿呼吸动效 */}
-                <div className="relative flex items-center justify-center">
-                    {/* 外层光晕 */}
-                    <motion.div
-                        className="absolute w-40 h-40 rounded-full bg-emerald-400/5 blur-2xl"
-                        animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.3, 0.5, 0.3],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    />
+            <div className="mb-3 sm:mb-4">
+                <p className={cn(
+                    "text-[13px] sm:text-sm leading-relaxed",
+                    tokens.summaryText
+                )}>
+                    {t("build.timeline.summary")}
+                </p>
+                <div className="mt-2 sm:mt-2.5">
+                    <div className={cn(
+                        "grid grid-cols-[repeat(24,minmax(0,1fr))] gap-0.5 sm:gap-1",
+                        isDarkBackground ? "opacity-95" : "opacity-90"
+                    )}>
+                        {Array.from({ length: CORE_BUILD_PROGRESS_BLOCKS }).map((_, idx) => {
+                            const isBuilding = idx >= buildingStart && idx < buildingStart + buildingBlocks;
+                            const isSettled = idx < buildingStart;
 
-                    <IslandOutline />
-                </div>
-
-                {/* 诗意文案区 */}
-                <div className="flex flex-col items-center gap-3 z-10">
-                    {/* 主状态 */}
-                    <motion.div
-                        className="text-base font-medium text-white/80 tracking-wide"
-                        animate={{
-                            opacity: [0.7, 1, 0.7],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    >
-                        {language === 'zh' ? '岛屿正在呼吸' : 'The island breathes'}
-                    </motion.div>
-
-                    {/* 生命律动计数 */}
-                    <div className="text-sm text-white/60 font-light tracking-wide">
-                        {language === 'zh'
-                            ? `感知到 ${pulseCount} 次生命律动`
-                            : `${pulseCount} vital pulses sensed`}
-                    </div>
-
-                    {/* 生态状态 */}
-                    <div className="flex items-center gap-2 mt-1">
-                        <motion.div
-                            className="w-1.5 h-1.5 rounded-full bg-emerald-400/70"
-                            animate={{
-                                opacity: [0.5, 1, 0.5],
-                                boxShadow: [
-                                    "0 0 4px rgba(52,211,153,0.4)",
-                                    "0 0 10px rgba(52,211,153,0.7)",
-                                    "0 0 4px rgba(52,211,153,0.4)"
-                                ]
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                        />
-                        <span className="text-sm text-emerald-400/60 font-medium">
-                            {language === 'zh' ? '生态系统：繁荣' : 'Ecosystem: Thriving'}
-                        </span>
+                            return (
+                                <span
+                                    className={cn(
+                                        "h-2 sm:h-2.5 rounded-[2px] transition-all motion-reduce:transition-none",
+                                        isSettled && tokens.progressSettled,
+                                        isBuilding && cn(
+                                            tokens.progressBuilding,
+                                            "animate-pulse motion-reduce:animate-none motion-reduce:shadow-none"
+                                        ),
+                                        !isSettled && !isBuilding && tokens.progressPending
+                                    )}
+                                    key={`progress-block-${idx}`}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             </div>
 
-            {/* 底部状态栏 - 极简 */}
-            <div className="mt-auto pt-3 border-t border-white/10 flex items-center justify-between">
-                <div className="text-[10px] font-mono uppercase text-white/30 tracking-wider">
-                    {language === 'zh' ? '律动频率：稳定' : 'Rhythm: Stable'}
-                </div>
-                <div className="text-[10px] font-mono uppercase text-white/30">
-                    {t('core.status.syncing')}
-                </div>
+            <div className="flex-1 min-h-0 grid grid-rows-3 gap-2 sm:gap-2.5">
+                {groups.map((group) => (
+                    <section
+                        key={group.id}
+                        className={cn(
+                            "h-full rounded-xl border px-2.5 py-2 sm:px-3 sm:py-2.5 flex flex-col justify-center",
+                            tokens.sectionSurface
+                        )}
+                    >
+                        <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <h4 className={cn(
+                                "text-[10px] sm:text-[11px] uppercase tracking-[0.12em]",
+                                tokens.sectionLabel
+                            )}>
+                                {t(group.titleKey)}
+                            </h4>
+                            <span className={cn(
+                                "text-[10px] px-2 py-0.5 rounded-full border",
+                                toneByGroup[group.id]
+                            )}>
+                                {t(group.statusKey)}
+                            </span>
+                        </div>
+                        <p className={cn(
+                            "text-[13px] sm:text-sm leading-snug break-words",
+                            tokens.sectionBody
+                        )}>
+                            {group.modules.length > 0
+                                ? group.modules.map((module) => t(module.moduleKey)).join(" · ")
+                                : t("build.group.empty")}
+                        </p>
+                    </section>
+                ))}
+            </div>
+
+            <div className={cn(
+                "text-[10px] italic mt-1.5 sm:mt-2 text-right",
+                tokens.footer
+            )}>
+                — {t("build.footer_note")}
             </div>
         </BentoCard>
     );

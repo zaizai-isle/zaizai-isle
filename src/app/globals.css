@@ -4,11 +4,50 @@
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius: var(--radius);
 }
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #f9c913;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --destructive: #e53e3e;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #171717;
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,12 +59,13 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* Offset for sticky header */
+  scroll-padding-top: 80px;
+  /* Offset for sticky header */
 }
 
 body {
   background-color: #e5e5e7;
-  background-image: 
+  background-image:
     radial-gradient(at 10% 10%, hsla(210, 100%, 93%, 1) 0px, transparent 50%),
     radial-gradient(at 90% 10%, rgb(232, 228, 250) 0px, transparent 50%),
     radial-gradient(at 90% 90%, rgb(253, 235, 201) 0px, transparent 50%),
@@ -41,13 +81,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #d1d5db;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
@@ -56,9 +99,11 @@ body {
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #e5e7eb;
   border-radius: 20px;
@@ -66,24 +111,103 @@ body {
 
 /* Weather Icon Animations */
 @keyframes rain {
-  0% { transform: translateY(-1px); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translateY(3px); opacity: 0; }
+  0% {
+    transform: translateY(-1px);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(3px);
+    opacity: 0;
+  }
 }
+
 .animate-rain {
   animation: rain 1s infinite linear;
 }
 
 @keyframes flash {
-  0%, 90%, 100% { opacity: 1; }
-  92% { opacity: 0.5; }
-  94% { opacity: 1; }
-  96% { opacity: 0.5; }
+
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0.5;
+  }
+
+  94% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 0.5;
+  }
 }
+
 .animate-flash {
   animation: flash 5s infinite;
 }
 
 .animate-pulse-slow {
   animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Everything is Banana 专属主题 ────────────────── */
+
+.banana-theme {
+  --background: #fffdf0;
+  --foreground: #261f14;
+  --card: #ffffff;
+  --card-foreground: #261f14;
+  --popover: #ffffff;
+  --popover-foreground: #261f14;
+  --primary: #f9c913;
+  --primary-foreground: #261f14;
+  --secondary: #f0920a;
+  --secondary-foreground: #ffffff;
+  --muted: #f5f0e0;
+  --muted-foreground: #6b5a3e;
+  --accent: #f9c913;
+  --accent-foreground: #261f14;
+  --destructive: #e53e3e;
+  --destructive-foreground: #ffffff;
+  --border: #e8d99a;
+  --input: #e8d99a;
+  --ring: #f9c913;
+  --radius: 0.75rem;
+
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark .banana-theme {
+  --background: #1a1508;
+  --foreground: #fff8d6;
+  --card: #241d0d;
+  --card-foreground: #fff8d6;
+  --popover: #241d0d;
+  --popover-foreground: #fff8d6;
+  --primary: #f9c913;
+  --primary-foreground: #261f14;
+  --secondary: #f0920a;
+  --secondary-foreground: #ffffff;
+  --muted: #2e2410;
+  --muted-foreground: #c4a96b;
+  --accent: #f9c913;
+  --accent-foreground: #261f14;
+  --destructive: #c53030;
+  --destructive-foreground: #ffffff;
+  --border: #3d3016;
+  --input: #3d3016;
+  --ring: #f9c913;
+
+  background-color: var(--background);
+  color: var(--foreground);
 }

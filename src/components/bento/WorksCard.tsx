@@ -56,7 +56,7 @@ export function WorksCard() {
               onClick={() => setPreviewProject({
                 title: "Everything is Banana",
                 image: projectBanana,
-                link: "https://app-7s7fn2uu96o1.appmiaoda.com"
+                link: "/banana"
               })}
               className="aspect-[3/2] w-full bg-gray-100 rounded-lg border border-gray-200 relative overflow-hidden group/item cursor-pointer"
             >

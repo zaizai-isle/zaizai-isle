@@ -13,23 +13,30 @@ Current project assets include several high-resolution raster images and a large
 
 ### 3.1 WebP Migration
 Migrate all high-resolution PNG/JPG assets to WebP format.
-| Original Asset | Size | Expected WebP Size | Saving |
+| Original Asset | Size | Runtime WebP Size | Saving |
 | :--- | :--- | :--- | :--- |
-| `shoebill-sprite-transparent.png` | 1.2MB | ~250KB | ~80% |
-| `Zaizai-Isle_Shoebill.png` | 351KB | ~80KB | ~77% |
-| `avatar-v1.jpg` | 70KB | ~30KB | ~57% |
-| `project-*.jpg` (x3) | ~450KB | ~180KB | ~60% |
-| **Total** | **~2.1MB** | **~540KB** | **~1.5MB** |
+| `shoebill-sprite-transparent.png` | 1.23MB | 473KB | ~62% |
+| `Zaizai-Isle_Shoebill.png` | 352KB | 52KB | ~85% |
+| `avatar-v1.jpg` | 70KB | 35KB | ~50% |
+| `project-*.jpg` (x3) | 457KB | 338KB | ~26% |
+| **Total** | **~2.11MB** | **~898KB** | **~1.2MB** |
 
 ### 3.2 Weather Icon Refactoring
-The `WeatherIconsMap.ts` (370KB) is currently a large JS bundle.
-- **Problem**: Next.js must parse this large JS file on load, even if weather is not visible.
-- **Solution**: Move icons to `public/weather-icons/` and load them as static SVGs via `<img>` tags or dynamic `fetch`. This offloads 370KB from the JS bundle.
+The `WeatherIconsMap.ts` (370KB) was previously a large inline SVG module.
+- **Problem**: Next.js had to parse this large JS file when the icon component imported it.
+- **Solution**: Move icons to `public/weather-icons/` and load them as static SVGs through `next/image`. This keeps the icon payload out of the Weather card JS chunk.
+
+## 4. Implementation Status
+- [x] Generate runtime WebP variants for high-impact raster assets.
+- [x] Update app and README references to prefer WebP assets.
+- [x] Move weather icon rendering to static SVG files under `public/weather-icons/`.
+- [ ] Consider removing or archiving original raster assets after production verification.
+- [ ] Consider splitting the shoebill sprite by state if animation payload remains too large.
 
 ### 3.3 Sprite Optimization
 The `shoebill-sprite-transparent.png` contains 7 rows of animations. 
 - **Recommendation**: In addition to WebP conversion, consider splitting into smaller individual animations if certain states are rarely used, or using a more optimized sprite sheet layout.
 
-## 4. Directory Organization
+## 5. Directory Organization
 - Consolidate all "Source" assets (unprocessed icons) into a non-build folder like `.assets/source`.
 - Keep "Runtime" assets (processed, optimized) in `public/` or `src/assets/`.

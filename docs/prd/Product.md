@@ -4,7 +4,7 @@
 > 再做一点，再想一点，惊喜总在发生
 > *Build more, think more, find the spark.*
 
-> **Status**: V1.2.6 (Calibration Phase)
+> **Status**: V1.2.9 (Asset Quieting Phase)
 > **Role**: This is the highest-level "constitution" for Zaizai Isle. It guides philosophy, narrative, and boundaries.
 
 ---
@@ -72,11 +72,13 @@ Isle 不是单一叙事对象，而是三层结构的同时存在。任何新增
 
 ## 5. 维护记录 (Maintenance Log)
 
+*   **V1.2.9 (Rev. 2026-06-04)**: 资产 WebP 迁移与天气图标静态加载，降低静态导出下的传输与 JS 解析负担。
+*   **V1.2.8**: 完成性能校准，核心 Bento 模块采用动态加载，组件静态逻辑进一步提升。
 *   **V1.2.6 (Rev. 2026-02-10)**: 文档系统升级与视觉减法。完成了自研 TOC 导航、环境感知亮度自适应（#dark-bg）及全局页脚简化。
-*   **Next Phase**: 资产 WebP 迁移与天气图标异步化。
+*   **Next Phase**: 精灵图按状态拆分与构建产物体积持续观测。
 
 ---
 
 **Document Status**
-*   **Last Updated**: 2026-02-10
+*   **Last Updated**: 2026-06-04
 *   **Author**: Isle System

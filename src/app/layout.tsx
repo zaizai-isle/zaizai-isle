@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zaizai Isle | AI Product Designer",
     description: "Zaizai Isle — Personal site of an AI Product Designer. Focused on AI-driven product design, UX systems, and end-to-end delivery. Build more, think more, find the spark.",
-    images: "https://zaizai-isle.github.io/zaizai-isle/Zaizai-Isle_Shoebill.png",
+    images: "https://zaizai-isle.github.io/zaizai-isle/Zaizai-Isle_Shoebill.webp",
   },
 };
 

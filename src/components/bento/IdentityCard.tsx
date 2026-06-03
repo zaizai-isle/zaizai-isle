@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion as fmMotion } from "framer-motion";
 import { Drama, Lightbulb, PartyPopper } from "lucide-react";
 import NextImage from "next/image";
-import avatarImage from "@/assets/avatar-v1.jpg";
+import avatarImage from "@/assets/avatar-v1.webp";
 
 
 import { useLanguage } from "@/lib/language-context";
@@ -26,7 +26,7 @@ interface IdentityCardProps {
   spriteUrl?: string;
 }
 
-export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }: IdentityCardProps) => {
+export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.webp" }: IdentityCardProps) => {
   const { t, language } = useLanguage();
   const [frame, setFrame] = useState(0);
   const timerRef = useRef<number | null>(null);
@@ -76,6 +76,7 @@ export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.png" }:
 
     const baseFiles = [
       spriteUrl,
+      "/shoebill-sprite-transparent.webp",
       "/shoebill-sprite-transparent.png",
       "/shoebill-sprite.png",
       "/shoebill_sprite_clean.png",

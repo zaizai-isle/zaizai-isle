@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/.venv
+/.conda-env
 /.pnp
 .pnp.*
 .yarn/*

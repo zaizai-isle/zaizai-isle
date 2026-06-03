@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.9] - 2026-06-04
+
+### Added
+- Added WebP runtime variants for high-impact visual assets.
+- Added static weather icon loading from `public/weather-icons/`.
+
+### Changed
+- Updated project version metadata and active product documentation to V1.2.9.
+- Updated image references to prefer WebP assets for static export performance.
+- Replaced the large inline `WeatherIconsMap` bundle path with static SVG image loading.
+
+### Technical
+- Reduced client-side JavaScript parsing pressure by moving weather icon SVGs out of the component bundle.
+- Preserved original raster assets during rollout for fallback and visual verification.
+
 ## [v1.2.5] - 2026-02-08
 
 ### Added
@@ -207,4 +222,3 @@ All notable changes to this project will be documented in this file.
   - **Tech Stack**: Infinite scrolling marquee of development tools and skills.
   - **Guestbook**: Real-time message board integration powered by **Supabase**.
   - **Animations**: Smooth entry and hover effects using **Framer Motion**.
-

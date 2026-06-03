@@ -2,7 +2,7 @@
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { SquarePen } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/lib/language-context";
@@ -48,51 +48,45 @@ export function GuestbookCard() {
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(124);
 
-  useEffect(() => {
+  const fetchMessages = useCallback(async () => {
     const client = supabase;
-    if (client) {
-      const fetchMessages = async () => {
-        try {
-          const { data, error, count } = await client
-            .from('guestbook')
-            .select('*', { count: 'exact' })
-            .order('created_at', { ascending: false })
-            .limit(10);
+    if (!client) return;
 
-          if (error) {
-            console.warn('Supabase fetch error:', error);
-            return;
-          }
-          if (data) setMessages(data);
-          if (count !== null) setTotalCount(count);
-        } catch (err) {
-          console.warn('Failed to fetch messages:', err);
-        }
-      };
+    try {
+      const { data, error, count } = await client
+        .from('guestbook')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .limit(10);
 
-      fetchMessages();
-
-      // Subscribe to new messages
-      const channel = client
-        .channel('guestbook')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guestbook' }, (payload) => {
-          const newMessage = payload.new as Message;
-          setMessages((prev) => {
-            // Deduplicate: check if message with same ID already exists
-            if (prev.some(msg => msg.id === newMessage.id)) {
-              return prev;
-            }
-            return [newMessage, ...prev];
-          });
-          setTotalCount((prev) => prev + 1);
-        })
-        .subscribe();
-
-      return () => {
-        client.removeChannel(channel);
-      };
+      if (error) {
+        console.warn('Supabase fetch error:', error);
+        return;
+      }
+      if (data) setMessages(data);
+      if (count !== null) setTotalCount(count);
+    } catch (err) {
+      console.warn('Failed to fetch messages:', err);
     }
   }, []);
+
+  useEffect(() => {
+    void Promise.resolve().then(fetchMessages);
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') {
+        fetchMessages();
+      }
+    };
+
+    window.addEventListener('focus', fetchMessages);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+
+    return () => {
+      window.removeEventListener('focus', fetchMessages);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+    };
+  }, [fetchMessages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,6 +127,7 @@ export function GuestbookCard() {
           // Otherwise, update the temp ID to real ID
           return prev.map(msg => msg.id === tempId ? { ...msg, id: data.id } : msg);
         });
+        fetchMessages();
       }
     } else {
       console.warn('Supabase client not initialized. Message will not be saved persistently.');

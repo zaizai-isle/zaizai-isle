@@ -1,8 +1,27 @@
 // bananaApi.ts
-// 使用 Google Gemini API 替代原秒哒平台的图片处理能力
+// 香蕉图相关 AI 调用
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
-const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+import {
+  BANANA_AI_PROVIDER,
+  BANANA_IMAGE_MODEL,
+  BANANA_VISION_MODEL,
+  buildGeminiGenerateUrl,
+  buildProxyUrl,
+  getAuthHeaders,
+  parseAiError,
+} from './bananaAiConfig';
+
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  let binary = '';
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  return btoa(binary);
+}
 
 // 将图片文件转换为 Base64
 export async function fileToBase64(file: File): Promise<string> {
@@ -19,15 +38,7 @@ export async function fileToBase64(file: File): Promise<string> {
   });
 }
 
-// ─────────────────────────────────────────────
-// 功能一：香蕉化图片（图生图）
-// 使用 gemini-3.1-flash-image-preview
-// ─────────────────────────────────────────────
-export async function bananaifyImage(
-  imageBase64: string,
-  mimeType: string
-): Promise<string> {
-  const prompt = `核心指令：基于输入图像的构图和光影，进行全面的、像素级的语义内容替换。将输入图像中所有识别出的对象，替换为香蕉形态的物体。
+const BANANAIFY_PROMPT = `核心指令：基于输入图像的构图和光影，进行全面的、像素级的语义内容替换。将输入图像中所有识别出的对象，替换为香蕉形态的物体。
 
 转换规则：
 1. 物体替换：
@@ -41,8 +52,12 @@ export async function bananaifyImage(
    - 光影保持：严格保持输入图像的原始光源方向、强度和环境反射。
    - 成熟度随机：在同一张图像中，随机使用不同成熟度的香蕉纹理（新鲜的黄皮、带黑斑的熟皮、略带绿色的未熟皮），增加荒谬感和视觉丰富性。`;
 
+async function bananaifyWithGemini(
+  imageBase64: string,
+  mimeType: string
+): Promise<string> {
   const response = await fetch(
-    `${GEMINI_BASE_URL}/models/gemini-3.1-flash-image-preview:generateContent?key=${GEMINI_API_KEY}`,
+    buildGeminiGenerateUrl(BANANA_IMAGE_MODEL),
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,20 +71,19 @@ export async function bananaifyImage(
                   data: imageBase64,
                 },
               },
-              { text: prompt },
+              { text: BANANAIFY_PROMPT },
             ],
           },
         ],
         generationConfig: {
-          responseModalities: ['IMAGE', 'TEXT'],
+          responseModalities: ['IMAGE'],
         },
       }),
     }
   );
 
   if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || '香蕉化处理失败');
+    throw await parseAiError(response, '香蕉化处理失败');
   }
 
   const data = await response.json();
@@ -85,25 +99,61 @@ export async function bananaifyImage(
       return part.inline_data.data;
     }
   }
-
-
-  throw new Error('Gemini 未返回图片，请稍后重试');
+  throw new Error('AI 未返回图片，请稍后重试');
 }
 
-// ─────────────────────────────────────────────
-// 功能二：理解图片内容（图转文字描述）
-// 使用 gemini-3.1-flash-image-preview，直接同步返回，无需轮询
-// ─────────────────────────────────────────────
-export async function understandImage(imageUrl: string): Promise<string> {
-  // 先把 URL 的图片下载为 base64
+async function bananaifyWithProxy(
+  imageBase64: string,
+  mimeType: string
+): Promise<string> {
+  const response = await fetch(buildProxyUrl('bananaify'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({
+      model: BANANA_IMAGE_MODEL,
+      prompt: BANANAIFY_PROMPT,
+      image_base64: imageBase64,
+      mime_type: mimeType,
+    }),
+  });
+
+  if (!response.ok) {
+    throw await parseAiError(response, '香蕉化处理失败');
+  }
+
+  const data = await response.json();
+  const imageBase64Result = data?.image_base64 || data?.imageBase64;
+  if (!imageBase64Result) {
+    throw new Error('AI 代理未返回 image_base64');
+  }
+
+  return imageBase64Result;
+}
+
+async function imageUrlToBase64(imageUrl: string): Promise<{
+  base64: string;
+  mimeType: string;
+}> {
   const res = await fetch(imageUrl);
   const blob = await res.blob();
   const arrayBuffer = await blob.arrayBuffer();
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+  const base64 = arrayBufferToBase64(arrayBuffer);
   const mimeType = blob.type || 'image/jpeg';
 
+  return { base64, mimeType };
+}
+
+async function understandImageWithGemini(
+  imageUrl: string,
+  question: string
+): Promise<string> {
+  const { base64, mimeType } = await imageUrlToBase64(imageUrl);
+
   const response = await fetch(
-    `${GEMINI_BASE_URL}/models/gemini-3.1-flash-image-preview:generateContent?key=${GEMINI_API_KEY}`,
+    buildGeminiGenerateUrl(BANANA_VISION_MODEL),
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -115,7 +165,7 @@ export async function understandImage(imageUrl: string): Promise<string> {
                 inline_data: { mime_type: mimeType, data: base64 },
               },
               {
-                text: '请详细描述这张图片的内容，包括主要物体、场景、颜色等信息。',
+                text: question,
               },
             ],
           },
@@ -125,8 +175,7 @@ export async function understandImage(imageUrl: string): Promise<string> {
   );
 
   if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || '图片理解失败');
+    throw await parseAiError(response, '图片理解失败');
   }
 
   const data = await response.json();
@@ -135,16 +184,81 @@ export async function understandImage(imageUrl: string): Promise<string> {
   return text;
 }
 
+async function understandImageWithProxy(
+  imageUrl: string,
+  question: string
+): Promise<string> {
+  const { base64, mimeType } = await imageUrlToBase64(imageUrl);
+  const response = await fetch(buildProxyUrl('understand'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({
+      model: BANANA_VISION_MODEL,
+      question,
+      image_base64: base64,
+      mime_type: mimeType,
+    }),
+  });
+
+  if (!response.ok) {
+    throw await parseAiError(response, '图片理解失败');
+  }
+
+  const data = await response.json();
+  const text = data?.text || data?.description;
+  if (!text) throw new Error('AI 代理未返回 text');
+  return text;
+}
+
+// ─────────────────────────────────────────────
+// 功能一：香蕉化图片（图生图）
+// ─────────────────────────────────────────────
+export async function bananaifyImage(
+  imageBase64: string,
+  mimeType: string
+): Promise<string> {
+  if (BANANA_AI_PROVIDER === 'proxy') {
+    return bananaifyWithProxy(imageBase64, mimeType);
+  }
+
+  if (BANANA_AI_PROVIDER === 'gemini') {
+    return bananaifyWithGemini(imageBase64, mimeType);
+  }
+
+  throw new Error('暂不支持该 AI provider，请使用 gemini 或 proxy');
+}
+
+// ─────────────────────────────────────────────
+// 功能二：理解图片内容（图转文字描述）
+// ─────────────────────────────────────────────
+export async function understandImage(
+  imageUrl: string,
+  question = '请详细描述这张图片的内容，包括主要物体、场景、颜色等信息。'
+): Promise<string> {
+  if (BANANA_AI_PROVIDER === 'proxy') {
+    return understandImageWithProxy(imageUrl, question);
+  }
+
+  if (BANANA_AI_PROVIDER === 'gemini') {
+    return understandImageWithGemini(imageUrl, question);
+  }
+
+  throw new Error('暂不支持该 AI provider，请使用 gemini 或 proxy');
+}
+
 // ─────────────────────────────────────────────
 // 保留原来的函数签名兼容性
 // 原来图片理解是异步轮询，现在直接返回结果
 // ─────────────────────────────────────────────
 export async function submitImageUnderstanding(
   imageUrl: string,
-  _question: string
+  question: string
 ): Promise<string> {
   // 直接复用 understandImage，返回描述文本作为"taskId"占位
-  const description = await understandImage(imageUrl);
+  const description = await understandImage(imageUrl, question);
   return description; // 直接当结果返回，跳过轮询
 }
 

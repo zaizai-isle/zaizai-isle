@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/lib/language-context";
 import Image from "next/image";
-import avatarImage from "@/assets/avatar-v1.jpg";
+import avatarImage from "@/assets/avatar-v1.webp";
 import qrcodeImage from "@/assets/qrcode.jpg";
 import { Drama, Lightbulb, PartyPopper, Mail, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";

@@ -1,7 +1,7 @@
 # 🏝️ Welcome to Zaizai Isle
 
 <p align="center">
-  <img src="public/Zaizai-Isle_Shoebill.png" width="100%" alt="Zaizai Isle - AI Product Designer" />
+  <img src="public/Zaizai-Isle_Shoebill.webp" width="100%" alt="Zaizai Isle - AI Product Designer" />
 </p>
 
 <p align="center">
@@ -81,6 +81,17 @@ then the site is doing what it’s meant to do.
 >
 > This project is for personal showcase only. All code and design rights are reserved.
 
+## Local Environment
+
+This project uses a project-local Conda environment:
+
+```bash
+conda activate /Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle/.conda-env
+npm run dev
+```
+
+The environment includes Python `3.13.13`, Node.js `25.8.2`, and npm `11.11.1`.
+
 ## Visual Regression
 
 - Update baseline: `npm run vr:core-build:update`
@@ -104,3 +115,27 @@ The frontend will call this URL with query params:
 - `lang=zh|en`
 
 The endpoint should return normalized `WeatherData` JSON.
+
+## Banana AI API (Optional)
+
+The banana image flow can use either Gemini directly or your own model proxy. Set these values in `.env.local`:
+
+```bash
+NEXT_PUBLIC_BANANA_AI_PROVIDER=gemini
+NEXT_PUBLIC_BANANA_AI_API_KEY=your_api_key_here
+NEXT_PUBLIC_BANANA_AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+NEXT_PUBLIC_BANANA_IMAGE_MODEL=gemini-2.5-flash-image-preview
+NEXT_PUBLIC_BANANA_VISION_MODEL=gemini-2.5-flash
+NEXT_PUBLIC_BANANA_CHAT_MODEL=gemini-2.0-flash
+```
+
+- `NEXT_PUBLIC_BANANA_AI_PROVIDER`: `gemini` for Gemini-compatible APIs, or `proxy` for a custom API wrapper.
+- `NEXT_PUBLIC_BANANA_IMAGE_MODEL`: image generation model for bananafication.
+- `NEXT_PUBLIC_BANANA_VISION_MODEL`: multimodal text model for image description.
+- `NEXT_PUBLIC_BANANA_CHAT_MODEL`: text model for the banana analysis report.
+
+When `NEXT_PUBLIC_BANANA_AI_PROVIDER=proxy`, the frontend posts normalized JSON to:
+
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/bananaify`, expects `{ "image_base64": "..." }`.
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/understand`, expects `{ "text": "..." }`.
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/analysis`, expects `{ "text": "..." }`.

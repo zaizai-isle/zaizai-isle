@@ -1,4 +1,4 @@
-# 🏝️ Zaizai Isle (V1.2.6)
+# 🏝️ Zaizai Isle (V1.2.9)
 
  > 一个可长期维护、可继续生长、可承载个人变化的数字小岛
  > *A digital isle that grows, survives, and reflects personal evolution.*
@@ -99,15 +99,16 @@
 
 ## 6. 生长足迹 (Growth Milestones)
 
-*   **V1.2.6 (Active)**: 本手册 - 性能精密校准与 12 列栅格重构。
+*   **V1.2.9 (Active)**: 资产静默减重，推进 WebP 迁移与天气图标静态加载。
+*   **V1.2.8**: 性能精密校准与 12 列栅格重构。
 *   **V1.2.0 (Heritage)**: [Experience 气质成型版存档](/zaizai-isle/docs/history/PRODUCT_V1.2.0_Original) (2026-01-21)
 *   **V1.0.0 (Archive)**: 岛屿浮出水面的那一刻。
 
 ---
 
 **Document Status**
-*   **Current Version**: V1.2.6 (Continuous Improvement)
-*   **Last Updated**: 2026-02-10
+*   **Current Version**: V1.2.9 (Asset Quieting)
+*   **Last Updated**: 2026-06-04
 *   **Author**: Isle System
 
 ---

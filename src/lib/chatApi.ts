@@ -1,14 +1,34 @@
 // chatApi.ts
-// 使用 Google Gemini API 替代原秒哒平台的对话流式能力
+// 香蕉学分析报告 AI 调用
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
-const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
+import {
+  BANANA_AI_PROVIDER,
+  BANANA_CHAT_MODEL,
+  buildGeminiGenerateUrl,
+  buildProxyUrl,
+  getAuthHeaders,
+  parseAiError,
+} from './bananaAiConfig';
 
 // ─────────────────────────────────────────────
 // 功能三：生成香蕉学分析报告（流式输出）
-// 使用 gemini-2.0-flash streamGenerateContent
 // ─────────────────────────────────────────────
 export async function generateBananaAnalysis(
+  imageDescription: string,
+  onUpdate?: (content: string) => void
+): Promise<string> {
+  if (BANANA_AI_PROVIDER === 'proxy') {
+    return generateBananaAnalysisWithProxy(imageDescription, onUpdate);
+  }
+
+  if (BANANA_AI_PROVIDER === 'gemini') {
+    return generateBananaAnalysisWithGemini(imageDescription, onUpdate);
+  }
+
+  throw new Error('暂不支持该 AI provider，请使用 gemini 或 proxy');
+}
+
+async function generateBananaAnalysisWithGemini(
   imageDescription: string,
   onUpdate?: (content: string) => void
 ): Promise<string> {
@@ -25,7 +45,7 @@ export async function generateBananaAnalysis(
 5. 字数控制在150字左右`;
 
   const response = await fetch(
-    `${GEMINI_BASE_URL}/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`,
+    `${buildGeminiGenerateUrl(BANANA_CHAT_MODEL, 'streamGenerateContent')}&alt=sse`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -44,8 +64,7 @@ export async function generateBananaAnalysis(
   );
 
   if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || '香蕉学分析生成失败');
+    throw await parseAiError(response, '香蕉学分析生成失败');
   }
 
   // 读取 SSE 流
@@ -82,4 +101,31 @@ export async function generateBananaAnalysis(
   }
 
   return fullText;
+}
+
+async function generateBananaAnalysisWithProxy(
+  imageDescription: string,
+  onUpdate?: (content: string) => void
+): Promise<string> {
+  const response = await fetch(buildProxyUrl('analysis'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({
+      model: BANANA_CHAT_MODEL,
+      image_description: imageDescription,
+    }),
+  });
+
+  if (!response.ok) {
+    throw await parseAiError(response, '香蕉学分析生成失败');
+  }
+
+  const data = await response.json();
+  const text = data?.text || data?.analysis_report || data?.analysisReport;
+  if (!text) throw new Error('AI 代理未返回 text');
+  onUpdate?.(text);
+  return text;
 }

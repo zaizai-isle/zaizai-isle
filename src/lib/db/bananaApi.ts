@@ -1,9 +1,10 @@
-import { supabase } from './supabase';
+import { getSupabase } from './supabase';
 import type { BananaWork } from '../types/banana';
 
 export async function createBananaWork(
   work: Omit<BananaWork, 'id' | 'created_at' | 'likes'>
 ) {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from('banana_works')
     .insert({
@@ -18,6 +19,7 @@ export async function createBananaWork(
 }
 
 export async function getAllBananaWorks(limit = 50, offset = 0): Promise<BananaWork[]> {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from('banana_works')
     .select('*')
@@ -29,6 +31,7 @@ export async function getAllBananaWorks(limit = 50, offset = 0): Promise<BananaW
 }
 
 export async function getPopularBananaWorks(limit = 50, offset = 0): Promise<BananaWork[]> {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from('banana_works')
     .select('*')
@@ -41,11 +44,13 @@ export async function getPopularBananaWorks(limit = 50, offset = 0): Promise<Ban
 }
 
 export async function incrementLikes(workId: string) {
+  const supabase = getSupabase();
   const { error } = await supabase.rpc('increment_likes', { work_id: workId });
   if (error) throw error;
 }
 
 export async function uploadImage(file: File, path: string): Promise<string> {
+  const supabase = getSupabase();
   const { data, error } = await supabase.storage
     .from('banana_images')
     .upload(path, file, { cacheControl: '3600', upsert: false });

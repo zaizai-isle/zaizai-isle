@@ -10,9 +10,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { BentoHeader } from "./BentoCommon";
 
-import projectBanana from "@/assets/project-banana-v3.jpg";
-import projectExam from "@/assets/project-exam.jpg";
-import projectAiTrainer from "@/assets/project-ai-trainer.jpg";
+import projectBanana from "@/assets/project-banana-v3.webp";
+import projectExam from "@/assets/project-exam.webp";
+import projectAiTrainer from "@/assets/project-ai-trainer.webp";
 
 export function WorksCard() {
   const { t } = useLanguage();

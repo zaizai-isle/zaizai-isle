@@ -30,6 +30,7 @@ The `WeatherIconsMap.ts` (370KB) was previously a large inline SVG module.
 - [x] Generate runtime WebP variants for high-impact raster assets.
 - [x] Update app and README references to prefer WebP assets.
 - [x] Move weather icon rendering to static SVG files under `public/weather-icons/`.
+- [x] Archive `WeatherIconsMap.ts` outside `src` and update `scripts/process-icons.ts` to output static SVGs only.
 - [ ] Consider removing or archiving original raster assets after production verification.
 - [ ] Consider splitting the shoebill sprite by state if animation payload remains too large.
 

@@ -12,10 +12,12 @@ All notable changes to this project will be documented in this file.
 - Updated project version metadata and active product documentation to V1.2.9.
 - Updated image references to prefer WebP assets for static export performance.
 - Replaced the large inline `WeatherIconsMap` bundle path with static SVG image loading.
+- Updated the weather icon generation script to emit static SVG files instead of a JavaScript icon map.
 
 ### Technical
 - Reduced client-side JavaScript parsing pressure by moving weather icon SVGs out of the component bundle.
 - Preserved original raster assets during rollout for fallback and visual verification.
+- Archived the previous inline icon map at `docs/archive/generated/WeatherIconsMap.v1.2.8.ts`.
 
 ## [v1.2.5] - 2026-02-08
 

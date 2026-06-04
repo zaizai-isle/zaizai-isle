@@ -9,6 +9,7 @@
 conda activate /Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle/.conda-env
 ```
 
+- The user's zsh config sources `./.auto-activate-conda.zsh`, so interactive zsh sessions auto-activate this environment after `cd` into the repo.
 - If running commands non-interactively, prefer putting the Conda environment first in `PATH`:
 
 ```bash

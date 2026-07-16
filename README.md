@@ -101,6 +101,12 @@ Default URL is `http://127.0.0.1:3000/zaizai-isle/`.
 Override with `VR_BASE_URL`, for example:  
 `VR_BASE_URL=http://127.0.0.1:3000/zaizai-isle/ npm run vr:core-build`
 
+## Asset Generation
+
+- Weather icons: `env PATH=/Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle/.conda-env/bin:$PATH ./node_modules/.bin/tsx scripts/process-icons.ts`
+- Runtime images should prefer WebP when the optimized file is smaller and visually equivalent.
+- Release checklist: `docs/prd/ReleaseChecklist.md`
+
 ## Weather Proxy (Optional)
 
 This project currently uses static export (`output: export`), so built-in Next.js `API Route` is not available in production export mode.

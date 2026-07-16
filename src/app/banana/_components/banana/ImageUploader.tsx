@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -101,7 +102,14 @@ export function ImageUploader({ onImageSelected, disabled }: ImageUploaderProps)
         </div>
       ) : (
         <div className="relative rounded-lg overflow-hidden border border-border">
-          <img src={preview} alt="预览" className="w-full h-auto" />
+          <Image
+            src={preview}
+            alt="预览"
+            width={1024}
+            height={1024}
+            unoptimized
+            className="w-full h-auto"
+          />
           <Button
             size="icon"
             variant="destructive"

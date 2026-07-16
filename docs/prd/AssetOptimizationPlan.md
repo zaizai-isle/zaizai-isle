@@ -39,5 +39,8 @@ The `shoebill-sprite-transparent.png` contains 7 rows of animations.
 - **Recommendation**: In addition to WebP conversion, consider splitting into smaller individual animations if certain states are rarely used, or using a more optimized sprite sheet layout.
 
 ## 5. Directory Organization
-- Consolidate all "Source" assets (unprocessed icons) into a non-build folder like `.assets/source`.
-- Keep "Runtime" assets (processed, optimized) in `public/` or `src/assets/`.
+- **Runtime assets** live in `public/` or `src/assets/` and are referenced by the app.
+- **Source assets** are original editable inputs. Keep them only when they are needed for regeneration or visual fallback.
+- **Archive assets** live under `docs/archive/` when they explain an old implementation but should not be imported by app code.
+- Weather icons are generated as static SVGs into both `src/assets/weather-icons/` and `public/weather-icons/`.
+- Do not reintroduce inline weather icon maps into `src`.

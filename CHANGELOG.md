@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.0] - 2026-07-16
+
+### Added
+- Added `ReleaseChecklist.md` as the first maintenance-memory artifact.
+- Added README notes for weather icon generation and release checklist usage.
+- Added source/runtime/archive asset policy to the asset optimization plan.
+- Added `VersionUpgradePlan.md` for V1.3 through V2.0 planning.
+
+### Changed
+- Updated the Product guide next phase to V1.3 Maintenance Memory.
+- Cleaned up mechanical Banana lint warnings without changing the image comparison interaction.
+
+### Technical
+- `npm run lint` now completes without warnings.
+
 ## [v1.2.9] - 2026-06-04
 
 ### Added

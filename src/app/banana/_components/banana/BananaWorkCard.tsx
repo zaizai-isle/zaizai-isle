@@ -160,6 +160,7 @@ export function BananaWorkCard({ work, onLikeUpdate }: BananaWorkCardProps) {
         >
           <div className="relative w-full aspect-square overflow-hidden rounded-[10px]">
             {/* 香蕉化后的图片（底层） */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={work.banana_image_url}
               alt="香蕉化作品"
@@ -172,6 +173,7 @@ export function BananaWorkCard({ work, onLikeUpdate }: BananaWorkCardProps) {
               className="absolute inset-0 overflow-hidden"
               style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={work.original_image_url}
                 alt="原始图片"
@@ -268,6 +270,7 @@ export function BananaWorkCard({ work, onLikeUpdate }: BananaWorkCardProps) {
           >
             <div className="relative">
               {/* 香蕉化后的图片（底层） */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={work.banana_image_url}
                 alt="香蕉化作品"
@@ -280,6 +283,7 @@ export function BananaWorkCard({ work, onLikeUpdate }: BananaWorkCardProps) {
                 className="absolute inset-0 overflow-hidden"
                 style={{ clipPath: `inset(0 ${100 - fullscreenSliderPosition}% 0 0)` }}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={work.original_image_url}
                   alt="原始图片"

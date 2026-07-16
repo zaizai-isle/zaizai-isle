@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { ImageUploader } from './_components/banana/ImageUploader';
 import { ShareDialog } from './_components/banana/ShareDialog';
 import { Button } from './_components/ui/button';
@@ -20,16 +21,14 @@ import { generateSafeFileName } from '@/lib/utils/imageCompression';
 
 export default function BananaHomePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string>('');
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressText, setProgressText] = useState('');
   const [bananaImageUrl, setBananaImageUrl] = useState<string>('');
   const [analysisReport, setAnalysisReport] = useState<string>('');
 
-  const handleImageSelected = (file: File, previewUrl: string) => {
+  const handleImageSelected = (file: File) => {
     setSelectedFile(file);
-    setPreview(previewUrl);
     setBananaImageUrl('');
     setAnalysisReport('');
   };
@@ -180,7 +179,14 @@ export default function BananaHomePage() {
               {bananaImageUrl && (
                 <div className="space-y-4">
                   <div className="rounded-lg overflow-hidden border border-border">
-                    <img src={bananaImageUrl} alt="香蕉化结果" className="w-full h-auto" />
+                    <Image
+                      src={bananaImageUrl}
+                      alt="香蕉化结果"
+                      width={1024}
+                      height={1024}
+                      unoptimized
+                      className="w-full h-auto"
+                    />
                   </div>
 
                   {analysisReport && (

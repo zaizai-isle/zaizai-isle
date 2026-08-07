@@ -1,0 +1,474 @@
+import { DEFAULT_SETTINGS, renderAchievementCanvas, type FilterId } from "./canvas-renderer";
+import type { LifeAchievement } from "./achievements";
+import type { PhotoTextureId, StampDraft, StampStyleId } from "./passport-model";
+
+export const PASSPORT_FORMAT = { width: 1080, height: 1920 } as const;
+
+const POSTER_COLORS = {
+  fog: "#ffffff",
+  charcoal: "#171717",
+  forest: "#303030",
+  moss: "#595959",
+  light: "#d9d9d6",
+  muted: "#707070",
+} as const;
+
+const HANDWRITING_FONT = '"Ma Shan Zheng", "STXingkai", "Xingkai SC", "Kaiti SC", cursive';
+
+function coverImage(
+  ctx: CanvasRenderingContext2D,
+  image: CanvasImageSource,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const sourceWidth = image instanceof HTMLImageElement ? image.naturalWidth : (image as HTMLCanvasElement).width;
+  const sourceHeight = image instanceof HTMLImageElement ? image.naturalHeight : (image as HTMLCanvasElement).height;
+  const scale = Math.max(width / sourceWidth, height / sourceHeight);
+  const drawWidth = sourceWidth * scale;
+  const drawHeight = sourceHeight * scale;
+  ctx.drawImage(image, x + (width - drawWidth) / 2, y + (height - drawHeight) / 2, drawWidth, drawHeight);
+}
+
+function drawPaperBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  ctx.fillStyle = POSTER_COLORS.fog;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = "rgba(32,32,32,.026)";
+  for (let index = 0; index < 170; index += 1) {
+    const x = (index * 193) % width;
+    const y = (index * 431) % height;
+    const size = index % 9 === 0 ? 3 : 1;
+    ctx.fillRect(x, y, size, size);
+  }
+}
+
+function applyTexture(
+  ctx: CanvasRenderingContext2D,
+  image: CanvasImageSource,
+  texture: PhotoTextureId,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const filters: Record<Exclude<PhotoTextureId, "experimental">, string> = {
+    original: "none",
+    fade: "saturate(.68) contrast(.88) brightness(1.08) sepia(.18)",
+    film: "saturate(.82) contrast(.96) brightness(1.02) sepia(.28)",
+    photocopy: "grayscale(1) contrast(1.7) brightness(1.08)",
+  };
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, width, height);
+  ctx.clip();
+  ctx.filter = filters[texture as Exclude<PhotoTextureId, "experimental">] ?? "none";
+  coverImage(ctx, image, x, y, width, height);
+  ctx.restore();
+
+  if (texture === "fade" || texture === "film") {
+    ctx.fillStyle = texture === "film" ? "rgba(92,49,23,.13)" : "rgba(238,224,190,.2)";
+    ctx.fillRect(x, y, width, height);
+  }
+}
+
+function formatStampDate(value: string) {
+  const [year = "----", month = "--", day = "--"] = value.split("-");
+  return { year, month, day, compact: `${year}.${month}.${day}` };
+}
+
+function drawTextAlongArc(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  radius: number,
+  centerAngle: number,
+  maxArc: number,
+) {
+  const characters = Array.from(text);
+  const letterSpacing = 1.5;
+  let fontSize = 28;
+  let characterWidths: number[] = [];
+
+  while (fontSize >= 22) {
+    ctx.font = `700 ${fontSize}px "Noto Serif SC", serif`;
+    characterWidths = characters.map((character) => ctx.measureText(character).width);
+    const textWidth = characterWidths.reduce((total, width) => total + width, 0) + letterSpacing * (characters.length - 1);
+    if (textWidth / radius <= maxArc) break;
+    fontSize -= 1;
+  }
+
+  const advances = characterWidths.map((width, index) => width + (index < characters.length - 1 ? letterSpacing : 0));
+  const rawTotalAngle = advances.reduce((total, width) => total + width, 0) / radius;
+  const angleScale = Math.min(1, maxArc / rawTotalAngle);
+  const totalAngle = rawTotalAngle * angleScale;
+  let angle = centerAngle - totalAngle / 2;
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  characters.forEach((character, index) => {
+    const characterAngle = (advances[index] / radius) * angleScale;
+    angle += characterAngle / 2;
+    ctx.save();
+    ctx.translate(Math.cos(angle) * radius, Math.sin(angle) * radius);
+    ctx.rotate(angle + Math.PI / 2);
+    ctx.fillText(character, 0, 0);
+    ctx.restore();
+    angle += characterAngle / 2;
+  });
+}
+
+function drawClassicStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: number, y: number) {
+  const ink = POSTER_COLORS.moss;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(-0.065);
+  ctx.strokeStyle = ink;
+  ctx.fillStyle = ink;
+  ctx.globalAlpha = 0.9;
+  ctx.lineWidth = 13;
+  ctx.beginPath();
+  ctx.arc(0, 0, 164, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(0, 0, 143, 0, Math.PI * 2);
+  ctx.stroke();
+  drawTextAlongArc(ctx, "人生旅程 · 已抵达", 112, -Math.PI / 2, Math.PI * 0.72);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.font = '700 82px "Noto Serif SC", serif';
+  ctx.fillText(draft.icon, 0, 25);
+  ctx.font = "700 27px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, 0, 94);
+  ctx.restore();
+}
+
+function drawDateStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: number, y: number) {
+  const date = formatStampDate(draft.date);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(0.035);
+  ctx.strokeStyle = POSTER_COLORS.forest;
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.globalAlpha = 0.92;
+  ctx.lineWidth = 11;
+  ctx.strokeRect(-190, -132, 380, 264);
+  ctx.lineWidth = 3;
+  ctx.strokeRect(-171, -113, 342, 226);
+  ctx.textAlign = "center";
+  ctx.font = "700 28px ui-monospace, monospace";
+  ctx.fillText("ARRIVAL RECORD", 0, -66);
+  ctx.font = "700 76px ui-monospace, monospace";
+  ctx.fillText(`${date.month}.${date.day}`, 0, 18);
+  ctx.font = "700 32px ui-monospace, monospace";
+  ctx.fillText(`${date.year}  /  ${draft.icon}`, 0, 80);
+  ctx.restore();
+}
+
+function drawJournalStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: number, y: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(-0.095);
+  ctx.strokeStyle = POSTER_COLORS.moss;
+  ctx.fillStyle = POSTER_COLORS.moss;
+  ctx.globalAlpha = 0.9;
+  ctx.lineWidth = 10;
+  ctx.beginPath();
+  ctx.moveTo(-184, -112);
+  ctx.lineTo(134, -134);
+  ctx.lineTo(190, -26);
+  ctx.lineTo(124, 132);
+  ctx.lineTo(-168, 108);
+  ctx.closePath();
+  ctx.stroke();
+  ctx.textAlign = "center";
+  ctx.font = "700 30px sans-serif";
+  ctx.fillText("这 一 程 已 留 下", 0, -48);
+  ctx.font = "700 86px serif";
+  ctx.fillText(draft.icon, 0, 42);
+  ctx.font = "700 25px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, 0, 91);
+  ctx.restore();
+}
+
+function drawStamp(
+  ctx: CanvasRenderingContext2D,
+  style: StampStyleId,
+  draft: StampDraft,
+  x: number,
+  y: number,
+  scale = 1,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  if (style === "date") {
+    drawDateStamp(ctx, draft, 0, 0);
+    ctx.restore();
+    return;
+  }
+  if (style === "journal") {
+    drawJournalStamp(ctx, draft, 0, 0);
+    ctx.restore();
+    return;
+  }
+  drawClassicStamp(ctx, draft, 0, 0);
+  ctx.restore();
+}
+
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
+  const lines: string[] = [];
+  let current = "";
+  for (const character of text) {
+    if (ctx.measureText(current + character).width > maxWidth && current) {
+      lines.push(current);
+      current = character;
+    } else {
+      current += character;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function fitWrappedText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+  maxLines: number,
+  startSize: number,
+  minSize: number,
+  fontFamily: string,
+  weight = 700,
+) {
+  let fontSize = startSize;
+  let lines: string[] = [];
+  while (fontSize >= minSize) {
+    ctx.font = `${weight} ${fontSize}px ${fontFamily}`;
+    lines = wrapText(ctx, text, maxWidth);
+    if (lines.length <= maxLines) break;
+    fontSize -= 2;
+  }
+  return { fontSize, lines: lines.slice(0, maxLines) };
+}
+
+function drawRule(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+  ctx.strokeStyle = "rgba(40,40,40,.28)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+}
+
+function drawPosterHeader(ctx: CanvasRenderingContext2D, draft: StampDraft, width: number, margin: number) {
+  ctx.textBaseline = "alphabetic";
+  ctx.textAlign = "left";
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = "700 20px ui-monospace, monospace";
+  ctx.fillText("LIFE PASSPORT  /  ARRIVAL", margin, 82);
+  ctx.textAlign = "right";
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "18px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, width - margin, 82);
+  drawRule(ctx, margin, 112, width - margin, 112);
+}
+
+function drawPosterFooter(ctx: CanvasRenderingContext2D, width: number, height: number, margin: number) {
+  drawRule(ctx, margin, height - 65, width - margin, height - 65);
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "15px ui-monospace, monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("ZAIZAI ISLE  /  ARRIVAL RECORD", margin, height - 30);
+  ctx.textAlign = "right";
+  ctx.fillText("NO. 0001", width - margin, height - 30);
+}
+
+function drawPhotoFrame(
+  ctx: CanvasRenderingContext2D,
+  image: CanvasImageSource,
+  draft: StampDraft,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  applyTexture(ctx, image, draft.texture, x, y, width, height);
+  ctx.strokeStyle = "rgba(40,40,40,.48)";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x, y, width, height);
+}
+
+function drawPostmarkCancellation(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(-0.065);
+  ctx.strokeStyle = POSTER_COLORS.moss;
+  ctx.globalAlpha = 0.7;
+  ctx.lineWidth = 4;
+  [-28, 0, 28].forEach((offset) => {
+    ctx.beginPath();
+    ctx.moveTo(-210, offset);
+    ctx.bezierCurveTo(-172, offset - 14, -138, offset + 14, -100, offset);
+    ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function drawPortraitPhotoPoster(ctx: CanvasRenderingContext2D, image: CanvasImageSource, draft: StampDraft) {
+  const width = 1080;
+  const height = 1920;
+  const margin = 64;
+  const photoWidth = 1008;
+  const photoHeight = 1344;
+  const photoX = (1080 - photoWidth) / 2;
+  const photoY = 132;
+  const photoBottom = photoY + photoHeight;
+  drawPosterHeader(ctx, draft, width, margin);
+  drawPhotoFrame(ctx, image, draft, photoX, photoY, photoWidth, photoHeight);
+
+  ctx.textAlign = "left";
+  ctx.fillStyle = POSTER_COLORS.moss;
+  ctx.font = "700 19px ui-monospace, monospace";
+  ctx.fillText(draft.category, margin, 1542);
+
+  ctx.textAlign = "left";
+  ctx.fillStyle = POSTER_COLORS.charcoal;
+  const title = fitWrappedText(ctx, draft.title || "一次值得记住的抵达", 860, 2, 52, 44, '"Noto Serif SC", serif');
+  ctx.font = `500 ${title.fontSize}px ${HANDWRITING_FONT}`;
+  title.lines.forEach((line, index) => ctx.fillText(line, margin, 1588 + index * (title.fontSize + 8)));
+
+  const noteY = 1588 + title.lines.length * (title.fontSize + 8) + 24;
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = `26px ${HANDWRITING_FONT}`;
+  const note = draft.note || draft.description || "不是所有抵达，都需要掌声。";
+  wrapText(ctx, `“${note}”`, 860).slice(0, 2).forEach((line, index) => ctx.fillText(line, margin, noteY + index * 38));
+
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "16px ui-monospace, monospace";
+  ctx.fillText("ARRIVAL DATE", margin, 1800);
+  ctx.textAlign = "right";
+  ctx.fillText("LOCATION", width - margin, 1800);
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = "700 21px ui-monospace, monospace";
+  ctx.textAlign = "left";
+  ctx.fillText(formatStampDate(draft.date).compact, margin, 1832);
+  ctx.textAlign = "right";
+  ctx.font = "700 21px serif";
+  ctx.fillText(draft.location || "未标记地点", width - margin, 1832);
+
+  const stampX = 930;
+  ctx.fillStyle = POSTER_COLORS.light;
+  ctx.globalAlpha = 0.82;
+  ctx.beginPath();
+  ctx.arc(stampX - 12, photoBottom - 12, 72, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  if (draft.style === "classic") drawPostmarkCancellation(ctx, stampX, photoBottom);
+  drawStamp(ctx, draft.style, draft, stampX, photoBottom, draft.style === "classic" ? 0.62 : 0.55);
+  drawPosterFooter(ctx, width, height, margin);
+}
+
+function drawPortraitTextArchive(ctx: CanvasRenderingContext2D, draft: StampDraft) {
+  const height = 1920;
+  const margin = 68;
+  drawPosterHeader(ctx, draft, 1080, margin);
+  drawRule(ctx, margin, 168, 1012, 168);
+  drawRule(ctx, margin, 360, 1012, 360);
+
+  ctx.textAlign = "left";
+  ctx.fillStyle = POSTER_COLORS.light;
+  ctx.font = '700 108px "Noto Serif SC", serif';
+  ctx.fillText("01", margin, 310);
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "18px ui-monospace, monospace";
+  ctx.fillText("PERSONAL JOURNEY ARCHIVE", 240, 232);
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = `500 25px ${HANDWRITING_FONT}`;
+  ctx.fillText("一次只属于你的抵达", 240, 276);
+
+  ctx.fillStyle = POSTER_COLORS.moss;
+  ctx.font = "700 19px ui-monospace, monospace";
+  ctx.fillText(draft.category, margin, 492);
+  ctx.fillStyle = POSTER_COLORS.charcoal;
+  const title = fitWrappedText(ctx, draft.title || "一次值得记住的抵达", 820, 2, 76, 56, '"Noto Serif SC", serif');
+  ctx.font = `500 ${title.fontSize}px ${HANDWRITING_FONT}`;
+  title.lines.forEach((line, index) => ctx.fillText(line, margin, 616 + index * (title.fontSize + 14)));
+
+  const mottoY = 616 + title.lines.length * (title.fontSize + 14) + 48;
+  ctx.font = `32px ${HANDWRITING_FONT}`;
+  const mottoLines = wrapText(ctx, `“${draft.note || "地图可以自己画"}”`, 760).slice(0, 2);
+  ctx.strokeStyle = POSTER_COLORS.light;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(margin, mottoY - 32);
+  ctx.lineTo(margin, mottoY + (mottoLines.length - 1) * 42 + 18);
+  ctx.stroke();
+  ctx.fillStyle = POSTER_COLORS.forest;
+  mottoLines.forEach((line, index) => ctx.fillText(line, margin + 24, mottoY + index * 42));
+
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "28px serif";
+  const description = draft.description || "那些没有被掌声确认的决定，也构成了真正属于你的路。";
+  const descriptionY = mottoY + 86 + (mottoLines.length - 1) * 42;
+  wrapText(ctx, description, 760).slice(0, 4).forEach((line, index) => ctx.fillText(line, margin, descriptionY + index * 42));
+
+  drawRule(ctx, margin, 1450, 1012, 1450);
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "16px ui-monospace, monospace";
+  ctx.fillText("抵达日期", margin, 1500);
+  ctx.fillText("抵达地点", 330, 1500);
+  ctx.fillText("记录状态", 592, 1500);
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = "700 22px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, margin, 1540);
+  ctx.font = "700 22px serif";
+  wrapText(ctx, draft.location || "未标记地点", 220).slice(0, 2).forEach((line, index) => ctx.fillText(line, 330, 1540 + index * 27));
+  ctx.fillText("已盖章", 592, 1540);
+
+  drawStamp(ctx, draft.style, draft, 840, 1670, draft.style === "classic" ? 0.65 : 0.57);
+  drawPosterFooter(ctx, 1080, height, margin);
+}
+
+export function renderPassportCanvas(
+  canvas: HTMLCanvasElement,
+  image: HTMLImageElement | HTMLCanvasElement | null,
+  draft: StampDraft,
+) {
+  let posterImage = image;
+  if (image && draft.texture === "experimental") {
+    const achievement: LifeAchievement = {
+      id: draft.achievementId ?? "custom-arrival",
+      category: draft.category,
+      icon: draft.icon,
+      title: draft.title || "一次值得记住的抵达",
+      motto: draft.note || "这一程已经被记录",
+      description: draft.description || "不是所有抵达，都需要掌声。",
+      rate: formatStampDate(draft.date).compact,
+      rarity: "传说",
+    };
+    const filteredImage = document.createElement("canvas");
+    renderAchievementCanvas(filteredImage, image, achievement, {
+      ...DEFAULT_SETTINGS,
+      filter: draft.experimentalFilter as FilterId,
+      includeCard: false,
+      showRate: false,
+      showRarity: false,
+    });
+    posterImage = filteredImage;
+  }
+
+  const { width, height } = PASSPORT_FORMAT;
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  drawPaperBackground(ctx, width, height);
+  if (posterImage) {
+    drawPortraitPhotoPoster(ctx, posterImage, draft);
+    return;
+  }
+  drawPortraitTextArchive(ctx, draft);
+}

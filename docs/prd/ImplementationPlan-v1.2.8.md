@@ -1,5 +1,11 @@
 # Implementation Plan - Zaizai Isle Performance Optimization (V1.2.8)
 
+> Status: Historical implementation plan
+>
+> Superseded by: V1.3 maintenance memory and the active V1.4.0 execution PRD
+>
+> Note: Checklist state below is preserved as an implementation-time snapshot, not as current release work.
+
 Based on the **Vercel React Best Practices** skill audit, this plan outlines the steps to optimize the "Zaizai Isle" project for better bundle size, rendering performance, and overall smoothness.
 
 ## 1. Grid & Page Level Optimization (Bundle & Critical Rendering)

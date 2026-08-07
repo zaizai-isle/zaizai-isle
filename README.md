@@ -12,6 +12,8 @@
 
 [✨ Visit the Isle / 访问小岛](https://zaizai-isle.github.io/zaizai-isle/)
 
+[📚 Documentation / 文档库](https://zaizai-isle.github.io/zaizai-isle/docs/) · [Document Map / 文档地图](https://zaizai-isle.github.io/zaizai-isle/docs/PRD_REGISTRY/)
+
 ## About · 关于
 
 **Zaizai Isle** 是一个以 *Vibe Coding* 方式构建的轻量级个人网站与实验空间。

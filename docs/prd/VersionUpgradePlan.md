@@ -1,8 +1,8 @@
 # Zaizai Isle Version Upgrade Plan
 
-> Status: Active plan after V1.3.0
-> Last Updated: 2026-06-05
-> Purpose: Define how Zaizai Isle should grow after V1.2.9 without drifting into a feature list, portfolio page, or heavy system.
+> Status: Active plan after V1.4.0
+> Last Updated: 2026-08-07
+> Purpose: Define how Zaizai Isle should grow without drifting into a feature list, portfolio page, or heavy system.
 
 ---
 
@@ -89,11 +89,10 @@ Strong foundations:
 
 Open maintenance issues:
 
-- `scripts/process-icons.ts` is now static-output aligned, but the asset-generation workflow is not yet documented in README.
 - Original raster assets still live beside optimized runtime assets.
-- Banana pages still have lint warnings for raw `<img>` usage and one unused state.
 - Build depends on Supabase environment variables.
 - Core Build is still manually updated through config and translation keys.
+- Built Structures, Life Passport, and Isle Daily need release-by-release status discipline to avoid registry drift.
 
 ---
 
@@ -145,16 +144,21 @@ Success criteria:
 
 ### V1.4: Built Structures Refinement
 
+Status: Completed in V1.4.0 (2026-08-07)
+
 Goal:
 
 - Clarify how side experiments such as Banana relate to the island.
 
 Scope:
 
-- Reframe Works as "built structures" more consistently.
-- Improve how Banana is linked, previewed, and described from the home island.
-- Add lightweight status metadata for built structures: stable, experimental, archived.
-- Consider moving project metadata into a small config file instead of hardcoding it in the card.
+- Reframe Works as "built structures" more consistently. (Done)
+- Improve how Banana is linked, previewed, and described from the home island. (Done)
+- Add lightweight status metadata for built structures: stable, experimental, archived. (Done)
+- Move project metadata into a small config file instead of hardcoding it in the card. (Done)
+- Add filtering only after the registry grows beyond six active structures.
+- Register Life Passport as an experimental island structure. (Done)
+- Add Isle Daily as a quiet living-state surface without feed mechanics. (Done)
 
 Non-goals:
 
@@ -218,22 +222,24 @@ Non-goals:
 
 ## 6. Recommended Next Step
 
-V1.3.0 has completed the first maintenance-memory slice:
+V1.4.0 has completed the first Built Structures slice:
 
-- `docs/prd/ReleaseChecklist.md`
-- README asset-generation notes
-- Banana mechanical lint cleanup
-- source/runtime/archive asset policy
+- config-driven structure metadata and stable / experimental / archived states
+- clearer internal and external link behavior
+- Banana ownership and return path
+- Life Passport as an experimental structure
+- Isle Daily as a quiet living-state surface
+- current documentation map and Node 25 GitHub Pages alignment
 
 The next concrete version should be:
 
-**V1.4.0: Built Structures Refinement**
+**V1.5.0: Living State**
 
 First planning slice:
 
-1. Inventory Works and Banana as built structures.
-2. Define stable / experimental / archived structure statuses.
-3. Move Works project metadata into a small config if it reduces duplication.
-4. Adjust only first-perception copy if the home island still reads too much like a portfolio.
+1. Audit Core Build status against the real structure registry.
+2. Decide whether a single “current forming area” can replace manually repeated status copy.
+3. Keep Life Passport and Isle Daily internal versions independent from the site version.
+4. Avoid new homepage cards; refine existing surfaces first.
 
-This keeps the island growing through clearer structure, not through louder presentation.
+This keeps the island alive through accurate state, not through more visible activity.

@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+No changes recorded yet.
+
+## [v1.4.0] - 2026-08-07
+
+### Added
+- Added a config-driven Built Structures registry with stable, experimental, and archived states.
+- Added structure type, status, and bilingual descriptions to Works previews.
+- Added a Zaizai Isle ownership strip to Banana with a direct return path to the home island.
+- Added Life Passport `v0.1.10` as an experimental island structure with a four-step stamp and keepsake export flow.
+- Added Isle Daily `v0.1` with date browsing, bilingual notes, lunar and solar-term context, and four seasonal themes.
+- Added a maintained documentation map and an Isle Daily product specification.
+
+### Changed
+- Internal structures now open in the current tab while external structures use a new tab.
+- Adjusted the Banana header so its navigation remains readable on mobile screens.
+- Repaired Core Build visual regression startup and theme readiness checks.
+- Updated the product guide, active PRD, version roadmap, release checklist, and module roadmaps for the V1.4.0 baseline.
+- Updated the GitHub Pages deployment workflow from Node 20 to Node 25 to match the project environment.
+
+### Technical
+- Updated package metadata to `1.4.0`.
+- Preserved Next.js static export to `out` and automatic GitHub Pages deployment on pushes to `main`.
+
 ## [v1.3.0] - 2026-07-16
 
 ### Added

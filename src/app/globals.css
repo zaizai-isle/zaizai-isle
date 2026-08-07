@@ -211,3 +211,261 @@ body {
   background-color: var(--background);
   color: var(--foreground);
 }
+
+/* Standalone built structures own their editing chrome. */
+.achievement-theme ~ .fixed.bottom-6.right-6 {
+  display: none;
+}
+
+.achievement-theme :is(a, button, input, textarea):focus-visible {
+  outline: 2px solid #526b45;
+  outline-offset: 3px;
+}
+
+.achievement-theme button {
+  touch-action: manipulation;
+}
+
+/* Material-backed journal surfaces; keep image layers after color washes. */
+.achievement-paper {
+  background-color: #ede9dd;
+  background-image:
+    linear-gradient(rgba(237, 233, 220, 0.58), rgba(237, 233, 220, 0.58)),
+    radial-gradient(circle at 72% 13%, rgba(255, 253, 246, 0.34), transparent 38%),
+    url("../assets/achievement/paper-fiber.webp");
+  background-position: center, center, center top;
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 1024px 600px;
+}
+
+.achievement-handwriting {
+  font-family: "Ma Shan Zheng", "STXingkai", "Xingkai SC", "Kaiti SC", cursive;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+}
+
+.journal-writing {
+  isolation: isolate;
+  overflow: visible;
+  background-color: rgba(247, 243, 232, 0.58);
+  background-image:
+    linear-gradient(rgba(246, 242, 230, 0.42), rgba(246, 242, 230, 0.42)),
+    url("../assets/achievement/paper-fiber.webp");
+  background-position: center, center;
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 720px 422px;
+}
+
+.journal-writing::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.38;
+  background-image:
+    url("../assets/achievement/line.svg"),
+    url("../assets/achievement/line.svg"),
+    url("../assets/achievement/line.svg");
+  background-position: center 33%, center 66%, center calc(100% - 1px);
+  background-repeat: no-repeat;
+  background-size: 100% 3px;
+}
+
+.journal-writing > textarea {
+  position: relative;
+  z-index: 1;
+}
+
+.journal-writing::after {
+  position: absolute;
+  bottom: 3px;
+  left: 1rem;
+  width: min(34%, 15rem);
+  height: 4px;
+  content: "";
+  background: #e2d849;
+  -webkit-mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
+  transform: rotate(-0.6deg);
+}
+
+/* User-provided paper and tape silhouettes. */
+.journal-tape,
+.journal-mini-tape {
+  display: block;
+  background-color: transparent;
+  background-image: url("../assets/achievement/bg-stick.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: sepia(0.2) saturate(0.72);
+  transform: rotate(8deg);
+}
+
+.journal-tape::after,
+.journal-mini-tape::after {
+  display: none;
+}
+
+.journal-tape {
+  width: 6.2rem;
+  height: 1.76rem;
+}
+
+.journal-mini-tape {
+  width: 3.4rem;
+  height: 0.97rem;
+  opacity: 0.8;
+}
+
+.journal-pencil-line {
+  background: rgba(82, 88, 82, 0.48);
+  height: 3px !important;
+  -webkit-mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
+  transform: rotate(-0.5deg);
+}
+
+.journal-topic::after {
+  position: absolute;
+  right: 0.25rem;
+  bottom: 0;
+  left: 0.25rem;
+  height: 3px;
+  content: "";
+  background: rgba(82, 88, 82, 0.24);
+  -webkit-mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
+  transform: rotate(-0.35deg);
+}
+
+.journal-topic-selected::before {
+  position: absolute;
+  inset: 4% 2%;
+  content: "";
+  background: url("../assets/achievement/bg-select.svg") center / 100% 100% no-repeat;
+  opacity: 0.78;
+  mix-blend-mode: multiply;
+  transform: rotate(-0.8deg);
+}
+
+.arrival-topic-selected::before {
+  display: none;
+}
+
+.arrival-topic-label-selected {
+  margin-right: -0.6rem;
+  margin-left: -0.45rem;
+  padding: 0.15rem 0.6rem 0.12rem 0.45rem;
+  background: url("../assets/achievement/bg-select.svg") center / 100% 100% no-repeat;
+}
+
+.journal-slip-wrap {
+  padding-top: 0.45rem;
+  filter: drop-shadow(0 7px 8px rgba(45, 42, 34, 0.12));
+}
+
+.journal-paper-slip {
+  background-color: rgba(245, 241, 229, 0.96);
+  background-image:
+    linear-gradient(rgba(245, 240, 226, 0.5), rgba(245, 240, 226, 0.5)),
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.34), transparent 34%),
+    url("../assets/achievement/paper-fiber.webp");
+  background-position: center, center, center;
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 640px 375px;
+  box-shadow: none;
+  -webkit-mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
+}
+
+.journal-paper-selected {
+  background-color: rgba(247, 243, 231, 0.98);
+}
+
+.journal-paper-selected::after {
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 0.65rem;
+  width: 4px;
+  content: "";
+  background: #d8c600;
+  border-radius: 999px 55% 999px 45%;
+  transform: rotate(1.5deg);
+}
+
+.achievement-choice:nth-child(2n) {
+  rotate: 0.35deg;
+}
+
+.achievement-choice:nth-child(3n) {
+  rotate: -0.45deg;
+}
+
+.achievement-choice:nth-child(2n) .journal-mini-tape {
+  right: 1rem;
+  left: auto;
+  transform: rotate(7deg);
+}
+
+.achievement-choice:nth-child(3n) .journal-mini-tape {
+  left: 42%;
+  transform: rotate(-6deg);
+}
+
+.journal-note-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.journal-note-underline::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.2rem;
+  left: 0;
+  height: 3px;
+  content: "";
+  pointer-events: none;
+  background: #e2d849;
+  -webkit-mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
+  transform: rotate(-0.7deg);
+}
+
+.journal-ink-button {
+  min-width: 9.75rem;
+  min-height: 3.25rem;
+  background-color: transparent;
+  background-image: url("../assets/achievement/bg-button.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  clip-path: none;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.journal-ink-button:hover:not(:disabled) {
+  background-color: transparent;
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.journal-ink-button:disabled {
+  background-color: transparent;
+  filter: grayscale(0.45) opacity(0.58);
+}
+
+.achievement-hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.achievement-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Daily note owns its reading controls and keeps the page free of floating UI. */
+.daily-theme ~ .fixed.bottom-6.right-6 {
+  display: none;
+}

@@ -1,4 +1,4 @@
-# 🏝️ Zaizai Isle (V1.3.0)
+# 🏝️ Zaizai Isle (V1.4.0)
 
  > 一个可长期维护、可继续生长、可承载个人变化的数字小岛
  > *A digital isle that grows, survives, and reflects personal evolution.*
@@ -36,6 +36,8 @@
 *   **Node Traces**（节点追踪 / 数据统计）
 *   **Social Heart**   （社交组件 / 联络互动）
 *   **Built Structures**（已建成结构 / 作品展示）
+*   **Life Passport**（人生护照 / 抵达记录实验）
+*   **Isle Daily**（小岛日签 / 时间切片）
 *   **Tools Dashboard**（工具面板 / AI 能力外显）
 *   **Isle Deposits**（岛屿沉积 / 时间留痕）
 *   **Core Build**（构建面板 / 实时生长进度）
@@ -71,10 +73,23 @@
 *   常用 AI 工作流入口聚合。
 *   内置高性能前端工具（如图片压缩），体现“工具即性格”。
 
-### 📂 Works Card｜已建成结构
-**定位**：减少展示，强调构建质量。
-*   精选项目以“结构”而非“截图”为核心。
-*   悬停预览与沉浸式模态框，提供无干扰的阅读体验。
+### 📂 Built Structures｜已建成结构
+**定位**：减少展示，强调构建关系与当前状态。
+*   由统一注册表维护结构类型、稳定状态、链接方式与更新时间。
+*   岛内结构保持当前页面关系，外部结构明确跳转边界。
+*   当前仅展示精选结构；活跃结构超过 6 个前不增加筛选与项目索引页。
+
+### 🪪 Life Passport｜人生护照
+**定位**：为一次真实的人生抵达盖下印章。
+*   当前内部版本为 `Passport v0.1.10`，支持四步盖章与纪念卡导出。
+*   照片可选，支持多种印章与照片质感。
+*   当前不保存历史记录，不承诺登录、同步或云端存储。
+
+### 📖 Isle Daily｜小岛日签
+**定位**：在时间里留下一页，不制造连续使用压力。
+*   首页呈现当日日签，独立页面支持按日期翻阅。
+*   中英文内容、农历/节气与四季主题共同形成时间感。
+*   不引入签到、提醒、推荐流与社交指标。
 
 ### 📝 Archive｜岛屿沉积
 **定位**：时间流逝的痕迹，而非社交动态。
@@ -89,17 +104,19 @@
 
 ## 5. 技术架构：精密工程
 
-在 V1.2.6 中，我们引入了 Vercel 等顶级工程实践：
+当前工程底座以静态、可复现和低维护为目标：
 *   **动态渲染拓扑**：利用 `next/dynamic` 实现模块级异步加载，首屏 JS 负载最小化。
 *   **渲染帧率优化**：采用 `React.memo` 对装饰性高频组件（云朵、动画）进行物理隔离。
 *   **12 列栅格系统**：提供更高精细度的布局控制力。
 *   **全量 i18n 集成**：所有状态逻辑均已托管，实现语境级适配。
+*   **静态发布链路**：Next.js 导出 `out`，推送 `main` 后由 Node 25 GitHub Action 自动发布到 GitHub Pages。
 
 ---
 
 ## 6. 生长足迹 (Growth Milestones)
 
-*   **V1.3.0 (Active)**: 维护记忆成型，新增发布检查、资产生成说明与版本升级规划，清理低风险 Banana lint 噪音。
+*   **V1.4.0 (Active)**: Built Structures 注册表成型；新增人生护照与小岛日签两个实验结构；校准 Banana 归属关系、移动导航、文档索引与 GitHub Pages Node 25 发布链路。
+*   **V1.3.0**: 维护记忆成型，新增发布检查、资产生成说明与版本升级规划，清理低风险 Banana lint 噪音。
 *   **V1.2.9**: 资产静默减重，推进 WebP 迁移与天气图标静态加载；归档旧版内联天气图标 Map，图标生成链路转为静态 SVG 输出。
 *   **V1.2.8**: 性能精密校准与 12 列栅格重构。
 *   **V1.2.0 (Heritage)**: [Experience 气质成型版存档](/zaizai-isle/docs/history/PRODUCT_V1.2.0_Original) (2026-01-21)
@@ -108,8 +125,8 @@
 ---
 
 **Document Status**
-*   **Current Version**: V1.3.0 (Maintenance Memory)
-*   **Last Updated**: 2026-07-16
+*   **Current Version**: V1.4.0 (Built Structures & Living Moments)
+*   **Last Updated**: 2026-08-07
 *   **Author**: Isle System
 
 ---

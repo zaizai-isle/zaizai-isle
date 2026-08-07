@@ -10,12 +10,13 @@ const SocialCard = dynamic(() => import("@/components/bento/SocialCard").then(mo
 const WorksCard = dynamic(() => import("@/components/bento/WorksCard").then(mod => mod.WorksCard), { ssr: false });
 const AIHubCard = dynamic(() => import("@/components/bento/AIHubCard").then(mod => mod.AIHubCard), { ssr: false });
 const CompressorCard = dynamic(() => import("@/components/bento/CompressorCard").then(mod => mod.CompressorCard), { ssr: false });
+const PassportCard = dynamic(() => import("@/components/bento/PassportCard").then(mod => mod.PassportCard), { ssr: false });
 const ActivityCard = dynamic(() => import("@/components/bento/ActivityCard").then(mod => mod.ActivityCard), { ssr: false });
 const TechStackCard = dynamic(() => import("@/components/bento/TechStackCard").then(mod => mod.TechStackCard), { ssr: false });
+const DailyNoteCard = dynamic(() => import("@/components/bento/DailyNoteCard").then(mod => mod.DailyNoteCard), { ssr: false });
 import { SharePoster } from "@/components/SharePoster";
 
 import { CoreBuildCard } from "@/components/bento/CoreBuildCard";
-import { EnvironmentNotes } from "@/components/bento/EnvironmentNotes";
 import { SystemBoundary } from "@/components/bento/SystemBoundary";
 import { SystemStatus } from "@/components/SystemStatus";
 import { cn } from "@/lib/utils";
@@ -51,6 +52,7 @@ export default function Home() {
           <div className={gridClass}>
             <TechStackCard />
             <WorksCard />
+            <PassportCard />
             <CompressorCard />
             <AIHubCard />
           </div>
@@ -60,7 +62,7 @@ export default function Home() {
         <section>
           <div className={gridClass}>
             <GuestbookCard />
-            <EnvironmentNotes />
+            <DailyNoteCard />
             <WeatherCard />
           </div>
         </section>

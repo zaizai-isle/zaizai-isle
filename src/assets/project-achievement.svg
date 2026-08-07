@@ -1,0 +1,24 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="600" fill="#101010"/>
+  <rect x="34" y="34" width="832" height="532" stroke="#E0B33D" stroke-width="3"/>
+  <path d="M34 92H866M92 34V566" stroke="#3A321D"/>
+  <circle cx="699" cy="153" r="104" fill="url(#sun)"/>
+  <path d="M35 377L210 238L354 369L530 198L866 390V565H35V377Z" fill="#202A35"/>
+  <g opacity=".72" fill="#F7E7B0" font-family="monospace" font-size="14">
+    <text x="76" y="125">@ # % + = · : * @ # % + = · : *</text>
+    <text x="115" y="154"># % + = · : * @ # % + = · : *</text>
+    <text x="74" y="183">% + = · : * @ # % + = · : * @</text>
+    <text x="151" y="212">+ = · : * @ # % + = · : *</text>
+    <text x="90" y="241">= · : * @ # % + = · : * @ #</text>
+  </g>
+  <rect x="92" y="332" width="716" height="183" fill="#070707" stroke="#D5A72F" stroke-width="4"/>
+  <rect x="72" y="352" width="756" height="143" stroke="#D5A72F" stroke-width="3"/>
+  <rect x="108" y="365" width="126" height="116" fill="#2A210F" stroke="#9B741C" stroke-width="2"/>
+  <text x="171" y="438" text-anchor="middle" font-size="58">★</text>
+  <text x="264" y="382" fill="#E9DDBF" font-family="monospace" font-size="16">人生成就达成</text>
+  <text x="264" y="427" fill="#FFF9E9" font-family="sans-serif" font-weight="700" font-size="34">把今天认真过完</text>
+  <text x="264" y="460" fill="#ABA495" font-family="sans-serif" font-size="18">这一刻值得被标记，也值得被记住。</text>
+  <path d="M264 476H778" stroke="#86651C" stroke-dasharray="8 8"/>
+  <text x="264" y="500" fill="#ABA495" font-family="monospace" font-size="14">LIFE ACHIEVEMENT / 0.8%</text>
+  <defs><radialGradient id="sun"><stop stop-color="#FFD85B"/><stop offset="1" stop-color="#E88057" stop-opacity="0"/></radialGradient></defs>
+</svg>

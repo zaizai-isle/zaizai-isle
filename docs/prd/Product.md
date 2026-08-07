@@ -4,7 +4,7 @@
 > 再做一点，再想一点，惊喜总在发生
 > *Build more, think more, find the spark.*
 
-> **Status**: V1.3.0 (Maintenance Memory Phase)
+> **Status**: V1.4.0 (Built Structures & Living Moments)
 > **Role**: This is the highest-level "constitution" for Zaizai Isle. It guides philosophy, narrative, and boundaries.
 
 ---
@@ -49,8 +49,10 @@ Isle 不是单一叙事对象，而是三层结构的同时存在。任何新增
 | :--- | :--- | :--- |
 | **1.0** | **Foundation** | 确认岛屿真实存在，跑通技术大动脉。 |
 | **1.1** | **Usability** | 停留友好，中英双语、背景偏好持久化。 |
-| **1.2** | **Experience** | **(当前阶段)** 形成独有气质，环境叙事与性能校准。 |
-| **1.x** | **Growth** | 保持克制地自然生长，不引入重系统。 |
+| **1.2** | **Experience** | 形成独有气质，环境叙事与性能校准。 |
+| **1.3** | **Maintenance Memory** | 建立可复现的发布、资产与文档维护路径。 |
+| **1.4** | **Built Structures** | **（当前阶段）** 澄清岛内外结构关系，容纳克制的生活切片。 |
+| **1.x** | **Growth** | 通过现有表面继续生长，不引入重系统。 |
 | **2.0** | **System Phase** | 当判断力开始被系统消耗时，引入更深的自动化结构。 |
 
 ---
@@ -72,14 +74,15 @@ Isle 不是单一叙事对象，而是三层结构的同时存在。任何新增
 
 ## 5. 维护记录 (Maintenance Log)
 
+*   **V1.4.0 (Rev. 2026-08-07)**: 建立 Built Structures 注册表与状态语义；纳入人生护照和小岛日签；补齐文档地图，并统一 GitHub Pages 的 Node 25 构建环境。
 *   **V1.3.0 (Rev. 2026-07-16)**: 新增发布检查、资产生成说明与版本升级规划，清理 Banana 低风险 lint 噪音，让维护路径更可复现。
 *   **V1.2.9 (Rev. 2026-06-04)**: 资产 WebP 迁移与天气图标静态加载，降低静态导出下的传输与 JS 解析负担。
 *   **V1.2.8**: 完成性能校准，核心 Bento 模块采用动态加载，组件静态逻辑进一步提升。
 *   **V1.2.6 (Rev. 2026-02-10)**: 文档系统升级与视觉减法。完成了自研 TOC 导航、环境感知亮度自适应（#dark-bg）及全局页脚简化。
-*   **Next Phase**: V1.4 Built Structures Refinement。校准 Works 与 Banana 的关系，让已建成结构更清晰但不扩张成作品集。
+*   **Next Phase**: V1.5 Living State。只使用现有模块表达岛屿正在形成的部分，不增加公开动态流或首页结构数量。
 
 ---
 
 **Document Status**
-*   **Last Updated**: 2026-07-16
+*   **Last Updated**: 2026-08-07
 *   **Author**: Isle System

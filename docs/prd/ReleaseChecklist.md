@@ -1,7 +1,7 @@
 # Zaizai Isle Release Checklist
 
-> Status: V1.3 Maintenance Memory
-> Last Updated: 2026-07-16
+> Status: Active release procedure
+> Last Updated: 2026-08-07
 > Purpose: Keep releases small, repeatable, and aligned with the island's narrative guardrails.
 
 ---
@@ -59,3 +59,17 @@ Before committing:
 - Confirm unrelated user changes are not included.
 - Confirm static export assets exist when asset paths changed.
 - Confirm the release still feels quieter after the change than before it.
+- Confirm `package.json`, `package-lock.json`, `CHANGELOG.md`, and current product docs use the same release version.
+- Confirm `.github/workflows/deploy.yml` uses the project-supported Node version.
+- Confirm the GitHub Pages workflow still triggers on pushes to `main` and uploads the `out` directory.
+
+---
+
+## 5. Publish Check
+
+After pushing `main`:
+
+- Confirm the **Deploy GH Pages** workflow starts automatically.
+- Confirm both the build and deploy jobs complete successfully.
+- Open `https://zaizai-isle.github.io/zaizai-isle/` and verify the release version's primary paths.
+- Record any failed check before retrying; do not silently change the release scope during deployment.

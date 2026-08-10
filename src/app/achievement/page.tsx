@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "reac
 import { BookOpen, Compass } from "lucide-react";
 import {
   ArrivalStep,
-  CompleteStep,
   MemoryStep,
   StepHeader,
   StyleStep,
@@ -17,23 +16,24 @@ import { renderPassportCanvas } from "./passport-renderer";
 
 export default function AchievementPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const stylePreviewRef = useRef<HTMLCanvasElement>(null);
   const [step, setStep] = useState<PassportStep>("arrival");
   const [category, setCategory] = useState<string>(ACHIEVEMENT_CATEGORIES[0]);
   const [draft, setDraft] = useState<StampDraft>(createInitialStampDraft);
   const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null);
   const [photoUrl, setPhotoUrl] = useState("");
   const [fileError, setFileError] = useState("");
+  const photoAspect = sourceImage?.naturalHeight
+    ? sourceImage.naturalWidth / sourceImage.naturalHeight
+    : 4 / 3;
 
   const updateDraft = useCallback((patch: Partial<StampDraft>) => {
     setDraft((current) => ({ ...current, ...patch }));
   }, []);
 
   useEffect(() => {
-    if (step !== "style" && step !== "complete") return;
+    if (step !== "style") return;
     const frame = window.requestAnimationFrame(() => {
-      const target = step === "style" ? stylePreviewRef.current : canvasRef.current;
-      if (target) renderPassportCanvas(target, sourceImage, draft);
+      if (canvasRef.current) renderPassportCanvas(canvasRef.current, sourceImage, draft);
     });
     return () => window.cancelAnimationFrame(frame);
   }, [draft, sourceImage, step]);
@@ -106,7 +106,7 @@ export default function AchievementPage() {
           </Link>
           <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-[#b9bfba]">
             <BookOpen className="h-3.5 w-3.5" />
-            PASSPORT v0.1.10
+            PASSPORT v0.1.11
           </div>
         </div>
       </header>
@@ -128,6 +128,7 @@ export default function AchievementPage() {
           <MemoryStep
             draft={draft}
             photoUrl={photoUrl}
+            photoAspect={photoAspect}
             fileError={fileError}
             onDraftChange={updateDraft}
             onPhotoChange={handlePhotoChange}
@@ -139,20 +140,11 @@ export default function AchievementPage() {
 
         {step === "style" ? (
           <StyleStep
-            canvasRef={stylePreviewRef}
+            canvasRef={canvasRef}
             draft={draft}
             hasPhoto={Boolean(sourceImage)}
             onDraftChange={updateDraft}
             onBack={() => setStep("memory")}
-            onNext={() => setStep("complete")}
-          />
-        ) : null}
-
-        {step === "complete" ? (
-          <CompleteStep
-            canvasRef={canvasRef}
-            draft={draft}
-            onBack={() => setStep("style")}
             onExport={exportImage}
             onRestart={restart}
           />

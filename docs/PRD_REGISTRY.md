@@ -1,8 +1,8 @@
 # Zaizai Isle 文档地图
 
-> 当前站点版本：V1.4.0
+> 当前站点版本：V1.4.1
 >
-> 文档基线日期：2026-08-07
+> 文档基线日期：2026-08-10
 >
 > 说明：此页是文档库索引；“当前”文档代表现行约束，“规划”文档代表后续方向，“归档”文档仅用于追溯。
 
@@ -10,9 +10,9 @@
 
 | 文档 | 用途 | 状态 |
 |---|---|---|
-| [产品说明书](/zaizai-isle/docs/PRODUCT_DOCUMENTATION) | 当前产品定位、信息架构、模块与版本足迹 | Current · V1.4.0 |
+| [产品说明书](/zaizai-isle/docs/PRODUCT_DOCUMENTATION) | 当前产品定位、信息架构、模块与版本足迹 | Current · V1.4.1 |
 | [产品愿景与叙事规范](/zaizai-isle/docs/prd/Product) | 最高层产品原则、三层叙事与扩建边界 | Current |
-| [当前执行 PRD](/zaizai-isle/docs/prd/PRD-ACTIVE) | 本轮改动范围、非目标与验收标准 | Active · V1.4.0 |
+| [当前执行 PRD](/zaizai-isle/docs/prd/PRD-ACTIVE) | 本轮改动范围、非目标与验收标准 | Active · V1.4.1 |
 | [发布检查清单](/zaizai-isle/docs/prd/ReleaseChecklist) | 文档、质量、GitHub Pages 发布前检查 | Active |
 
 ## 模块与版本规划
@@ -20,7 +20,7 @@
 | 文档 | 用途 | 状态 |
 |---|---|---|
 | [版本升级规划](/zaizai-isle/docs/prd/VersionUpgradePlan) | V1.3 至 V2.0 的站点演进路径 | Active |
-| [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.1.10 |
+| [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.1.11 |
 | [小岛日签规格](/zaizai-isle/docs/prd/IsleDaily-v0.1) | `/daily` 的当前能力、内容规则与边界 | Active · Daily v0.1 |
 | [资产优化计划](/zaizai-isle/docs/prd/AssetOptimizationPlan) | 静态导出下的图片与天气图标策略 | Maintained |
 

@@ -1,7 +1,7 @@
 # Zaizai Isle Version Upgrade Plan
 
-> Status: Active plan after V1.4.0
-> Last Updated: 2026-08-07
+> Status: Active plan after V1.4.1
+> Last Updated: 2026-08-10
 > Purpose: Define how Zaizai Isle should grow without drifting into a feature list, portfolio page, or heavy system.
 
 ---

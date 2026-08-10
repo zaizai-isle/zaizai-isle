@@ -125,22 +125,25 @@ function drawClassicStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: n
   ctx.rotate(-0.065);
   ctx.strokeStyle = ink;
   ctx.fillStyle = ink;
-  ctx.globalAlpha = 0.9;
-  ctx.lineWidth = 13;
+  ctx.globalAlpha = 0.8;
+  ctx.lineWidth = 8;
+  ctx.setLineDash([98, 4, 58, 3, 122, 5]);
   ctx.beginPath();
-  ctx.arc(0, 0, 164, 0, Math.PI * 2);
+  ctx.arc(0, 0, 152, 0, Math.PI * 2);
   ctx.stroke();
   ctx.lineWidth = 3;
+  ctx.setLineDash([210, 3, 80, 2]);
   ctx.beginPath();
-  ctx.arc(0, 0, 143, 0, Math.PI * 2);
+  ctx.arc(0, 0, 134, 0, Math.PI * 2);
   ctx.stroke();
-  drawTextAlongArc(ctx, "人生旅程 · 已抵达", 112, -Math.PI / 2, Math.PI * 0.72);
+  ctx.setLineDash([]);
+  drawTextAlongArc(ctx, "LIFE PASSPORT · 已抵达", 106, -Math.PI / 2, Math.PI * 0.82);
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
-  ctx.font = '700 82px "Noto Serif SC", serif';
-  ctx.fillText(draft.icon, 0, 25);
-  ctx.font = "700 27px ui-monospace, monospace";
-  ctx.fillText(formatStampDate(draft.date).compact, 0, 94);
+  ctx.font = '700 68px "Noto Serif SC", serif';
+  ctx.fillText(draft.icon, 0, 23);
+  ctx.font = "700 24px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, 0, 86);
   ctx.restore();
 }
 
@@ -149,21 +152,34 @@ function drawDateStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: numb
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(0.035);
-  ctx.strokeStyle = POSTER_COLORS.forest;
-  ctx.fillStyle = POSTER_COLORS.forest;
-  ctx.globalAlpha = 0.92;
-  ctx.lineWidth = 11;
-  ctx.strokeRect(-190, -132, 380, 264);
+  ctx.strokeStyle = POSTER_COLORS.moss;
+  ctx.fillStyle = POSTER_COLORS.moss;
+  ctx.globalAlpha = 0.8;
+  ctx.lineWidth = 8;
+  ctx.setLineDash([138, 4, 76, 3, 112, 5]);
+  ctx.strokeRect(-172, -116, 344, 232);
   ctx.lineWidth = 3;
-  ctx.strokeRect(-171, -113, 342, 226);
+  ctx.setLineDash([196, 3, 72, 2]);
+  ctx.strokeRect(-155, -99, 310, 198);
+  ctx.setLineDash([]);
   ctx.textAlign = "center";
-  ctx.font = "700 28px ui-monospace, monospace";
-  ctx.fillText("ARRIVAL RECORD", 0, -66);
-  ctx.font = "700 76px ui-monospace, monospace";
+  ctx.font = "700 24px ui-monospace, monospace";
+  ctx.fillText("LIFE PASSPORT / ARRIVAL", 0, -58);
+  ctx.font = "700 66px ui-monospace, monospace";
   ctx.fillText(`${date.month}.${date.day}`, 0, 18);
-  ctx.font = "700 32px ui-monospace, monospace";
-  ctx.fillText(`${date.year}  /  ${draft.icon}`, 0, 80);
+  ctx.font = "700 28px ui-monospace, monospace";
+  ctx.fillText(`${date.year}  ·  ${draft.icon}`, 0, 72);
   ctx.restore();
+}
+
+function traceJournalStamp(ctx: CanvasRenderingContext2D, inner = false) {
+  const points = inner
+    ? [[-151, -88], [109, -102], [153, -22], [99, 99], [-139, 83]]
+    : [[-168, -105], [122, -121], [173, -24], [113, 118], [-154, 100]];
+  ctx.beginPath();
+  ctx.moveTo(points[0][0], points[0][1]);
+  points.slice(1).forEach(([pointX, pointY]) => ctx.lineTo(pointX, pointY));
+  ctx.closePath();
 }
 
 function drawJournalStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: number, y: number) {
@@ -172,23 +188,51 @@ function drawJournalStamp(ctx: CanvasRenderingContext2D, draft: StampDraft, x: n
   ctx.rotate(-0.095);
   ctx.strokeStyle = POSTER_COLORS.moss;
   ctx.fillStyle = POSTER_COLORS.moss;
-  ctx.globalAlpha = 0.9;
-  ctx.lineWidth = 10;
-  ctx.beginPath();
-  ctx.moveTo(-184, -112);
-  ctx.lineTo(134, -134);
-  ctx.lineTo(190, -26);
-  ctx.lineTo(124, 132);
-  ctx.lineTo(-168, 108);
-  ctx.closePath();
+  ctx.globalAlpha = 0.8;
+  ctx.lineWidth = 8;
+  ctx.setLineDash([126, 4, 62, 3, 104, 5]);
+  traceJournalStamp(ctx);
   ctx.stroke();
+  ctx.lineWidth = 3;
+  ctx.setLineDash([178, 3, 60, 2]);
+  traceJournalStamp(ctx, true);
+  ctx.stroke();
+  ctx.setLineDash([]);
   ctx.textAlign = "center";
-  ctx.font = "700 30px sans-serif";
-  ctx.fillText("这 一 程 已 留 下", 0, -48);
-  ctx.font = "700 86px serif";
-  ctx.fillText(draft.icon, 0, 42);
-  ctx.font = "700 25px ui-monospace, monospace";
-  ctx.fillText(formatStampDate(draft.date).compact, 0, 91);
+  ctx.font = `500 30px ${HANDWRITING_FONT}`;
+  ctx.fillText("这一程，已留下", 0, -46);
+  ctx.font = "700 70px serif";
+  ctx.fillText(draft.icon, 0, 35);
+  ctx.font = "700 23px ui-monospace, monospace";
+  ctx.fillText(formatStampDate(draft.date).compact, 0, 84);
+  ctx.restore();
+}
+
+function drawStampBacking(
+  ctx: CanvasRenderingContext2D,
+  style: StampStyleId,
+  x: number,
+  y: number,
+  scale: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.fillStyle = POSTER_COLORS.fog;
+  ctx.globalAlpha = 0.74;
+  if (style === "classic") {
+    ctx.rotate(-0.065);
+    ctx.beginPath();
+    ctx.arc(0, 0, 157, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (style === "date") {
+    ctx.rotate(0.035);
+    ctx.fillRect(-177, -121, 354, 242);
+  } else {
+    ctx.rotate(-0.095);
+    traceJournalStamp(ctx);
+    ctx.fill();
+  }
   ctx.restore();
 }
 
@@ -300,17 +344,19 @@ function drawPhotoFrame(
   ctx.strokeRect(x, y, width, height);
 }
 
-function drawPostmarkCancellation(ctx: CanvasRenderingContext2D, x: number, y: number) {
+function drawPostmarkCancellation(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number) {
   ctx.save();
   ctx.translate(x, y);
+  ctx.scale(scale, scale);
   ctx.rotate(-0.065);
   ctx.strokeStyle = POSTER_COLORS.moss;
-  ctx.globalAlpha = 0.7;
-  ctx.lineWidth = 4;
-  [-28, 0, 28].forEach((offset) => {
+  ctx.globalAlpha = 0.5;
+  ctx.lineWidth = 3;
+  ctx.setLineDash([72, 3, 48, 4]);
+  [-23, 0, 23].forEach((offset) => {
     ctx.beginPath();
-    ctx.moveTo(-210, offset);
-    ctx.bezierCurveTo(-172, offset - 14, -138, offset + 14, -100, offset);
+    ctx.moveTo(-192, offset);
+    ctx.bezierCurveTo(-164, offset - 11, -128, offset + 11, -88, offset);
     ctx.stroke();
   });
   ctx.restore();
@@ -358,15 +404,12 @@ function drawPortraitPhotoPoster(ctx: CanvasRenderingContext2D, image: CanvasIma
   ctx.font = "700 21px serif";
   ctx.fillText(draft.location || "未标记地点", width - margin, 1832);
 
-  const stampX = 930;
-  ctx.fillStyle = POSTER_COLORS.light;
-  ctx.globalAlpha = 0.82;
-  ctx.beginPath();
-  ctx.arc(stampX - 12, photoBottom - 12, 72, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-  if (draft.style === "classic") drawPostmarkCancellation(ctx, stampX, photoBottom);
-  drawStamp(ctx, draft.style, draft, stampX, photoBottom, draft.style === "classic" ? 0.62 : 0.55);
+  const stampX = 866;
+  const stampY = photoBottom - 18;
+  const stampScale = draft.style === "classic" ? 0.52 : 0.48;
+  drawStampBacking(ctx, draft.style, stampX, stampY, stampScale);
+  if (draft.style === "classic") drawPostmarkCancellation(ctx, stampX, stampY, stampScale);
+  drawStamp(ctx, draft.style, draft, stampX, stampY, stampScale);
   drawPosterFooter(ctx, width, height, margin);
 }
 

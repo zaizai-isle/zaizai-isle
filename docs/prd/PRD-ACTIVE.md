@@ -1,10 +1,10 @@
-# Zaizai Isle V1.4.0 执行 PRD
+# Zaizai Isle V1.4.1 执行 PRD
 
 > 版本主题：Built Structures & Living Moments
 >
-> 状态：Release candidate
+> 状态：Released patch
 >
-> 基线日期：2026-08-07
+> 基线日期：2026-08-10
 >
 > 使用对象：产品、设计、前端与 AI Agent
 
@@ -37,8 +37,8 @@ Zaizai Isle 是一座持续扩建的个人数字小岛，不是传统简历、�
 
 ### 3.2 Life Passport
 
-- `/achievement` 以 `Passport v0.1.10` 作为当前内部版本。
-- 支持“选择抵达—留下记录—盖章—保存/导出”的四步流程。
+- `/achievement` 以 `Passport v0.1.11` 作为当前内部版本。
+- 支持“选择抵达—留下记录—装帧并保存”的三步流程。
 - 当前仅导出纪念卡，不承诺刷新后保存记录。
 - 在首页以独立实验结构卡片进入，不取代 Works 的结构注册表职责。
 
@@ -53,7 +53,8 @@ Zaizai Isle 是一座持续扩建的个人数字小岛，不是传统简历、�
 
 - GitHub Pages 在推送 `main` 后通过 Actions 自动部署。
 - 构建与本地项目环境统一使用 Node 25。
-- 版本号、变更记录、产品说明和文档地图同步更新到 V1.4.0。
+- Banana 可通过 Supabase Edge Function 代理 Replicate 图像编辑，私密令牌只存放在服务端 Secret。
+- 版本号、变更记录、产品说明和文档地图同步更新到 V1.4.1。
 
 ## 4. 非目标
 
@@ -105,4 +106,4 @@ Zaizai Isle 是一座持续扩建的个人数字小岛，不是传统简历、�
 
 ## 9. 发布结论
 
-V1.4.0 完成后，V1.4 进入维护状态。下一站是 V1.5 Living State：只通过现有表面表达“岛屿正在生长”，不继续增加首页结构数量。
+V1.4.1 完成后，V1.4 进入维护状态。下一站是 V1.5 Living State：只通过现有表面表达“岛屿正在生长”，不继续增加首页结构数量。

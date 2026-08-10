@@ -126,23 +126,34 @@ The endpoint should return normalized `WeatherData` JSON.
 
 ## Banana AI API (Optional)
 
-The banana image flow can use either Gemini directly or your own model proxy. Set these values in `.env.local`:
+The banana image flow now defaults to a Supabase Edge Function proxy when Supabase is configured. The recommended setup uses Replicate's `black-forest-labs/flux-kontext-dev` image editing model behind that proxy.
 
 ```bash
-NEXT_PUBLIC_BANANA_AI_PROVIDER=gemini
-NEXT_PUBLIC_BANANA_AI_API_KEY=your_api_key_here
-NEXT_PUBLIC_BANANA_AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
-NEXT_PUBLIC_BANANA_IMAGE_MODEL=gemini-2.5-flash-image-preview
-NEXT_PUBLIC_BANANA_VISION_MODEL=gemini-2.5-flash
-NEXT_PUBLIC_BANANA_CHAT_MODEL=gemini-2.0-flash
+NEXT_PUBLIC_BANANA_AI_PROVIDER=proxy
+NEXT_PUBLIC_BANANA_AI_BASE_URL=https://your-project-ref.functions.supabase.co/banana-ai
+NEXT_PUBLIC_BANANA_AI_API_KEY=your_supabase_anon_key
+NEXT_PUBLIC_BANANA_IMAGE_MODEL=black-forest-labs/flux-kontext-dev
 ```
 
-- `NEXT_PUBLIC_BANANA_AI_PROVIDER`: `gemini` for Gemini-compatible APIs, or `proxy` for a custom API wrapper.
+- `NEXT_PUBLIC_BANANA_AI_PROVIDER`: `proxy` for the Supabase function, or `gemini` for Gemini-compatible APIs.
+- `NEXT_PUBLIC_BANANA_AI_BASE_URL`: optional when `NEXT_PUBLIC_SUPABASE_URL` is set; the frontend can derive the function URL.
+- `NEXT_PUBLIC_BANANA_AI_API_KEY`: optional when `NEXT_PUBLIC_SUPABASE_ANON_KEY` is set; used only to invoke the Supabase function.
 - `NEXT_PUBLIC_BANANA_IMAGE_MODEL`: image generation model for bananafication.
-- `NEXT_PUBLIC_BANANA_VISION_MODEL`: multimodal text model for image description.
-- `NEXT_PUBLIC_BANANA_CHAT_MODEL`: text model for the banana analysis report.
 
-When `NEXT_PUBLIC_BANANA_AI_PROVIDER=proxy`, the frontend posts normalized JSON to:
+Deploy the function and set the private Replicate token:
+
+```bash
+supabase functions deploy banana-ai
+supabase secrets set REPLICATE_API_TOKEN=your_replicate_token
+```
+
+Optional function secret:
+
+```bash
+supabase secrets set REPLICATE_IMAGE_MODEL=black-forest-labs/flux-kontext-dev
+```
+
+The proxy accepts normalized frontend calls:
 
 - `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/bananaify`, expects `{ "image_base64": "..." }`.
 - `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/understand`, expects `{ "text": "..." }`.

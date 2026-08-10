@@ -1,6 +1,6 @@
-import type { ChangeEvent, RefObject } from "react";
+import type { ChangeEvent, CSSProperties, RefObject } from "react";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Camera, Check, Download, ImagePlus, MapPin, RotateCcw, Stamp, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Camera, Download, ImagePlus, MapPin, RotateCcw, X } from "lucide-react";
 import { ACHIEVEMENT_CATEGORIES, LIFE_ACHIEVEMENTS, type LifeAchievement } from "../achievements";
 import { FILTERS, type FilterId } from "../canvas-renderer";
 import {
@@ -10,14 +10,14 @@ import {
   type StampDraft,
   type StampStyleId,
 } from "../passport-model";
+import { AdaptivePaper } from "./AdaptivePaper";
 
-export type PassportStep = "arrival" | "memory" | "style" | "complete";
+export type PassportStep = "arrival" | "memory" | "style";
 
 const STEP_ITEMS: { id: PassportStep; number: string; label: string; eyebrow: string; title: string; description: string }[] = [
   { id: "arrival", number: "01", label: "选择抵达", eyebrow: "LIFE PASSPORT / ARRIVAL", title: "你抵达了哪里？", description: "从一段熟悉的人生经历开始，或者写下只有你知道的抵达。" },
   { id: "memory", number: "02", label: "留下记录", eyebrow: "LIFE PASSPORT / MEMORY", title: "为这一刻留下记录", description: "照片与地点都可以留空，只留下你真正想记住的话。" },
-  { id: "style", number: "03", label: "盖下印章", eyebrow: "LIFE PASSPORT / STAMP", title: "盖下属于这一程的印章", description: "选择画布、印章和照片质感，预览会即时更新。" },
-  { id: "complete", number: "04", label: "保存此刻", eyebrow: "LIFE PASSPORT / RECORDED", title: "这一程，已经被记录。", description: "当前版本刷新后不会保存记录，请先导出纪念卡。" },
+  { id: "style", number: "03", label: "装帧并保存", eyebrow: "LIFE PASSPORT / STAMP", title: "装帧并保存这一程", description: "行至此处，为这一程留下最后的印记。" },
 ];
 
 const EXPERIMENTAL_FILTERS = FILTERS.filter((filter) => filter.id !== "raw");
@@ -36,10 +36,10 @@ export function StepHeader({ activeStep }: { activeStep: PassportStep }) {
   const activeIndex = STEP_ITEMS.findIndex((item) => item.id === activeStep);
   const currentStep = STEP_ITEMS[activeIndex];
   return (
-    <section className="shrink-0 border-b border-[#a7aaa2] bg-[#f2f0e8]/80 px-4 backdrop-blur-sm sm:px-6">
+    <section className="shrink-0 px-4 sm:px-6">
       <div className="mx-auto max-w-6xl py-2.5 sm:py-3">
         <nav aria-label="创建人生印章进度">
-          <ol className="grid grid-cols-4 gap-2 sm:gap-4">
+          <ol className="grid grid-cols-3 gap-2 sm:gap-4">
             {STEP_ITEMS.map((item, index) => (
               <li
                 key={item.id}
@@ -114,11 +114,9 @@ export function ArrivalStep({ draft, category, onCategoryChange, onDraftChange, 
         </section>
 
         <section className="mt-4 min-w-0 sm:mt-5">
-          <div aria-hidden="true" className="mb-2 flex items-center gap-2 text-[#526b45] sm:mb-3"><span className="achievement-handwriting text-xl">＊</span><span className="journal-pencil-line h-px w-24" /></div>
           <span className="achievement-handwriting text-xs tracking-[0.14em] text-[#526b45] sm:text-sm">02 / 选择主题</span>
           <div className="mt-0.5 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <span className="achievement-handwriting text-sm text-[#263b35] sm:text-base">或者，从已有的抵达中选择</span>
-            <small className="achievement-handwriting text-xs text-[#686d68]">先选主题，再选具体抵达 ↘</small>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1 sm:mt-3 sm:grid-cols-3 sm:gap-x-12 sm:gap-y-2">
             {ACHIEVEMENT_CATEGORIES.map((item, index) => (
@@ -140,19 +138,18 @@ export function ArrivalStep({ draft, category, onCategoryChange, onDraftChange, 
               const selected = draft.achievementId === achievement.id;
               return (
                 <div key={achievement.id} className="journal-slip-wrap achievement-choice relative">
-                  <span aria-hidden="true" className="journal-mini-tape absolute -top-0.5 left-4 z-10" />
+                  <span aria-hidden="true" className={`journal-mini-tape absolute -top-0.5 left-4 z-10 ${selected ? "journal-mini-tape-selected" : ""}`} />
                   <button
                     type="button"
                     aria-pressed={selected}
                     onClick={() => selectAchievement(achievement)}
-                    className={`journal-paper-slip relative grid min-h-[72px] w-full grid-cols-[34px_minmax(0,1fr)] items-center gap-2.5 px-3 py-3 text-left transition-transform hover:-translate-y-0.5 sm:min-h-24 sm:grid-cols-[42px_minmax(0,1fr)] sm:gap-3 sm:px-4 ${selected ? "journal-paper-selected" : ""}`}
+                    className="journal-paper-slip relative grid min-h-[72px] w-full grid-cols-[34px_minmax(0,1fr)] items-center gap-2.5 px-3 py-3 text-left transition-transform hover:-translate-y-0.5 sm:min-h-24 sm:grid-cols-[42px_minmax(0,1fr)] sm:gap-3 sm:px-4"
                   >
                     <span className="grid h-8 w-8 place-items-center text-lg sm:h-10 sm:w-10 sm:text-xl">{achievement.icon}</span>
                     <span className="relative z-[1] min-w-0">
                       <strong className="achievement-handwriting block truncate text-sm font-medium text-[#202624] sm:text-base">{achievement.title}</strong>
                       <small className="achievement-handwriting mt-0.5 block truncate text-[11px] text-[#686d68] sm:text-xs">{achievement.motto}</small>
                     </span>
-                    {selected ? <Check aria-hidden="true" className="absolute right-2 top-1.5 h-4 w-4 rotate-[-8deg] text-[#526b45]" /> : null}
                   </button>
                 </div>
               );
@@ -169,6 +166,7 @@ export function ArrivalStep({ draft, category, onCategoryChange, onDraftChange, 
 interface MemoryStepProps {
   draft: StampDraft;
   photoUrl: string;
+  photoAspect: number;
   fileError: string;
   onDraftChange: (patch: Partial<StampDraft>) => void;
   onPhotoChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -177,18 +175,22 @@ interface MemoryStepProps {
   onNext: () => void;
 }
 
-export function MemoryStep({ draft, photoUrl, fileError, onDraftChange, onPhotoChange, onRemovePhoto, onBack, onNext }: MemoryStepProps) {
+export function MemoryStep({ draft, photoUrl, photoAspect, fileError, onDraftChange, onPhotoChange, onRemovePhoto, onBack, onNext }: MemoryStepProps) {
   return (
     <StepContent>
-      <div className="grid min-h-0 flex-1 content-start gap-5 pt-7 sm:pt-10 lg:basis-0 lg:grid-cols-[1fr_0.78fr] lg:items-start lg:gap-8">
+      <div className="grid min-h-0 flex-1 content-start gap-5 pt-7 sm:pt-10 lg:basis-0 lg:grid-cols-[0.72fr_1.28fr] lg:items-start lg:gap-8">
         <div className="grid content-start gap-4 sm:grid-cols-2">
           <label className="block">
             <span className="achievement-handwriting mb-1 block text-sm text-[#263b35]">01 / 抵达日期</span>
-            <input name="arrival-date" autoComplete="off" type="date" value={draft.date} onChange={(event) => onDraftChange({ date: event.target.value })} className="h-11 w-full border-0 border-b border-[#879087]/55 bg-transparent px-2 text-sm text-[#202624] outline-none focus:border-[#526b45]" />
+            <span className="journal-input-line block">
+              <input name="arrival-date" autoComplete="off" type="date" value={draft.date} onChange={(event) => onDraftChange({ date: event.target.value })} className="h-11 w-full border-0 bg-transparent px-2 text-sm text-[#202624] outline-none" />
+            </span>
           </label>
           <label className="block">
             <span className="achievement-handwriting mb-1 flex items-center gap-1.5 text-sm text-[#263b35]"><MapPin className="h-3.5 w-3.5" />02 / 地点（可选）</span>
-            <input name="arrival-location" autoComplete="off" value={draft.location} onChange={(event) => onDraftChange({ location: event.target.value.slice(0, 28) })} placeholder="城市、房间，或特别的地方…" className="h-11 w-full border-0 border-b border-[#879087]/55 bg-transparent px-2 text-sm text-[#202624] outline-none placeholder:text-[#8a8f8a] focus:border-[#526b45]" />
+            <span className="journal-input-line block">
+              <input name="arrival-location" autoComplete="off" value={draft.location} onChange={(event) => onDraftChange({ location: event.target.value.slice(0, 28) })} placeholder="城市、房间，或特别的地方…" className="h-11 w-full border-0 bg-transparent px-2 text-sm text-[#202624] outline-none placeholder:text-[#8a8f8a]" />
+            </span>
           </label>
           <label className="block sm:col-span-2">
             <span className="mb-1 flex items-center justify-between text-sm text-[#263b35]"><span className="achievement-handwriting">03 / 想留给这一刻的一句话</span><span className="achievement-handwriting text-xs text-[#7d827d]">{draft.note.length} / 72</span></span>
@@ -198,20 +200,23 @@ export function MemoryStep({ draft, photoUrl, fileError, onDraftChange, onPhotoC
           </label>
         </div>
 
-        <div>
+        <div className="min-w-0">
           <span className="achievement-handwriting mb-1.5 flex items-center justify-between gap-3 text-sm text-[#263b35]">
             <span className="flex items-center gap-1.5"><Camera className="h-3.5 w-3.5" />04 / 照片（可选）</span>
-            {photoUrl ? <small className="font-mono text-[9px] font-normal text-[#686d68]">裁切 · 3:4</small> : null}
+            {photoUrl ? <small className="font-mono text-[9px] font-normal text-[#686d68]">完整显示 · 原比例</small> : null}
           </span>
           {photoUrl ? (
-            <div className="journal-slip-wrap relative">
+            <div
+              className="journal-slip-wrap journal-photo-frame relative mx-auto"
+              style={{ "--photo-aspect": photoAspect } as CSSProperties}
+            >
               <span aria-hidden="true" className="journal-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2" />
-              <div className="journal-paper-slip relative flex justify-center p-3">
-                <div className="relative aspect-[3/4] w-full max-w-52 overflow-hidden bg-[#c8cdc8]">
-                  <Image src={photoUrl} alt="所选人生时刻裁切预览" fill unoptimized sizes="(min-width: 1024px) 28rem, 100vw" className="object-cover" />
+              <AdaptivePaper className="journal-paper-photo flex w-full justify-center" contentClassName="relative w-full">
+                <div className="relative w-full overflow-hidden" style={{ aspectRatio: photoAspect }}>
+                  <Image src={photoUrl} alt="所选人生时刻完整预览" fill unoptimized sizes="(min-width: 1024px) 42rem, calc(100vw - 3rem)" className="object-contain" />
                   <button type="button" onClick={onRemovePhoto} aria-label="移除照片" className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-[#f2f0e8] text-[#263b35] shadow-md hover:bg-white"><X className="h-4 w-4" /></button>
                 </div>
-              </div>
+              </AdaptivePaper>
             </div>
           ) : (
             <div className="journal-slip-wrap relative">
@@ -242,10 +247,11 @@ interface StyleStepProps {
   hasPhoto: boolean;
   onDraftChange: (patch: Partial<StampDraft>) => void;
   onBack: () => void;
-  onNext: () => void;
+  onExport: () => void;
+  onRestart: () => void;
 }
 
-export function StyleStep({ canvasRef, draft, hasPhoto, onDraftChange, onBack, onNext }: StyleStepProps) {
+export function StyleStep({ canvasRef, draft, hasPhoto, onDraftChange, onBack, onExport, onRestart }: StyleStepProps) {
   const outputSize = "1080 × 1920";
 
   return (
@@ -263,26 +269,27 @@ export function StyleStep({ canvasRef, draft, hasPhoto, onDraftChange, onBack, o
         <div className="min-w-0 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
           <h2 className="achievement-handwriting text-xl text-[#263b35]">01 / 印章样式</h2>
           <div className="mt-2 grid gap-2 sm:grid-cols-3">
-            {STAMP_STYLES.map((style) => (
-              <div key={style.id} className="journal-slip-wrap relative">
-                <span aria-hidden="true" className="journal-mini-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2" />
-                <button
-                  type="button"
-                  aria-pressed={draft.style === style.id}
-                  onClick={() => onDraftChange({ style: style.id as StampStyleId })}
-                  className={`journal-paper-slip relative grid min-h-20 w-full grid-cols-[42px_1fr] items-center gap-2 p-2 text-left transition-transform hover:-translate-y-0.5 ${draft.style === style.id ? "journal-paper-selected" : ""}`}
-                >
-                  <span className={`grid h-10 w-10 place-items-center border border-[#526b45]/70 font-serif text-[10px] font-bold text-[#526b45] ${style.id === "classic" ? "rounded-full" : style.id === "journal" ? "rotate-[-5deg] rounded-[35%_12%_28%_16%]" : ""}`}>{style.mark}</span>
-                  <span className="relative z-[1] min-w-0"><strong className="block text-xs text-[#263b35]">{style.label}</strong><small className="mt-0.5 block text-pretty text-[10px] leading-4 text-[#686d68]">{style.description}</small></span>
-                  {draft.style === style.id ? <Check aria-hidden="true" className="absolute right-1.5 top-1.5 h-3.5 w-3.5 text-[#526b45]" /> : null}
-                </button>
-              </div>
-            ))}
+            {STAMP_STYLES.map((style) => {
+              const selected = draft.style === style.id;
+              return (
+                <div key={style.id} className="journal-slip-wrap relative">
+                  <span aria-hidden="true" className={`journal-mini-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2 ${selected ? "journal-mini-tape-selected" : ""}`} />
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onDraftChange({ style: style.id as StampStyleId })}
+                    className="journal-paper-slip relative grid min-h-20 w-full grid-cols-[42px_1fr] items-center gap-2 p-2 text-left transition-transform hover:-translate-y-0.5"
+                  >
+                    <span aria-hidden="true" className={`stamp-style-mark stamp-style-mark-${style.id}`}><span>{style.mark}</span></span>
+                    <span className="relative z-[1] min-w-0"><strong className="block text-xs text-[#263b35]">{style.label}</strong><small className="mt-0.5 block text-pretty text-[10px] leading-4 text-[#686d68]">{style.description}</small></span>
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           {hasPhoto ? (
             <div className="mt-4 pt-1">
-              <div aria-hidden="true" className="mb-1 flex items-center gap-2 text-[#526b45]"><span className="achievement-handwriting">＊</span><span className="h-px w-16 bg-[#8b918b]/55" /></div>
               <h2 className="achievement-handwriting text-xl text-[#263b35]">02 / 照片质感</h2>
               <div className="mt-1.5 grid grid-cols-2 gap-x-5 gap-y-0.5 sm:grid-cols-3">
                 {PHOTO_TEXTURES.map((texture) => (
@@ -319,43 +326,15 @@ export function StyleStep({ canvasRef, draft, hasPhoto, onDraftChange, onBack, o
         </div>
       </div>
 
-      <StepActions onBack={onBack} onNext={onNext} nextLabel="确认抵达" nextIcon={<Stamp className="h-5 w-5" />} />
-    </StepContent>
-  );
-}
-
-interface CompleteStepProps {
-  canvasRef: RefObject<HTMLCanvasElement | null>;
-  draft: StampDraft;
-  onBack: () => void;
-  onExport: () => void;
-  onRestart: () => void;
-}
-
-export function CompleteStep({ canvasRef, draft, onBack, onExport, onRestart }: CompleteStepProps) {
-  return (
-    <StepContent>
-      <div className="grid min-h-0 flex-1 items-stretch gap-5 lg:basis-0 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <div className="grid min-h-64 place-items-center">
-          <canvas ref={canvasRef} aria-label={`${draft.title}人生印章纪念卡预览`} className="max-h-[320px] w-auto max-w-full shadow-[0_18px_45px_rgba(32,38,36,0.2)] sm:max-h-[420px] lg:max-h-[calc(100dvh-285px)]" />
-        </div>
-        <div className="journal-slip-wrap relative min-h-0">
-          <span aria-hidden="true" className="journal-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2" />
-          <aside className="journal-paper-slip relative h-full overflow-y-auto bg-[#f2f0e8]/80 p-5">
-          <span className="font-mono text-[9px] tracking-[0.18em] text-[#526b45]">ARRIVAL CONFIRMED</span>
-          <h2 className="achievement-handwriting mt-2 text-2xl text-[#263b35]">{draft.title}</h2>
-          <p className="achievement-handwriting journal-note-underline mt-2 inline-block text-base leading-7 text-[#686d68]">{draft.note || "不是所有抵达，都需要掌声。"}</p>
-          <dl className="mt-4 border-y border-dashed border-[#879087]/45 py-3 text-xs text-[#5f6560]">
-            <div className="flex justify-between gap-4"><dt>抵达日期</dt><dd className="font-mono">{draft.date}</dd></div>
-            <div className="mt-2 flex justify-between gap-4"><dt>印章类型</dt><dd>{STAMP_STYLES.find((item) => item.id === draft.style)?.label}</dd></div>
-            <div className="mt-2 flex justify-between gap-4"><dt>海报尺寸</dt><dd>9:16 · 1080 × 1920</dd></div>
-          </dl>
-          <button type="button" onClick={onExport} className="journal-ink-button mt-4 flex h-10 w-full items-center justify-center gap-2 bg-[#263b35] px-4 text-sm font-semibold text-[#f2f0e8] hover:bg-[#526b45]"><Download className="h-4 w-4" />导出纪念卡</button>
-          <button type="button" onClick={onRestart} className="journal-note-underline mt-2 flex h-10 w-full items-center justify-center gap-2 text-xs text-[#263b35] hover:text-[#526b45]"><RotateCcw className="h-3.5 w-3.5" />记录另一次抵达</button>
-          <button type="button" onClick={onBack} className="mt-2 flex h-9 w-full items-center justify-center gap-2 text-xs text-[#5f6560] hover:text-[#263b35]"><ArrowLeft className="h-3.5 w-3.5" />返回调整样式</button>
-          </aside>
-        </div>
-      </div>
+      <StepActions
+        onBack={onBack}
+        onNext={onExport}
+        nextLabel="导出纪念卡"
+        nextIcon={<Download className="h-4 w-4" />}
+        onSecondary={onRestart}
+        secondaryLabel="记录另一次抵达"
+        secondaryIcon={<RotateCcw className="h-3.5 w-3.5" />}
+      />
     </StepContent>
   );
 }
@@ -366,13 +345,19 @@ interface StepActionsProps {
   nextLabel: string;
   nextDisabled?: boolean;
   nextIcon?: React.ReactNode;
+  onSecondary?: () => void;
+  secondaryLabel?: string;
+  secondaryIcon?: React.ReactNode;
 }
 
-function StepActions({ onBack, onNext, nextLabel, nextDisabled = false, nextIcon }: StepActionsProps) {
+function StepActions({ onBack, onNext, nextLabel, nextDisabled = false, nextIcon, onSecondary, secondaryLabel, secondaryIcon }: StepActionsProps) {
   return (
     <div className="sticky bottom-0 z-20 mt-auto flex shrink-0 flex-col-reverse gap-2 bg-[linear-gradient(to_bottom,transparent,rgba(238,235,224,.9)_30%)] pt-5 pb-[calc(.75rem+env(safe-area-inset-bottom))] sm:flex-row sm:items-center sm:justify-between">
       {onBack ? <button type="button" onClick={onBack} className="flex h-10 items-center justify-center gap-2 px-3 text-xs text-[#5f6560] hover:text-[#263b35]"><ArrowLeft className="h-4 w-4" />返回上一步</button> : <span />}
-      <button type="button" disabled={nextDisabled} onClick={onNext} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-sm font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{nextLabel}{nextIcon ?? <ArrowRight className="h-4 w-4 text-[#e2d849]" />}</button>
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
+        {onSecondary && secondaryLabel ? <button type="button" onClick={onSecondary} className="flex h-10 items-center justify-center gap-2 px-3 text-xs text-[#5f6560] hover:text-[#263b35]">{secondaryIcon}{secondaryLabel}</button> : null}
+        <button type="button" disabled={nextDisabled} onClick={onNext} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-sm font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{nextLabel}{nextIcon ?? <ArrowRight className="h-4 w-4 text-[#e2d849]" />}</button>
+      </div>
     </div>
   );
 }

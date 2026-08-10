@@ -2,7 +2,7 @@
 
 > Status: Historical implementation plan
 >
-> Superseded by: V1.3 maintenance memory and the active V1.4.0 execution PRD
+> Superseded by: V1.3 maintenance memory and the active V1.4.x execution PRD
 >
 > Note: Checklist state below is preserved as an implementation-time snapshot, not as current release work.
 

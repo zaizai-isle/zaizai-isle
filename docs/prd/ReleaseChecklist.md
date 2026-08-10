@@ -1,7 +1,7 @@
 # Zaizai Isle Release Checklist
 
 > Status: Active release procedure
-> Last Updated: 2026-08-07
+> Last Updated: 2026-08-10
 > Purpose: Keep releases small, repeatable, and aligned with the island's narrative guardrails.
 
 ---
@@ -73,3 +73,13 @@ After pushing `main`:
 - Confirm both the build and deploy jobs complete successfully.
 - Open `https://zaizai-isle.github.io/zaizai-isle/` and verify the release version's primary paths.
 - Record any failed check before retrying; do not silently change the release scope during deployment.
+
+### Queued Run Recovery
+
+If a workflow remains `Queued` without creating any jobs:
+
+1. Confirm no other run is holding the same concurrency group.
+2. Try **Cancel workflow** once.
+3. If cancellation fails, push a no-code redeploy commit or trigger a fresh manual run.
+4. Confirm the replacement run creates a `build` job before treating the incident as resolved.
+5. Use GitHub's force-cancel API only when the stale run must be removed and an Actions-write credential is available.

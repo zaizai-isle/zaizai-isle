@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 No changes recorded yet.
 
+## [v1.4.1] - 2026-08-10
+
+### Added
+- Added `AdaptivePaper` for responsive torn-paper surfaces in Life Passport.
+- Added a selected-state tape asset and clearer visual feedback for achievement and stamp choices.
+- Added a Supabase Edge Function proxy for Replicate image editing with server-side token handling.
+
+### Changed
+- Simplified Life Passport from four steps to three by combining styling, confirmation, and export.
+- Preserved uploaded photo aspect ratios in previews and refined the 9:16 keepsake composition and stamp rendering.
+- Made Banana prefer the Supabase proxy when Supabase is configured, while preserving Gemini as a fallback provider.
+- Expanded README setup instructions for the Banana proxy and Replicate secrets.
+
+### Technical
+- Excluded Supabase Edge Function sources from the Next.js TypeScript project boundary.
+- Recovered the V1.4 deployment from stale queued run #99 with successful build and Pages deployment run #100.
+
 ## [v1.4.0] - 2026-08-07
 
 ### Added

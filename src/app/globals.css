@@ -319,12 +319,39 @@ body {
   opacity: 0.8;
 }
 
+.journal-mini-tape-selected {
+  background-color: transparent;
+  background-image: url("../assets/achievement/bg-stick-selected.svg");
+  filter: none;
+  opacity: 1;
+}
+
 .journal-pencil-line {
   background: rgba(82, 88, 82, 0.48);
   height: 3px !important;
   -webkit-mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
   mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
   transform: rotate(-0.5deg);
+}
+
+.journal-input-line {
+  position: relative;
+}
+
+.journal-input-line::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  pointer-events: none;
+  content: "";
+  background: url("../assets/achievement/line.svg") center / 100% 3px no-repeat;
+  opacity: 0.32;
+}
+
+.journal-input-line:focus-within::after {
+  opacity: 0.5;
 }
 
 .journal-topic::after {
@@ -380,20 +407,84 @@ body {
   mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
 }
 
-.journal-paper-selected {
-  background-color: rgba(247, 243, 231, 0.98);
+.stamp-style-mark {
+  position: relative;
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  color: #526b45;
+  font-family: serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  opacity: 0.82;
 }
 
-.journal-paper-selected::after {
+.stamp-style-mark::before,
+.stamp-style-mark::after {
   position: absolute;
-  top: 18%;
-  bottom: 18%;
-  left: 0.65rem;
-  width: 4px;
   content: "";
-  background: #d8c600;
-  border-radius: 999px 55% 999px 45%;
-  transform: rotate(1.5deg);
+  border: 1.5px solid currentColor;
+  -webkit-mask-image: repeating-linear-gradient(103deg, #000 0 0.72rem, transparent 0.72rem 0.78rem, #000 0.78rem 1.72rem, transparent 1.72rem 1.8rem);
+  mask-image: repeating-linear-gradient(103deg, #000 0 0.72rem, transparent 0.72rem 0.78rem, #000 0.78rem 1.72rem, transparent 1.72rem 1.8rem);
+}
+
+.stamp-style-mark::before {
+  inset: 0;
+  transform: rotate(-1.2deg);
+}
+
+.stamp-style-mark::after {
+  inset: 0.16rem;
+  border-width: 1px;
+  opacity: 0.38;
+  transform: rotate(1.4deg);
+}
+
+.stamp-style-mark > span {
+  position: relative;
+  z-index: 1;
+}
+
+.stamp-style-mark-classic::before,
+.stamp-style-mark-classic::after {
+  border-radius: 999px;
+}
+
+.stamp-style-mark-date {
+  font-family: ui-monospace, monospace;
+  font-size: 0.58rem;
+  transform: rotate(1deg);
+}
+
+.stamp-style-mark-journal {
+  font-size: 0.9rem;
+  transform: rotate(-4deg);
+}
+
+.stamp-style-mark-journal::before,
+.stamp-style-mark-journal::after {
+  border-radius: 38% 13% 31% 17% / 20% 36% 16% 31%;
+}
+
+.journal-photo-frame {
+  --photo-aspect: 1.3333;
+  --photo-padding: clamp(1rem, 1.3vw, 1.25rem);
+  width: min(
+    100%,
+    calc(
+      clamp(18rem, calc(100dvh - 22rem), 42rem) * var(--photo-aspect) +
+      var(--photo-padding) * 2
+    )
+  );
+}
+
+.journal-paper-photo {
+  padding: var(--photo-padding);
+}
+
+.journal-paper-complete {
+  min-height: clamp(28rem, calc(100dvh - 18rem), 32rem);
 }
 
 .achievement-choice:nth-child(2n) {

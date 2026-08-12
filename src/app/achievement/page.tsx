@@ -32,10 +32,18 @@ export default function AchievementPage() {
 
   useEffect(() => {
     if (step !== "style") return;
-    const frame = window.requestAnimationFrame(() => {
-      if (canvasRef.current) renderPassportCanvas(canvasRef.current, sourceImage, draft);
+    let frame = 0;
+    let cancelled = false;
+    void document.fonts.ready.then(() => {
+      if (cancelled) return;
+      frame = window.requestAnimationFrame(() => {
+        if (canvasRef.current) renderPassportCanvas(canvasRef.current, sourceImage, draft);
+      });
     });
-    return () => window.cancelAnimationFrame(frame);
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
   }, [draft, sourceImage, step]);
 
   useEffect(() => {
@@ -78,9 +86,10 @@ export default function AchievementPage() {
     updateDraft({ texture: "original" });
   }, [updateDraft]);
 
-  const exportImage = useCallback(() => {
+  const exportImage = useCallback(async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    await document.fonts.ready;
     const link = document.createElement("a");
     link.download = `life-passport-portrait-${draft.date}-${draft.achievementId ?? "arrival"}.png`;
     link.href = canvas.toDataURL("image/png");
@@ -100,13 +109,13 @@ export default function AchievementPage() {
       <a href="#passport-step-content" className="sr-only z-[100] bg-[#f2f0e8] px-4 py-2 text-[#202624] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">跳到当前步骤</a>
       <header className="shrink-0 border-b border-[#56615d] bg-[#202624] text-[#f2f0e8]">
         <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2.5 text-base font-semibold tracking-wide">
+          <Link href="/" className="achievement-title flex items-center gap-2.5 text-lg tracking-wide">
             <span className="grid h-7 w-7 place-items-center rounded-full border border-[#7c847f] text-[#e2d849]"><Compass className="h-4 w-4" /></span>
             人生成就
           </Link>
-          <div className="flex items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-[#b9bfba]">
+          <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.18em] text-[#b9bfba]">
             <BookOpen className="h-3.5 w-3.5" />
-            PASSPORT v0.1.11
+            PASSPORT v0.1.12
           </div>
         </div>
       </header>

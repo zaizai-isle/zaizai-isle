@@ -4,7 +4,7 @@
 > 再做一点，再想一点，惊喜总在发生
 > *Build more, think more, find the spark.*
 
-> **Status**: V1.4.1 (Built Structures & Living Moments)
+> **Status**: V1.4.2 (Built Structures & Living Moments)
 > **Role**: This is the highest-level "constitution" for Zaizai Isle. It guides philosophy, narrative, and boundaries.
 
 ---
@@ -74,6 +74,7 @@ Isle 不是单一叙事对象，而是三层结构的同时存在。任何新增
 
 ## 5. 维护记录 (Maintenance Log)
 
+*   **V1.4.2 (Rev. 2026-08-12)**: 扩展人生护照主题与抵达选项，以本地手写字体、手绘表单和一致的章印导出语言强化私人记录感。
 *   **V1.4.1 (Rev. 2026-08-10)**: 收敛人生护照三步流程与自适应纸张，加入 Banana 的 Supabase / Replicate 代理代码，并完成 GitHub Pages 发布恢复验证。
 *   **V1.4.0 (Rev. 2026-08-07)**: 建立 Built Structures 注册表与状态语义；纳入人生护照和小岛日签；补齐文档地图，并统一 GitHub Pages 的 Node 25 构建环境。
 *   **V1.3.0 (Rev. 2026-07-16)**: 新增发布检查、资产生成说明与版本升级规划，清理 Banana 低风险 lint 噪音，让维护路径更可复现。
@@ -85,5 +86,5 @@ Isle 不是单一叙事对象，而是三层结构的同时存在。任何新增
 ---
 
 **Document Status**
-*   **Last Updated**: 2026-08-10
+*   **Last Updated**: 2026-08-12
 *   **Author**: Isle System

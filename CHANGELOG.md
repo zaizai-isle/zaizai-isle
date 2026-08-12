@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 No changes recorded yet.
 
+## [v1.4.2] - 2026-08-12
+
+### Added
+- Expanded Life Passport to twelve themes with a broader set of everyday, relationship, growth, work, travel, and recovery milestones.
+- Added three bundled local handwriting fonts for consistent Chinese typography in the interface and exported keepsakes.
+- Added a hand-drawn date picker and custom date, location, and photo controls to the memory step.
+
+### Changed
+- Refined Life Passport copy, hierarchy, option cards, mobile spacing, reduced-motion behavior, and selected-state tape treatment.
+- Redesigned the three stamp styles and aligned their previews with the exported 9:16 poster rendering.
+- Simplified achievement data to the fields used by the current Passport flow and updated photo/text poster composition.
+- Reduced nonessential Banana upload notifications while preserving image compression and error feedback.
+
+### Technical
+- Moved Canvas poster typography to the same local fonts used by the Life Passport interface.
+- Suppressed root body hydration warnings caused by browser-injected attributes without changing rendered content.
+
 ## [v1.4.1] - 2026-08-10
 
 ### Added

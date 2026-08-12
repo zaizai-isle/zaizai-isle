@@ -1,4 +1,4 @@
-# 🏝️ Zaizai Isle (V1.4.1)
+# 🏝️ Zaizai Isle (V1.4.2)
 
  > 一个可长期维护、可继续生长、可承载个人变化的数字小岛
  > *A digital isle that grows, survives, and reflects personal evolution.*
@@ -81,9 +81,10 @@
 
 ### 🪪 Life Passport｜人生护照
 **定位**：为一次真实的人生抵达盖下印章。
-*   当前内部版本为 `Passport v0.1.11`，支持三步记录、装帧与纪念卡导出。
-*   照片可选，支持多种印章与照片质感。
+*   当前内部版本为 `Passport v0.1.12`，支持三步记录、装帧与纪念卡导出。
+*   提供十二类人生主题、手绘日期选择、可选照片及多种印章与照片质感。
 *   照片预览保留原始比例，纸张边缘会随内容尺寸自适应。
+*   页面与导出海报共用本地手写字体，章印预览和导出结果保持一致。
 *   当前不保存历史记录，不承诺登录、同步或云端存储。
 
 ### 📖 Isle Daily｜小岛日签
@@ -116,7 +117,8 @@
 
 ## 6. 生长足迹 (Growth Milestones)
 
-*   **V1.4.1 (Active)**: 人生护照收敛为三步流程并新增自适应纸张；Banana 增加 Supabase Edge Function / Replicate 代理代码；恢复并验证 GitHub Pages 发布链路。
+*   **V1.4.2 (Active)**: 扩展人生护照主题与成就库，重做手绘表单、字体和章印体系，并统一界面与 9:16 导出海报的视觉语言。
+*   **V1.4.1**: 人生护照收敛为三步流程并新增自适应纸张；Banana 增加 Supabase Edge Function / Replicate 代理代码；恢复并验证 GitHub Pages 发布链路。
 *   **V1.4.0**: Built Structures 注册表成型；新增人生护照与小岛日签两个实验结构；校准 Banana 归属关系、移动导航、文档索引与 GitHub Pages Node 25 发布链路。
 *   **V1.3.0**: 维护记忆成型，新增发布检查、资产生成说明与版本升级规划，清理低风险 Banana lint 噪音。
 *   **V1.2.9**: 资产静默减重，推进 WebP 迁移与天气图标静态加载；归档旧版内联天气图标 Map，图标生成链路转为静态 SVG 输出。
@@ -127,8 +129,8 @@
 ---
 
 **Document Status**
-*   **Current Version**: V1.4.1 (Built Structures & Living Moments)
-*   **Last Updated**: 2026-08-10
+*   **Current Version**: V1.4.2 (Built Structures & Living Moments)
+*   **Last Updated**: 2026-08-12
 *   **Author**: Isle System
 
 ---

@@ -8,6 +8,7 @@ import { BackgroundWrapper } from "@/components/BackgroundWrapper";
 import { BackgroundController } from "@/components/BackgroundController";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TextModeSwitcher } from "@/components/TextModeSwitcher";
+import { hongLeiXingShuFont, xinYeNianFont, youRanXiaoKaiFont } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Zaizai Isle | AI Product Designer",
@@ -41,7 +42,7 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID || "";
   return (
     <html lang="zh-CN">
-      <body className="antialiased min-h-screen relative overflow-x-hidden">
+      <body suppressHydrationWarning className={`${xinYeNianFont.variable} ${youRanXiaoKaiFont.variable} ${hongLeiXingShuFont.variable} antialiased min-h-screen relative overflow-x-hidden`}>
         <BackgroundProvider>
           <BackgroundWrapper />
           <LanguageProvider>

@@ -1,7 +1,7 @@
 # Zaizai Isle Release Checklist
 
 > Status: Active release procedure
-> Last Updated: 2026-08-10
+> Last Updated: 2026-08-12
 > Purpose: Keep releases small, repeatable, and aligned with the island's narrative guardrails.
 
 ---

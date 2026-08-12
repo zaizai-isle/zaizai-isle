@@ -228,6 +228,11 @@ body {
 
 /* Material-backed journal surfaces; keep image layers after color washes. */
 .achievement-paper {
+  --achievement-ink: #263b35;
+  --achievement-ink-strong: #202624;
+  --achievement-ink-muted: #686d68;
+  --achievement-accent: #526b45;
+  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
   background-color: #ede9dd;
   background-image:
     linear-gradient(rgba(237, 233, 220, 0.58), rgba(237, 233, 220, 0.58)),
@@ -239,9 +244,67 @@ body {
 }
 
 .achievement-handwriting {
-  font-family: "Ma Shan Zheng", "STXingkai", "Xingkai SC", "Kaiti SC", cursive;
+  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
   font-weight: 400;
   letter-spacing: 0.045em;
+}
+
+.achievement-paper :is(h1, h2, h3, strong),
+.achievement-title {
+  font-family: var(--font-you-ran-xiao-kai), "STXingkai", "Xingkai SC", "Kaiti SC", cursive;
+  font-weight: 400;
+}
+
+.achievement-paper .achievement-section-title {
+  color: var(--achievement-ink);
+  font-family: var(--font-hong-lei-xing-shu), "STXingkai", "Kaiti SC", cursive;
+  font-size: clamp(1.125rem, 1.2vw, 1.375rem);
+  line-height: 1.35;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.achievement-option-control {
+  color: var(--achievement-ink);
+}
+
+.achievement-option-title {
+  position: relative;
+  z-index: 1;
+  color: var(--achievement-ink);
+  font-family: var(--font-you-ran-xiao-kai), "STXingkai", "Kaiti SC", cursive;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.achievement-option-description {
+  position: relative;
+  z-index: 1;
+  color: var(--achievement-ink-muted);
+  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.achievement-option-control:hover .achievement-option-title,
+.achievement-option-control:focus-visible .achievement-option-title {
+  color: var(--achievement-accent);
+}
+
+.achievement-texture-option {
+  min-height: 4.5rem;
+  padding: 0.625rem 0.75rem;
+}
+
+.achievement-filter-option {
+  min-height: 2.75rem;
+  color: var(--achievement-ink);
+  font-size: 0.9375rem;
+}
+
+.achievement-paper :is(button, input, textarea, select):not(.font-mono):not(.achievement-title) {
+  font-family: inherit;
 }
 
 .journal-writing {
@@ -316,14 +379,15 @@ body {
 .journal-mini-tape {
   width: 3.4rem;
   height: 0.97rem;
-  opacity: 0.8;
+  filter: sepia(0.18) saturate(0.65) brightness(0.76) contrast(1.15);
+  opacity: 0.92;
 }
 
 .journal-mini-tape-selected {
   background-color: transparent;
   background-image: url("../assets/achievement/bg-stick-selected.svg");
-  filter: none;
-  opacity: 1;
+  filter: saturate(0.9);
+  opacity: 0.72;
 }
 
 .journal-pencil-line {
@@ -352,6 +416,105 @@ body {
 
 .journal-input-line:focus-within::after {
   opacity: 0.5;
+}
+
+.journal-hand-icon {
+  filter: drop-shadow(0.35px 0.45px 0 rgba(38, 59, 53, 0.22));
+  transform: rotate(-1.5deg);
+}
+
+.journal-input-with-icon .journal-hand-icon {
+  transform: translateY(-50%) rotate(-1.5deg);
+}
+
+.journal-hand-icon svg {
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.journal-hand-icon svg path:nth-child(even) {
+  stroke-width: 1.35;
+}
+
+.journal-date-trigger {
+  cursor: pointer;
+}
+
+.journal-date-trigger:focus-visible {
+  outline: 1px dashed rgba(82, 107, 69, 0.72);
+  outline-offset: 5px;
+}
+
+.journal-calendar {
+  isolation: isolate;
+  color: #263b35;
+  background-color: #f1ede1;
+  background-image:
+    linear-gradient(rgba(242, 238, 226, 0.76), rgba(242, 238, 226, 0.76)),
+    url("../assets/achievement/paper-fiber.webp");
+  background-position: center, center;
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 720px 422px;
+  box-shadow: 0 15px 30px rgba(38, 43, 39, 0.16);
+  clip-path: polygon(0.7% 1.8%, 32% 0, 67% 1.2%, 99.2% 0.6%, 100% 34%, 99.1% 69%, 100% 98.3%, 65% 100%, 32% 98.9%, 0 100%);
+}
+
+.journal-calendar::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0.35rem;
+  content: "";
+  pointer-events: none;
+  border: 1px solid rgba(82, 107, 69, 0.2);
+  transform: rotate(-0.15deg);
+}
+
+.journal-calendar-arrow {
+  color: #526b45;
+  transition: transform 160ms ease;
+}
+
+.journal-calendar-arrow:hover {
+  transform: rotate(-4deg) scale(1.08);
+}
+
+.journal-calendar-day {
+  color: #353d38;
+}
+
+.journal-calendar-day::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0.12rem;
+  content: "";
+  border-radius: 46% 54% 42% 58% / 55% 43% 57% 45%;
+  opacity: 0;
+  transform: rotate(-3deg);
+}
+
+.journal-calendar-day:hover::before,
+.journal-calendar-day:focus-visible::before {
+  background: rgba(82, 107, 69, 0.1);
+  opacity: 1;
+}
+
+.journal-calendar-day-today {
+  color: #526b45;
+  text-decoration: underline;
+  text-decoration-color: #d8ce25;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.journal-calendar-day-selected {
+  color: #f4f0e4;
+}
+
+.journal-calendar-day-selected::before {
+  background: #526b45;
+  opacity: 1;
 }
 
 .journal-topic::after {
@@ -407,64 +570,65 @@ body {
   mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
 }
 
-.stamp-style-mark {
+.stamp-style-outline {
   position: relative;
-  display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
-  place-items: center;
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
   color: #526b45;
-  font-family: serif;
-  font-size: 0.62rem;
-  font-weight: 700;
-  opacity: 0.82;
+  opacity: 0.78;
 }
 
-.stamp-style-mark::before,
-.stamp-style-mark::after {
+.stamp-style-outline::before,
+.stamp-style-outline::after {
   position: absolute;
   content: "";
   border: 1.5px solid currentColor;
-  -webkit-mask-image: repeating-linear-gradient(103deg, #000 0 0.72rem, transparent 0.72rem 0.78rem, #000 0.78rem 1.72rem, transparent 1.72rem 1.8rem);
-  mask-image: repeating-linear-gradient(103deg, #000 0 0.72rem, transparent 0.72rem 0.78rem, #000 0.78rem 1.72rem, transparent 1.72rem 1.8rem);
+  opacity: 0.9;
 }
 
-.stamp-style-mark::before {
-  inset: 0;
-  transform: rotate(-1.2deg);
+.stamp-style-outline::before {
+  inset: 0.08rem;
 }
 
-.stamp-style-mark::after {
-  inset: 0.16rem;
+.stamp-style-outline::after {
+  inset: 0.3rem;
   border-width: 1px;
   opacity: 0.38;
-  transform: rotate(1.4deg);
 }
 
-.stamp-style-mark > span {
-  position: relative;
-  z-index: 1;
+.stamp-style-outline-classic {
+  transform: rotate(-30deg);
 }
 
-.stamp-style-mark-classic::before,
-.stamp-style-mark-classic::after {
+.stamp-style-outline-classic::before,
+.stamp-style-outline-classic::after {
   border-radius: 999px;
 }
 
-.stamp-style-mark-date {
-  font-family: ui-monospace, monospace;
-  font-size: 0.58rem;
-  transform: rotate(1deg);
+.stamp-style-outline-date {
+  width: 2.9rem;
+  height: 2.3rem;
+  transform: rotate(-7deg);
 }
 
-.stamp-style-mark-journal {
-  font-size: 0.9rem;
+.stamp-style-outline-journal {
   transform: rotate(-4deg);
 }
 
-.stamp-style-mark-journal::before,
-.stamp-style-mark-journal::after {
-  border-radius: 38% 13% 31% 17% / 20% 36% 16% 31%;
+.stamp-style-outline-journal::before,
+.stamp-style-outline-journal::after {
+  border: 0;
+  clip-path: polygon(5% 12%, 72% 2%, 98% 25%, 87% 92%, 8% 83%, 0 35%);
+}
+
+.stamp-style-outline-journal::before {
+  background: currentColor;
+}
+
+.stamp-style-outline-journal::after {
+  background: #f5f1e5;
+  opacity: 1;
 }
 
 .journal-photo-frame {
@@ -493,17 +657,6 @@ body {
 
 .achievement-choice:nth-child(3n) {
   rotate: -0.45deg;
-}
-
-.achievement-choice:nth-child(2n) .journal-mini-tape {
-  right: 1rem;
-  left: auto;
-  transform: rotate(7deg);
-}
-
-.achievement-choice:nth-child(3n) .journal-mini-tape {
-  left: 42%;
-  transform: rotate(-6deg);
 }
 
 .journal-note-underline {
@@ -546,6 +699,18 @@ body {
 .journal-ink-button:disabled {
   background-color: transparent;
   filter: grayscale(0.45) opacity(0.58);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-paper-slip,
+  .journal-ink-button {
+    transition: none;
+  }
+
+  .journal-paper-slip:hover,
+  .journal-ink-button:hover:not(:disabled) {
+    transform: none;
+  }
 }
 
 .achievement-hide-scrollbar {

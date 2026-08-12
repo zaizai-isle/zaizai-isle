@@ -7,7 +7,7 @@ import { Upload, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 import { toast } from 'sonner';
-import { compressImage, validateFileName, generateSafeFileName, formatFileSize } from '@/lib/utils/imageCompression';
+import { compressImage } from '@/lib/utils/imageCompression';
 import type { CompressionResult } from '@/lib/utils/imageCompression';
 
 interface ImageUploaderProps {
@@ -28,18 +28,9 @@ export function ImageUploader({ onImageSelected, disabled }: ImageUploaderProps)
       setProgress(10);
 
       try {
-        if (!validateFileName(file.name)) {
-          const safeName = generateSafeFileName(file.name);
-          toast.info('文件名已自动调整', { description: `已重命名为：${safeName}` });
-        }
         setProgress(30);
         const result: CompressionResult = await compressImage(file);
         setProgress(60);
-        if (result.compressed) {
-          toast.success('图片已自动压缩', {
-            description: `原始：${formatFileSize(result.originalSize)}，压缩后：${formatFileSize(result.finalSize)}`,
-          });
-        }
         setProgress(80);
         const previewUrl = URL.createObjectURL(result.file);
         setPreview(previewUrl);

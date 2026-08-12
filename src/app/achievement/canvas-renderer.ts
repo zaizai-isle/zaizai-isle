@@ -1,4 +1,16 @@
 import type { LifeAchievement } from "./achievements";
+import { xinYeNianFont, youRanXiaoKaiFont } from "../fonts";
+
+const BODY_FONT = `${xinYeNianFont.style.fontFamily}, "Kaiti SC", serif`;
+const TITLE_FONT = `${youRanXiaoKaiFont.style.fontFamily}, "Kaiti SC", cursive`;
+
+export type AchievementRarity = "普通" | "稀有" | "史诗" | "传说";
+
+export interface AchievementCard extends LifeAchievement {
+  description: string;
+  rate: string;
+  rarity: AchievementRarity;
+}
 
 export type FilterId =
   | "ascii" | "hanzi" | "terminal" | "dots" | "voxel" | "arcade" | "mosaic"
@@ -409,7 +421,7 @@ function drawPixelIcon(
 
 function drawAchievementCard(
   ctx: CanvasRenderingContext2D,
-  achievement: LifeAchievement,
+  achievement: AchievementCard,
   settings: RenderSettings,
   iconImage?: HTMLImageElement | null,
 ) {
@@ -473,7 +485,7 @@ function drawAchievementCard(
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "#dedbd0";
-  ctx.font = "23px ui-monospace, monospace";
+  ctx.font = `23px ${BODY_FONT}`;
   ctx.fillText("人生成就达成", contentX, y + 60);
   if (settings.showRarity) {
     ctx.textAlign = "right";
@@ -484,10 +496,10 @@ function drawAchievementCard(
     ctx.textAlign = "left";
   }
   let titleSize = 50;
-  ctx.font = `bold ${titleSize}px ui-monospace, system-ui, sans-serif`;
+  ctx.font = `${titleSize}px ${TITLE_FONT}`;
   while (ctx.measureText(achievement.title).width > contentRight - contentX && titleSize > 34) {
     titleSize -= 2;
-    ctx.font = `bold ${titleSize}px ui-monospace, system-ui, sans-serif`;
+    ctx.font = `${titleSize}px ${TITLE_FONT}`;
   }
   ctx.fillStyle = palette.shadow;
   ctx.fillText(achievement.title, contentX + 3, y + 121);
@@ -497,13 +509,13 @@ function drawAchievementCard(
   let cursorY = y + 160;
   if (settings.showMotto) {
     ctx.fillStyle = "#e3dece";
-    ctx.font = "27px ui-monospace, system-ui, sans-serif";
+    ctx.font = `27px ${BODY_FONT}`;
     ctx.fillText(`“${achievement.motto}”`, contentX, cursorY);
     cursorY += 49;
   }
   if (settings.showDescription) {
     ctx.fillStyle = "#aaa69d";
-    ctx.font = "22px ui-monospace, system-ui, sans-serif";
+    ctx.font = `22px ${BODY_FONT}`;
     const lines = wrapText(ctx, achievement.description, contentRight - contentX).slice(0, 2);
     lines.forEach((line, index) => ctx.fillText(line, contentX, cursorY + index * 29));
   }
@@ -531,7 +543,7 @@ function drawAchievementCard(
 export function renderAchievementCanvas(
   canvas: HTMLCanvasElement,
   image: HTMLImageElement | HTMLCanvasElement,
-  achievement: LifeAchievement,
+  achievement: AchievementCard,
   settings: RenderSettings,
   iconImage?: HTMLImageElement | null,
 ) {

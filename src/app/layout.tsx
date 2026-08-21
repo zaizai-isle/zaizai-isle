@@ -41,7 +41,7 @@ export default function RootLayout({
   const isProd = process.env.NODE_ENV === 'production';
   const gaId = process.env.NEXT_PUBLIC_GA_ID || "";
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-scroll-behavior="smooth">
       <body suppressHydrationWarning className={`${xinYeNianFont.variable} ${youRanXiaoKaiFont.variable} ${hongLeiXingShuFont.variable} antialiased min-h-screen relative overflow-x-hidden`}>
         <BackgroundProvider>
           <BackgroundWrapper />

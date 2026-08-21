@@ -20,7 +20,7 @@
 | 文档 | 用途 | 状态 |
 |---|---|---|
 | [版本升级规划](/zaizai-isle/docs/prd/VersionUpgradePlan) | V1.3 至 V2.0 的站点演进路径 | Active |
-| [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.1.12 |
+| [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.2.2 |
 | [小岛日签规格](/zaizai-isle/docs/prd/IsleDaily-v0.1) | `/daily` 的当前能力、内容规则与边界 | Active · Daily v0.1 |
 | [资产优化计划](/zaizai-isle/docs/prd/AssetOptimizationPlan) | 静态导出下的图片与天气图标策略 | Maintained |
 

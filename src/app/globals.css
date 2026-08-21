@@ -424,7 +424,7 @@ body {
 }
 
 .journal-input-with-icon .journal-hand-icon {
-  transform: translateY(-50%) rotate(-1.5deg);
+  transform: rotate(-1.5deg);
 }
 
 .journal-hand-icon svg {
@@ -719,6 +719,34 @@ body {
 
 .achievement-hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+@media (min-width: 1024px) {
+  .achievement-form-scroll {
+    scrollbar-color: transparent transparent;
+    scrollbar-width: thin;
+  }
+
+  .achievement-form-scroll:hover {
+    scrollbar-color: rgba(0, 0, 0, 0.05) transparent;
+  }
+
+  .achievement-form-scroll::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  .achievement-form-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .achievement-form-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: transparent;
+  }
+
+  .achievement-form-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.05);
+  }
 }
 
 /* Daily note owns its reading controls and keeps the page free of floating UI. */

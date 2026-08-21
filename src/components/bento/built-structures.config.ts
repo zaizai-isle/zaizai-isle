@@ -29,7 +29,7 @@ export const LIFE_PASSPORT_STRUCTURE: BuiltStructure = {
   href: "/achievement",
   status: "experimental",
   kind: "tool",
-  updatedAt: "2026-07-16",
+  updatedAt: "2026-08-21",
   external: false,
   placeholder: "empty",
 };

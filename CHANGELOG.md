@@ -4,7 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-No changes recorded yet.
+### Added
+- Added clear Life Passport feedback for photo processing, preview rendering, and PNG export failures.
+- Added an explicit remove-photo action and keyboard focus containment for the inspiration dialog.
+- Added Passport `v0.2.0` local persistence with a versioned IndexedDB schema, a default passport, and atomic stamp/photo records.
+- Added `/achievement/passport` with persistent stamp counts, empty state, chronological records, and locally stored thumbnails.
+- Added Passport `v0.2.1` stamp details, saved-draft editing, guarded deletion, and regenerated PNG export from local source data.
+- Added Passport `v0.2.2` schema migration tests, storage-capacity preflight, and automatic orphan-photo/photo-flag repair.
+
+### Changed
+- Refined Life Passport `v0.1.13` into a single-page creation workbench with live preview.
+- Renamed the image export action to “Download PNG” so it remains distinct from local passport saving.
+- Separated “Save to My Passport” from PNG download and compressed photos into source/thumbnail WebP blobs before local storage.
 
 ## [v1.4.2] - 2026-08-12
 

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type RefObject } from "react";
-import Image from "next/image";
-import { ArrowLeft, ArrowRight, Download, RotateCcw, X } from "lucide-react";
+import { useEffect, useRef, useState, type ChangeEvent, type RefObject } from "react";
+import Link from "next/link";
+import { BookMarked, Download, RotateCcw, X } from "lucide-react";
 import { ACHIEVEMENT_CATEGORIES, LIFE_ACHIEVEMENTS, type LifeAchievement } from "../achievements";
 import { FILTERS, type FilterId } from "../canvas-renderer";
 import {
@@ -10,27 +10,8 @@ import {
   type StampDraft,
   type StampStyleId,
 } from "../passport-model";
-import { AdaptivePaper } from "./AdaptivePaper";
-
-export type PassportStep = "arrival" | "memory" | "style";
-
-const STEP_ITEMS: { id: PassportStep; number: string; label: string; eyebrow: string; title: string; description: string }[] = [
-  { id: "arrival", number: "01", label: "写下抵达", eyebrow: "LIFE PASSPORT / ARRIVAL", title: "你抵达了哪里？", description: "有些远方，不在地图上。" },
-  { id: "memory", number: "02", label: "留住此刻", eyebrow: "LIFE PASSPORT / MEMORY", title: "那一天，发生了什么？", description: "时间会走，字迹会留下。" },
-  { id: "style", number: "03", label: "盖下印记", eyebrow: "LIFE PASSPORT / STAMP", title: "为这一程盖章", description: "走到这里，已经值得好好纪念。" },
-];
 
 const EXPERIMENTAL_FILTERS = FILTERS.filter((filter) => filter.id !== "raw");
-
-interface StepContentProps {
-  children: React.ReactNode;
-}
-
-function StepContent({ children }: StepContentProps) {
-  return (
-    <section className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col px-4 pt-3 sm:px-6 sm:pt-5">{children}</section>
-  );
-}
 
 function StampStyleOutline({ style }: { style: StampStyleId }) {
   return <span aria-hidden="true" className={`stamp-style-outline stamp-style-outline-${style}`} />;
@@ -57,7 +38,7 @@ function HandDrawnPin() {
 
 function HandDrawnPhoto() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 48 48" className="h-10 w-10 overflow-visible fill-none">
+    <svg aria-hidden="true" viewBox="0 0 48 48" className="h-6 w-6 overflow-visible fill-none">
       <path d="M7.4 11.5c8.7-1.2 23.1-1 32.6.1.8 7.4.8 17.8-.1 25.1-9.3.8-23.5.8-32.5-.2-.7-7.7-.6-17.5 0-25Z" />
       <path d="M10.1 32.9c3.9-4.8 6.9-8 9.7-10.2 2.2 2 4.4 4.3 6.2 6.2 2.5-2.8 4.5-4.7 6.3-6 2.8 2.9 5 6.1 7.3 9.8" />
       <path d="M29.3 9.1c.1-2.2.1-4.1.4-5.7M25.9 6.3c2.5.1 5.3 0 7.7-.2" />
@@ -187,316 +168,157 @@ function HandDrawnDatePicker({ value, onChange }: { value: string; onChange: (va
   );
 }
 
-export function StepHeader({ activeStep }: { activeStep: PassportStep }) {
-  const activeIndex = STEP_ITEMS.findIndex((item) => item.id === activeStep);
-  const currentStep = STEP_ITEMS[activeIndex];
-  return (
-    <section className="shrink-0 px-4 sm:px-6">
-      <div className="mx-auto max-w-6xl py-2.5 sm:py-3">
-        <nav aria-label="创建人生印章进度">
-          <ol className="grid grid-cols-3 gap-2 sm:gap-4">
-            {STEP_ITEMS.map((item, index) => (
-              <li
-                key={item.id}
-                aria-current={item.id === activeStep ? "step" : undefined}
-                className={`relative border-t pt-1 ${index <= activeIndex ? "border-[#526b45]" : "border-[#bfc2bc]"}`}
-              >
-                <span className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-2">
-                  <span className={`font-mono text-[9px] font-bold tracking-[0.12em] sm:text-[10px] ${index <= activeIndex ? "text-[#526b45]" : "text-[#8a8f8a]"}`}>{item.number}</span>
-                  <span className={`whitespace-nowrap text-[11px] font-semibold sm:text-[13px] ${index === activeIndex ? "text-[#202624]" : index < activeIndex ? "text-[#686d68]" : "text-[#8a8f8a]"}`}>{item.label}</span>
-                </span>
-                {index < STEP_ITEMS.length - 1 ? <span aria-hidden="true" className="absolute -right-[5px] -top-0.5 h-1 w-1 rounded-full bg-[#a7aaa2] sm:-right-[9px]" /> : null}
-              </li>
-            ))}
-          </ol>
-        </nav>
-        <div className="mt-2 grid gap-0.5 sm:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)] sm:items-end sm:gap-8">
-          <div>
-            <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#526b45] sm:text-[11px]">{currentStep.eyebrow}</span>
-            <h1 className="achievement-handwriting mt-0.5 text-balance text-[1.75rem] leading-tight tracking-wide text-[#202624] sm:text-[2.15rem]">{currentStep.title}</h1>
-          </div>
-          <p className="hidden text-pretty text-sm leading-6 text-[#686d68] sm:block sm:pb-0.5">{currentStep.description}</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-interface ArrivalStepProps {
+interface AchievementCreatorProps {
   draft: StampDraft;
   category: string;
-  onCategoryChange: (category: string) => void;
-  onDraftChange: (patch: Partial<StampDraft>) => void;
-  onNext: () => void;
-}
-
-export function ArrivalStep({ draft, category, onCategoryChange, onDraftChange, onNext }: ArrivalStepProps) {
-  const visibleAchievements = LIFE_ACHIEVEMENTS.filter((achievement) => achievement.category === category);
-  const selectAchievement = (achievement: LifeAchievement) => {
-    onDraftChange({
-      achievementId: achievement.id,
-      title: achievement.title,
-      category: achievement.category,
-      icon: achievement.icon,
-      note: achievement.motto,
-    });
-  };
-
-  return (
-    <StepContent>
-      <div className="arrival-journal min-h-0 flex-1">
-        <section>
-          <span className="achievement-section-title">01  用自己的话写下这一刻</span>
-          <label className="block">
-            <span className="journal-writing relative mt-1.5 block">
-              <span aria-hidden="true" className="journal-tape absolute right-12 -top-1 hidden sm:block" />
-              <textarea
-                name="arrival-title"
-                autoComplete="off"
-                rows={2}
-                value={draft.title}
-                onChange={(event) => onDraftChange({ achievementId: undefined, title: event.target.value.slice(0, 24) })}
-                placeholder="例如：第一次一个人生活……"
-                className="achievement-title h-[82px] w-full resize-none bg-transparent px-5 py-3 pb-8 text-[1.4rem] leading-8 text-[#202624] outline-none placeholder:text-[#8a8f8a] sm:h-[104px] sm:px-7 sm:py-4 sm:pb-9 sm:text-[1.7rem] sm:leading-10"
-              />
-              <span className="achievement-handwriting pointer-events-none absolute bottom-2.5 right-3 z-[2] text-sm text-[#7d827d]">{draft.title.length} / 24</span>
-            </span>
-          </label>
-        </section>
-
-        <section className="mt-4 min-w-0 sm:mt-5">
-          <span className="achievement-section-title">02  也许，这里正好有你的故事</span>
-          <div className="mt-0.5 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          </div>
-          <div className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1 sm:mt-3 sm:grid-cols-4 sm:gap-x-8 sm:gap-y-2">
-            {ACHIEVEMENT_CATEGORIES.map((item, index) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => onCategoryChange(item)}
-                aria-pressed={category === item}
-                className={`achievement-option-control journal-topic arrival-topic relative flex min-h-11 items-center gap-2 px-1.5 py-1 text-left sm:min-h-12 sm:gap-3 ${category === item ? "arrival-topic-selected" : ""}`}
-              >
-                <span className="relative z-[1] font-mono text-[11px] text-[#526b45] sm:text-[13px]">{String(index + 1).padStart(2, "0")}</span>
-                <span className={`achievement-option-title truncate ${category === item ? "arrival-topic-label-selected" : ""}`}>{item}</span>
-                <span aria-hidden="true" className={`relative z-[1] text-xs ${category === item ? "text-[#d1bd00]" : "text-[#90958f]"}`}>{category === item ? "◎" : "·"}</span>
-              </button>
-            ))}
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:mt-4 sm:gap-4 lg:grid-cols-4">
-            {visibleAchievements.map((achievement) => {
-              const selected = draft.achievementId === achievement.id;
-              return (
-                <div key={achievement.id} className="journal-slip-wrap achievement-choice relative">
-                  <span aria-hidden="true" className={`journal-mini-tape absolute -top-0.5 right-4 z-10 ${selected ? "journal-mini-tape-selected" : ""}`} />
-                  <button
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => selectAchievement(achievement)}
-                    className="achievement-option-control journal-paper-slip relative grid min-h-[72px] w-full grid-cols-[34px_minmax(0,1fr)] items-center gap-2.5 px-3 py-3 text-left transition-transform hover:-translate-y-0.5 sm:min-h-24 sm:grid-cols-[42px_minmax(0,1fr)] sm:gap-3 sm:px-4"
-                  >
-                    <span className="grid h-8 w-8 place-items-center text-lg sm:h-10 sm:w-10 sm:text-xl">{achievement.icon}</span>
-                    <span className="relative z-[1] min-w-0">
-                      <strong className="achievement-option-title block truncate sm:text-lg">{achievement.title}</strong>
-                      <small className="achievement-option-description mt-0.5 block truncate">{achievement.motto}</small>
-                    </span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      </div>
-
-      <StepActions onNext={onNext} nextLabel="为这一刻留下记录" nextDisabled={!draft.title.trim()} />
-    </StepContent>
-  );
-}
-
-interface MemoryStepProps {
-  draft: StampDraft;
   photoUrl: string;
-  photoAspect: number;
   fileError: string;
+  previewError: string;
+  exportState: "idle" | "exporting" | "success" | "error";
+  saveState: "idle" | "saving" | "success" | "error";
+  saveError: string;
+  isEditing: boolean;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
+  onCategoryChange: (category: string) => void;
   onDraftChange: (patch: Partial<StampDraft>) => void;
   onPhotoChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onRemovePhoto: () => void;
-  onBack: () => void;
-  onNext: () => void;
-}
-
-export function MemoryStep({ draft, photoUrl, photoAspect, fileError, onDraftChange, onPhotoChange, onRemovePhoto, onBack, onNext }: MemoryStepProps) {
-  return (
-    <StepContent>
-      <div className="mx-auto grid w-full max-w-3xl content-start gap-6 pt-7 sm:gap-7 sm:pt-10">
-        <div className="grid content-start gap-5">
-          <HandDrawnDatePicker value={draft.date} onChange={(date) => onDraftChange({ date })} />
-          <label className="block">
-            <span className="journal-input-line journal-input-with-icon relative block">
-              <span className="journal-hand-icon pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[#263b35]"><HandDrawnPin /></span>
-              <input aria-label="抵达地点" name="arrival-location" autoComplete="off" value={draft.location} onChange={(event) => onDraftChange({ location: event.target.value.slice(0, 28) })} placeholder="城市、房间，或特别的地方…" className="h-12 w-full border-0 bg-transparent pl-11 pr-2 text-base text-[#202624] outline-none placeholder:text-[#8a8f8a]" />
-            </span>
-          </label>
-          <label className="block">
-            <span className="journal-writing relative block">
-              <textarea aria-label="留给这一刻的一句话" name="arrival-note" autoComplete="off" value={draft.note} onChange={(event) => onDraftChange({ note: event.target.value.slice(0, 72) })} rows={4} placeholder="留给这一刻的一句话……" className="achievement-handwriting h-32 w-full resize-none bg-transparent px-3 py-2 pb-9 text-lg leading-8 text-[#202624] outline-none placeholder:text-[#8a8f8a]" />
-              <span className="achievement-handwriting pointer-events-none absolute bottom-2.5 right-3 z-[2] text-sm text-[#7d827d]">{draft.note.length} / 72</span>
-            </span>
-          </label>
-        </div>
-
-        <div className="min-w-0 pb-2">
-          {photoUrl ? (
-            <div
-              className="journal-slip-wrap journal-photo-frame relative mx-auto"
-              style={{ "--photo-aspect": photoAspect } as CSSProperties}
-            >
-              <span aria-hidden="true" className="journal-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2" />
-              <AdaptivePaper className="journal-paper-photo flex w-full justify-center" contentClassName="relative w-full">
-                <div className="relative w-full overflow-hidden" style={{ aspectRatio: photoAspect }}>
-                  <Image src={photoUrl} alt="所选人生时刻完整预览" fill unoptimized sizes="(min-width: 1024px) 42rem, calc(100vw - 3rem)" className="object-contain" />
-                  <button type="button" onClick={onRemovePhoto} aria-label="移除照片" className="absolute right-2 top-2 grid h-11 w-11 place-items-center rounded-full bg-[#f2f0e8] text-[#263b35] shadow-md hover:bg-white"><X className="h-4 w-4" /></button>
-                </div>
-              </AdaptivePaper>
-            </div>
-          ) : (
-            <div className="journal-slip-wrap relative">
-              <span aria-hidden="true" className="journal-tape absolute -top-1 left-1/2 z-10 -translate-x-1/2" />
-              <label className="journal-paper-slip relative grid min-h-44 cursor-pointer place-items-center bg-[#f2f0e8]/65 p-5 text-center transition-transform hover:-translate-y-0.5 sm:min-h-48">
-                <span>
-                  <span className="journal-hand-icon mx-auto block w-fit text-[#526b45]"><HandDrawnPhoto /></span>
-                  <strong className="achievement-option-title mt-3 block">放入一张照片</strong>
-                  <small className="achievement-option-description mt-1.5 block">有些记忆，一眼就能回来</small>
-                  <span aria-hidden="true" className="achievement-handwriting mt-2 block text-[#d8ce25]">↗</span>
-                </span>
-                <input name="arrival-photo" type="file" accept="image/jpeg,image/png,image/webp" onChange={onPhotoChange} className="sr-only" />
-              </label>
-            </div>
-          )}
-          {fileError ? <p role="alert" className="mt-2 text-sm text-[#a02f28]">{fileError}</p> : null}
-        </div>
-      </div>
-
-      <StepActions onBack={onBack} onNext={onNext} nextLabel="选择印章样式" />
-    </StepContent>
-  );
-}
-
-interface StyleStepProps {
-  canvasRef: RefObject<HTMLCanvasElement | null>;
-  draft: StampDraft;
-  hasPhoto: boolean;
-  onDraftChange: (patch: Partial<StampDraft>) => void;
-  onBack: () => void;
+  onSave: () => void;
   onExport: () => void;
   onRestart: () => void;
 }
 
-export function StyleStep({ canvasRef, draft, hasPhoto, onDraftChange, onBack, onExport, onRestart }: StyleStepProps) {
+export function AchievementCreator({ draft, category, photoUrl, fileError, previewError, exportState, saveState, saveError, isEditing, canvasRef, onCategoryChange, onDraftChange, onPhotoChange, onRemovePhoto, onSave, onExport, onRestart }: AchievementCreatorProps) {
+  const [inspirationOpen, setInspirationOpen] = useState(false);
+  const [selectedInspirationId, setSelectedInspirationId] = useState<string | undefined>(draft.achievementId);
+  const inspirationTriggerRef = useRef<HTMLButtonElement>(null);
+  const inspirationCloseRef = useRef<HTMLButtonElement>(null);
+  const inspirationDialogRef = useRef<HTMLElement>(null);
+  const visibleAchievements = LIFE_ACHIEVEMENTS.filter((achievement) => achievement.category === category);
+  const selectedInspiration = LIFE_ACHIEVEMENTS.find((achievement) => achievement.id === selectedInspirationId);
+
+  useEffect(() => {
+    if (!inspirationOpen) return;
+    const handleDialogKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setInspirationOpen(false);
+        window.requestAnimationFrame(() => inspirationTriggerRef.current?.focus());
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusableElements = inspirationDialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusableElements?.length) return;
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleDialogKeyDown);
+    window.requestAnimationFrame(() => inspirationCloseRef.current?.focus());
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleDialogKeyDown);
+    };
+  }, [inspirationOpen]);
+
+  const closeInspiration = () => {
+    setInspirationOpen(false);
+    window.requestAnimationFrame(() => inspirationTriggerRef.current?.focus());
+  };
+
+  const useInspiration = () => {
+    if (!selectedInspiration) return;
+    onDraftChange({ achievementId: selectedInspiration.id, title: selectedInspiration.title, category: selectedInspiration.category, icon: selectedInspiration.icon, note: selectedInspiration.motto });
+    closeInspiration();
+  };
+
   return (
-    <StepContent>
-      <div className="grid min-h-0 flex-1 items-stretch gap-5 lg:basis-0 lg:grid-cols-[minmax(280px,0.78fr)_minmax(0,1.22fr)] lg:gap-7">
-        <figure className="flex min-h-0 flex-col">
-          <div className="grid min-h-64 flex-1 place-items-center">
-            <canvas ref={canvasRef} aria-label={`${draft.title}印章样式实时预览`} className="max-h-[250px] w-auto max-w-full shadow-[0_18px_45px_rgba(32,38,36,0.2)] sm:max-h-[320px] lg:max-h-[calc(100dvh-285px)]" />
-          </div>
-          <figcaption className="mt-2 flex items-center justify-between gap-4 font-mono text-[11px] tracking-[0.08em] text-[#686d68]">
-            <span>这一程，确实发生过</span><span>LIFE PASSPORT</span>
-          </figcaption>
-        </figure>
+    <section className="mx-auto w-full max-w-6xl px-4 pb-8 pt-3 sm:px-6 sm:pb-10 sm:pt-5 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pb-5">
+      <div className="mb-5 grid shrink-0 gap-1 pt-3 sm:grid-cols-[minmax(0,1fr)_minmax(280px,.7fr)] sm:items-end sm:gap-8">
+        <div><span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#526b45] sm:text-[11px]">LIFE PASSPORT / CREATE</span><h1 className="achievement-handwriting mt-1 text-balance text-[1.75rem] leading-tight tracking-wide text-[#202624] sm:text-[2.15rem]">把这一程，好好记下来</h1></div>
+        <p className="hidden text-right text-pretty text-sm leading-6 text-[#686d68] sm:block">记录这一程，也为它留下一枚印记。</p>
+      </div>
 
-        <div className="min-w-0 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
-          <h2 className="achievement-section-title">01   印章样式</h2>
-          <div className="mt-2 grid gap-2 sm:grid-cols-3">
-            {STAMP_STYLES.map((style) => {
-              const selected = draft.style === style.id;
-              return (
-                <div key={style.id} className="journal-slip-wrap relative">
-                  <span aria-hidden="true" className={`journal-mini-tape absolute -top-1 right-4 z-10 ${selected ? "journal-mini-tape-selected" : ""}`} />
-                  <button
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => onDraftChange({ style: style.id as StampStyleId })}
-                    className="achievement-option-control journal-paper-slip relative grid min-h-20 w-full grid-cols-[48px_1fr] items-center gap-2 p-2 text-left transition-transform hover:-translate-y-0.5"
-                  >
-                    <StampStyleOutline style={style.id} />
-                    <span className="relative z-[1] min-w-0"><strong className="achievement-option-title block">{style.label}</strong><small className="achievement-option-description mt-0.5 block text-pretty">{style.description}</small></span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+      <div className="grid items-start gap-7 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1.12fr)_minmax(300px,.72fr)] lg:gap-9">
+        <div className="achievement-form-scroll grid min-w-0 auto-rows-max content-start gap-3 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:pb-8 lg:pr-3">
+          <section>
+            <label className="sr-only" htmlFor="achievement-title">写下成就</label>
+            <span className="journal-input-line relative block">
+              <input id="achievement-title" name="achievement-title" autoComplete="off" maxLength={24} value={draft.title} onChange={(event) => onDraftChange({ achievementId: undefined, title: event.target.value })} placeholder="例如：第一次一个人生活……" className="achievement-title h-12 w-full border-0 bg-transparent px-2 pr-32 text-xl text-[#202624] outline-none placeholder:text-[#8a8f8a] sm:pr-36 sm:text-2xl" />
+              <button ref={inspirationTriggerRef} type="button" aria-haspopup="dialog" onClick={() => { setSelectedInspirationId(draft.achievementId); setInspirationOpen(true); }} className="achievement-handwriting absolute inset-y-0 right-1 flex min-h-11 items-center px-2 text-sm text-[#526b45] hover:text-[#263b35]">寻找灵感 ↗</button>
+            </span>
+          </section>
 
-          {hasPhoto ? (
-            <div className="mt-4 pt-1">
-              <h2 className="achievement-section-title">02 / 照片质感</h2>
-              <div className="mt-1.5 grid grid-cols-2 gap-x-5 gap-y-0.5 sm:grid-cols-3">
-                {PHOTO_TEXTURES.map((texture) => (
-                  <button
-                    key={texture.id}
-                    type="button"
-                    aria-pressed={draft.texture === texture.id}
-                    onClick={() => onDraftChange({ texture: texture.id as PhotoTextureId })}
-                    className={`achievement-option-control achievement-texture-option journal-topic relative text-left ${draft.texture === texture.id ? "journal-topic-selected" : ""}`}
-                  >
-                    <strong className="achievement-option-title block">{texture.label}</strong>
-                    <small className="achievement-option-description mt-1 block text-pretty">{texture.description}</small>
-                  </button>
-                ))}
-              </div>
+          <section>
+            <label className="sr-only" htmlFor="achievement-note">留下一句话</label>
+            <span className="journal-writing relative block"><textarea id="achievement-note" name="achievement-note" autoComplete="off" maxLength={72} value={draft.note} onChange={(event) => onDraftChange({ note: event.target.value })} rows={4} placeholder="关于这一程，你最想让未来的自己记住什么？" className="achievement-handwriting h-32 w-full resize-none bg-transparent px-3 py-2 text-lg leading-8 text-[#202624] outline-none placeholder:text-[#8a8f8a]" /></span>
+          </section>
 
-              {draft.texture === "experimental" ? (
-                <div className="mt-2 grid grid-cols-3 gap-x-4 gap-y-1 sm:grid-cols-4 xl:grid-cols-6">
-                  {EXPERIMENTAL_FILTERS.map((filter) => (
-                    <button
-                      key={filter.id}
-                      type="button"
-                      aria-pressed={draft.experimentalFilter === filter.id}
-                      onClick={() => onDraftChange({ experimentalFilter: filter.id as FilterId })}
-                      className={`achievement-filter-option journal-topic relative w-full px-2 py-1 ${draft.experimentalFilter === filter.id ? "journal-topic-selected" : ""}`}
-                    >
-                      {filter.label}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
+          <section aria-label="时间与地点">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <HandDrawnDatePicker value={draft.date} onChange={(date) => onDraftChange({ date })} />
+              <label className="block"><span className="journal-input-line journal-input-with-icon relative block"><span className="journal-hand-icon pointer-events-none absolute inset-y-0 left-2 flex items-center text-[#263b35]"><HandDrawnPin /></span><input aria-label="抵达地点" name="arrival-location" autoComplete="off" value={draft.location} onChange={(event) => onDraftChange({ location: event.target.value.slice(0, 28) })} placeholder="城市、房间，或特别的地方…" className="h-12 w-full border-0 bg-transparent pl-11 pr-2 text-base text-[#202624] outline-none placeholder:text-[#8a8f8a]" /></span></label>
             </div>
-          ) : null}
+          </section>
+
+          <section className="min-w-0" aria-label="照片（可选）">
+            <div className="w-full max-w-md">
+              <div className="flex items-center gap-2">
+                <label className="journal-input-line relative flex h-12 min-w-0 flex-1 cursor-pointer items-center gap-3 px-2 text-left focus-within:outline focus-within:outline-1 focus-within:outline-offset-2 focus-within:outline-[#526b45]">
+                <span className="journal-hand-icon shrink-0 text-[#526b45]"><HandDrawnPhoto /></span>
+                <strong className="achievement-handwriting min-w-0 flex-1 text-base font-normal text-[#526b45]">{photoUrl ? "替换照片" : "添加照片（可选）"}</strong>
+                <span aria-hidden="true" className="achievement-handwriting shrink-0 text-[#526b45]">↗</span>
+                <input name="arrival-photo" type="file" accept="image/jpeg,image/png,image/webp" onChange={onPhotoChange} className="sr-only" />
+                </label>
+                {photoUrl ? <button type="button" onClick={onRemovePhoto} className="h-11 shrink-0 px-2 text-sm text-[#686d68] hover:text-[#a02f28]">移除照片</button> : null}
+              </div>
+              {fileError ? <p role="alert" className="mt-2 text-sm text-[#a02f28]">{fileError}</p> : null}
+            </div>
+          </section>
+
+          <section aria-label="选择印章">
+            <div className="grid gap-2 sm:grid-cols-3">
+              {STAMP_STYLES.map((style) => { const selected = draft.style === style.id; return <div key={style.id} className="journal-slip-wrap relative"><span aria-hidden="true" className={`journal-mini-tape absolute -top-1 right-4 z-10 ${selected ? "journal-mini-tape-selected" : ""}`} /><button type="button" aria-pressed={selected} onClick={() => onDraftChange({ style: style.id as StampStyleId })} className="achievement-option-control journal-paper-slip relative grid min-h-20 w-full grid-cols-[48px_1fr] items-center gap-2 p-2 text-left transition-transform hover:-translate-y-0.5"><StampStyleOutline style={style.id} /><span className="relative z-[1] min-w-0"><strong className="achievement-option-title block">{style.label}</strong><small className="achievement-option-description mt-0.5 block text-pretty">{style.description}</small></span></button></div>; })}
+            </div>
+
+            {photoUrl ? (
+              <div className="mt-5 pt-1" aria-label="照片质感"><div className="grid grid-cols-2 gap-x-5 gap-y-0.5 sm:grid-cols-3">{PHOTO_TEXTURES.map((texture) => <button key={texture.id} type="button" aria-pressed={draft.texture === texture.id} onClick={() => onDraftChange({ texture: texture.id as PhotoTextureId })} className={`achievement-option-control achievement-texture-option journal-topic relative text-left ${draft.texture === texture.id ? "journal-topic-selected" : ""}`}><strong className="achievement-option-title block">{texture.label}</strong><small className="achievement-option-description mt-1 block text-pretty">{texture.description}</small></button>)}</div>{draft.texture === "experimental" ? <div className="mt-2 grid grid-cols-3 gap-x-4 gap-y-1 sm:grid-cols-4 xl:grid-cols-6">{EXPERIMENTAL_FILTERS.map((filter) => <button key={filter.id} type="button" aria-pressed={draft.experimentalFilter === filter.id} onClick={() => onDraftChange({ experimentalFilter: filter.id as FilterId })} className={`achievement-filter-option journal-topic relative w-full px-2 py-1 ${draft.experimentalFilter === filter.id ? "journal-topic-selected" : ""}`}>{filter.label}</button>)}</div> : null}</div>
+            ) : null}
+          </section>
         </div>
+
+        <aside className="lg:min-h-0">
+          <figure><div className="grid min-h-72 place-items-center"><canvas ref={canvasRef} aria-label={`${draft.title || "人生凭证"}实时预览`} className="max-h-[520px] w-auto max-w-full shadow-[0_18px_45px_rgba(32,38,36,0.2)] lg:max-h-[calc(100dvh-250px)]" /></div><figcaption className="mt-2 flex items-center justify-between gap-4 font-mono text-[11px] tracking-[0.08em] text-[#686d68]"><span>这一程，确实发生过</span><span>LIFE PASSPORT</span></figcaption></figure>
+          {previewError ? <p role="alert" className="mt-3 text-sm text-[#a02f28]">{previewError}</p> : null}
+          <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center"><button type="button" onClick={onRestart} className="flex h-11 items-center justify-center gap-2 px-3 text-sm text-[#5f6560] hover:text-[#263b35]"><RotateCcw className="h-3.5 w-3.5" />重新填写</button><div className="flex flex-col gap-2 sm:flex-row sm:justify-end"><button type="button" disabled={!draft.title.trim() || exportState === "exporting" || Boolean(previewError)} onClick={onExport} className="achievement-handwriting journal-topic relative flex h-10 items-center justify-center gap-2 px-4 text-base text-[#526b45] hover:text-[#263b35] disabled:cursor-not-allowed disabled:opacity-45">{exportState === "exporting" ? "正在生成…" : "下载 PNG"}<Download className="h-4 w-4" /></button><button type="button" disabled={!draft.title.trim() || saveState === "saving" || Boolean(previewError)} onClick={onSave} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-base font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{saveState === "saving" ? "正在收入护照…" : isEditing ? "更新这枚印章" : "保存到我的护照"}<BookMarked className="h-4 w-4" /></button></div></div>
+          {saveState === "success" ? <p role="status" className="mt-2 text-right text-sm text-[#526b45]">这枚印章已收入护照。<Link href="/achievement/passport" className="ml-2 underline underline-offset-4">打开我的护照</Link></p> : null}
+          {saveState === "error" ? <p role="alert" className="mt-2 text-right text-sm text-[#a02f28]">{saveError}</p> : null}
+          {exportState === "success" ? <p role="status" className="mt-2 text-right text-sm text-[#526b45]">人生凭证已开始下载。</p> : null}
+          {exportState === "error" ? <p role="alert" className="mt-2 text-right text-sm text-[#a02f28]">下载生成失败，请稍后重试或更换照片。</p> : null}
+        </aside>
       </div>
 
-      <StepActions
-        onBack={onBack}
-        onNext={onExport}
-        nextLabel="收下这张纪念卡"
-        nextIcon={<Download className="h-4 w-4" />}
-        onSecondary={onRestart}
-        secondaryLabel="记录另一次抵达"
-        secondaryIcon={<RotateCcw className="h-3.5 w-3.5" />}
-      />
-    </StepContent>
-  );
-}
-
-interface StepActionsProps {
-  onBack?: () => void;
-  onNext: () => void;
-  nextLabel: string;
-  nextDisabled?: boolean;
-  nextIcon?: React.ReactNode;
-  onSecondary?: () => void;
-  secondaryLabel?: string;
-  secondaryIcon?: React.ReactNode;
-}
-
-function StepActions({ onBack, onNext, nextLabel, nextDisabled = false, nextIcon, onSecondary, secondaryLabel, secondaryIcon }: StepActionsProps) {
-  return (
-    <div className="sticky bottom-0 z-20 mt-auto flex shrink-0 flex-col-reverse gap-2 pt-5 pb-[calc(.75rem+env(safe-area-inset-bottom))] sm:flex-row sm:items-center sm:justify-between">
-      {onBack ? <button type="button" onClick={onBack} className="flex h-11 items-center justify-center gap-2 px-3 text-sm text-[#5f6560] hover:text-[#263b35]"><ArrowLeft className="h-4 w-4" />返回上一步</button> : <span />}
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
-        {onSecondary && secondaryLabel ? <button type="button" onClick={onSecondary} className="flex h-11 items-center justify-center gap-2 px-3 text-sm text-[#5f6560] hover:text-[#263b35]">{secondaryIcon}{secondaryLabel}</button> : null}
-        <button type="button" disabled={nextDisabled} onClick={onNext} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-base font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{nextLabel}{nextIcon ?? <ArrowRight className="h-4 w-4 text-[#e2d849]" />}</button>
-      </div>
-    </div>
+      {inspirationOpen ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-[#202624]/55 p-3 sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) closeInspiration(); }}>
+          <section ref={inspirationDialogRef} role="dialog" aria-modal="true" aria-labelledby="inspiration-title" className="achievement-paper relative flex max-h-[min(88dvh,760px)] w-full max-w-5xl flex-col overflow-hidden px-4 pb-4 pt-5 shadow-[0_24px_80px_rgba(20,24,22,.35)] sm:px-7 sm:pb-6 sm:pt-7">
+            <span aria-hidden="true" className="journal-tape absolute -top-1 left-1/2 -translate-x-1/2" />
+            <div className="flex items-start justify-between gap-5"><div><h2 id="inspiration-title" className="achievement-title text-2xl text-[#263b35] sm:text-3xl">找一个接近此刻的说法</h2><p className="mt-1 text-sm text-[#686d68]">它只是一个起点，确认后仍然可以修改。</p></div><button ref={inspirationCloseRef} type="button" onClick={closeInspiration} aria-label="关闭灵感选择" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#526b45] hover:bg-[#526b45]/10"><X className="h-5 w-5" /></button></div>
+            <div className="achievement-hide-scrollbar mt-4 min-h-0 overflow-y-auto overscroll-contain pr-1">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-1 sm:grid-cols-3 lg:grid-cols-4 sm:gap-x-8 sm:gap-y-2">{ACHIEVEMENT_CATEGORIES.map((item, index) => <button key={item} type="button" onClick={() => { onCategoryChange(item); setSelectedInspirationId(undefined); }} aria-pressed={category === item} className={`achievement-option-control journal-topic arrival-topic relative flex min-h-11 items-center gap-2 px-1.5 py-1 text-left sm:min-h-12 sm:gap-3 ${category === item ? "arrival-topic-selected" : ""}`}><span className="relative z-[1] font-mono text-[11px] text-[#526b45] sm:text-[13px]">{String(index + 1).padStart(2, "0")}</span><span className={`achievement-option-title truncate ${category === item ? "arrival-topic-label-selected" : ""}`}>{item}</span></button>)}</div>
+              <div className="mt-3 grid grid-cols-2 gap-2.5 sm:mt-4 sm:gap-4 lg:grid-cols-4">{visibleAchievements.map((achievement: LifeAchievement) => { const selected = selectedInspirationId === achievement.id; return <div key={achievement.id} className="journal-slip-wrap achievement-choice relative"><span aria-hidden="true" className={`journal-mini-tape absolute -top-0.5 right-4 z-10 ${selected ? "journal-mini-tape-selected" : ""}`} /><button type="button" aria-pressed={selected} onClick={() => setSelectedInspirationId(achievement.id)} className="achievement-option-control journal-paper-slip relative grid min-h-[72px] w-full grid-cols-[34px_minmax(0,1fr)] items-center gap-2.5 px-3 py-3 text-left transition-transform hover:-translate-y-0.5 sm:min-h-24 sm:grid-cols-[42px_minmax(0,1fr)] sm:gap-3 sm:px-4"><span className="grid h-8 w-8 place-items-center text-lg sm:h-10 sm:w-10 sm:text-xl">{achievement.icon}</span><span className="relative z-[1] min-w-0"><strong className="achievement-option-title block truncate sm:text-lg">{achievement.title}</strong><small className="achievement-option-description mt-0.5 block truncate">{achievement.motto}</small></span></button></div>; })}</div>
+            </div>
+            <div className="mt-4 flex shrink-0 flex-col-reverse gap-2 border-t border-[#b7b9b2] pt-4 sm:flex-row sm:items-center sm:justify-between"><button type="button" onClick={closeInspiration} className="h-11 px-3 text-sm text-[#5f6560] hover:text-[#263b35]">取消</button><div className="flex flex-col gap-2 sm:flex-row sm:items-center"><span className="min-w-0 truncate text-sm text-[#686d68]">{selectedInspiration ? `当前选择「${selectedInspiration.title}」` : "选择一个灵感后继续"}</span><button type="button" disabled={!selectedInspiration} onClick={useInspiration} className="journal-ink-button flex h-10 items-center justify-center px-5 text-base font-semibold text-[#f2f0e8] disabled:cursor-not-allowed disabled:opacity-50">用这个灵感</button></div></div>
+          </section>
+        </div>
+      ) : null}
+    </section>
   );
 }

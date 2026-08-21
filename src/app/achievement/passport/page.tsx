@@ -187,9 +187,9 @@ export default function PassportPage() {
                 <Link href="/achievement" className="journal-ink-button mt-6 inline-flex h-11 items-center gap-2 px-5 font-semibold text-[#f2f0e8]"><Plus className="h-4 w-4" />盖下第一枚印章</Link>
               </div>
             ) : (
-              <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-7 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {viewState.stamps.map(({ stamp, thumbnailUrl }) => (
-                  <article key={stamp.id} className="journal-paper-slip overflow-hidden p-4 sm:p-5" style={{ contentVisibility: "auto", containIntrinsicSize: "280px" }}>
+                  <article key={stamp.id} className="journal-paper-slip overflow-hidden p-4 sm:p-5">
                     <button type="button" onClick={() => openStamp(stamp.id)} className="block w-full text-left">
                       {thumbnailUrl ? <div role="img" aria-label={`${stamp.title}的照片`} className="mb-4 aspect-[4/3] bg-[#c9ccc7] bg-cover bg-center" style={{ backgroundImage: `url(${thumbnailUrl})` }} /> : <div aria-hidden="true" className="mb-4 grid aspect-[4/3] place-items-center border border-dashed border-[#a7aca6] text-4xl text-[#526b45]">{stamp.icon}</div>}
                       <div className="flex items-center justify-between gap-3 font-mono text-[10px] tracking-[0.1em] text-[#68716c]"><span>{stamp.category}</span><time dateTime={stamp.date}>{formatDate(stamp.date)}</time></div>

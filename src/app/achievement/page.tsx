@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cloudPassportEnabled } from "./passport-cloud";
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "react";
 import { BookOpen, Compass } from "lucide-react";
 import { AchievementCreator } from "./_components/PassportSteps";
@@ -8,12 +9,14 @@ import { ACHIEVEMENT_CATEGORIES } from "./achievements";
 import { createInitialStampDraft, type StampDraft } from "./passport-model";
 import { preparePassportPhoto } from "./passport-photo";
 import { renderPassportCanvas } from "./passport-renderer";
-import { ensureDefaultPassport, getStamp, getStampPhoto, passportStorageErrorMessage, saveStamp } from "./passport-storage";
+import { ensureDefaultPassport, getStamp, getStampPhoto, passportStorageErrorMessage, saveStamp } from "./passport-repository";
 
 type ExportState = "idle" | "exporting" | "success" | "error";
 type SaveState = "idle" | "saving" | "success" | "error";
 
 export default function AchievementPage() {
+  const editLoading = useRef(false);
+  const [editError, setEditError] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [category, setCategory] = useState<string>(ACHIEVEMENT_CATEGORIES[0]);
   const [draft, setDraft] = useState<StampDraft>(createInitialStampDraft);
@@ -36,6 +39,7 @@ export default function AchievementPage() {
   useEffect(() => {
     const stampId = new URLSearchParams(window.location.search).get("stamp");
     if (!stampId) return;
+    editLoading.current = true;
     let active = true;
 
     const loadSavedStamp = async () => {
@@ -57,7 +61,7 @@ export default function AchievementPage() {
         });
         setCategory(stamp.category);
         setSavedStampId(stamp.id);
-        if (!photo) return;
+        if (!photo) { editLoading.current = false; return; }
 
         const file = new File([photo.sourceBlob], `${stamp.id}.webp`, { type: photo.mimeType });
         const url = URL.createObjectURL(file);
@@ -67,17 +71,19 @@ export default function AchievementPage() {
             URL.revokeObjectURL(url);
             return;
           }
+          editLoading.current = false;
           setSourceFile(file);
           setPhotoUrl(url);
           setSourceImage(image);
         };
         image.onerror = () => {
           URL.revokeObjectURL(url);
-          if (active) setFileError("这枚印章的本地照片暂时无法读取，你仍然可以编辑文字内容。");
+          if (active) setEditError("这枚印章的照片暂时无法读取，请重新打开记录后再保存。");
         };
         image.src = url;
       } catch (error) {
         if (!active) return;
+        setEditError(passportStorageErrorMessage(error));
         setSaveError(passportStorageErrorMessage(error));
         setSaveState("error");
       }
@@ -159,6 +165,7 @@ export default function AchievementPage() {
 
   const saveToPassport = useCallback(async () => {
     if (!draft.title.trim()) return;
+    if (editLoading.current) { setSaveError("请等待原记录及照片加载完成，读取失败时请重新打开记录。"); setSaveState("error"); return; }
     setSaveState("saving");
     setSaveError("");
     try {
@@ -166,11 +173,13 @@ export default function AchievementPage() {
         ensureDefaultPassport(),
         sourceFile ? preparePassportPhoto(sourceFile) : Promise.resolve(null),
       ]);
-      const stamp = await saveStamp({ id: savedStampId, draft, photo });
+      const id = savedStampId ?? `stamp-${crypto.randomUUID()}`;
+      setSavedStampId(id);
+      const stamp = await saveStamp({ id, draft, photo });
       setSavedStampId(stamp.id);
       setSaveState("success");
     } catch (error) {
-      console.error("Life Passport local save failed", error);
+      console.error("Life Passport save failed", error);
       setSaveError(passportStorageErrorMessage(error));
       setSaveState("error");
     }
@@ -204,6 +213,8 @@ export default function AchievementPage() {
   }, [draft.achievementId, draft.date]);
 
   const restart = useCallback(() => {
+    editLoading.current = false;
+    setEditError("");
     setDraft(createInitialStampDraft());
     setCategory(ACHIEVEMENT_CATEGORIES[0]);
     setSavedStampId(undefined);
@@ -225,7 +236,7 @@ export default function AchievementPage() {
           </Link>
           <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.14em] text-[#b9bfba] sm:gap-5 sm:tracking-[0.18em]">
             <Link href="/achievement/passport" className="flex min-h-10 items-center gap-1.5 text-[#e3e5df] hover:text-white"><BookOpen className="h-3.5 w-3.5" />我的护照</Link>
-            <span className="hidden sm:inline">PASSPORT v0.2.2</span>
+            <span className="hidden sm:inline">{cloudPassportEnabled ? "CLOUD PASSPORT" : "LOCAL PASSPORT"}</span>
           </div>
         </div>
       </header>
@@ -237,7 +248,7 @@ export default function AchievementPage() {
           category={category}
           photoUrl={photoUrl}
           fileError={fileError}
-          previewError={previewError}
+          previewError={editError || previewError}
           exportState={exportState}
           saveState={saveState}
           saveError={saveError}

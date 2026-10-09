@@ -23,22 +23,29 @@ function canvasToPng(canvas: HTMLCanvasElement) {
   });
 }
 
-export async function exportSavedStamp(stamp: StampRecord, photo?: StampPhotoRecord) {
+export async function createSavedStampPoster(stamp: StampRecord, photo?: StampPhotoRecord) {
   await document.fonts.ready;
   const loadedPhoto = photo ? await imageFromBlob(photo.sourceBlob) : undefined;
   try {
     const canvas = document.createElement("canvas");
     renderPassportCanvas(canvas, loadedPhoto?.image ?? null, stamp);
-    const blob = await canvasToPng(canvas);
-    const url = URL.createObjectURL(blob);
+    return await canvasToPng(canvas);
+  } finally {
+    if (loadedPhoto) URL.revokeObjectURL(loadedPhoto.url);
+  }
+}
+
+export async function exportSavedStamp(stamp: StampRecord, photo?: StampPhotoRecord) {
+  const blob = await createSavedStampPoster(stamp, photo);
+  const url = URL.createObjectURL(blob);
+  try {
     const link = document.createElement("a");
     link.href = url;
     link.download = `life-passport-portrait-${stamp.date}-${stamp.achievementId ?? stamp.id}.png`;
     document.body.appendChild(link);
     link.click();
     link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 0);
   } finally {
-    if (loadedPhoto) URL.revokeObjectURL(loadedPhoto.url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 }

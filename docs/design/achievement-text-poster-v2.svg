@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      @font-face { font-family: YouRan; src: url('../../src/app/fonts/yan-shi-you-ran-xiao-kai.woff2'); }
+      @font-face { font-family: XinYe; src: url('../../src/app/fonts/xin-ye-nian-ti.woff2'); }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .body { font-family: XinYe, "Kaiti SC", "STKaiti", serif; }
+      .title { font-family: YouRan, "STXingkai", "Kaiti SC", serif; }
+    </style>
+    <pattern id="fiber" width="43" height="47" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="12" r="1" fill="#293d35" opacity=".035" />
+      <circle cx="31" cy="36" r=".8" fill="#293d35" opacity=".025" />
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1920" fill="#f6f2e9" />
+  <rect width="1080" height="1920" fill="url(#fiber)" />
+
+  <text x="64" y="82" class="mono" fill="#303030" font-size="22" font-weight="700">LIFE PASSPORT  /  ARRIVAL</text>
+
+  <text x="75" y="360" class="body" fill="#69766f" font-size="24" letter-spacing="4.8">独立与成长</text>
+  <text x="68" y="510" class="title" fill="#17221d" font-size="128">第一次</text>
+  <text x="68" y="660" class="title" fill="#17221d" font-size="128">一个人生活</text>
+  <text x="75" y="720" class="mono" fill="#9a9e9a" font-size="13" letter-spacing="3">THE FIRST HOME I MADE FOR MYSELF</text>
+
+  <text x="70" y="1030" font-family="Georgia, serif" fill="#a46357" font-size="94">“</text>
+  <text x="75" y="1095" class="mono" fill="#8a918c" font-size="12" font-weight="700" letter-spacing="3">TO MY FUTURE SELF</text>
+  <text x="75" y="1170" class="body" fill="#36463f" font-size="38" letter-spacing="1.7">原来安顿好自己，</text>
+  <text x="75" y="1234" class="body" fill="#36463f" font-size="38" letter-spacing="1.7">也是一种了不起的能力。</text>
+
+  <g transform="translate(855 1420) rotate(-9)" fill="none" stroke="#9d574b" opacity=".76">
+    <circle r="119" stroke-width="4" />
+    <circle r="104" stroke-width="1.5" />
+    <text x="0" y="17" class="title" fill="#9d574b" stroke="none" opacity="1" font-size="50" text-anchor="middle" letter-spacing="4">已抵达</text>
+    <text x="0" y="72" class="mono" fill="#9d574b" stroke="none" opacity="1" font-size="9" font-weight="700" text-anchor="middle" letter-spacing="2">LIFE PASSPORT</text>
+  </g>
+
+  <text x="64" y="1800" class="mono" fill="#707070" font-size="16">ARRIVAL DATE</text>
+  <text x="1016" y="1800" class="mono" fill="#707070" font-size="16" text-anchor="end">LOCATION</text>
+  <text x="64" y="1832" class="mono" fill="#303030" font-size="21" font-weight="700">2026.08.26</text>
+  <text x="1016" y="1832" class="body" fill="#303030" font-size="21" text-anchor="end">上海 · 新房间</text>
+
+  <line x1="64" y1="1855" x2="1016" y2="1855" stroke="#282828" stroke-opacity=".28" stroke-width="2" />
+  <text x="64" y="1890" class="mono" fill="#707070" font-size="15">ZAIZAI ISLE  /  ARRIVAL RECORD</text>
+  <text x="1016" y="1890" class="mono" fill="#707070" font-size="15" text-anchor="end">NO. 0001</text>
+</svg>

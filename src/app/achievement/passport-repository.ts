@@ -1,0 +1,11 @@
+import * as local from './passport-storage';
+import * as cloud from './passport-cloud';
+export { passportStorageErrorMessage } from './passport-storage';
+export type { PassportRecord, StampRecord } from './passport-storage';
+export const ensureDefaultPassport = cloud.cloudPassportEnabled ? cloud.ensureCloudPassport : local.ensureDefaultPassport;
+export const listStamps = cloud.cloudPassportEnabled ? cloud.listCloudStamps : local.listStamps;
+export const getStamp = cloud.cloudPassportEnabled ? cloud.getCloudStamp : local.getStamp;
+export const getStampPhoto = cloud.cloudPassportEnabled ? cloud.getCloudPhoto : local.getStampPhoto;
+export const saveStamp = cloud.cloudPassportEnabled ? cloud.saveCloudStamp : local.saveStamp;
+export const deleteStamp = cloud.cloudPassportEnabled ? cloud.deleteCloudStamp : local.deleteStamp;
+export const repairPassportStorage = cloud.cloudPassportEnabled ? async () => undefined : local.repairPassportStorage;

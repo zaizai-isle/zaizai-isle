@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Added opt-in anonymous Life Passport cloud persistence, private photo storage, recovery-key download/restore/rotation, and explicit local-record migration. Supabase schema, anonymous auth, isolation, recovery, text records, and private photos are verified online.
+- Added database isolation, recovery, quota, immutable-photo and stale-edit tests using PGlite.
 - Added clear Life Passport feedback for photo processing, preview rendering, and PNG export failures.
 - Added an explicit remove-photo action and keyboard focus containment for the inspiration dialog.
 - Added Passport `v0.2.0` local persistence with a versioned IndexedDB schema, a default passport, and atomic stamp/photo records.

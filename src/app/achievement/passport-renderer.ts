@@ -14,7 +14,7 @@ const POSTER_COLORS = {
   charcoal: "#171717",
   forest: "#303030",
   moss: "#595959",
-  light: "#d9d9d6",
+  rust: "#9b5b4f",
   muted: "#707070",
 } as const;
 
@@ -334,19 +334,6 @@ function drawRule(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: num
   ctx.stroke();
 }
 
-function drawPosterHeader(ctx: CanvasRenderingContext2D, draft: StampDraft, width: number, margin: number) {
-  ctx.textBaseline = "alphabetic";
-  ctx.textAlign = "left";
-  ctx.fillStyle = POSTER_COLORS.forest;
-  ctx.font = "700 20px ui-monospace, monospace";
-  ctx.fillText("LIFE PASSPORT  /  ARRIVAL", margin, 82);
-  ctx.textAlign = "right";
-  ctx.fillStyle = POSTER_COLORS.muted;
-  ctx.font = "18px ui-monospace, monospace";
-  ctx.fillText(formatStampDate(draft.date).compact, width - margin, 82);
-  drawRule(ctx, margin, 112, width - margin, 112);
-}
-
 function drawPhotoPosterHeader(ctx: CanvasRenderingContext2D, margin: number) {
   ctx.textBaseline = "alphabetic";
   ctx.textAlign = "left";
@@ -363,6 +350,27 @@ function drawPosterFooter(ctx: CanvasRenderingContext2D, width: number, height: 
   ctx.fillText("ZAIZAI ISLE  /  ARRIVAL RECORD", margin, height - 30);
   ctx.textAlign = "right";
   ctx.fillText("NO. 0001", width - margin, height - 30);
+}
+
+function drawPosterMetadata(
+  ctx: CanvasRenderingContext2D,
+  draft: StampDraft,
+  width: number,
+  margin: number,
+) {
+  ctx.fillStyle = POSTER_COLORS.muted;
+  ctx.font = "16px ui-monospace, monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("ARRIVAL DATE", margin, 1800);
+  ctx.textAlign = "right";
+  ctx.fillText("LOCATION", width - margin, 1800);
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = "700 21px ui-monospace, monospace";
+  ctx.textAlign = "left";
+  ctx.fillText(formatStampDate(draft.date).compact, margin, 1832);
+  ctx.textAlign = "right";
+  ctx.font = `400 21px ${BODY_FONT}`;
+  ctx.fillText(draft.location || "未标记地点", width - margin, 1832);
 }
 
 function drawPosterPhoto(
@@ -406,18 +414,7 @@ function drawPortraitPhotoPoster(ctx: CanvasRenderingContext2D, image: CanvasIma
   const note = draft.note || "不是所有抵达，都需要掌声。";
   wrapText(ctx, `“${note}”`, 660).slice(0, 2).forEach((line, index) => ctx.fillText(line, margin, noteY + index * 42));
 
-  ctx.fillStyle = POSTER_COLORS.muted;
-  ctx.font = "16px ui-monospace, monospace";
-  ctx.fillText("ARRIVAL DATE", margin, 1800);
-  ctx.textAlign = "right";
-  ctx.fillText("LOCATION", width - margin, 1800);
-  ctx.fillStyle = POSTER_COLORS.forest;
-  ctx.font = "700 21px ui-monospace, monospace";
-  ctx.textAlign = "left";
-  ctx.fillText(formatStampDate(draft.date).compact, margin, 1832);
-  ctx.textAlign = "right";
-  ctx.font = `400 21px ${BODY_FONT}`;
-  ctx.fillText(draft.location || "未标记地点", width - margin, 1832);
+  drawPosterMetadata(ctx, draft, width, margin);
 
   const stampPlacement: Record<StampStyleId, { x: number; y: number; scale: number }> = {
     classic: { x: 858, y: photoBottom - 30, scale: 0.7 },
@@ -431,58 +428,63 @@ function drawPortraitPhotoPoster(ctx: CanvasRenderingContext2D, image: CanvasIma
 }
 
 function drawPortraitTextArchive(ctx: CanvasRenderingContext2D, draft: StampDraft) {
+  const width = 1080;
   const height = 1920;
-  const margin = 68;
-  drawPosterHeader(ctx, draft, 1080, margin);
-  drawRule(ctx, margin, 168, 1012, 168);
-  drawRule(ctx, margin, 360, 1012, 360);
+  const margin = 64;
+  drawPhotoPosterHeader(ctx, margin);
 
   ctx.textAlign = "left";
-  ctx.fillStyle = POSTER_COLORS.light;
-  ctx.font = '700 108px "Noto Serif SC", serif';
-  ctx.fillText("01", margin, 310);
-  ctx.fillStyle = POSTER_COLORS.muted;
-  ctx.font = "18px ui-monospace, monospace";
-  ctx.fillText("PERSONAL JOURNEY ARCHIVE", 240, 232);
-  ctx.fillStyle = POSTER_COLORS.forest;
-  ctx.font = `400 25px ${BODY_FONT}`;
-  ctx.fillText("一次只属于你的抵达", 240, 276);
-
   ctx.fillStyle = POSTER_COLORS.moss;
-  ctx.font = "700 19px ui-monospace, monospace";
-  ctx.fillText(draft.category, margin, 492);
+  ctx.font = `400 24px ${BODY_FONT}`;
+  ctx.fillText(draft.category, margin + 11, 360);
+
   ctx.fillStyle = POSTER_COLORS.charcoal;
-  const title = fitWrappedText(ctx, draft.title || "一次值得记住的抵达", 820, 2, 76, 56, TITLE_FONT, 400);
+  const title = fitWrappedText(ctx, draft.title || "一次值得记住的抵达", 900, 2, 128, 78, TITLE_FONT, 400);
   ctx.font = `400 ${title.fontSize}px ${TITLE_FONT}`;
-  title.lines.forEach((line, index) => ctx.fillText(line, margin, 616 + index * (title.fontSize + 14)));
+  const titleStartY = 510;
+  const titleLineHeight = title.fontSize + 22;
+  title.lines.forEach((line, index) => ctx.fillText(line, margin + 4, titleStartY + index * titleLineHeight));
 
-  const mottoY = 616 + title.lines.length * (title.fontSize + 14) + 48;
-  ctx.font = `32px ${BODY_FONT}`;
-  const mottoLines = wrapText(ctx, `“${draft.note || "地图可以自己画"}”`, 760).slice(0, 2);
-  ctx.strokeStyle = POSTER_COLORS.light;
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.moveTo(margin, mottoY - 32);
-  ctx.lineTo(margin, mottoY + (mottoLines.length - 1) * 42 + 18);
-  ctx.stroke();
-  ctx.fillStyle = POSTER_COLORS.forest;
-  mottoLines.forEach((line, index) => ctx.fillText(line, margin + 24, mottoY + index * 42));
+  const titleEndY = titleStartY + (title.lines.length - 1) * titleLineHeight;
+  ctx.fillStyle = "#9a9e9a";
+  ctx.font = "13px ui-monospace, monospace";
+  ctx.fillText("A MOMENT WORTH REMEMBERING", margin + 11, titleEndY + 60);
 
-  drawRule(ctx, margin, 1450, 1012, 1450);
+  const noteLabelY = Math.max(930, titleEndY + 270);
+  ctx.fillStyle = POSTER_COLORS.rust;
+  ctx.font = '94px Georgia, "Times New Roman", serif';
+  ctx.fillText("“", margin + 3, noteLabelY - 38);
+
   ctx.fillStyle = POSTER_COLORS.muted;
-  ctx.font = "16px ui-monospace, monospace";
-  ctx.fillText("抵达日期", margin, 1500);
-  ctx.fillText("抵达地点", 330, 1500);
-  ctx.fillText("记录状态", 592, 1500);
-  ctx.fillStyle = POSTER_COLORS.forest;
-  ctx.font = "700 22px ui-monospace, monospace";
-  ctx.fillText(formatStampDate(draft.date).compact, margin, 1540);
-  ctx.font = `400 22px ${BODY_FONT}`;
-  wrapText(ctx, draft.location || "未标记地点", 220).slice(0, 2).forEach((line, index) => ctx.fillText(line, 330, 1540 + index * 27));
-  ctx.fillText("已盖章", 592, 1540);
+  ctx.font = "700 12px ui-monospace, monospace";
+  ctx.fillText("TO MY FUTURE SELF", margin + 11, noteLabelY + 28);
 
-  drawStamp(ctx, draft.style, draft, 840, 1670, draft.style === "classic" ? 0.65 : 0.57);
-  drawPosterFooter(ctx, 1080, height, margin);
+  const motto = fitWrappedText(
+    ctx,
+    draft.note || "不是所有抵达，都需要掌声。",
+    650,
+    4,
+    38,
+    28,
+    BODY_FONT,
+    400,
+  );
+  ctx.fillStyle = POSTER_COLORS.forest;
+  ctx.font = `400 ${motto.fontSize}px ${BODY_FONT}`;
+  const mottoStartY = noteLabelY + 103;
+  const mottoLineHeight = motto.fontSize + 26;
+  motto.lines.forEach((line, index) => ctx.fillText(line, margin + 11, mottoStartY + index * mottoLineHeight));
+
+  const stampPlacement: Record<StampStyleId, { x: number; y: number; scale: number }> = {
+    classic: { x: 850, y: 1450, scale: 0.72 },
+    date: { x: 835, y: 1450, scale: 0.64 },
+    journal: { x: 850, y: 1450, scale: 0.72 },
+  };
+  const stamp = stampPlacement[draft.style];
+  drawStamp(ctx, draft.style, draft, stamp.x, stamp.y, stamp.scale);
+
+  drawPosterMetadata(ctx, draft, width, margin);
+  drawPosterFooter(ctx, width, height, margin);
 }
 
 export function renderPassportCanvas(

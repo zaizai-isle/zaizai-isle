@@ -21,8 +21,11 @@
 |---|---|---|
 | [版本升级规划](/zaizai-isle/docs/prd/VersionUpgradePlan) | V1.3 至 V2.0 的站点演进路径 | Active |
 | [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.2.2 |
+| [人生护照下一阶段范围草案](/zaizai-isle/docs/prd/LifePassportNextPhase) | 云端持久化优先，浏览功能后续 | Active · 实施中 |
 | [小岛日签规格](/zaizai-isle/docs/prd/IsleDaily-v0.1) | `/daily` 的当前能力、内容规则与边界 | Active · Daily v0.1 |
 | [资产优化计划](/zaizai-isle/docs/prd/AssetOptimizationPlan) | 静态导出下的图片与天气图标策略 | Maintained |
+
+[人生护照云端部署与验证](/zaizai-isle/docs/prd/LifePassportCloudDeployment)：免注册、恢复密钥、部署步骤与验收边界。
 
 ## 历史与归档
 

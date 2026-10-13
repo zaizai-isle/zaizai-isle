@@ -2,8 +2,11 @@ import type { StaticImageData } from "next/image";
 
 import projectAchievement from "@/assets/project-achievement.svg";
 import projectAiTrainer from "@/assets/project-ai-trainer.webp";
+import projectAiTrainerThumbnail from "@/assets/project-ai-trainer-thumb.jpg";
 import projectBanana from "@/assets/project-banana-v3.webp";
+import projectBananaThumbnail from "@/assets/project-banana-thumb.jpg";
 import projectExam from "@/assets/project-exam.webp";
+import projectExamThumbnail from "@/assets/project-exam-thumb.jpg";
 
 export type BuiltStructureStatus = "stable" | "experimental" | "archived";
 export type BuiltStructureKind = "tool" | "experiment" | "external";
@@ -13,6 +16,7 @@ export interface BuiltStructure {
   title: string;
   descriptionKey: string;
   image: StaticImageData;
+  thumbnail: StaticImageData;
   href: string;
   status: BuiltStructureStatus;
   kind: BuiltStructureKind;
@@ -26,6 +30,7 @@ export const LIFE_PASSPORT_STRUCTURE: BuiltStructure = {
   title: "人生护照",
   descriptionKey: "page.works.structure.achievement.desc",
   image: projectAchievement,
+  thumbnail: projectAchievement,
   href: "/achievement",
   status: "experimental",
   kind: "tool",
@@ -40,6 +45,7 @@ export const BUILT_STRUCTURES: readonly BuiltStructure[] = [
     title: "Everything is Banana",
     descriptionKey: "page.works.structure.banana.desc",
     image: projectBanana,
+    thumbnail: projectBananaThumbnail,
     href: "/banana",
     status: "experimental",
     kind: "experiment",
@@ -52,6 +58,7 @@ export const BUILT_STRUCTURES: readonly BuiltStructure[] = [
     title: "Smart Exam Platform",
     descriptionKey: "page.works.structure.exam.desc",
     image: projectExam,
+    thumbnail: projectExamThumbnail,
     href: "https://app-7vpd7214bjlt.appmiaoda.com",
     status: "stable",
     kind: "external",
@@ -64,6 +71,7 @@ export const BUILT_STRUCTURES: readonly BuiltStructure[] = [
     title: "AI Trainer Assistant",
     descriptionKey: "page.works.structure.trainer.desc",
     image: projectAiTrainer,
+    thumbnail: projectAiTrainerThumbnail,
     href: "https://www.doubao.com/code/launch/detail/66403617282?from=from_launch_share_link",
     status: "stable",
     kind: "external",

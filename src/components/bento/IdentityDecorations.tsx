@@ -1,11 +1,8 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import React, { memo } from 'react';
+import React from 'react';
 
-export const Tag = memo(({ children, variant = 'emerald', icon: Icon }: { children: React.ReactNode; variant?: 'emerald' | 'yellow' | 'rose'; icon?: LucideIcon }) => {
+export const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.ReactNode; variant?: 'emerald' | 'yellow' | 'rose'; icon?: LucideIcon }) => {
     const variants = {
         emerald: "bg-[#0f1c36] text-emerald-50 hover:bg-emerald-900",
         yellow: "bg-[#281730] text-yellow-50 hover:bg-yellow-900",
@@ -19,39 +16,30 @@ export const Tag = memo(({ children, variant = 'emerald', icon: Icon }: { childr
     };
 
     return (
-        <motion.div
-            whileHover={{ scale: 1.05, y: -2 }}
+        <div
             className={cn(
-                "flex items-center justify-center gap-1.5 w-fit px-3 py-1.5 min-w-max text-xs font-bold text-center rounded-full transition-all md:text-sm border border-white/10 hover:border-white/20 shadow-md hover:shadow-lg backdrop-blur-md cursor-default",
+                "flex items-center justify-center gap-1.5 w-fit px-3 py-1.5 min-w-max text-xs font-bold text-center rounded-full transition-all md:text-sm border border-white/10 hover:border-white/20 shadow-md hover:shadow-lg backdrop-blur-md cursor-default hover:scale-105 hover:-translate-y-0.5",
                 variants[variant]
             )}
         >
             {Icon && <Icon className={cn("w-3.5 h-3.5", iconColors[variant])} />}
             {children}
-        </motion.div>
+        </div>
     );
-});
+};
 
-Tag.displayName = 'Tag';
-
-export const Sparkle = memo(({ className, delay = 0 }: { className?: string; delay?: number }) => (
-    <motion.div
-        animate={{
-            scale: [0.8, 1.2, 0.8],
-            opacity: [0.5, 1, 0.5],
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay }}
-        className={cn("absolute", className)}
+export const Sparkle = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
+    <div
+        className={cn("isle-sparkle absolute", className)}
+        style={{ animationDelay: `${delay}s` }}
     >
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
             <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
         </svg>
-    </motion.div>
-));
+    </div>
+);
 
-Sparkle.displayName = 'Sparkle';
-
-export const Cloud = memo(({
+export const Cloud = ({
     className,
     delay = 0,
     opacity = 1,
@@ -74,17 +62,13 @@ export const Cloud = memo(({
     const gradientClass = getGradient(variant);
 
     return (
-        <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
-            className={cn("absolute flex items-end", className)}
-            style={{ opacity }}
+        <div
+            className={cn("isle-float absolute flex items-end", className)}
+            style={{ opacity, animationDelay: `${delay}s` }}
         >
             <div className={cn("w-20 h-20 rounded-full translate-y-8 backdrop-blur-md bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]", gradientClass)} />
             <div className={cn("w-32 h-32 rounded-full -ml-10 backdrop-blur-xl bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)] z-10", gradientClass)} />
             <div className={cn("w-24 h-24 rounded-full -ml-12 translate-y-4 backdrop-blur-md bg-gradient-to-b border-t shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]", gradientClass)} />
-        </motion.div>
+        </div>
     );
-});
-
-Cloud.displayName = 'Cloud';
+};

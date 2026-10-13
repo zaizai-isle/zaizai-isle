@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { supabase } from './supabase';
+import { createContext, useCallback, useContext, useMemo, useState, ReactNode, useEffect, useRef } from 'react';
+import { getSupabaseClient } from './supabase';
+import { scheduleIdle } from './utils/schedule-idle';
 
 export type BackgroundType = 'default' | 'color' | 'image';
 export type TextMode = 'light' | 'dark';
@@ -34,28 +35,32 @@ const getUserId = () => {
 };
 
 export function BackgroundProvider({ children }: { children: ReactNode }) {
+  const remoteVersionRef = useRef(0);
   const [settings, setSettings] = useState<BackgroundSettings>({
     type: 'default',
     value: '',
     textMode: 'dark' // default to dark text for the default light background
   });
 
-  // Load saved settings from LocalStorage and Supabase
+  // Local settings are immediate; cloud reconciliation waits for idle time.
   useEffect(() => {
-    const loadSettings = async () => {
-      // 1. Try LocalStorage first
-      try {
-        const localSettings = localStorage.getItem('background_settings');
-        if (localSettings) {
-          setSettings(JSON.parse(localSettings));
-        }
-      } catch {
-        console.warn('Failed to load settings from localStorage');
+    let localTimer: number | undefined;
+    try {
+      const localSettings = localStorage.getItem('background_settings');
+      if (localSettings) {
+        const parsedSettings = JSON.parse(localSettings) as BackgroundSettings;
+        localTimer = window.setTimeout(() => {
+          if (remoteVersionRef.current === 0) setSettings(parsedSettings);
+        }, 0);
       }
+    } catch {
+      console.warn('Failed to load settings from localStorage');
+    }
 
-      // 2. Try Supabase
+    const loadCloudSettings = async () => {
       try {
         if (process.env.NODE_ENV !== 'production') return;
+        const supabase = await getSupabaseClient();
         if (!supabase) return;
 
         const userId = getUserId();
@@ -73,17 +78,20 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        if (data?.background_settings) {
+        if (data?.background_settings && remoteVersionRef.current === 0) {
           setSettings(data.background_settings as BackgroundSettings);
-          // Sync back to local storage
           localStorage.setItem('background_settings', JSON.stringify(data.background_settings));
         }
       } catch {
-        // Silent failure for Supabase issues
+        // Keep local settings when cloud reconciliation is unavailable.
       }
     };
 
-    loadSettings();
+    const cancelIdle = scheduleIdle(() => void loadCloudSettings(), 3000);
+    return () => {
+      if (localTimer !== undefined) window.clearTimeout(localTimer);
+      cancelIdle();
+    };
   }, []);
 
   // Save settings to LocalStorage and Supabase
@@ -95,9 +103,13 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
       console.warn('Failed to save to localStorage', e);
     }
 
+    const remoteVersion = remoteVersionRef.current;
+    if (remoteVersion === 0) return;
+
     const saveSettings = async () => {
       try {
         if (process.env.NODE_ENV !== 'production') return;
+        const supabase = await getSupabaseClient();
         if (!supabase) return;
 
         const userId = getUserId();
@@ -114,6 +126,8 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
           if (error.code !== 'PGRST205') {
             console.warn('Supabase save error:', error.message);
           }
+        } else if (remoteVersionRef.current === remoteVersion) {
+          remoteVersionRef.current = 0;
         }
       } catch {
         // Silent failure
@@ -128,38 +142,39 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [settings]);
 
-  const setBackground = (type: BackgroundType, value: string, textMode?: TextMode) => {
-    let mode = textMode;
+  const setBackground = useCallback((type: BackgroundType, value: string, textMode?: TextMode) => {
+    remoteVersionRef.current += 1;
+    setSettings((previous) => {
+      let mode = textMode;
+      if (type === 'image' && !mode) {
+        if (value.includes('#dark-bg')) mode = 'light';
+        else if (value.includes('#light-bg')) mode = 'dark';
+      }
+      if (!mode) mode = type === 'default' ? 'dark' : (previous.textMode || 'dark');
+      return { type, value, textMode: mode };
+    });
+  }, []);
 
-    // Auto-detect hint from URL if it's an image
-    // #dark-bg -> Needs 'light' text
-    // #light-bg -> Needs 'dark' text
-    if (type === 'image' && !mode) {
-      if (value.includes('#dark-bg')) mode = 'light';
-      else if (value.includes('#light-bg')) mode = 'dark';
-    }
-
-    // Default fallback if still undefined
-    if (!mode) {
-      mode = type === 'default' ? 'dark' : (settings.textMode || 'dark');
-    }
-
-    setSettings({ type, value, textMode: mode });
-  };
-
-  const resetBackground = () => {
+  const resetBackground = useCallback(() => {
+    remoteVersionRef.current += 1;
     setSettings({ type: 'default', value: '', textMode: 'dark' });
-  };
+  }, []);
 
-  const toggleTextMode = () => {
+  const toggleTextMode = useCallback(() => {
+    remoteVersionRef.current += 1;
     setSettings(prev => ({
       ...prev,
       textMode: prev.textMode === 'light' ? 'dark' : 'light'
     }));
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ settings, setBackground, resetBackground, toggleTextMode }),
+    [settings, setBackground, resetBackground, toggleTextMode]
+  );
 
   return (
-    <BackgroundContext.Provider value={{ settings, setBackground, resetBackground, toggleTextMode }}>
+    <BackgroundContext.Provider value={value}>
       {children}
     </BackgroundContext.Provider>
   );

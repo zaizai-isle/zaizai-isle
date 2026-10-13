@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { BananaHeader } from './_components/common/BananaHeader';
 import { BananaFooter } from './_components/common/BananaFooter';
 import { Toaster } from 'sonner';
+import './banana.css';
 
 export const metadata = {
   title: 'Everything is Banana',

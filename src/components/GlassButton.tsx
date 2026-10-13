@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, HTMLMotionProps } from "framer-motion";
+import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-interface GlassButtonProps extends HTMLMotionProps<"button"> {
+interface GlassButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     active?: boolean;
 }
@@ -12,11 +12,9 @@ export const GlassButton = ({ children, className, active, ...props }: GlassButt
     const isActive = !!active;
 
     return (
-        <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <button
             className={cn(
-                "rounded-full backdrop-blur-md transition-all duration-300",
+                "rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95",
                 "flex items-center justify-center text-white/90 relative group",
                 // 优化内阴影：顶部微光 + 极弱投影，增加悬浮感
                 "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.15)]",
@@ -42,6 +40,6 @@ export const GlassButton = ({ children, className, active, ...props }: GlassButt
             <div className="relative z-10 flex items-center justify-center">
                 {children}
             </div>
-        </motion.button>
+        </button>
     );
 };

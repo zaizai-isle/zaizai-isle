@@ -2,13 +2,13 @@
 
 import { cn } from "@/lib/utils";
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { motion } from "framer-motion";
 import { MapPin, RefreshCw, Droplets, Wind, Thermometer } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { FrostedGlassIcon, WeatherDefs } from "../FrostedGlassIcon";
 import { fetchWeatherWithCache } from "@/services/weather";
 import { WeatherData } from "@/types/weather";
+import { usePageVisibility } from "@/lib/use-page-visibility";
 
 // Weather Gradients & Filters Definitions - Imported from FrostedGlassIcon
 
@@ -143,6 +143,7 @@ export function WeatherCard() {
   const { t, language } = useLanguage();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true); // Start with loading true
+  const isPageVisible = usePageVisibility();
 
   const fetchWeather = useCallback(async () => {
     setLoading(true);
@@ -159,6 +160,7 @@ export function WeatherCard() {
   }, [language]);
 
   useEffect(() => {
+    if (!isPageVisible) return;
     fetchWeather();
 
     // Refresh every 5 minutes
@@ -167,7 +169,7 @@ export function WeatherCard() {
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [language, fetchWeather]);
+  }, [fetchWeather, isPageVisible]);
 
   return (
     <BentoCard
@@ -222,19 +224,13 @@ export function WeatherCard() {
         {/* Right: Big Glassy Icon */}
         <div className="flex flex-col justify-center h-full">
           {weather && (
-            <motion.div
-              className="transform scale-150 mr-4"
-              whileHover={{
-                rotate: [0, -10, 10, -5, 5, 0],
-                transition: { duration: 0.5 }
-              }}
-            >
+            <div className="isle-weather-icon transform scale-150 mr-4">
               <FrostedGlassIcon
                 condition={weather.condition}
                 isDay={weather.isDay}
                 iconCode={weather.iconCode}
               />
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

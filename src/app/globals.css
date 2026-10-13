@@ -2,8 +2,8 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -73,7 +73,7 @@ body {
     radial-gradient(at 50% 50%, hsla(220, 100%, 95%, 1) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   @apply text-gray-900 antialiased;
 }
 
@@ -159,593 +159,62 @@ body {
   animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* ── Everything is Banana 专属主题 ────────────────── */
-
-.banana-theme {
-  --background: #fffdf0;
-  --foreground: #261f14;
-  --card: #ffffff;
-  --card-foreground: #261f14;
-  --popover: #ffffff;
-  --popover-foreground: #261f14;
-  --primary: #f9c913;
-  --primary-foreground: #261f14;
-  --secondary: #f0920a;
-  --secondary-foreground: #ffffff;
-  --muted: #f5f0e0;
-  --muted-foreground: #6b5a3e;
-  --accent: #f9c913;
-  --accent-foreground: #261f14;
-  --destructive: #e53e3e;
-  --destructive-foreground: #ffffff;
-  --border: #e8d99a;
-  --input: #e8d99a;
-  --ring: #f9c913;
-  --radius: 0.75rem;
-
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-.dark .banana-theme {
-  --background: #1a1508;
-  --foreground: #fff8d6;
-  --card: #241d0d;
-  --card-foreground: #fff8d6;
-  --popover: #241d0d;
-  --popover-foreground: #fff8d6;
-  --primary: #f9c913;
-  --primary-foreground: #261f14;
-  --secondary: #f0920a;
-  --secondary-foreground: #ffffff;
-  --muted: #2e2410;
-  --muted-foreground: #c4a96b;
-  --accent: #f9c913;
-  --accent-foreground: #261f14;
-  --destructive: #c53030;
-  --destructive-foreground: #ffffff;
-  --border: #3d3016;
-  --input: #3d3016;
-  --ring: #f9c913;
-
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-/* Standalone built structures own their editing chrome. */
-.achievement-theme ~ .fixed.bottom-6.right-6 {
-  display: none;
-}
-
-.achievement-theme :is(a, button, input, textarea):focus-visible {
-  outline: 2px solid #526b45;
-  outline-offset: 3px;
-}
-
-.achievement-theme button {
-  touch-action: manipulation;
-}
-
-/* Material-backed journal surfaces; keep image layers after color washes. */
-.achievement-paper {
-  --achievement-ink: #263b35;
-  --achievement-ink-strong: #202624;
-  --achievement-ink-muted: #686d68;
-  --achievement-accent: #526b45;
-  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
-  background-color: #ede9dd;
-  background-image:
-    linear-gradient(rgba(237, 233, 220, 0.58), rgba(237, 233, 220, 0.58)),
-    radial-gradient(circle at 72% 13%, rgba(255, 253, 246, 0.34), transparent 38%),
-    url("../assets/achievement/paper-fiber.webp");
-  background-position: center, center, center top;
-  background-repeat: no-repeat, no-repeat, repeat;
-  background-size: 100% 100%, 100% 100%, 1024px 600px;
-}
-
-.achievement-handwriting {
-  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
-  font-weight: 400;
-  letter-spacing: 0.045em;
-}
-
-.achievement-paper :is(h1, h2, h3, strong),
-.achievement-title {
-  font-family: var(--font-you-ran-xiao-kai), "STXingkai", "Xingkai SC", "Kaiti SC", cursive;
-  font-weight: 400;
-}
-
-.achievement-paper .achievement-section-title {
-  color: var(--achievement-ink);
-  font-family: var(--font-hong-lei-xing-shu), "STXingkai", "Kaiti SC", cursive;
-  font-size: clamp(1.125rem, 1.2vw, 1.375rem);
-  line-height: 1.35;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-}
-
-.achievement-option-control {
-  color: var(--achievement-ink);
-}
-
-.achievement-option-title {
-  position: relative;
-  z-index: 1;
-  color: var(--achievement-ink);
-  font-family: var(--font-you-ran-xiao-kai), "STXingkai", "Kaiti SC", cursive;
-  font-size: 1.25rem;
-  line-height: 1.4;
-  font-weight: 400;
-}
-
-.achievement-option-description {
-  position: relative;
-  z-index: 1;
-  color: var(--achievement-ink-muted);
-  font-family: var(--font-xin-ye-nian), "Kaiti SC", "STKaiti", serif;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
-
-.achievement-option-control:hover .achievement-option-title,
-.achievement-option-control:focus-visible .achievement-option-title {
-  color: var(--achievement-accent);
-}
-
-.achievement-texture-option {
-  min-height: 4.5rem;
-  padding: 0.625rem 0.75rem;
-}
-
-.achievement-filter-option {
-  min-height: 2.75rem;
-  color: var(--achievement-ink);
-  font-size: 0.9375rem;
-}
-
-.achievement-paper :is(button, input, textarea, select):not(.font-mono):not(.achievement-title) {
-  font-family: inherit;
-}
-
-.journal-writing {
-  isolation: isolate;
-  overflow: visible;
-  background-color: rgba(247, 243, 232, 0.58);
-  background-image:
-    linear-gradient(rgba(246, 242, 230, 0.42), rgba(246, 242, 230, 0.42)),
-    url("../assets/achievement/paper-fiber.webp");
-  background-position: center, center;
-  background-repeat: no-repeat, repeat;
-  background-size: 100% 100%, 720px 422px;
-}
-
-.journal-writing::before {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  content: "";
-  pointer-events: none;
-  opacity: 0.38;
-  background-image:
-    url("../assets/achievement/line.svg"),
-    url("../assets/achievement/line.svg"),
-    url("../assets/achievement/line.svg");
-  background-position: center 33%, center 66%, center calc(100% - 1px);
-  background-repeat: no-repeat;
-  background-size: 100% 3px;
-}
-
-.journal-writing > textarea {
-  position: relative;
-  z-index: 1;
-}
-
-.journal-writing::after {
-  position: absolute;
-  bottom: 3px;
-  left: 1rem;
-  width: min(34%, 15rem);
-  height: 4px;
-  content: "";
-  background: #e2d849;
-  -webkit-mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
-  mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
-  transform: rotate(-0.6deg);
-}
-
-/* User-provided paper and tape silhouettes. */
-.journal-tape,
-.journal-mini-tape {
-  display: block;
-  background-color: transparent;
-  background-image: url("../assets/achievement/bg-stick.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  filter: sepia(0.2) saturate(0.72);
-  transform: rotate(8deg);
-}
-
-.journal-tape::after,
-.journal-mini-tape::after {
-  display: none;
-}
-
-.journal-tape {
-  width: 6.2rem;
-  height: 1.76rem;
-}
-
-.journal-mini-tape {
-  width: 3.4rem;
-  height: 0.97rem;
-  filter: sepia(0.18) saturate(0.65) brightness(0.76) contrast(1.15);
-  opacity: 0.92;
-}
-
-.journal-mini-tape-selected {
-  background-color: transparent;
-  background-image: url("../assets/achievement/bg-stick-selected.svg");
-  filter: saturate(0.9);
-  opacity: 0.72;
-}
-
-.journal-pencil-line {
-  background: rgba(82, 88, 82, 0.48);
-  height: 3px !important;
-  -webkit-mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
-  mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
-  transform: rotate(-0.5deg);
-}
-
-.journal-input-line {
-  position: relative;
-}
-
-.journal-input-line::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  pointer-events: none;
-  content: "";
-  background: url("../assets/achievement/line.svg") center / 100% 3px no-repeat;
-  opacity: 0.32;
-}
-
-.journal-input-line:focus-within::after {
-  opacity: 0.5;
-}
-
-.journal-hand-icon {
-  filter: drop-shadow(0.35px 0.45px 0 rgba(38, 59, 53, 0.22));
-  transform: rotate(-1.5deg);
-}
-
-.journal-input-with-icon .journal-hand-icon {
-  transform: rotate(-1.5deg);
-}
-
-.journal-hand-icon svg {
-  stroke: currentColor;
-  stroke-width: 1.65;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.journal-hand-icon svg path:nth-child(even) {
-  stroke-width: 1.35;
-}
-
-.journal-date-trigger {
-  cursor: pointer;
-}
-
-.journal-date-trigger:focus-visible {
-  outline: 1px dashed rgba(82, 107, 69, 0.72);
-  outline-offset: 5px;
-}
-
-.journal-calendar {
-  isolation: isolate;
-  color: #263b35;
-  background-color: #f1ede1;
-  background-image:
-    linear-gradient(rgba(242, 238, 226, 0.76), rgba(242, 238, 226, 0.76)),
-    url("../assets/achievement/paper-fiber.webp");
-  background-position: center, center;
-  background-repeat: no-repeat, repeat;
-  background-size: 100% 100%, 720px 422px;
-  box-shadow: 0 15px 30px rgba(38, 43, 39, 0.16);
-  clip-path: polygon(0.7% 1.8%, 32% 0, 67% 1.2%, 99.2% 0.6%, 100% 34%, 99.1% 69%, 100% 98.3%, 65% 100%, 32% 98.9%, 0 100%);
-}
-
-.journal-calendar::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0.35rem;
-  content: "";
-  pointer-events: none;
-  border: 1px solid rgba(82, 107, 69, 0.2);
-  transform: rotate(-0.15deg);
-}
-
-.journal-calendar-arrow {
-  color: #526b45;
-  transition: transform 160ms ease;
-}
-
-.journal-calendar-arrow:hover {
-  transform: rotate(-4deg) scale(1.08);
-}
-
-.journal-calendar-day {
-  color: #353d38;
-}
-
-.journal-calendar-day::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0.12rem;
-  content: "";
-  border-radius: 46% 54% 42% 58% / 55% 43% 57% 45%;
-  opacity: 0;
-  transform: rotate(-3deg);
-}
-
-.journal-calendar-day:hover::before,
-.journal-calendar-day:focus-visible::before {
-  background: rgba(82, 107, 69, 0.1);
-  opacity: 1;
-}
-
-.journal-calendar-day-today {
-  color: #526b45;
-  text-decoration: underline;
-  text-decoration-color: #d8ce25;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-}
-
-.journal-calendar-day-selected {
-  color: #f4f0e4;
-}
-
-.journal-calendar-day-selected::before {
-  background: #526b45;
-  opacity: 1;
-}
-
-.journal-topic::after {
-  position: absolute;
-  right: 0.25rem;
-  bottom: 0;
-  left: 0.25rem;
-  height: 3px;
-  content: "";
-  background: rgba(82, 88, 82, 0.24);
-  -webkit-mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
-  mask: url("../assets/achievement/handdrawn-stroke.svg") center / 100% 100% no-repeat;
-  transform: rotate(-0.35deg);
-}
-
-.journal-topic-selected::before {
-  position: absolute;
-  inset: 4% 2%;
-  content: "";
-  background: url("../assets/achievement/bg-select.svg") center / 100% 100% no-repeat;
-  opacity: 0.78;
-  mix-blend-mode: multiply;
-  transform: rotate(-0.8deg);
-}
-
-.arrival-topic-selected::before {
-  display: none;
-}
-
-.arrival-topic-label-selected {
-  margin-right: -0.6rem;
-  margin-left: -0.45rem;
-  padding: 0.15rem 0.6rem 0.12rem 0.45rem;
-  background: url("../assets/achievement/bg-select.svg") center / 100% 100% no-repeat;
+/* Lightweight homepage motion primitives. */
+@keyframes isle-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.journal-slip-wrap {
-  padding-top: 0.45rem;
-  filter: drop-shadow(0 7px 8px rgba(45, 42, 34, 0.12));
+@keyframes isle-pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.journal-paper-slip {
-  background-color: rgba(245, 241, 229, 0.96);
-  background-image:
-    linear-gradient(rgba(245, 240, 226, 0.5), rgba(245, 240, 226, 0.5)),
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,.34), transparent 34%),
-    url("../assets/achievement/paper-fiber.webp");
-  background-position: center, center, center;
-  background-repeat: no-repeat, no-repeat, repeat;
-  background-size: 100% 100%, 100% 100%, 640px 375px;
-  box-shadow: none;
-  -webkit-mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
-  mask: url("../assets/achievement/bg.svg") center / 100% 100% no-repeat;
+@keyframes isle-toast-in {
+  from { opacity: 0; margin-top: 10px; }
+  to { opacity: 1; margin-top: 0; }
 }
 
-.stamp-style-outline {
-  position: relative;
-  display: block;
-  width: 2.75rem;
-  height: 2.75rem;
-  color: #526b45;
-  opacity: 0.78;
+@keyframes isle-log-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
-.stamp-style-outline::before,
-.stamp-style-outline::after {
-  position: absolute;
-  content: "";
-  border: 1.5px solid currentColor;
-  opacity: 0.9;
+@keyframes isle-sparkle {
+  0%, 100% { opacity: 0.5; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-.stamp-style-outline::before {
-  inset: 0.08rem;
+@keyframes isle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
-.stamp-style-outline::after {
-  inset: 0.3rem;
-  border-width: 1px;
-  opacity: 0.38;
+@keyframes isle-heart-flight {
+  from { opacity: 1; transform: translate(0, 0) scale(0) rotate(0); }
+  to {
+    opacity: 0;
+    transform: translate(var(--heart-x), var(--heart-y)) scale(var(--heart-scale)) rotate(var(--heart-rotate));
+  }
 }
 
-.stamp-style-outline-classic {
-  transform: rotate(-30deg);
-}
-
-.stamp-style-outline-classic::before,
-.stamp-style-outline-classic::after {
-  border-radius: 999px;
-}
-
-.stamp-style-outline-date {
-  width: 2.9rem;
-  height: 2.3rem;
-  transform: rotate(-7deg);
-}
-
-.stamp-style-outline-journal {
-  transform: rotate(-4deg);
-}
-
-.stamp-style-outline-journal::before,
-.stamp-style-outline-journal::after {
-  border: 0;
-  clip-path: polygon(5% 12%, 72% 2%, 98% 25%, 87% 92%, 8% 83%, 0 35%);
-}
-
-.stamp-style-outline-journal::before {
-  background: currentColor;
-}
-
-.stamp-style-outline-journal::after {
-  background: #f5f1e5;
-  opacity: 1;
-}
-
-.journal-photo-frame {
-  --photo-aspect: 1.3333;
-  --photo-padding: clamp(1rem, 1.3vw, 1.25rem);
-  width: min(
-    100%,
-    calc(
-      clamp(18rem, calc(100dvh - 22rem), 42rem) * var(--photo-aspect) +
-      var(--photo-padding) * 2
-    )
-  );
-}
-
-.journal-paper-photo {
-  padding: var(--photo-padding);
-}
-
-.journal-paper-complete {
-  min-height: clamp(28rem, calc(100dvh - 18rem), 32rem);
-}
-
-.achievement-choice:nth-child(2n) {
-  rotate: 0.35deg;
-}
-
-.achievement-choice:nth-child(3n) {
-  rotate: -0.45deg;
-}
-
-.journal-note-underline {
-  position: relative;
-  text-decoration: none;
-}
-
-.journal-note-underline::after {
-  position: absolute;
-  right: 0;
-  bottom: -0.2rem;
-  left: 0;
-  height: 3px;
-  content: "";
-  pointer-events: none;
-  background: #e2d849;
-  -webkit-mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
-  mask: url("../assets/achievement/line2.svg") center / 100% 100% no-repeat;
-  transform: rotate(-0.7deg);
-}
-
-.journal-ink-button {
-  min-width: 9.75rem;
-  min-height: 3.25rem;
-  background-color: transparent;
-  background-image: url("../assets/achievement/bg-button.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  clip-path: none;
-  transition: filter 160ms ease, transform 160ms ease;
-}
-
-.journal-ink-button:hover:not(:disabled) {
-  background-color: transparent;
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-
-.journal-ink-button:disabled {
-  background-color: transparent;
-  filter: grayscale(0.45) opacity(0.58);
-}
+.isle-fade-in { animation: isle-fade-in 500ms ease-out both; }
+.isle-pop-in { animation: isle-pop-in 240ms ease-out both; }
+.isle-toast-in { animation: isle-toast-in 180ms ease-out both; }
+.isle-log-in { animation: isle-log-in 240ms ease-out both; }
+.isle-sparkle { animation: isle-sparkle 3s ease-in-out infinite; }
+.isle-float { animation: isle-float 6s ease-in-out infinite; }
+.isle-heart-flight { animation: isle-heart-flight 1s ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .journal-paper-slip,
-  .journal-ink-button {
-    transition: none;
-  }
-
-  .journal-paper-slip:hover,
-  .journal-ink-button:hover:not(:disabled) {
-    transform: none;
-  }
-}
-
-.achievement-hide-scrollbar {
-  scrollbar-width: none;
-}
-
-.achievement-hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .achievement-form-scroll {
-    scrollbar-color: transparent transparent;
-    scrollbar-width: thin;
-  }
-
-  .achievement-form-scroll:hover {
-    scrollbar-color: rgba(0, 0, 0, 0.05) transparent;
-  }
-
-  .achievement-form-scroll::-webkit-scrollbar {
-    width: 2px;
-  }
-
-  .achievement-form-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .achievement-form-scroll::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: transparent;
-  }
-
-  .achievement-form-scroll:hover::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.05);
+  .isle-fade-in,
+  .isle-pop-in,
+  .isle-toast-in,
+  .isle-log-in,
+  .isle-sparkle,
+  .isle-float,
+  .isle-heart-flight {
+    animation: none;
   }
 }
 
@@ -753,3 +222,95 @@ body {
 .daily-theme ~ .fixed.bottom-6.right-6 {
   display: none;
 }
+@keyframes isle-weather-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+.isle-weather-icon:hover {
+  animation: isle-weather-shake 500ms ease-in-out;
+}
+
+@keyframes isle-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100vw); }
+}
+
+@keyframes isle-poster-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.isle-poster-in {
+  animation: isle-poster-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.isle-marquee {
+  animation-name: isle-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isle-weather-icon:hover,
+  .isle-marquee,
+  .isle-poster-in {
+    animation: none;
+  }
+}
+/* Server-rendered header shell, updated through data attributes by its small runtime island. */
+.system-status-header {
+  background: transparent;
+  color: rgb(17 24 39);
+  transition: margin 500ms, background-color 500ms, color 300ms;
+}
+.system-status-header[data-text-mode="light"] { color: white; }
+.system-status-header[data-scrolled="true"] {
+  margin-top: 0;
+  background: rgb(255 255 255 / 0.3);
+  backdrop-filter: blur(12px);
+}
+.system-status-header[data-scrolled="true"][data-text-mode="light"] { background: rgb(0 0 0 / 0.1); }
+.system-status-divider { background: rgb(17 24 39 / 0.3); }
+.system-status-header[data-text-mode="light"] .system-status-divider { background: rgb(255 255 255 / 0.3); }
+.isle-core-build-card {
+  --core-summary: rgb(0 0 0 / 0.88);
+  --core-settled: rgb(0 0 0 / 0.52);
+  --core-building: rgb(217 119 6 / 0.9);
+  --core-pending: rgb(0 0 0 / 0.14);
+  --core-surface-border: rgb(0 0 0 / 0.2);
+  --core-surface: rgb(0 0 0 / 0.03);
+  --core-label: rgb(0 0 0 / 0.72);
+  --core-body: rgb(0 0 0 / 0.9);
+  --core-footer: rgb(0 0 0 / 0.55);
+}
+body[data-text-mode="light"] .isle-core-build-card {
+  --core-summary: rgb(255 255 255 / 0.92);
+  --core-settled: rgb(255 255 255 / 0.72);
+  --core-building: rgb(253 230 138 / 0.9);
+  --core-pending: rgb(255 255 255 / 0.22);
+  --core-surface-border: rgb(255 255 255 / 0.15);
+  --core-surface: rgb(255 255 255 / 0.03);
+  --core-label: rgb(255 255 255 / 0.72);
+  --core-body: rgb(255 255 255 / 0.92);
+  --core-footer: rgb(255 255 255 / 0.42);
+  background: rgb(255 255 255 / 0.1) !important;
+  color: white;
+}
+body[data-text-mode="light"] .isle-core-build-card:hover { background: rgb(255 255 255 / 0.15) !important; }
+body[data-text-mode="light"] .isle-core-build-card h3 { color: rgb(255 255 255 / 0.9); }
+body[data-text-mode="light"] .isle-core-build-card h3 + p { color: rgb(255 255 255 / 0.75); }
+body[data-text-mode="light"] .isle-core-tone-running { color: rgb(110 231 183); border-color: rgb(110 231 183 / 0.3); background: rgb(110 231 183 / 0.1); }
+body[data-text-mode="light"] .isle-core-tone-steady { color: rgb(125 211 252); border-color: rgb(125 211 252 / 0.3); background: rgb(125 211 252 / 0.1); }
+body[data-text-mode="light"] .isle-core-tone-building { color: rgb(253 230 138); border-color: rgb(253 230 138 / 0.3); background: rgb(253 230 138 / 0.1); }
+.isle-core-summary { color: var(--core-summary); }
+.isle-core-settled { background: var(--core-settled); }
+.isle-core-building { background: var(--core-building); }
+.isle-core-pending { background: var(--core-pending); }
+.isle-core-section { border-color: var(--core-surface-border); background: var(--core-surface); }
+.isle-core-label { color: var(--core-label); }
+.isle-core-body { color: var(--core-body); }
+.isle-core-footer { color: var(--core-footer); }

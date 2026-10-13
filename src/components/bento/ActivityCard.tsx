@@ -2,14 +2,20 @@
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { useLanguage } from "@/lib/language-context";
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useMemo } from "react";
 import { BentoHeader, BentoFooter } from "./BentoCommon";
+import { usePageVisibility } from "@/lib/use-page-visibility";
 
 const createLogEntry = (text: string, id: number) => ({
     id,
     text,
     time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+});
+
+const createInitialLogEntry = (text: string, id: number) => ({
+    id,
+    text,
+    time: "--:--:--",
 });
 
 export function ActivityCard() {
@@ -22,17 +28,27 @@ export function ActivityCard() {
         t('activity.log.kernel'),
     ], [t]);
     const [logs, setLogs] = useState<{ id: number; text: string; time: string }[]>(() =>
-        rawLogs.slice(0, 3).map((text, i) => createLogEntry(text, Date.now() + i))
+        rawLogs.slice(0, 3).map((text, i) => createInitialLogEntry(text, i))
     );
+    const isPageVisible = usePageVisibility();
 
     useEffect(() => {
+        if (!isPageVisible) return;
+        const initializeTimer = window.setTimeout(() => {
+            const initialTimestamp = Date.now();
+            setLogs(rawLogs.slice(0, 3).map((text, i) => createLogEntry(text, initialTimestamp + i)));
+        }, 0);
+
         const interval = setInterval(() => {
             const newLog = createLogEntry(rawLogs[Math.floor(Math.random() * rawLogs.length)], Date.now());
             setLogs(prev => [newLog, ...prev.slice(0, 4)]);
         }, 12000);
 
-        return () => clearInterval(interval);
-    }, [rawLogs]);
+        return () => {
+            window.clearTimeout(initializeTimer);
+            clearInterval(interval);
+        };
+    }, [isPageVisible, rawLogs]);
 
     return (
         <BentoCard
@@ -55,15 +71,10 @@ export function ActivityCard() {
 
             <div className="flex-1 font-mono text-xs overflow-hidden leading-relaxed relative min-h-[80px]">
                 <div className="flex flex-col justify-end h-full gap-0.5 pt-2">
-                    <AnimatePresence mode="popLayout" initial={false}>
-                        {logs.map((log) => (
-                            <motion.div
+                    {logs.map((log) => (
+                            <div
                                 key={log.id}
-                                layout
-                                initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="flex items-start gap-3 group"
+                                className="isle-log-in flex items-start gap-3 group"
                             >
                                 <span className="text-white/30 shrink-0 font-light select-none tabular-nums">
                                     {log.time}
@@ -74,9 +85,8 @@ export function ActivityCard() {
                                 <span className="text-white/[0.05] group-hover:text-emerald-500/20 transition-colors shrink-0">
                                     {'>_'}
                                 </span>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                            </div>
+                    ))}
                 </div>
             </div>
 

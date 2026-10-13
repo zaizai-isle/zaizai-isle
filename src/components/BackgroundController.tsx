@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useBackground } from "@/lib/background-context";
 import { useLanguage } from "@/lib/language-context";
-import { motion, AnimatePresence } from "framer-motion";
 import { RotateCcw, Check, ImagePlus, Plus, SwatchBook } from "lucide-react";
 import { GlassButton } from "./GlassButton";
 
@@ -172,10 +171,16 @@ const PRESET_IMAGES = [
 
 import { cn, trackEvent } from "@/lib/utils";
 
-export function BackgroundController({ className }: { className?: string }) {
+export function BackgroundController({
+  className,
+  initiallyOpen = false,
+}: {
+  className?: string;
+  initiallyOpen?: boolean;
+}) {
   const { settings, setBackground, resetBackground } = useBackground();
   const { t } = useLanguage();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -232,20 +237,16 @@ export function BackgroundController({ className }: { className?: string }) {
         active={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         title={t('bg.settings')}
-        style={{ rotate: isOpen ? 90 : 0 }}
+        style={{ rotate: isOpen ? "90deg" : "0deg" }}
       >
         <SwatchBook className="w-4 h-4" />
       </GlassButton>
 
       {/* Settings Panel */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
+      {isOpen && (
+          <div
             ref={panelRef}
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-20 right-6 z-50 w-[360px] bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-5 overflow-hidden"
+            className="isle-pop-in fixed bottom-20 right-6 z-50 w-[360px] bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-5 overflow-hidden"
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold text-gray-800 flex items-center gap-2">
@@ -353,9 +354,8 @@ export function BackgroundController({ className }: { className?: string }) {
                 </div>
               </div>
             </CustomScrollArea>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }

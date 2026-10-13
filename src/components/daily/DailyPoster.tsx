@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { DailyLanguage, DailyNote, DailySeason, getTraditionalDate } from "@/lib/daily-notes";
 import { SeasonLandscape } from "./SeasonLandscape";
@@ -25,12 +24,9 @@ export function DailyPoster({ date, note, language, dateKey, season }: DailyPost
     : new Intl.DateTimeFormat("en-US", { month: "long" }).format(date).toUpperCase();
 
   return (
-    <motion.article
+    <article
       key={`${dateKey}-${language}`}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-      className="relative isolate flex min-h-[450px] flex-col overflow-hidden rounded-[2.25rem] border border-white/80 bg-[var(--daily-surface)] p-5 shadow-[-14px_-14px_30px_rgba(255,255,255,0.66),16px_18px_36px_var(--daily-shadow),inset_1px_1px_1px_rgba(255,255,255,0.8)] sm:min-h-[490px] sm:p-8 lg:aspect-[1.56/1] lg:min-h-0"
+      className="isle-poster-in relative isolate flex min-h-[450px] flex-col overflow-hidden rounded-[2.25rem] border border-white/80 bg-[var(--daily-surface)] p-5 shadow-[-14px_-14px_30px_rgba(255,255,255,0.66),16px_18px_36px_var(--daily-shadow),inset_1px_1px_1px_rgba(255,255,255,0.8)] sm:min-h-[490px] sm:p-8 lg:aspect-[1.56/1] lg:min-h-0"
     >
       <div className="pointer-events-none absolute -right-12 -top-14 h-44 w-44 rounded-full bg-[var(--daily-accent-soft)] opacity-70 blur-3xl" />
       <div className="pointer-events-none absolute bottom-10 right-12 text-[9rem] font-semibold leading-none text-[var(--daily-accent)] opacity-[0.035]">
@@ -104,6 +100,6 @@ export function DailyPoster({ date, note, language, dateKey, season }: DailyPost
           <span className="block h-2 w-2 shrink-0 rounded-full bg-[var(--daily-pop)] shadow-[0_2px_4px_var(--daily-shadow)]" />
         </span>
       </footer>
-    </motion.article>
+    </article>
   );
 }

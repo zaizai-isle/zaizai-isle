@@ -6,8 +6,8 @@ import { Bot, Cpu, Palette, Smile, Sparkle, Sailboat, Drill, MessageSquareCode, 
 import { BentoHeader } from "./BentoCommon";
 import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
+import { usePageVisibility } from "@/lib/use-page-visibility";
 
 // Presence Levels configuration
 const PRESENCE_THRESHOLDS = {
@@ -63,14 +63,16 @@ export function AIHubCard() {
     });
     const [showAllToolsModal, setShowAllToolsModal] = useState(false);
     const [referenceNow, setReferenceNow] = useState(() => getNow());
+    const isPageVisible = usePageVisibility();
 
     useEffect(() => {
+        if (!isPageVisible) return;
         const timer = window.setInterval(() => {
             setReferenceNow(getNow());
         }, 60000);
 
         return () => window.clearInterval(timer);
-    }, []);
+    }, [isPageVisible]);
 
     const updateToolUsage = (id: string) => {
         setToolsUsage((previousUsage) => {
@@ -162,12 +164,10 @@ export function AIHubCard() {
                     )}
                 </div>
 
-                {typeof window !== 'undefined' && createPortal(
-                    <AnimatePresence>
-                        {showAllToolsModal && (
+                {showAllToolsModal && typeof document !== 'undefined' ? createPortal(
                             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowAllToolsModal(false)} className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-                                <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl p-5 max-h-[80vh] overflow-y-auto z-10" >
+                                <div onClick={() => setShowAllToolsModal(false)} className="isle-fade-in absolute inset-0 bg-black/80 backdrop-blur-sm" />
+                                <div className="isle-pop-in relative w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl p-5 max-h-[80vh] overflow-y-auto z-10" >
                                     <div className="flex items-center justify-between mb-6">
                                         <h3 className="text-lg font-semibold text-white">All Tools Repository</h3>
                                         <button onClick={() => setShowAllToolsModal(false)} className="text-white/40 hover:text-white"><Plus className="w-5 h-5 rotate-45" /></button>
@@ -191,12 +191,10 @@ export function AIHubCard() {
                                             </div>
                                         ))}
                                     </div>
-                                </motion.div>
-                            </div>
-                        )}
-                    </AnimatePresence>,
+                                </div>
+                            </div>,
                     document.body
-                )}
+                ) : null}
             </div>
         </BentoCard>
     );

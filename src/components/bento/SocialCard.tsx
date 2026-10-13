@@ -1,13 +1,12 @@
 "use client";
 
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
-import { Mail, Github, MessageCircle, X, Heart } from "lucide-react";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import qrcodeImage from "@/assets/qrcode.jpg";
+import { Mail, Github, MessageCircle, Heart } from "lucide-react";
+import { lazy, Suspense, useEffect, useState, type CSSProperties } from "react";
 import { trackEvent } from "@/lib/utils";
+
+const SocialQrModal = lazy(() => import("./SocialQrModal"));
 
 export function SocialCard() {
   const { t } = useLanguage();
@@ -118,18 +117,11 @@ export function SocialCard() {
           <div className="w-16 h-16 aspect-square flex-shrink-0 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-gray-800 group-hover:bg-white/40 transition-colors">
             <Mail className="w-7 h-7" />
           </div>
-          <AnimatePresence>
-            {showEmail && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full whitespace-nowrap z-60"
-              >
+          {showEmail ? (
+              <div className="isle-toast-in absolute -top-6 left-1/2 -translate-x-1/2 bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full whitespace-nowrap z-60">
                 {t('social.email.copied')}
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+          ) : null}
         </button>
 
         {/* GitHub */}
@@ -151,74 +143,35 @@ export function SocialCard() {
         >
           <div className={`relative w-16 h-16 aspect-square flex-shrink-0 flex items-center justify-center rounded-full transition-colors backdrop-blur-md border border-white/20 ${hasLiked ? 'bg-red-50/40 text-red-500 border-red-100/80' : 'bg-white/20 text-gray-400 hover:bg-white/40 hover:text-red-400'}`}>
             <Heart className={`w-8 h-8 translate-x-[1px] translate-y-[1px] ${hasLiked ? 'fill-current' : ''}`} />
-            <AnimatePresence>
-              {flyingHearts.map(heart => (
-                <motion.div
+            {flyingHearts.map(heart => (
+                <div
                   key={heart.id}
-                  initial={{ opacity: 1, x: 0, y: 0, scale: 0 }}
-                  animate={{
-                    opacity: 0,
-                    x: heart.x,
-                    y: heart.y,
-                    scale: heart.scale,
-                    rotate: heart.rotate
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="absolute pointer-events-none"
+                  className="isle-heart-flight absolute pointer-events-none"
+                  style={{
+                    "--heart-x": `${heart.x}px`,
+                    "--heart-y": `${heart.y}px`,
+                    "--heart-scale": heart.scale,
+                    "--heart-rotate": `${heart.rotate}deg`,
+                  } as CSSProperties}
                 >
                   <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                </div>
+            ))}
           </div>
-          <AnimatePresence>
-            {showLikeToast && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50"
-              >
+          {showLikeToast ? (
+              <div className="isle-toast-in absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">
                 {t('social.like.thanks')}
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+          ) : null}
         </button>
       </div>
 
       {/* WeChat QR Code Modal */}
-      <AnimatePresence>
-        {showQRCode && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute inset-0 z-50 backdrop-blur-md flex flex-col items-center justify-center p-5 rounded-3xl"
-          >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowQRCode(false);
-              }}
-              className="absolute top-1 right-1 p-1.5 text-gray-400 hover:text-gray-500 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-            <div className="bg-white p-2 rounded-2xl shadow-lg">
-              <Image
-                src={qrcodeImage}
-                alt="WeChat QR Code"
-                width={132}
-                height={132}
-                className="object-contain"
-                placeholder="blur"
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {showQRCode ? (
+        <Suspense fallback={null}>
+          <SocialQrModal onClose={() => setShowQRCode(false)} />
+        </Suspense>
+      ) : null}
     </BentoCard>
   );
 }

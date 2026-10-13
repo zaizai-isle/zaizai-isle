@@ -1,16 +1,12 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-import { useLanguage } from "@/lib/language-context";
+import { TranslatedText } from "@/components/TranslatedText";
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { LIFE_PASSPORT_STRUCTURE } from "./built-structures.config";
 
 export function PassportCard() {
-  const { t } = useLanguage();
-
   return (
     <BentoCard
       colSpan={2}
@@ -29,6 +25,7 @@ export function PassportCard() {
           src={LIFE_PASSPORT_STRUCTURE.image}
           alt=""
           aria-hidden="true"
+          sizes="144px"
           className="absolute -bottom-7 -right-7 w-36 rotate-[-7deg] opacity-25 transition-transform duration-500 group-hover:rotate-[-2deg] group-hover:scale-105"
         />
 
@@ -44,7 +41,7 @@ export function PassportCard() {
             {LIFE_PASSPORT_STRUCTURE.title}
           </h3>
           <p className="mt-1.5 text-xs leading-5 text-gray-600">
-            {t(LIFE_PASSPORT_STRUCTURE.descriptionKey)}
+            <TranslatedText translationKey={LIFE_PASSPORT_STRUCTURE.descriptionKey} />
           </p>
         </div>
       </Link>

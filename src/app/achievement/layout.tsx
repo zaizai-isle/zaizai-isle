@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "@fontsource/ma-shan-zheng/chinese-simplified.css";
 import "@fontsource/ma-shan-zheng/latin.css";
+import { hongLeiXingShuFont, xinYeNianFont, youRanXiaoKaiFont } from "../fonts";
+import "./achievement.css";
 
 export const metadata: Metadata = {
   title: "人生护照 | Zaizai Isle",
@@ -9,5 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default function AchievementLayout({ children }: { children: ReactNode }) {
-  return <div className="achievement-theme">{children}</div>;
+  return (
+    <div className={`${xinYeNianFont.variable} ${youRanXiaoKaiFont.variable} ${hongLeiXingShuFont.variable} achievement-theme`}>
+      {children}
+    </div>
+  );
 }

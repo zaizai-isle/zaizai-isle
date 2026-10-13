@@ -3,8 +3,7 @@
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
 import { SquarePen } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseClient } from "@/lib/supabase";
 import { useLanguage } from "@/lib/language-context";
 import { cn, trackEvent } from "@/lib/utils";
 import { BentoHeader } from "./BentoCommon";
@@ -49,7 +48,7 @@ export function GuestbookCard() {
   const [totalCount, setTotalCount] = useState(124);
 
   const fetchMessages = useCallback(async () => {
-    const client = supabase;
+    const client = await getSupabaseClient();
     if (!client) return;
 
     try {
@@ -107,7 +106,7 @@ export function GuestbookCard() {
     setTotalCount((prev) => prev + 1);
     setInputValue("");
 
-    const client = supabase;
+    const client = await getSupabaseClient();
     if (client) {
       const { data, error } = await client.from('guestbook').insert([{ content: inputValue }]).select().single();
       if (error) {
@@ -159,26 +158,18 @@ export function GuestbookCard() {
       >
         <div className="relative w-full h-full">
           {finalMessages.map((msg, i) => (
-            <motion.div
+            <div
               key={`${msg.id || msg.created_at}-${i}`}
-              initial={{ x: 0 }}
-              animate={{
-                x: "-100vw",
-              }}
-              transition={{
-                duration: 15 + (i % 5),
-                repeat: Infinity,
-                ease: "linear",
-                delay: i * 2,
-              }}
               style={{
                 top: `${(i % 3) * 25}%`,
                 left: "100%",
+                animationDuration: `${15 + (i % 5)}s`,
+                animationDelay: `${i * 2}s`,
               }}
-              className="absolute whitespace-nowrap px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-sm text-white shadow-sm border border-white/10"
+              className="isle-marquee absolute whitespace-nowrap px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-sm text-white shadow-sm border border-white/10"
             >
               {msg.content}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useLanguage } from "@/lib/language-context";
 import Image from "next/image";
 import avatarImage from "@/assets/avatar-v1.webp";
@@ -75,8 +76,14 @@ const Tag = ({ children, variant = 'emerald', icon: Icon }: { children: React.Re
   );
 };
 
-export function SharePoster() {
+export function SharePoster({ onReady }: { onReady?: () => void }) {
   const { t, language } = useLanguage();
+
+  useEffect(() => {
+    if (!onReady) return;
+    const frame = window.requestAnimationFrame(onReady);
+    return () => window.cancelAnimationFrame(frame);
+  }, [onReady]);
 
   const today = new Date().toLocaleDateString('zh-CN', {
     year: 'numeric',

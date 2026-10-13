@@ -1,15 +1,9 @@
-"use client";
-
 import { BentoCard, VERTICAL_BORDER_GRADIENT } from "./BentoCard";
-import { useLanguage } from "@/lib/language-context";
 import { Layers, Code2, Database, Globe } from "lucide-react";
-import { BentoHeader } from "./BentoCommon";
-import { motion } from "framer-motion";
+import { TranslatedBentoHeader } from "./TranslatedBentoHeader";
 import { cn } from "@/lib/utils";
 
 export function TechStackCard() {
-    const { t } = useLanguage();
-
     const tech = [
         {
             name: "React / Next.js",
@@ -45,25 +39,19 @@ export function TechStackCard() {
             borderGradient={VERTICAL_BORDER_GRADIENT}
             className="flex flex-col p-5 overflow-hidden"
         >
-            <BentoHeader
-                title={t('tech.title')}
-                subtitle={t('tech.subtitle')}
+            <TranslatedBentoHeader
+                titleKey="tech.title"
+                subtitleKey="tech.subtitle"
                 className="mb-4"
             />
 
             <div className="flex-1 flex flex-col gap-0.5 mb-0">
                 {tech.map((item, i) => (
-                    <motion.div
+                    <div
                         key={item.name}
-                        initial={{ opacity: 0, scaleX: 0.9, y: 10 }}
-                        whileInView={{ opacity: 1, scaleX: 1, y: 0 }}
-                        transition={{
-                            duration: 0.7,
-                            delay: (tech.length - i) * 0.08,
-                            ease: [0.22, 1, 0.36, 1]
-                        }}
+                        style={{ animationDelay: `${(tech.length - i) * 0.08}s` }}
                         className={cn(
-                            "relative group flex flex-col justify-center items-center flex-1 transition-all duration-300 mx-auto",
+                            "isle-log-in relative group flex flex-col justify-center items-center flex-1 transition-all duration-300 mx-auto",
                             item.width
                         )}
                     >
@@ -80,7 +68,7 @@ export function TechStackCard() {
                                 {item.tags}
                             </span>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </BentoCard>

@@ -1,0 +1,52 @@
+/* ── Everything is Banana 专属主题 ────────────────── */
+
+.banana-theme {
+  --background: #fffdf0;
+  --foreground: #261f14;
+  --card: #ffffff;
+  --card-foreground: #261f14;
+  --popover: #ffffff;
+  --popover-foreground: #261f14;
+  --primary: #f9c913;
+  --primary-foreground: #261f14;
+  --secondary: #f0920a;
+  --secondary-foreground: #ffffff;
+  --muted: #f5f0e0;
+  --muted-foreground: #6b5a3e;
+  --accent: #f9c913;
+  --accent-foreground: #261f14;
+  --destructive: #e53e3e;
+  --destructive-foreground: #ffffff;
+  --border: #e8d99a;
+  --input: #e8d99a;
+  --ring: #f9c913;
+  --radius: 0.75rem;
+
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark .banana-theme {
+  --background: #1a1508;
+  --foreground: #fff8d6;
+  --card: #241d0d;
+  --card-foreground: #fff8d6;
+  --popover: #241d0d;
+  --popover-foreground: #fff8d6;
+  --primary: #f9c913;
+  --primary-foreground: #261f14;
+  --secondary: #f0920a;
+  --secondary-foreground: #ffffff;
+  --muted: #2e2410;
+  --muted-foreground: #c4a96b;
+  --accent: #f9c913;
+  --accent-foreground: #261f14;
+  --destructive: #c53030;
+  --destructive-foreground: #ffffff;
+  --border: #3d3016;
+  --input: #3d3016;
+  --ring: #f9c913;
+
+  background-color: var(--background);
+  color: var(--foreground);
+}

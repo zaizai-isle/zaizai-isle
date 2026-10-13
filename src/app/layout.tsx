@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { IdleGoogleAnalytics } from "@/components/IdleGoogleAnalytics";
 import { LanguageProvider } from "@/lib/language-context";
 import { BackgroundProvider } from "@/lib/background-context";
 import { BackgroundWrapper } from "@/components/BackgroundWrapper";
-import { BackgroundController } from "@/components/BackgroundController";
+import { LazyBackgroundController } from "@/components/LazyBackgroundController";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { TextModeSwitcher } from "@/components/TextModeSwitcher";
-import { hongLeiXingShuFont, xinYeNianFont, youRanXiaoKaiFont } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Zaizai Isle | AI Product Designer",
@@ -42,7 +41,7 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID || "";
   return (
     <html lang="zh-CN" data-scroll-behavior="smooth">
-      <body suppressHydrationWarning className={`${xinYeNianFont.variable} ${youRanXiaoKaiFont.variable} ${hongLeiXingShuFont.variable} antialiased min-h-screen relative overflow-x-hidden`}>
+      <body suppressHydrationWarning className="antialiased min-h-screen relative overflow-x-hidden">
         <BackgroundProvider>
           <BackgroundWrapper />
           <LanguageProvider>
@@ -50,11 +49,11 @@ export default function RootLayout({
             <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
               <TextModeSwitcher className="w-9 h-9 p-0" />
               <LanguageSwitcher className="w-9 h-9 p-0" />
-              <BackgroundController className="w-9 h-9 p-0" />
+              <LazyBackgroundController className="w-9 h-9 p-0" />
             </div>
           </LanguageProvider>
         </BackgroundProvider>
-        {isProd && gaId && <GoogleAnalytics gaId={gaId} />}
+        {isProd && gaId ? <IdleGoogleAnalytics gaId={gaId} /> : null}
       </body>
     </html>
   );

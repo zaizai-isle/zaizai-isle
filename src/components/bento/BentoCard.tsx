@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { ReactNode, CSSProperties } from "react";
+import type { ReactNode, CSSProperties } from "react";
 
 export const VERTICAL_BORDER_GRADIENT = "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)";
 
@@ -54,22 +53,14 @@ export function BentoCard({
 
 
   const themeClasses = theme === 'light'
-    ? "bg-white/55 text-gray-900 hover:bg-white/70 shadow-sm shadow-black/5"
+    ? "bg-white/55 text-gray-900 hover:bg-white/70 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] shadow-sm shadow-black/5"
     : theme === 'glass'
-      ? "bg-white/10 text-white hover:bg-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
-      : "bg-black/70 text-white hover:bg-black/80 shadow-[0_20px_50px_rgba(0,0,0,0.2)]";
+      ? "bg-white/10 text-white hover:bg-white/15 hover:shadow-[0_15px_35px_-5px_rgba(0,0,0,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
+      : "bg-black/70 text-white hover:bg-black/80 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] shadow-[0_20px_50px_rgba(0,0,0,0.2)]";
 
   return (
-    <motion.div
+    <div
       onClick={onClick}
-      whileHover={{
-        boxShadow: theme === 'light'
-          ? "0 10px 30px -10px rgba(0,0,0,0.05)"
-          : theme === 'glass'
-            ? "0 15px 35px -5px rgba(0,0,0,0.08)"
-            : "0 25px 50px -12px rgba(0,0,0,0.3)"
-      }}
-      transition={{ type: "spring", stiffness: 300 }}
       className={cn(
         "backdrop-blur-xl rounded-3xl p-5 flex flex-col relative overflow-visible transition-all duration-300 min-h-[192px] md:min-h-0",
         themeClasses,
@@ -91,6 +82,6 @@ export function BentoCard({
         }}
       />
       {children}
-    </motion.div>
+    </div>
   );
 }

@@ -5,6 +5,32 @@ const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers
 function response(data: unknown, status = 200) { return new Response(JSON.stringify(data), { status, headers: { ...CORS, "content-type": "application/json" } }); }
 function str(value: unknown) { return typeof value === "string" ? value.trim() : ""; }
 
+
+const IMAGE_HOSTS = new Set([
+  "images.metmuseum.org", "www.artic.edu", "openaccess-cdn.clevelandart.org",
+  "iip-thumb.smk.dk", "api.smk.dk", "www.loc.gov", "tile.loc.gov", "cdn.loc.gov"
+]);
+async function getImageInput(imageUrl: unknown) {
+  try {
+    const url=new URL(String(imageUrl||""));
+    if(url.protocol!=="https:" || !IMAGE_HOSTS.has(url.hostname))return null;
+    const result=await fetch(url,{signal:AbortSignal.timeout(12000)});
+    if(!result.ok)return null;
+    const mime=(result.headers.get("content-type")||"").split(";")[0].trim();
+    if(!["image/jpeg","image/png","image/webp"].includes(mime))return null;
+    const length=Number(result.headers.get("content-length")||0);
+    if(length>4000000)return null;
+    const buffer=await result.arrayBuffer();
+    if(buffer.byteLength>4000000)return null;
+    const bytes=new Uint8Array(buffer);
+    let binary="";
+    for(let offset=0;offset<bytes.length;offset+=8192){
+      binary+=String.fromCharCode(...bytes.subarray(offset,offset+8192));
+    }
+    return {inlineData:{mimeType:mime,data:btoa(binary)}};
+  }catch{return null;}
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   if (req.method !== "POST") return response({ error: "Method not allowed" }, 405);
@@ -49,13 +75,14 @@ Deno.serve(async (req) => {
   ].join("\n");
 
   try {
+    const imageInput = await getImageInput(imageUrl);
     const model = Deno.env.get("GEMINI_MODEL") || "gemini-3.8-flash";
     const api = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
     const generated = await fetch(api, {
       method: "POST",
       headers: { "content-type": "application/json", "x-goog-api-key": modelKey },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: instruction }] }],
+        contents: [{ role: "user", parts: [{ text: instruction }, ...(imageInput ? [imageInput] : [])] }],
         generationConfig: { responseMimeType: "application/json", temperature: 0.4 },
       }),
       signal: AbortSignal.timeout(45000),

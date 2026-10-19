@@ -24,6 +24,17 @@ jobs:
           python-version: '3.11'
       - name: Collect public museum candidates
         run: python scripts/collect_learning_research.py
+      - name: Generate private article drafts
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -n "$GEMINI_API_KEY" ] && [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            python scripts/generate-learning-drafts.py
+          else
+            echo "Article generation skipped: required repository secrets are not configured."
+          fi
       - name: Commit research files
         run: |
           git config user.name 'github-actions[bot]'

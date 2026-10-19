@@ -9,6 +9,32 @@ const GITHUB_KEYS = createRemoteJWKSet(new URL("https://token.actions.githubuser
 const REPLY = (body: unknown,status=200) => new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json"}});
 const str = (v: unknown) => typeof v==="string"?v.trim():"";
 
+
+const IMAGE_HOSTS = new Set([
+  "images.metmuseum.org", "www.artic.edu", "openaccess-cdn.clevelandart.org",
+  "iip-thumb.smk.dk", "api.smk.dk", "www.loc.gov", "tile.loc.gov", "cdn.loc.gov"
+]);
+async function getImageInput(imageUrl: unknown) {
+  try {
+    const url=new URL(String(imageUrl||""));
+    if(url.protocol!=="https:" || !IMAGE_HOSTS.has(url.hostname))return null;
+    const result=await fetch(url,{signal:AbortSignal.timeout(12000)});
+    if(!result.ok)return null;
+    const mime=(result.headers.get("content-type")||"").split(";")[0].trim();
+    if(!["image/jpeg","image/png","image/webp"].includes(mime))return null;
+    const length=Number(result.headers.get("content-length")||0);
+    if(length>4000000)return null;
+    const buffer=await result.arrayBuffer();
+    if(buffer.byteLength>4000000)return null;
+    const bytes=new Uint8Array(buffer);
+    let binary="";
+    for(let offset=0;offset<bytes.length;offset+=8192){
+      binary+=String.fromCharCode(...bytes.subarray(offset,offset+8192));
+    }
+    return {inlineData:{mimeType:mime,data:btoa(binary)}};
+  }catch{return null;}
+}
+
 Deno.serve(async (req: Request) => {
   if(req.method!=="POST")return REPLY({error:"Method not allowed"},405);
   const auth=req.headers.get("authorization")||"";
@@ -63,12 +89,13 @@ Deno.serve(async (req: Request) => {
       source_url:item.source_url,catalog_api_url:item.catalog_api_url,rights:item.rights
     })
   ].join("\n");
+  const imageInput=await getImageInput(item.image_url);
   const model=Deno.env.get("GEMINI_MODEL")||"gemini-3.8-flash";
   let generated: Response;
   try {
     generated=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent",{
       method:"POST",headers:{"content-type":"application/json","x-goog-api-key":gemini},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.35,responseMimeType:"application/json"}}),
+      body:JSON.stringify({contents:[{parts:[{text:prompt},...(imageInput?[imageInput]:[])]}],generationConfig:{temperature:0.35,responseMimeType:"application/json"}}),
       signal:AbortSignal.timeout(45000)
     });
   } catch{return REPLY({error:"Text generation unavailable"},502)}

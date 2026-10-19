@@ -19,6 +19,18 @@ All notable changes to this project will be documented in this file.
 - Renamed the image export action to “Download PNG” so it remains distinct from local passport saving.
 - Separated “Save to My Passport” from PNG download and compressed photos into source/thumbnail WebP blobs before local storage.
 
+## [v1.4.5] - 2026-10-13
+
+### Changed
+- Split the home page into an immediately rendered first section and below-the-fold card groups that load near the viewport.
+- Added size-matched Bento placeholders so deferred cards preserve the grid while their code loads.
+- Deferred background controls, analytics, and interactive system-status behavior until they are needed.
+- Moved Life Passport and Banana styles out of the global home-page stylesheet into route-specific stylesheets.
+- Split English translations from the primary language context and reduced repeated card markup.
+
+### Technical
+- Release reconstructed from commit `79a982b` because its version metadata and release notes were not updated at publication time.
+
 ## [v1.4.2] - 2026-08-12
 
 ### Added

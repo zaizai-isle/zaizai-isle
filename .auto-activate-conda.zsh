@@ -1,7 +1,10 @@
 # Auto-activate this project's local Conda environment when entering the repo.
+# Resolve the repository from this sourced file so the setup survives directory moves.
+
+typeset -g ZAIZAI_ISLE_PROJECT_ROOT="${${(%):-%N}:A:h}"
 
 _zaizai_isle_auto_conda() {
-    local project_root="/Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle"
+    local project_root="$ZAIZAI_ISLE_PROJECT_ROOT"
     local project_env="$project_root/.conda-env"
 
     if [[ "$PWD" == "$project_root" || "$PWD" == "$project_root"/* ]]; then

@@ -1,12 +1,8 @@
 import type { StaticImageData } from "next/image";
 
 import projectAchievement from "@/assets/project-achievement.svg";
-import projectAiTrainer from "@/assets/project-ai-trainer.webp";
-import projectAiTrainerThumbnail from "@/assets/project-ai-trainer-thumb.jpg";
 import projectBanana from "@/assets/project-banana-v3.webp";
 import projectBananaThumbnail from "@/assets/project-banana-thumb.jpg";
-import projectExam from "@/assets/project-exam.webp";
-import projectExamThumbnail from "@/assets/project-exam-thumb.jpg";
 
 export type BuiltStructureStatus = "stable" | "experimental" | "archived";
 export type BuiltStructureKind = "tool" | "experiment" | "external";
@@ -34,12 +30,13 @@ export const LIFE_PASSPORT_STRUCTURE: BuiltStructure = {
   href: "/achievement",
   status: "experimental",
   kind: "tool",
-  updatedAt: "2026-08-21",
+  updatedAt: "2026-10-09",
   external: false,
   placeholder: "empty",
 };
 
 export const BUILT_STRUCTURES: readonly BuiltStructure[] = [
+  LIFE_PASSPORT_STRUCTURE,
   {
     id: "everything-is-banana",
     title: "Everything is Banana",
@@ -51,32 +48,6 @@ export const BUILT_STRUCTURES: readonly BuiltStructure[] = [
     kind: "experiment",
     updatedAt: "2026-07-16",
     external: false,
-    placeholder: "blur",
-  },
-  {
-    id: "smart-exam-platform",
-    title: "Smart Exam Platform",
-    descriptionKey: "page.works.structure.exam.desc",
-    image: projectExam,
-    thumbnail: projectExamThumbnail,
-    href: "https://app-7vpd7214bjlt.appmiaoda.com",
-    status: "stable",
-    kind: "external",
-    updatedAt: "2026-07-16",
-    external: true,
-    placeholder: "blur",
-  },
-  {
-    id: "ai-trainer-assistant",
-    title: "AI Trainer Assistant",
-    descriptionKey: "page.works.structure.trainer.desc",
-    image: projectAiTrainer,
-    thumbnail: projectAiTrainerThumbnail,
-    href: "https://www.doubao.com/code/launch/detail/66403617282?from=from_launch_share_link",
-    status: "stable",
-    kind: "external",
-    updatedAt: "2026-07-16",
-    external: true,
     placeholder: "blur",
   },
 ];

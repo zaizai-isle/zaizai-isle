@@ -36,14 +36,14 @@ export function WorksCard() {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 to-transparent opacity-30" />
 
-        <div className="relative z-10 flex flex-col h-full justify-between">
+        <div className="relative z-10 flex h-full flex-col">
           <div className="flex justify-between items-start gap-5">
             <BentoHeader
               icon={ArrowUpRight}
               title={t('page.works.title')}
               subtitle={t('page.works.desc')}
               theme="light"
-              className="flex-1"
+              className="mb-0 flex-1"
             />
             <Link
               href="/docs"
@@ -56,20 +56,20 @@ export function WorksCard() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+          <div className="mt-2 grid min-h-[96px] flex-1 grid-cols-2 gap-3">
             {BUILT_STRUCTURES.map((project) => (
               <button
                 key={project.id}
                 type="button"
                 onClick={() => setPreviewProject(project)}
-                className="aspect-[3/2] w-full bg-gray-100 rounded-lg border border-gray-200 relative overflow-hidden group/item cursor-pointer"
+                className="relative h-full min-h-0 w-full cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-gray-100 group/item"
                 aria-label={`${t("page.works.preview")} ${project.title}`}
               >
                 <Image
                   src={project.thumbnail}
                   alt={project.title}
                   fill
-                  sizes="(min-width: 640px) 30vw, 50vw"
+                  sizes="(min-width: 1280px) 14vw, (min-width: 640px) 22vw, 50vw"
                   className="object-cover transition-all duration-500 grayscale group-hover/item:grayscale-0 group-hover/item:scale-105"
                   placeholder={project.placeholder}
                 />

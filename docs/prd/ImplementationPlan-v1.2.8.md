@@ -44,6 +44,6 @@ Based on the **Vercel React Best Practices** skill audit, this plan outlines the
 
 ## Verification Plan
 
-- [ ] **Build Check**: Run `npm run build` to verify bundle size reduction.
+- [ ] **Build Check**: Run `npm run build -- --webpack` to verify bundle size reduction.
 - [ ] **Vibe Check**: Manually verify animations remain smooth after memoization.
 - [ ] **Accessibility Check**: Ensure ARIA roles and keyboard interactions are preserved.

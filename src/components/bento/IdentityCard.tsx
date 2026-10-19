@@ -5,7 +5,7 @@ import { IdentityInteractive } from "./IdentityInteractive";
 import { Tag, Sparkle, Cloud } from "./IdentityDecorations";
 
 export const IdentityCard = ({ spriteUrl = "/shoebill-sprite-transparent.webp" }: { spriteUrl?: string }) => (
-  <BentoCard colSpan={4} rowSpan={2} theme="light" className="h-full justify-center items-center text-center relative overflow-hidden group p-8" borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)" borderWidth={1}>
+  <BentoCard colSpan={4} rowSpan={4} theme="light" className="h-full justify-center items-center text-center relative overflow-hidden group p-8" borderGradient="linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 70%, rgba(255,255,255,0.3) 100%)" borderWidth={1}>
     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50/20 via-white/40 to-blue-50/20" />
       <div className="absolute bottom-[-10%] left-[-10%] w-full h-1/2 opacity-60">

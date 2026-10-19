@@ -166,7 +166,7 @@ export function StatsCard() {
       <BentoCard
         onClick={handleDownload}
         colSpan={2}
-        rowSpan={1}
+        rowSpan={2}
         theme="dark"
         className="h-full cursor-pointer justify-center group relative overflow-hidden p-4 md:p-5"
         borderGradient={VERTICAL_BORDER_GRADIENT}

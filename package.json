@@ -1,6 +1,6 @@
 {
   "name": "my-bento-grid",
-  "version": "1.4.2",
+  "version": "1.4.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,8 @@
     "vr:core-build": "node scripts/visual-regression-core-build.mjs",
     "vr:core-build:update": "node scripts/visual-regression-core-build.mjs --update",
     "lint": "eslint",
-    "test:passport-cloud": "node --test scripts/life-passport-cloud.test.mjs && tsx --test scripts/life-passport-recovery.test.ts"
+    "test:passport-cloud": "node --test scripts/life-passport-cloud.test.mjs && tsx --test scripts/life-passport-recovery.test.ts",
+    "test:daily-learning": "node --test scripts/daily-learning-cloud.test.mjs"
   },
   "dependencies": {
     "@fontsource/ma-shan-zheng": "^5.3.0",

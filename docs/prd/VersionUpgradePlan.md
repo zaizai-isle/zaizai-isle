@@ -1,6 +1,8 @@
 # Zaizai Isle Version Upgrade Plan
 
-> Status: Active plan after V1.4.2
+> Status: Active plan after V1.4.5
+
+> Performance implementation rule: all future page and module changes follow [PerformanceContract](./PerformanceContract.md), generalized from the V1.4.5 homepage loading optimization.
 > Last Updated: 2026-08-12
 > Purpose: Define how Zaizai Isle should grow without drifting into a feature list, portfolio page, or heavy system.
 
@@ -173,16 +175,19 @@ Success criteria:
 
 ### V1.5: Living State
 
+Status: Calibration implementation in progress (2026-10-14)
+
 Goal:
 
-- Make the island's "currently growing" state clearer through existing surfaces.
+- Align the existing home page with a personal digital space for creations, thoughts, and life records. Present actual work and current interests clearly, with construction information in a supporting role.
 
 Scope:
 
 - Improve Core Build milestones and status language.
 - Connect maintenance changes to visible construction state only where appropriate.
 - Consider exposing "last build pulse" or "current forming area" in Core Build.
-- Keep all text short and system-like.
+- Use factual language for construction status and natural, owner-supplied language for personal interests. Follow Product for long-term positioning and PRD-ACTIVE for the current layout and acceptance scope.
+- Older writing, images, and everyday records may be organized later; migration and a full personal archive are not V1.5 release requirements.
 
 Non-goals:
 
@@ -237,9 +242,9 @@ The next concrete version should be:
 
 First planning slice:
 
-1. Audit Core Build status against the real structure registry.
-2. Decide whether a single “current forming area” can replace manually repeated status copy.
+1. Audit Core Build status against the real structure registry. (Implemented; pending manual acceptance)
+2. Decide whether a single “current forming area” can replace manually repeated status copy. (Implemented; pending manual acceptance)
 3. Keep Life Passport and Isle Daily internal versions independent from the site version.
-4. Avoid new homepage cards; refine existing surfaces first.
+4. Avoid new homepage cards; refine existing surfaces first. (Implemented by replacing simulated Activity and reducing tool surfaces)
 
 This keeps the island alive through accurate state, not through more visible activity.

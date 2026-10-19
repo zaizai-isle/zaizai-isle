@@ -8,7 +8,7 @@ import imageCompression from "browser-image-compression";
 import { cn } from "@/lib/utils";
 import { BentoHeader } from "./BentoCommon";
 
-export function CompressorCard() {
+export function CompressorCard({ colSpan = 2 }: { colSpan?: number }) {
     const { t } = useLanguage();
     const [file, setFile] = useState<File | null>(null);
     const [compressedFile, setCompressedFile] = useState<File | null>(null);
@@ -69,7 +69,7 @@ export function CompressorCard() {
 
     return (
         <BentoCard
-            colSpan={2}
+            colSpan={colSpan}
             rowSpan={1}
             theme="dark"
             className="h-full min-h-[220px]"

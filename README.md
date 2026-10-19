@@ -16,30 +16,15 @@
 
 ## About · 关于
 
-**Zaizai Isle** 是一个以 *Vibe Coding* 方式构建的轻量级个人网站与实验空间。
+**Zaizai Isle，一个可长期维护、可继续生长、可承载个人变化的数字小岛。**
 
-它不是：
-- 传统意义上的简历站  
-- 单纯的作品展示页  
+这里先承接当下的作品, 关注与新记录。过去散落在其他平台的文章、图片和日常，以后慢慢整理，不设期限。
 
-它更像是：
-- 一个持续生长的个人数字空间  
-- 用来承载想法、工具与实验的地方  
-- AI 辅助下进行产品设计与交付的真实案例  
+小岛是这个空间的气质，鲸头鹳是它的陪伴。内容随时间自然积累，不要求每次更新承担额外的运营压力。
 
-整个站点采用渐进式构建方式。  
-每一次更新更关注判断力、可用性与整体体验，而不是功能数量。
+网站以 Vibe Coding 的方式逐步建设，功能随实际使用和需要自然生长。
 
-有些模块已经稳定，  
-有些仍在演进中。  
-它们存在的原因很简单：在当下，它们值得被做出来。
-
-如果你在这里获得了一点启发，  
-或发现了一个不经意的小惊喜，  
-那这个网站就已经完成了它的使命。
-
-**再做一点，再想一点，  
-惊喜总会在不经意间发生。**
+再做一点，再想一点，惊喜总会在不经意间发生。
 
 ---
 
@@ -48,28 +33,15 @@
 
 <br />
 
-**Zaizai Isle** is a lightweight personal website built as a real-world case of *Vibe Coding*.
+**Zaizai Isle, a digital isle that grows, survives, and reflects personal evolution.**
 
-It is not:
-- a traditional resume site  
-- a static portfolio showcase  
-- a technical demo for its own sake  
+It starts with current projects, interests, and new notes. Older writings and everyday records from other platforms will find their way here gradually.
 
-Instead, it is:
-- a small, evolving personal space on the web  
-- a place to experiment with ideas, tools, and interactions  
-- a practical demonstration of AI-assisted product design and delivery  
+The isle provides the atmosphere, accompanied by the shoebill. Content grows naturally over time without operational pressure.
 
-The site is built incrementally.  
-Each update prioritizes judgment, usability, and overall experience — not feature count.
+Built incrementally through Vibe Coding, the site develops around actual use and needs.
 
-Some parts are refined.  
-Some are still evolving.  
-Everything exists because it felt worth building at that moment.
-
-If something here turns out to be useful,  
-or unexpectedly interesting,  
-then the site is doing what it’s meant to do.
+Build more, think more, find the spark.
 
 **Build more, think more, find the spark.**
 
@@ -88,8 +60,8 @@ then the site is doing what it’s meant to do.
 This project uses a project-local Conda environment:
 
 ```bash
-conda activate /Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle/.conda-env
-npm run dev
+conda activate "$PWD/.conda-env"
+npm run dev -- --webpack
 ```
 
 The environment includes Python `3.13.13`, Node.js `25.8.2`, and npm `11.11.1`.
@@ -105,7 +77,7 @@ Override with `VR_BASE_URL`, for example:
 
 ## Asset Generation
 
-- Weather icons: `env PATH=/Volumes/ieb/AEBO25/SA_Requirements/zaizai-isle/.conda-env/bin:$PATH ./node_modules/.bin/tsx scripts/process-icons.ts`
+- Weather icons: `env PATH="$PWD/.conda-env/bin:$PATH" ./node_modules/.bin/tsx scripts/process-icons.ts`
 - Runtime images should prefer WebP when the optimized file is smaller and visually equivalent.
 - Release checklist: `docs/prd/ReleaseChecklist.md`
 

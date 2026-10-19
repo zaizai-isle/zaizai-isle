@@ -26,3 +26,20 @@
 .review-buttons {display:flex;flex-wrap:wrap;gap:10px}
 .review-message {padding:12px 0 26px;font-size:14px}
 @media(max-width:760px){.review-layout {grid-template-columns:1fr;padding-top:14px}.review-list {position:static}.review-list-item {padding:12px}.review-artwork img{max-height:360px}}
+
+.learning-review-layout{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:start;padding:20px 0 80px}
+.learning-review-layout aside{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto}
+.learning-review-layout>section{min-width:0}
+.learning-review-layout article h2{font-size:clamp(22px,2.6vw,34px);line-height:1.4;margin:10px 0 22px}
+.learning-review-layout article h3{font-size:15px;font-weight:600;margin-top:22px}
+.learning-review-layout article p{font-size:15px;line-height:1.85;white-space:pre-wrap;margin:12px 0}
+.learning-review-item{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;border:1px solid #dfdbd0;border-radius:10px;padding:12px;margin-top:10px;background:transparent}
+.learning-review-item[aria-pressed=true]{background:#fff;border-color:#888}
+.learning-review-item small{color:#666}
+.learning-review-image{display:block;width:auto;max-width:100%;max-height:500px;object-fit:contain}
+.learning-review-actions{border-top:1px solid #dfdbd0;margin-top:28px;padding-top:20px;display:grid;gap:12px}
+.learning-review-actions label{display:flex;gap:8px;align-items:center}
+.learning-review-actions label:has(textarea){display:grid;justify-items:start}
+.learning-review-layout .learning-login{display:grid;gap:12px;margin:16px 0}
+.learning-review-layout .learning-input{width:100%;resize:vertical;min-width:0}
+@media(max-width:800px){.learning-review-layout{grid-template-columns:1fr}.learning-review-layout aside{position:static;max-height:none}}

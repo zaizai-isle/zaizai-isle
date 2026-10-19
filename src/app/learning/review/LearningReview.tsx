@@ -40,7 +40,7 @@ export function LearningReview() {
         const owner=await verifyIslandOwner();
         if(!live)return;
         if(!owner){setAuth("denied");return;}
-        setAuth("ready");await reload();
+        setAuth("ready");await reload(); await loadResearch();
       }catch{if(live){setAuth("denied");setMessage("无法验证岛主身份。");}}
     })();
     return()=>{live=false;};
@@ -57,8 +57,30 @@ export function LearningReview() {
       if(error)throw error;
       const owner=await verifyIslandOwner();
       if(!owner)throw new Error("该账户不是岛主账户。");
-      setPassword("");setAuth("ready");await reload();
+      setPassword("");setAuth("ready");await reload(); await loadResearch();
     }catch(e){setMessage(e instanceof Error?e.message:"登录失败");}
+    finally{setBusy(false);}
+  }
+  async function loadResearch(){
+    try {
+      const response=await fetch("https://raw.githubusercontent.com/zaizai-isle/zaizai-isle/main/data/learning/research/latest.json", {cache:"no-store"});
+      if(!response.ok) {setMessage("尚无成功的采集数据。请先检查 GitHub Actions。");return;}
+      const record=await response.json();
+      if(record.schema_version!==1||record.status!=="research_candidates_only"||!Array.isArray(record.items))throw new Error("候选数据格式不正确");
+      setCandidates(record.items.filter((x:Record<string,unknown>)=>x.review_status==="needs_editorial_review"));
+      setResearchDate(text(record.research_date));
+    } catch(error){setMessage(error instanceof Error?error.message:"采集数据不可用");}
+  }
+  async function generate(source:Record<string,unknown>){
+    setBusy(true);setMessage("");
+    try {
+      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate:source}});
+      if(error)throw error;
+      if(data?.error)throw new Error(String(data.error));
+      await reload();
+      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
+      setMessage("草稿已生成。还需要核实史实和图片许可。");
+    } catch(error){setMessage(error instanceof Error?error.message:"生成失败");}
     finally{setBusy(false);}
   }
   async function decide(status:"approved"|"changes_requested"|"rejected"){
@@ -118,7 +140,8 @@ export function LearningReview() {
       <h3>历史理解</h3><p>{text(c.history)}</p>
       <h3>当代连接</h3><p>{text(c.connection)}</p>
       <h3>阅读回应</h3><p>{text(c.question)}</p>
-      <h3>来源</h3><a href={text(c.source_url)} rel="noreferrer" target="_blank">{text(c.source_url)}</a>
+      <h3>来源</h3><a href={text(current.source_record.source_url)} rel="noreferrer" target="_blank">{text(current.source_record.source_url)}</a>
+      {Array.isArray(c.editorial_caveats)?<section><h3>Agent 不确定事项</h3><ul>{c.editorial_caveats.map((v,i)=><li key={i}>{text(v)}</li>)}</ul></section>:null}
       <div className="learning-review-actions"><label><input type="checkbox" checked={imageRights} disabled={current.status==="approved"} onChange={e=>setImageRights(e.target.checked)}/> 已核实图片使用许可</label>
       <label><input type="checkbox" checked={sourcesOk} disabled={current.status==="approved"} onChange={e=>setSourcesOk(e.target.checked)}/> 已核实历史事实和来源</label>
       <label>审核意见<textarea className="learning-input" maxLength={2000} value={note} disabled={current.status==="approved"} onChange={e=>setNote(e.target.value)} /></label>

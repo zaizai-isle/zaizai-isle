@@ -1,0 +1,29 @@
+name: Daily Learning Type Check
+
+on:
+  push:
+    branches:
+      - feature/daily-learning-agent-review
+  pull_request:
+    paths:
+      - 'src/app/learning/**'
+      - 'supabase/functions/daily-learning-*/**'
+      - 'supabase/migrations/*daily_learning*'
+      - 'scripts/*learning*'
+      - '.github/workflows/daily-learning-*.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit

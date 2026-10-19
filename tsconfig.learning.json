@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "next-env.d.ts",
+    "src/app/learning/**/*.ts",
+    "src/app/learning/**/*.tsx",
+    "src/lib/island-owner-client.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

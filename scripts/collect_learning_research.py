@@ -79,7 +79,7 @@ def collect_met(query: str, seen: set[str]) -> list[dict]:
         "limit": "24", "offset": "0",
     }
     search = get_json(
-        "https://collectionapi.metmuseum.org/public/collection/v1.1/search?" + urlencode(params)
+        "https://collectionapi.metmuseum.org/public/collection/v1/search?" + urlencode(params)
     )
     items = []
     for object_id in (search.get("objectIDs") or [])[:12]:

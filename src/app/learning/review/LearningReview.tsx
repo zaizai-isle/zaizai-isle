@@ -24,6 +24,8 @@ export function LearningReview() {
   const [message,setMessage]=useState("");
   const [candidateJson,setCandidateJson]=useState("");
   const [creating,setCreating]=useState(false);
+  const [candidates,setCandidates]=useState<Record<string,unknown>[]>([]);
+  const [researchDate,setResearchDate]=useState("");
   const current=rows.find(x=>x.id===selected);
   async function reload(){
     const {data,error}=await getIslandOwnerClient().from("daily_learning_article_drafts")
@@ -40,7 +42,7 @@ export function LearningReview() {
         const owner=await verifyIslandOwner();
         if(!live)return;
         if(!owner){setAuth("denied");return;}
-        setAuth("ready");await reload(); await loadResearch();
+        setAuth("ready");await reload();void fetchCandidates().catch(()=>{}); await loadResearch();
       }catch{if(live){setAuth("denied");setMessage("无法验证岛主身份。");}}
     })();
     return()=>{live=false;};
@@ -101,7 +103,28 @@ export function LearningReview() {
     }catch(e){setMessage(e instanceof Error?e.message:"保存失败");}
     finally{setBusy(false);}
   }
-  async function createArticleDraft(event:React.FormEvent){
+
+  async function fetchCandidates(){
+    const url="https://raw.githubusercontent.com/zaizai-isle/zaizai-isle/main/data/learning/research/latest.json";
+    const response=await fetch(url,{cache:"no-store"});
+    if(!response.ok)throw new Error("未读取到最新候选资料。");
+    const record=await response.json();
+    if(record?.status!=="research_candidates_only"||!Array.isArray(record.items))throw new Error("候选资料格式不符合要求。");
+    setCandidates(record.items);
+    setResearchDate(String(record.research_date||""));
+  }
+  async function generateCandidate(candidate:Record<string,unknown>){
+    setCreating(true);setMessage("");
+    try{
+      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
+      if(error)throw error;
+      if(data?.error)throw new Error(String(data.error));
+      await reload();
+      setMessage("文章草稿已生成。审核后才能批准，批准也不会自动发布。");
+    }catch(error){setMessage(error instanceof Error?error.message:"文章生成失败。");}
+    finally{setCreating(false);}
+  }
+    async function createArticleDraft(event:React.FormEvent){
     event.preventDefault();setCreating(true);setMessage("");
     try{
       const record=JSON.parse(candidateJson);
@@ -127,6 +150,13 @@ export function LearningReview() {
         <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"Agent 生成草稿"}</button>
       </form>
       <button className="learning-primary" type="button" onClick={()=>void reload()}>刷新</button>
+      <h3>最新候选作品{researchDate?" · "+researchDate:""}</h3>
+      {candidates.length?candidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
+        <strong>{text(item.title)}</strong>
+        <small>{text(item.source_id)} · {text(item.creator)}</small>
+        <a href={text(item.source_url)} target="_blank" rel="noreferrer">查看馆藏</a>
+        <button className="learning-primary" type="button" disabled={creating} onClick={()=>void generateCandidate(item)}>生成草稿</button>
+      </div>):<p>暂无候选资料。可粘贴候选作品 JSON。</p>}
       <h3>待审核草稿</h3>
       {rows.map(x=><button type="button" className="learning-review-item" aria-pressed={x.id===selected} key={x.id} onClick={()=>setSelected(x.id)}><strong>{text(x.content.title)||x.source_id}</strong><small>{statuses[x.status]??x.status} · v{x.version}</small></button>)}
       {!rows.length?<p>暂无草稿。采集与文章生成完成后将在此显示。</p>:null}

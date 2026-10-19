@@ -2,8 +2,7 @@
 
 ## 状态
 
-- 采集任务：`.github/workflows/daily-learning-research.yml`。当前仓库没有已确认的采集 JSON。
-- Agent 自动草稿：`.github/workflows/daily-learning-draft.yml`。仅在配置完密钥并成功采集后运行。
+- 采集与自动草稿：`.github/workflows/daily-learning-research.yml` 采集成功后，使用 GitHub OIDC 调用 `daily-learning-auto`。
 - 手动草稿：岛主登录 `/learning/review/`，导入候选 JSON 或选择采集记录，点击生成。
 - 草稿数据库：`public.daily_learning_article_drafts`。已启用 RLS。
 - 生成服务：Supabase Edge Function `daily-learning-generate`。已部署；需要 `GEMINI_API_KEY`。
@@ -11,15 +10,7 @@
 
 ## 必要配置
 
-### GitHub Actions Secrets
-
-- `GEMINI_API_KEY`：调用 Gemini 生成草稿。
-- `SUPABASE_URL`：Supabase 项目 URL。
-- `SUPABASE_SERVICE_ROLE_KEY`：仅用于受保护的 GitHub Actions 工作流。
-- `LEARNING_OWNER_ID`：与 `island_owner_accounts` 一致的岛主账户 ID。设为 Secret，不提交到仓库。
-
-配置在 GitHub 仓库 → Settings → Secrets and variables → Actions。
-四项未全部配置时，定时草稿任务会跳过，不会报错提交不完整内容。
+自动流程不在 GitHub 保存 Supabase 管理员密钥。GitHub Actions 使用短期 OIDC 身份，`daily-learning-auto` 严格核验仓库、分支、工作流、事件和 audience。
 
 ### Supabase Edge Function Secret
 
@@ -31,7 +22,8 @@
 ```text
 博物馆开放 API
    → data/learning/research/latest.json
-   → scripts/generate_learning_draft.py
+   → GitHub OIDC
+   → Supabase Edge Function `daily-learning-auto`
    → Supabase 私有草稿表（pending_review）
    → 岛主审核页面 /learning/review/
    → 事实核实 + 图片许可核实

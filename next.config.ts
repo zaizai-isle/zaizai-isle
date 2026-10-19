@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
+    remotePatterns: [
+      { protocol: "https", hostname: "images.metmuseum.org" },
+      { protocol: "https", hostname: "www.artic.edu" },
+      { protocol: "https", hostname: "openaccess-cdn.clevelandart.org" },
+      { protocol: "https", hostname: "iip-thumb.smk.dk" },
+      { protocol: "https", hostname: "api.smk.dk" },
+      { protocol: "https", hostname: "www.loc.gov" },
+      { protocol: "https", hostname: "tile.loc.gov" },
+      { protocol: "https", hostname: "cdn.loc.gov" },
+    ],
   },
   generateBuildId: async () => {
     return `build-${Date.now()}`;

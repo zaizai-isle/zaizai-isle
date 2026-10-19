@@ -42,6 +42,8 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 
 数据库管理员密钥不得配置在 GitHub 仓库、浏览器或公开文件中。
 
+`supabase/config.toml` 对 `daily-learning-auto` 关闭 Supabase JWT 网关预检，因为 GitHub OIDC 令牌不是 Supabase 用户令牌。该函数仍在代码中严格核验 GitHub 签发者、audience、仓库、main 分支、工作流路径和事件类型。岛主手动调用的 `daily-learning-generate` 保持 Supabase JWT 验证。
+
 ## 4. 模型配置
 
 需要在 Supabase 项目 **Edge Functions -> Secrets** 中配置：

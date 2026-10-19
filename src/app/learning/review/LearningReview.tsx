@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { getIslandOwnerClient } from "@/lib/island-owner-client";
 import { verifyIslandOwner } from "../learning-repository";
@@ -15,7 +16,11 @@ const statuses: Record<string,string> = {
   approved:"已批准（未发布）", rejected:"放弃"
 };
 const text = (v: unknown) => typeof v === "string" ? v : "";
-export function LearningReview() {
+type LearningReviewProps = {
+  initialCandidates: Record<string, unknown>[];
+  researchDate: string;
+};
+export function LearningReview({initialCandidates,researchDate}:LearningReviewProps) {
   const [auth,setAuth]=useState<"loading"|"denied"|"ready">("loading");
   const [email,setEmail]=useState(""); const [password,setPassword]=useState("");
   const [rows,setRows]=useState<Draft[]>([]); const [selected,setSelected]=useState("");
@@ -24,8 +29,6 @@ export function LearningReview() {
   const [message,setMessage]=useState("");
   const [candidateJson,setCandidateJson]=useState("");
   const [creating,setCreating]=useState(false);
-  const [candidates,setCandidates]=useState<Record<string,unknown>[]>([]);
-  const [researchDate,setResearchDate]=useState("");
   const current=rows.find(x=>x.id===selected);
   async function reload(){
     const {data,error}=await getIslandOwnerClient().from("daily_learning_article_drafts")
@@ -42,7 +45,7 @@ export function LearningReview() {
         const owner=await verifyIslandOwner();
         if(!live)return;
         if(!owner){setAuth("denied");return;}
-        setAuth("ready");await reload();void fetchCandidates().catch(()=>{}); await loadResearch();
+        setAuth("ready");await reload();
       }catch{if(live){setAuth("denied");setMessage("无法验证岛主身份。");}}
     })();
     return()=>{live=false;};
@@ -51,7 +54,7 @@ export function LearningReview() {
     setNote(current?.review_note??"");
     setImageRights(current?.image_permission_verified??false);
     setSourcesOk(current?.historical_sources_verified??false);
-  },[selected,current?.updated_at]);
+  },[current]);
   async function signIn(event:React.FormEvent){
     event.preventDefault();setBusy(true);setMessage("");
     try{
@@ -59,30 +62,8 @@ export function LearningReview() {
       if(error)throw error;
       const owner=await verifyIslandOwner();
       if(!owner)throw new Error("该账户不是岛主账户。");
-      setPassword("");setAuth("ready");await reload(); await loadResearch();
+      setPassword("");setAuth("ready");await reload();
     }catch(e){setMessage(e instanceof Error?e.message:"登录失败");}
-    finally{setBusy(false);}
-  }
-  async function loadResearch(){
-    try {
-      const response=await fetch("https://raw.githubusercontent.com/zaizai-isle/zaizai-isle/main/data/learning/research/latest.json", {cache:"no-store"});
-      if(!response.ok) {setMessage("尚无成功的采集数据。请先检查 GitHub Actions。");return;}
-      const record=await response.json();
-      if(record.schema_version!==1||record.status!=="research_candidates_only"||!Array.isArray(record.items))throw new Error("候选数据格式不正确");
-      setCandidates(record.items.filter((x:Record<string,unknown>)=>x.review_status==="needs_editorial_review"));
-      setResearchDate(text(record.research_date));
-    } catch(error){setMessage(error instanceof Error?error.message:"采集数据不可用");}
-  }
-  async function generate(source:Record<string,unknown>){
-    setBusy(true);setMessage("");
-    try {
-      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate:source}});
-      if(error)throw error;
-      if(data?.error)throw new Error(String(data.error));
-      await reload();
-      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
-      setMessage("草稿已生成。还需要核实史实和图片许可。");
-    } catch(error){setMessage(error instanceof Error?error.message:"生成失败");}
     finally{setBusy(false);}
   }
   async function decide(status:"approved"|"changes_requested"|"rejected"){
@@ -104,15 +85,6 @@ export function LearningReview() {
     finally{setBusy(false);}
   }
 
-  async function fetchCandidates(){
-    const url="https://raw.githubusercontent.com/zaizai-isle/zaizai-isle/main/data/learning/research/latest.json";
-    const response=await fetch(url,{cache:"no-store"});
-    if(!response.ok)throw new Error("未读取到最新候选资料。");
-    const record=await response.json();
-    if(record?.status!=="research_candidates_only"||!Array.isArray(record.items))throw new Error("候选资料格式不符合要求。");
-    setCandidates(record.items);
-    setResearchDate(String(record.research_date||""));
-  }
   async function generateCandidate(candidate:Record<string,unknown>){
     setCreating(true);setMessage("");
     try{
@@ -151,7 +123,7 @@ export function LearningReview() {
       </form>
       <button className="learning-primary" type="button" onClick={()=>void reload()}>刷新</button>
       <h3>最新候选作品{researchDate?" · "+researchDate:""}</h3>
-      {candidates.length?candidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
+      {initialCandidates.length?initialCandidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
         <strong>{text(item.title)}</strong>
         <small>{text(item.source_id)} · {text(item.creator)}</small>
         <a href={text(item.source_url)} target="_blank" rel="noreferrer">查看馆藏</a>
@@ -163,7 +135,7 @@ export function LearningReview() {
     </aside><section className="learning-reading">
     {!current?<p>选择一篇草稿</p>:<article><p className="learning-kicker">{statuses[current.status]??current.status} · 版本 {current.version}</p>
       <h2>{text(c.title)||current.source_id}</h2><p className="learning-muted">{text(c.subject)} · {text(c.creator)} · {text(c.era)}</p>
-      {text(current.source_record.image_url)?<figure><a href={text(current.source_record.source_url)} target="_blank" rel="noreferrer"><img className="learning-review-image" src={text(c.image_url)} alt={text(current.source_record.title)||"候选作品"}/></a><figcaption>候选图片：尚未确认发布许可</figcaption></figure>:null}
+      {text(current.source_record.image_url)?<figure><a href={text(current.source_record.source_url)} target="_blank" rel="noreferrer"><Image className="learning-review-image" src={text(current.source_record.image_url)} alt={text(current.source_record.title)||"候选作品"} width={1024} height={1024} sizes="(max-width: 900px) 100vw, 50vw" unoptimized/></a><figcaption>候选图片：尚未确认发布许可</figcaption></figure>:null}
       <p><strong>核心问题：</strong>{text(c.title)}</p>
       <p>{text(c.introduction)}</p>
       {Array.isArray(c.observations)?c.observations.map((o,i)=><section key={i}><h3>{text((o as Record<string,unknown>).heading)}</h3><p>{text((o as Record<string,unknown>).body)}</p></section>):null}

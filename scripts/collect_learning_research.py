@@ -56,7 +56,7 @@ def first_text(value: Any) -> str:
     if isinstance(value, list):
         return ", ".join(filter(None, (first_text(v) for v in value[:4])))
     if isinstance(value, dict):
-        for key in ("title", "name", "description", "period", "value"):
+        for key in ("title", "name", "description", "period", "value", "creator"):
             if value.get(key):
                 return first_text(value[key])
     return ""
@@ -157,7 +157,7 @@ def collect_artic(query: str, seen: set[str]) -> list[dict[str, Any]]:
 
 
 def collect_cleveland(query: str, seen: set[str]) -> list[dict[str, Any]]:
-    params = {"q": query, "cc0": "", "has_image": "", "limit": 20}
+    params = {"q": query, "cc0": "", "has_image": 1, "limit": 20}
     url = "https://openaccess-api.clevelandart.org/api/artworks/?" + urlencode(params)
     for obj in get_json(url).get("data") or []:
         if obj.get("share_license_status") != "CC0":
@@ -197,13 +197,13 @@ def collect_smk(query: str, seen: set[str]) -> list[dict[str, Any]]:
         if f"smk:{object_id}" in seen:
             continue
         titles = obj.get("titles") or obj.get("title")
-        creator = obj.get("production") or obj.get("creator")
+        creator = obj.get("artist") or obj.get("production") or obj.get("creator")
         date = obj.get("production_date") or obj.get("dating")
         image_url = obj.get("image_thumbnail") or obj.get("image_native") or ""
         item = candidate(
             "smk", object_id, titles, creator, date,
             obj.get("techniques") or obj.get("materials") or obj.get("object_names"),
-            f"https://open.smk.dk/en/artwork/image/{object_id}",
+            f"https://open.smk.dk/artwork/image/{object_id}",
             f"https://api.smk.dk/api/v1/art/?object_number={object_id}&lang=en",
             image_url, True, "SMK public_domain=true; check image record",
         )

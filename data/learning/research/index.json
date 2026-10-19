@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "seen_ids": [
+    "smk:KKS1974-113",
+    "artic:6471",
+    "cleveland:156112"
+  ],
+  "runs": [
+    "runs/2026-10-19.json"
+  ],
+  "last_research_date": "2026-10-19"
+}

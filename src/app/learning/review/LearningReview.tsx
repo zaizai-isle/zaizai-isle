@@ -22,6 +22,8 @@ export function LearningReview() {
   const [note,setNote]=useState(""); const [imageRights,setImageRights]=useState(false);
   const [sourcesOk,setSourcesOk]=useState(false); const [busy,setBusy]=useState(false);
   const [message,setMessage]=useState("");
+  const [candidateJson,setCandidateJson]=useState("");
+  const [creating,setCreating]=useState(false);
   const [candidates,setCandidates]=useState<Record<string,unknown>[]>([]);
   const [researchDate,setResearchDate]=useState("");
   const current=rows.find(x=>x.id===selected);
@@ -79,6 +81,19 @@ export function LearningReview() {
     }catch(e){setMessage(e instanceof Error?e.message:"保存失败");}
     finally{setBusy(false);}
   }
+  async function createArticleDraft(event:React.FormEvent){
+    event.preventDefault();setCreating(true);setMessage("");
+    try{
+      const record=JSON.parse(candidateJson);
+      const candidate=Array.isArray(record.items)?record.items[0]:record;
+      if(!candidate || typeof candidate.source_id!=="string" || !String(candidate.source_url||"").startsWith("https://"))throw new Error("需要有效的候选作品 JSON。");
+      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
+      if(error)throw error;
+      if(data?.error)throw new Error(String(data.error));
+      setCandidateJson(""); await reload();setMessage("文章草稿已生成。请核实作品、历史资料及图片许可。");
+    }catch(error){setMessage(error instanceof Error?error.message:"草稿生成失败");}
+    finally{setCreating(false);}
+  }
   const c=current?.content??{};
   return <main className="learning-page"><div className="learning-shell">
     <header className="learning-header"><div className="learning-brand"><h1>每日一看 · 内容审核</h1><p>仅岛主账户可以访问草稿与提交审核</p></div><Link href="/learning" className="learning-pill">返回每日一看</Link></header>
@@ -87,6 +102,10 @@ export function LearningReview() {
       <input className="learning-input" type="password" placeholder="密码" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/>
       <button className="learning-primary" disabled={busy}>登录</button></form></section>:
     <div className="learning-review-layout"><aside className="learning-reading"><h2>内容草稿（{rows.length}）</h2>
+      <form onSubmit={createArticleDraft} className="learning-login">
+        <label>导入一条候选作品 JSON<textarea className="learning-input" rows={5} value={candidateJson} onChange={e=>setCandidateJson(e.target.value)} placeholder='{"source_id":"met:123","title":"...","source_url":"https://...","image_url":"https://...","review_status":"needs_editorial_review"}' /></label>
+        <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"Agent 生成草稿"}</button>
+      </form>
       <button className="learning-primary" type="button" onClick={()=>void reload()}>刷新</button>
       <h3>候选作品 {researchDate ? "· "+researchDate : ""}</h3>
       {candidates.length===0?<p>暂无采集结果。</p>:candidates.map(source=><div key={text(source.source_id)} className="learning-review-candidate">

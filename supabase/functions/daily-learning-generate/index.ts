@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
   ].join("\n");
 
   try {
-    const model = Deno.env.get("GEMINI_MODEL") || "gemini-2.5-flash";
+    const model = Deno.env.get("GEMINI_MODEL") || "gemini-3.8-flash";
     const api = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
     const generated = await fetch(api, {
       method: "POST",

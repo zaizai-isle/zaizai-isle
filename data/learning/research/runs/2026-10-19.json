@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "research_candidates_only",
+  "generated_at": "2026-10-19T12:42:30+09:00",
+  "research_date": "2026-10-19",
+  "theme": {
+    "observation_code": "A05",
+    "observation_name": "材料、结构与功能",
+    "history_node": "H03",
+    "query": "furniture",
+    "classification_verified": false
+  },
+  "items": [
+    {
+      "source_id": "smk:KKS1974-113",
+      "source": "smk",
+      "title": "En kommode",
+      "creator": "Martinus Rørbye",
+      "date": "1840-1849",
+      "medium": "Pencil, pen and brown ink",
+      "source_url": "https://open.smk.dk/artwork/image/KKS1974-113",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS1974-113&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/f7623g139_pc4-09-09-04_-_068.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:6471",
+      "source": "artic",
+      "title": "Cylinder Desk and Bookcase",
+      "creator": "Artist unknown (American, 19th century)\nBoston",
+      "date": "1800–10",
+      "medium": "Mahogany and white pine, with mahogany, birch, and maple veneers",
+      "source_url": "https://www.artic.edu/artworks/6471",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/6471",
+      "image_url": "https://www.artic.edu/iiif/2/37c1e8e6-49d5-8a86-a0cb-a5e8f5aef5f7/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "cleveland:156112",
+      "source": "cleveland",
+      "title": "Tea Table",
+      "creator": "Carlo Bugatti (Italian, 1856–1940)",
+      "date": "c. 1907",
+      "medium": "inlaid wood (mahogany?), cast and gilded bronze mounts, inlays of ivory or bone, metal, and mother-of-pearl (marine mussels or pearl oysters)",
+      "source_url": "https://www.clevelandart.org/art/1991.45",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/156112",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1991.45/1991.45_web.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
+      },
+      "review_status": "needs_editorial_review"
+    }
+  ],
+  "sources_attempted": [
+    "smk",
+    "loc",
+    "met",
+    "artic",
+    "cleveland"
+  ],
+  "warnings": [],
+  "notes": "Catalog candidates only. No images saved and no content published."
+}

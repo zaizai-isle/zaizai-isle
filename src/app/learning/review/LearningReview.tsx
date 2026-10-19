@@ -22,6 +22,8 @@ export function LearningReview() {
   const [note,setNote]=useState(""); const [imageRights,setImageRights]=useState(false);
   const [sourcesOk,setSourcesOk]=useState(false); const [busy,setBusy]=useState(false);
   const [message,setMessage]=useState("");
+  const [candidates,setCandidates]=useState<Record<string,unknown>[]>([]);
+  const [researchDate,setResearchDate]=useState("");
   const current=rows.find(x=>x.id===selected);
   async function reload(){
     const {data,error}=await getIslandOwnerClient().from("daily_learning_article_drafts")
@@ -86,18 +88,25 @@ export function LearningReview() {
       <button className="learning-primary" disabled={busy}>登录</button></form></section>:
     <div className="learning-review-layout"><aside className="learning-reading"><h2>内容草稿（{rows.length}）</h2>
       <button className="learning-primary" type="button" onClick={()=>void reload()}>刷新</button>
+      <h3>候选作品 {researchDate ? "· "+researchDate : ""}</h3>
+      {candidates.length===0?<p>暂无采集结果。</p>:candidates.map(source=><div key={text(source.source_id)} className="learning-review-candidate">
+        <strong>{text(source.title)}</strong><p>{text(source.creator)} · {text(source.date)}</p>
+        <a href={text(source.source_url)} target="_blank" rel="noreferrer">馆藏来源 ↗</a>
+        <button type="button" className="learning-primary" disabled={busy} onClick={()=>void generate(source)}>生成草稿</button>
+      </div>)}
+      <h3>待审核草稿</h3>
       {rows.map(x=><button type="button" className="learning-review-item" aria-pressed={x.id===selected} key={x.id} onClick={()=>setSelected(x.id)}><strong>{text(x.content.title)||x.source_id}</strong><small>{statuses[x.status]??x.status} · v{x.version}</small></button>)}
       {!rows.length?<p>暂无草稿。采集与文章生成完成后将在此显示。</p>:null}
     </aside><section className="learning-reading">
     {!current?<p>选择一篇草稿</p>:<article><p className="learning-kicker">{statuses[current.status]??current.status} · 版本 {current.version}</p>
-      <h2>{text(c.title)||current.source_id}</h2><p className="learning-muted">{text(c.work_title)} · {text(c.creator)} · {text(c.work_date)}</p>
+      <h2>{text(c.title)||current.source_id}</h2><p className="learning-muted">{text(c.subject)} · {text(c.creator)} · {text(c.era)}</p>
       {text(c.image_url)?<figure><a href={text(c.source_url)} target="_blank" rel="noreferrer"><img className="learning-review-image" src={text(c.image_url)} alt={text(c.work_title)||"候选作品"}/></a><figcaption>候选图片：尚未确认发布许可</figcaption></figure>:null}
-      <p><strong>核心问题：</strong>{text(c.observation_question)}</p>
-      <p>{text(c.introduction)}</p>
-      {Array.isArray(c.observations)?c.observations.map((o,i)=><section key={i}><h3>{text((o as Record<string,unknown>).heading)}</h3><p>{text((o as Record<string,unknown>).body)}</p></section>):null}
-      <h3>历史理解</h3><p>{text(c.historical_context)}</p>
-      <h3>当代连接</h3><p>{text(c.contemporary_connection)}</p>
-      <h3>阅读回应</h3><p>{text(c.closing_question)}</p>
+      <p><strong>核心问题：</strong>{text(c.title)}</p>
+      <p>{text(c.intro)}</p>
+      {Array.isArray(c.observations)?c.observations.map((o,i)=><section key={i}><h3>{text((o as Record<string,unknown>).title)}</h3><p>{text((o as Record<string,unknown>).text)}</p></section>):null}
+      <h3>历史理解</h3><p>{text(c.context)}</p>
+      <h3>当代连接</h3><p>{text(c.connection)}</p>
+      <h3>阅读回应</h3><p>{text(c.question)}</p>
       <h3>来源</h3><a href={text(c.source_url)} rel="noreferrer" target="_blank">{text(c.source_url)}</a>
       <div className="learning-review-actions"><label><input type="checkbox" checked={imageRights} disabled={current.status==="approved"} onChange={e=>setImageRights(e.target.checked)}/> 已核实图片使用许可</label>
       <label><input type="checkbox" checked={sourcesOk} disabled={current.status==="approved"} onChange={e=>setSourcesOk(e.target.checked)}/> 已核实历史事实和来源</label>

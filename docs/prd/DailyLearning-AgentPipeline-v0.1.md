@@ -17,9 +17,8 @@
 GitHub Actions（每日 08:00 Asia/Tokyo）
   -> 馆藏 API 元数据
   -> data/learning/research/latest.json
-  -> GitHub OIDC 令牌
-  -> Supabase Edge Function: daily-learning-auto
-  -> Gemini 多模态文章草稿
+  -> Codex 研究、写作与生成标准草稿包
+  -> 岛主在审核页导入草稿包
   -> Supabase 私有表 daily_learning_article_drafts
   -> 岛主审核 /learning/review
   -> 已批准版本（未发布）
@@ -39,25 +38,16 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 
 | 路径 | 验证方式 | 数据权限 |
 |---|---|---|
-| GitHub 定时任务 -> Edge Function | GitHub OIDC JWT；核验固定仓库、main 分支、工作流路径、事件类型和 audience | 仅在后端写草稿 |
-| 岛主 -> 草稿生成函数 | Supabase 用户 JWT + island_owner_accounts | 仅岛主生成 |
+| GitHub 定时任务 | GitHub Actions | 只采集公开候选，不生成文章 |
+| Codex -> 草稿包 | 项目任务与内容规范 | 研究并生成 `codex_draft` JSON，不批准、不发布 |
+| 岛主 -> 草稿导入 | Supabase 用户 JWT + island_owner_accounts | 仅岛主写入私有草稿 |
 | 岛主 -> 审核页面 | Supabase 用户身份 + RLS | 仅岛主读取和审核 |
 | 岛主 -> 正式发布 | Supabase 用户身份 + RLS + 已批准快照一致性门禁 | 新增不可变公开版本 |
 | 公共站点 -> 正式文章 | 现有静态内容 | 不读取私有草稿 |
 
 数据库管理员密钥不得配置在 GitHub 仓库、浏览器或公开文件中。
 
-`supabase/config.toml` 对 `daily-learning-auto` 关闭 Supabase JWT 网关预检，因为 GitHub OIDC 令牌不是 Supabase 用户令牌。该函数仍在代码中严格核验 GitHub 签发者、audience、仓库、main 分支、工作流路径和事件类型。岛主手动调用的 `daily-learning-generate` 保持 Supabase JWT 验证。
-
-## 4. 模型配置
-
-需要在 Supabase 项目 **Edge Functions -> Secrets** 中配置：
-
-- `GEMINI_API_KEY`：服务端模型密钥。**必填**。
-- `GEMINI_MODEL`：可选，默认使用 `gemini-3.8-flash`。
-
-不得在聊天、GitHub 仓库文件或 Next.js `NEXT_PUBLIC_` 变量中填写私有密钥。
-尚未验证当前 Supabase 项目是否已配置 `GEMINI_API_KEY`。
+不再使用 Gemini 或其他站点内模型 API。审核页不会直接调用 Codex；Codex 在项目任务中生成草稿包，岛主导入后进入既有 RLS 审核流程。
 
 ## 5. 审核页面
 
@@ -67,7 +57,7 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 
 1. 使用岛主账户登录。
 2. 查看最新候选作品或导入一条标准候选 JSON。
-3. 点击「生成草稿」或等待定时生成。
+3. 导入 Codex 已完成的 `codex_draft` 草稿包。
 4. 阅读文章、原图、出处及待核实提示。
 5. 核实历史资料和图片许可。
 6. 选择「批准当前版本」「退回修改」或「放弃选题」。
@@ -80,13 +70,10 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 - 五个数据源均已尝试，运行结果 `warnings=[]`。
 - 公开研究目录生成 `latest.json`、`index.json` 与日期归档。
 - Supabase 草稿表和3条RLS策略已部署。
-- Supabase 两个生成函数已部署，分别处理岛主手动调用与 GitHub OIDC 自动调用。
 
 ## 7. 尚未验证
 
-- 模型密钥是否配置。
-- 首次真实 Gemini 文章生成是否成功。
-- GitHub OIDC 自动调用与私有入库的端到端测试。
+- 首份 Codex 草稿包导入与私有入库的端到端测试。
 - 审核页面的实际登录与浏览器交互。
 - Next.js 完整站点构建。独立类型检查另见 GitHub CI。
 - `daily_learning_publications` 迁移尚未部署；公开阅读页尚未消费该表。

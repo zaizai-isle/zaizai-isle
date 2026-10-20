@@ -115,6 +115,11 @@
   width: fit-content;
   margin-top: 4px;
 }
+.learning-review-awaiting {
+  color: #7a6b52;
+  font-size: 12px;
+  line-height: 1.55;
+}
 .learning-review-item[aria-pressed="true"] {
   border-color: #777;
   background: #fff;

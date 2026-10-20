@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
 concurrency:
   group: daily-learning-research
@@ -34,7 +33,3 @@ jobs:
             git commit -m 'chore(learning): collect daily public museum candidates'
             git push
           fi
-
-      - name: Submit candidates for private Agent drafts
-        continue-on-error: true
-        run: python scripts/submit-learning-drafts.py

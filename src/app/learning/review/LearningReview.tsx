@@ -16,20 +16,6 @@ const statuses: Record<string,string> = {
   approved:"已批准（未发布）", rejected:"放弃"
 };
 const text = (v: unknown) => typeof v === "string" ? v : "";
-async function functionErrorMessage(error: unknown, fallback: string) {
-  if (error && typeof error === "object" && "context" in error) {
-    const context = (error as {context?: unknown}).context;
-    if (context instanceof Response) {
-      try {
-        const body = await context.clone().json() as {error?: unknown; status?: unknown; provider_status?: unknown};
-        const detail = text(body.error);
-        const status = body.provider_status ?? body.status;
-        if (detail) return status ? `${detail}（上游状态 ${String(status)}）` : detail;
-      } catch { /* Fall back to the client error below. */ }
-    }
-  }
-  return error instanceof Error && error.message ? error.message : fallback;
-}
 type LearningReviewProps = {
   initialCandidates: Record<string, unknown>[];
   researchDate: string;
@@ -43,9 +29,8 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const [message,setMessage]=useState("");
   const [publishedDrafts,setPublishedDrafts]=useState<Record<string,string>>({});
   const [publicationReady,setPublicationReady]=useState(true);
-  const [candidateJson,setCandidateJson]=useState("");
-  const [creating,setCreating]=useState(false);
-  const [generatingSourceId,setGeneratingSourceId]=useState("");
+  const [draftJson,setDraftJson]=useState("");
+  const [importing,setImporting]=useState(false);
   const current=rows.find(x=>x.id===selected);
   async function reload(){
     const client=getIslandOwnerClient();
@@ -131,33 +116,31 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     finally{setBusy(false);}
   }
 
-  async function generateCandidate(candidate:Record<string,unknown>){
-    const sourceId=text(candidate.source_id);
-    setGeneratingSourceId(sourceId);setMessage(`正在生成《${text(candidate.title)||sourceId}》草稿，请稍候…`);
+  async function importCodexDraft(event:React.FormEvent){
+    event.preventDefault();setImporting(true);setMessage("");
     try{
-      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
-      if(error)throw new Error(await functionErrorMessage(error,"文章生成失败。"));
-      if(data?.error)throw new Error(String(data.error));
-      await reload();
-      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
-      setMessage("文章草稿已生成。审核后才能批准，批准也不会自动发布。");
-    }catch(error){setMessage(error instanceof Error?error.message:"文章生成失败。");}
-    finally{setGeneratingSourceId("");}
-  }
-    async function createArticleDraft(event:React.FormEvent){
-    event.preventDefault();setCreating(true);setMessage("");
-    try{
-      const record=JSON.parse(candidateJson);
-      const candidate=Array.isArray(record.items)?record.items[0]:record;
-      if(!candidate || typeof candidate.source_id!=="string" || !String(candidate.source_url||"").startsWith("https://"))throw new Error("需要有效的候选作品 JSON。");
-      const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
-      if(error)throw new Error(await functionErrorMessage(error,"草稿生成失败。"));
-      if(data?.error)throw new Error(String(data.error));
-      setCandidateJson("");await reload();
-      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
-      setMessage("文章草稿已生成。请核实作品、历史资料及图片许可。");
-    }catch(error){setMessage(error instanceof Error?error.message:"草稿生成失败");}
-    finally{setCreating(false);}
+      const record=JSON.parse(draftJson) as Record<string,unknown>;
+      const sourceRecord=record.source_record as Record<string,unknown>;
+      const content=record.content as Record<string,unknown>;
+      const sourceId=text(sourceRecord?.source_id);
+      if(record.schema_version!==1||record.status!=="codex_draft"||!sourceId||!text(sourceRecord?.source_url).startsWith("https://"))throw new Error("这不是有效的 Codex 草稿包。");
+      const required=["title","subject","creator","era","introduction","history","connection","question"];
+      if(!content||required.some(field=>!text(content[field]))||!Array.isArray(content.observations)||content.observations.length<1)throw new Error("Codex 草稿正文不完整。");
+      const owner=await verifyIslandOwner();
+      if(!owner)throw new Error("岛主登录已过期，请重新登录。");
+      const client=getIslandOwnerClient();
+      const {data:versions,error:versionError}=await client.from("daily_learning_article_drafts").select("version").eq("source_id",sourceId).order("version",{ascending:false}).limit(1);
+      if(versionError)throw versionError;
+      const {data,error}=await client.from("daily_learning_article_drafts").insert({
+        owner_id:owner.id,source_id:sourceId,source_record:sourceRecord,content,
+        version:(versions?.[0]?.version??0)+1,status:"pending_review",
+        image_permission_verified:false,historical_sources_verified:false
+      }).select("id").single();
+      if(error)throw error;
+      setDraftJson("");await reload();setSelected(data.id);
+      setMessage("Codex 草稿已导入。请核实正文、史实与图片许可。");
+    }catch(error){setMessage(error instanceof Error?error.message:"Codex 草稿导入失败。");}
+    finally{setImporting(false);}
   }
   const c=current?.content??{};
   return <main className="learning-page"><div className="learning-shell">
@@ -169,17 +152,17 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     <div className="learning-review-layout"><aside className="learning-review-sidebar"><div className="learning-review-sidebar-heading"><h2>内容草稿</h2><span>{rows.length} 篇</span></div>
       {message?<p className="learning-review-message" role="status" aria-live="polite">{message}</p>:null}
       {!publicationReady?<p className="learning-review-notice">发布功能等待数据库迁移，不影响草稿生成与审核。</p>:null}
-      <button className="learning-primary" type="button" disabled={busy||creating||Boolean(generatingSourceId)} onClick={()=>void reload()}>刷新列表</button>
-      <details className="learning-review-import"><summary>手动导入候选 JSON</summary><form onSubmit={createArticleDraft} className="learning-login">
-        <label htmlFor="candidate-json">候选作品 JSON</label><textarea id="candidate-json" name="candidate-json" className="learning-input" rows={6} value={candidateJson} onChange={e=>setCandidateJson(e.target.value)} autoComplete="off" spellCheck={false} placeholder='例如：{"source_id":"met:123", …}' />
-        <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"生成导入草稿"}</button>
+      <button className="learning-primary" type="button" disabled={busy||importing} onClick={()=>void reload()}>刷新列表</button>
+      <details className="learning-review-import"><summary>导入 Codex 草稿</summary><form onSubmit={importCodexDraft} className="learning-login">
+        <label htmlFor="codex-draft-json">Codex 草稿包 JSON</label><textarea id="codex-draft-json" name="codex-draft-json" className="learning-input" rows={8} value={draftJson} onChange={e=>setDraftJson(e.target.value)} autoComplete="off" spellCheck={false} placeholder='粘贴由 Codex 生成的 codex_draft JSON…' />
+        <button className="learning-primary" disabled={importing||!draftJson.trim()} type="submit">{importing?"正在导入…":"导入私有草稿"}</button>
       </form></details>
       <h3>最新候选{researchDate?" · "+researchDate:""}</h3>
       {initialCandidates.length?initialCandidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
         <strong>{text(item.title)}</strong>
         <small>{text(item.source_id)} · {text(item.creator)}</small>
         <a href={text(item.source_url)} target="_blank" rel="noreferrer">查看馆藏</a>
-        <button className="learning-primary" type="button" disabled={creating||Boolean(generatingSourceId)} onClick={()=>void generateCandidate(item)}>{generatingSourceId===text(item.source_id)?"正在生成…":"生成草稿"}</button>
+        <span className="learning-review-awaiting">等待 Codex 研究与起草</span>
       </div>):<p>暂无候选资料。可粘贴候选作品 JSON。</p>}
       <h3>待审核草稿</h3>
       {rows.map(x=><button type="button" className="learning-review-item" aria-pressed={x.id===selected} key={x.id} onClick={()=>setSelected(x.id)}><strong>{text(x.content.title)||x.source_id}</strong><small>{statuses[x.status]??x.status} · v{x.version}</small></button>)}

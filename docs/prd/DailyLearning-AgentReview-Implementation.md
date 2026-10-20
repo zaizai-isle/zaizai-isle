@@ -2,29 +2,25 @@
 
 ## 状态
 
-- 采集与自动草稿：`.github/workflows/daily-learning-research.yml` 采集成功后，使用 GitHub OIDC 调用 `daily-learning-auto`。
-- 手动草稿：岛主登录 `/learning/review/`，导入候选 JSON 或选择采集记录，点击生成。
+- 采集任务：`.github/workflows/daily-learning-research.yml` 只采集公开候选作品。
+- Codex 草稿：Codex 在项目任务中研究并生成标准 `codex_draft` JSON 草稿包。
+- 草稿导入：岛主登录 `/learning/review/`，导入 Codex 草稿包。
 - 草稿数据库：`public.daily_learning_article_drafts`。已启用 RLS。
-- 生成服务：Supabase Edge Function `daily-learning-generate`。已部署；需要 `GEMINI_API_KEY`。
 - 正式网站内容：仍在 `src/app/learning/learning-content.ts`。未接入自动发布。
 - 正式发布记录：`public.daily_learning_publications`。本地迁移与审核页独立发布动作已实现，尚未部署或接入静态阅读页。
 
 ## 必要配置
 
-自动流程不在 GitHub 保存 Supabase 管理员密钥。GitHub Actions 使用短期 OIDC 身份，`daily-learning-auto` 严格核验仓库、分支、工作流、事件和 audience。
-
-### Supabase Edge Function Secret
-
-- `GEMINI_API_KEY`：供岛主审核页面的按需生成功能调用。
-- 不得使用 `NEXT_PUBLIC_*` 环境变量存放密钥。
+不使用 Gemini、站点内模型 API 或 GitHub 数据库管理员密钥。Codex 不具有批准和发布权限。
 
 ## 数据流程
 
 ```text
 博物馆开放 API
    → data/learning/research/latest.json
-   → GitHub OIDC
-   → Supabase Edge Function `daily-learning-auto`
+   → Codex 研究与写作
+   → codex_draft JSON 草稿包
+   → 岛主审核页导入
    → Supabase 私有草稿表（pending_review）
    → 岛主审核页面 /learning/review/
    → 事实核实 + 图片许可核实

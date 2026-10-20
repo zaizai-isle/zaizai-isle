@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Supabase CLI local state
 /supabase/.temp/
+
+# Private Codex-produced review packages. Import through the owner review page.
+/.codex-output/learning-drafts/

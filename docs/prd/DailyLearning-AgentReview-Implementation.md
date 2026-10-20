@@ -7,7 +7,7 @@
 - 草稿导入：岛主登录 `/learning/review/`，导入 Codex 草稿包。
 - 草稿数据库：`public.daily_learning_article_drafts`。已启用 RLS。
 - 正式网站内容：仍在 `src/app/learning/learning-content.ts`。未接入自动发布。
-- 正式发布记录：`public.daily_learning_publications`。本地迁移与审核页独立发布动作已实现，尚未部署或接入静态阅读页。
+- 正式发布记录：`public.daily_learning_publications`。迁移已部署，审核页的独立发布动作与正式阅读页均已接通。
 
 ## 必要配置
 
@@ -27,6 +27,7 @@
    → 批准指定版本（approved）
    → 岛主再次确认发布
    → 不可变公开版本（daily_learning_publications）
+   → 每日一看公开页面读取并展示
 ```
 
 - 单次定时生成最多一篇草稿。

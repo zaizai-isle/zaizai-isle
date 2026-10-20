@@ -15,6 +15,15 @@ export interface LearningEntry {
   creator: string;
   sourceLabel: string;
   sourceUrl: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  imageCredit?: string;
+  imageLicense?: string;
+  imageLicenseUrl?: string;
+  medium?: string;
+  category?: string;
+  observations?: { heading: string; body: string }[];
+  isPublishedRecord?: boolean;
   visualSnapshot?: LearningVisual;
 }
 

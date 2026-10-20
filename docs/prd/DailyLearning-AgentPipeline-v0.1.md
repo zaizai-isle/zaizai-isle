@@ -76,6 +76,6 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 - 首份 Codex 草稿包导入与私有入库的端到端测试。
 - 审核页面的实际登录与浏览器交互。
 - Next.js 完整站点构建。独立类型检查另见 GitHub CI。
-- `daily_learning_publications` 迁移尚未部署；公开阅读页尚未消费该表。
+- `daily_learning_publications` 已部署；公开阅读页会读取最新发布版本，并在公开查询暂不可用时保留静态历史内容作为回退。
 
 正式合并前应完成上述验收。

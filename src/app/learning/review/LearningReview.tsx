@@ -27,15 +27,22 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const [note,setNote]=useState(""); const [imageRights,setImageRights]=useState(false);
   const [sourcesOk,setSourcesOk]=useState(false); const [busy,setBusy]=useState(false);
   const [message,setMessage]=useState("");
+  const [publishedDrafts,setPublishedDrafts]=useState<Record<string,string>>({});
   const [candidateJson,setCandidateJson]=useState("");
   const [creating,setCreating]=useState(false);
   const current=rows.find(x=>x.id===selected);
   async function reload(){
-    const {data,error}=await getIslandOwnerClient().from("daily_learning_article_drafts")
-      .select("id,source_id,version,status,source_record,content,review_note,image_permission_verified,historical_sources_verified,updated_at")
-      .order("updated_at",{ascending:false}).limit(100);
-    if(error) throw error;
-    const list=(data??[]) as Draft[]; setRows(list);
+    const client=getIslandOwnerClient();
+    const [draftResult,publicationResult]=await Promise.all([
+      client.from("daily_learning_article_drafts")
+        .select("id,source_id,version,status,source_record,content,review_note,image_permission_verified,historical_sources_verified,updated_at")
+        .order("updated_at",{ascending:false}).limit(100),
+      client.from("daily_learning_publications").select("draft_id,published_at")
+    ]);
+    if(draftResult.error)throw draftResult.error;
+    if(publicationResult.error)throw publicationResult.error;
+    const list=(draftResult.data??[]) as Draft[]; setRows(list);
+    setPublishedDrafts(Object.fromEntries((publicationResult.data??[]).map(row=>[row.draft_id,row.published_at])));
     setSelected(prev=>list.some(x=>x.id===prev)?prev:(list[0]?.id??""));
   }
   useEffect(()=>{
@@ -82,6 +89,24 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
         .update(fields).eq("id",current.id).eq("version",current.version);
       if(error)throw error;await reload();setMessage(status==="approved"?"已批准并锁定版本。未发布。":"审核状态已更新。");
     }catch(e){setMessage(e instanceof Error?e.message:"保存失败");}
+    finally{setBusy(false);}
+  }
+  async function publish(){
+    if(!current||current.status!=="approved"||publishedDrafts[current.id])return;
+    if(!window.confirm(`正式发布 ${text(current.content.title)||current.source_id} v${current.version}？发布记录不可修改或删除。`))return;
+    setBusy(true);setMessage("");
+    try{
+      const {error}=await getIslandOwnerClient().from("daily_learning_publications").insert({
+        owner_id:(await verifyIslandOwner())?.id,
+        draft_id:current.id,
+        source_id:current.source_id,
+        draft_version:current.version,
+        source_record:current.source_record,
+        content:current.content
+      });
+      if(error)throw error;
+      await reload();setMessage("已创建不可变发布记录。公开阅读页接入将在下一步完成。");
+    }catch(error){setMessage(error instanceof Error?error.message:"发布失败");}
     finally{setBusy(false);}
   }
 
@@ -135,6 +160,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     </aside><section className="learning-reading">
     {!current?<p>选择一篇草稿</p>:<article><p className="learning-kicker">{statuses[current.status]??current.status} · 版本 {current.version}</p>
       <h2>{text(c.title)||current.source_id}</h2><p className="learning-muted">{text(c.subject)} · {text(c.creator)} · {text(c.era)}</p>
+      {publishedDrafts[current.id]?<p className="learning-kicker">已发布 · {publishedDrafts[current.id].slice(0,10)}</p>:null}
       {text(current.source_record.image_url)?<figure><a href={text(current.source_record.source_url)} target="_blank" rel="noreferrer"><Image className="learning-review-image" src={text(current.source_record.image_url)} alt={text(current.source_record.title)||"候选作品"} width={1024} height={1024} sizes="(max-width: 900px) 100vw, 50vw" unoptimized/></a><figcaption>候选图片：尚未确认发布许可</figcaption></figure>:null}
       <p><strong>核心问题：</strong>{text(c.title)}</p>
       <p>{text(c.introduction)}</p>
@@ -148,6 +174,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       <label><input type="checkbox" checked={sourcesOk} disabled={current.status==="approved"} onChange={e=>setSourcesOk(e.target.checked)}/> 已核实历史事实和来源</label>
       <label>审核意见<textarea className="learning-input" maxLength={2000} value={note} disabled={current.status==="approved"} onChange={e=>setNote(e.target.value)} /></label>
       {current.status!=="approved"&&current.status!=="rejected"?<div className="learning-reactions"><button className="learning-primary" disabled={busy} onClick={()=>void decide("approved")}>批准当前版本（不发布）</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("changes_requested")}>退回修改</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("rejected")}>放弃选题</button></div>:null}
+      {current.status==="approved"&&!publishedDrafts[current.id]?<button className="learning-primary" disabled={busy} onClick={()=>void publish()}>发布这个已批准版本</button>:null}
       </div></article>}</section></div>}
     {message?<p role="status">{message}</p>:null}
   </div></main>;

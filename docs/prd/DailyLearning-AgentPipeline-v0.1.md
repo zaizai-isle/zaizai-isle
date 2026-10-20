@@ -23,6 +23,8 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
   -> Supabase 私有表 daily_learning_article_drafts
   -> 岛主审核 /learning/review
   -> 已批准版本（未发布）
+  -> 岛主再次确认发布
+  -> 不可变公开记录 daily_learning_publications
 ```
 
 - Agent 使用馆藏缩略图与元数据生成正文。
@@ -30,6 +32,8 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 - 每条候选作品最多自动生成一份初稿。重复采集不会覆盖草稿。
 - 单次采集最多五件候选作品。
 - 已批准内容必须保留独立版本。
+- 批准与发布是两个独立操作。只有岛主可以把已批准且快照完全匹配的版本写入公开发布表。
+- 发布记录不可更新或删除；后续修订必须批准并发布新版本。
 
 ## 3. 身份验证
 
@@ -38,6 +42,7 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 | GitHub 定时任务 -> Edge Function | GitHub OIDC JWT；核验固定仓库、main 分支、工作流路径、事件类型和 audience | 仅在后端写草稿 |
 | 岛主 -> 草稿生成函数 | Supabase 用户 JWT + island_owner_accounts | 仅岛主生成 |
 | 岛主 -> 审核页面 | Supabase 用户身份 + RLS | 仅岛主读取和审核 |
+| 岛主 -> 正式发布 | Supabase 用户身份 + RLS + 已批准快照一致性门禁 | 新增不可变公开版本 |
 | 公共站点 -> 正式文章 | 现有静态内容 | 不读取私有草稿 |
 
 数据库管理员密钥不得配置在 GitHub 仓库、浏览器或公开文件中。
@@ -84,5 +89,6 @@ GitHub Actions（每日 08:00 Asia/Tokyo）
 - GitHub OIDC 自动调用与私有入库的端到端测试。
 - 审核页面的实际登录与浏览器交互。
 - Next.js 完整站点构建。独立类型检查另见 GitHub CI。
+- `daily_learning_publications` 迁移尚未部署；公开阅读页尚未消费该表。
 
 正式合并前应完成上述验收。

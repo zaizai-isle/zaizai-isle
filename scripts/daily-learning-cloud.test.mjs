@@ -52,8 +52,10 @@ test("daily learning: private drafts require owner review and approved versions 
   `);
   const baseMigration = await readFile(new URL("../supabase/migrations/20261014113109_daily_learning_v01.sql", import.meta.url), "utf8");
   const draftMigration = await readFile(new URL("../supabase/migrations/20261019110000_daily_learning_drafts_review.sql", import.meta.url), "utf8");
+  const publicationMigration = await readFile(new URL("../supabase/migrations/20261020025338_daily_learning_publications.sql", import.meta.url), "utf8");
   await db.exec(baseMigration);
   await db.exec(draftMigration);
+  await db.exec(publicationMigration);
   async function asUser(id, role = "authenticated") {
     await db.exec(`reset role; set role ${role}`);
     await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id]);
@@ -65,6 +67,13 @@ test("daily learning: private drafts require owner review and approved versions 
     values($1,'smk:test','{"title":"Work"}','{"title":"Draft"}') returning id
   `, [owner]);
   const draftId = inserted.rows[0].id;
+  await assert.rejects(
+    db.query(`
+      insert into public.daily_learning_publications(owner_id,draft_id,source_id,draft_version,source_record,content)
+      values($1,$2,'smk:test',1,'{"title":"Work"}','{"title":"Draft"}')
+    `, [owner,draftId]),
+    /row-level security/
+  );
   await assert.rejects(
     db.query("update public.daily_learning_article_drafts set status='approved' where id=$1", [draftId]),
     /approved_requires_checks|Approval requires verified sources/
@@ -79,9 +88,26 @@ test("daily learning: private drafts require owner review and approved versions 
     db.query("update public.daily_learning_article_drafts set review_note='changed' where id=$1", [draftId]),
     /immutable/
   );
+  await assert.rejects(
+    db.query(`
+      insert into public.daily_learning_publications(owner_id,draft_id,source_id,draft_version,source_record,content)
+      values($1,$2,'smk:tampered',1,'{"title":"Changed"}','{"title":"Changed"}')
+    `, [owner,draftId]),
+    /row-level security/
+  );
+  await db.query(`
+    insert into public.daily_learning_publications(owner_id,draft_id,source_id,draft_version,source_record,content)
+    values($1,$2,'smk:test',1,'{"title":"Work"}','{"title":"Draft"}')
+  `, [owner,draftId]);
+  assert.equal((await db.query("select source_id from public.daily_learning_publications")).rows[0].source_id, "smk:test");
+  await assert.rejects(
+    db.query("update public.daily_learning_publications set content='{}' where draft_id=$1", [draftId]),
+    /permission denied|immutable/
+  );
 
   await asUser(other);
   assert.equal((await db.query("select * from public.daily_learning_article_drafts")).rows.length, 0);
+  assert.equal((await db.query("select * from public.daily_learning_publications")).rows.length, 1);
   await assert.rejects(
     db.query("insert into public.daily_learning_article_drafts(owner_id,source_id,source_record,content) values($1,'smk:other','{}','{}')", [other]),
     /row-level security/
@@ -89,5 +115,6 @@ test("daily learning: private drafts require owner review and approved versions 
 
   await asUser("", "anon");
   await assert.rejects(db.query("select * from public.daily_learning_article_drafts"), /permission denied/);
+  assert.equal((await db.query("select * from public.daily_learning_publications")).rows.length, 1);
   await db.close();
 });

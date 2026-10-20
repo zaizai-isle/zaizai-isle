@@ -200,13 +200,19 @@
 }
 .learning-review-actions .learning-reactions { margin: 8px 0 0; }
 .learning-review-message {
-  width: min(100%, 860px);
-  margin: 0 0 32px;
+  width: 100%;
+  margin: 0 0 16px;
   padding: 12px 14px;
   border-left: 3px solid #8e6f3e;
   background: #eee9df;
   color: #4f4433;
   font-size: 13px;
+  line-height: 1.65;
+}
+.learning-review-notice {
+  margin: 0 0 16px;
+  color: #686868;
+  font-size: 12px;
   line-height: 1.65;
 }
 

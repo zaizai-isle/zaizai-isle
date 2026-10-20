@@ -16,6 +16,20 @@ const statuses: Record<string,string> = {
   approved:"已批准（未发布）", rejected:"放弃"
 };
 const text = (v: unknown) => typeof v === "string" ? v : "";
+async function functionErrorMessage(error: unknown, fallback: string) {
+  if (error && typeof error === "object" && "context" in error) {
+    const context = (error as {context?: unknown}).context;
+    if (context instanceof Response) {
+      try {
+        const body = await context.clone().json() as {error?: unknown; status?: unknown; provider_status?: unknown};
+        const detail = text(body.error);
+        const status = body.provider_status ?? body.status;
+        if (detail) return status ? `${detail}（上游状态 ${String(status)}）` : detail;
+      } catch { /* Fall back to the client error below. */ }
+    }
+  }
+  return error instanceof Error && error.message ? error.message : fallback;
+}
 type LearningReviewProps = {
   initialCandidates: Record<string, unknown>[];
   researchDate: string;
@@ -28,8 +42,10 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const [sourcesOk,setSourcesOk]=useState(false); const [busy,setBusy]=useState(false);
   const [message,setMessage]=useState("");
   const [publishedDrafts,setPublishedDrafts]=useState<Record<string,string>>({});
+  const [publicationReady,setPublicationReady]=useState(true);
   const [candidateJson,setCandidateJson]=useState("");
   const [creating,setCreating]=useState(false);
+  const [generatingSourceId,setGeneratingSourceId]=useState("");
   const current=rows.find(x=>x.id===selected);
   async function reload(){
     const client=getIslandOwnerClient();
@@ -40,9 +56,13 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       client.from("daily_learning_publications").select("draft_id,published_at")
     ]);
     if(draftResult.error)throw draftResult.error;
-    if(publicationResult.error)throw publicationResult.error;
     const list=(draftResult.data??[]) as Draft[]; setRows(list);
-    setPublishedDrafts(Object.fromEntries((publicationResult.data??[]).map(row=>[row.draft_id,row.published_at])));
+    if(publicationResult.error){
+      setPublicationReady(false);setPublishedDrafts({});
+    }else{
+      setPublicationReady(true);
+      setPublishedDrafts(Object.fromEntries((publicationResult.data??[]).map(row=>[row.draft_id,row.published_at])));
+    }
     setSelected(prev=>list.some(x=>x.id===prev)?prev:(list[0]?.id??""));
   }
   useEffect(()=>{
@@ -92,6 +112,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     finally{setBusy(false);}
   }
   async function publish(){
+    if(!publicationReady){setMessage("发布表尚未部署。草稿生成和审核可以继续，正式发布暂不可用。");return;}
     if(!current||current.status!=="approved"||publishedDrafts[current.id])return;
     if(!window.confirm(`正式发布 ${text(current.content.title)||current.source_id} v${current.version}？发布记录不可修改或删除。`))return;
     setBusy(true);setMessage("");
@@ -111,15 +132,17 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   }
 
   async function generateCandidate(candidate:Record<string,unknown>){
-    setCreating(true);setMessage("");
+    const sourceId=text(candidate.source_id);
+    setGeneratingSourceId(sourceId);setMessage(`正在生成《${text(candidate.title)||sourceId}》草稿，请稍候…`);
     try{
       const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
-      if(error)throw error;
+      if(error)throw new Error(await functionErrorMessage(error,"文章生成失败。"));
       if(data?.error)throw new Error(String(data.error));
       await reload();
+      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
       setMessage("文章草稿已生成。审核后才能批准，批准也不会自动发布。");
     }catch(error){setMessage(error instanceof Error?error.message:"文章生成失败。");}
-    finally{setCreating(false);}
+    finally{setGeneratingSourceId("");}
   }
     async function createArticleDraft(event:React.FormEvent){
     event.preventDefault();setCreating(true);setMessage("");
@@ -128,9 +151,11 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       const candidate=Array.isArray(record.items)?record.items[0]:record;
       if(!candidate || typeof candidate.source_id!=="string" || !String(candidate.source_url||"").startsWith("https://"))throw new Error("需要有效的候选作品 JSON。");
       const {data,error}=await getIslandOwnerClient().functions.invoke("daily-learning-generate",{body:{candidate}});
-      if(error)throw error;
+      if(error)throw new Error(await functionErrorMessage(error,"草稿生成失败。"));
       if(data?.error)throw new Error(String(data.error));
-      setCandidateJson(""); await reload();setMessage("文章草稿已生成。请核实作品、历史资料及图片许可。");
+      setCandidateJson("");await reload();
+      if(typeof data?.draft?.id==="string")setSelected(data.draft.id);
+      setMessage("文章草稿已生成。请核实作品、历史资料及图片许可。");
     }catch(error){setMessage(error instanceof Error?error.message:"草稿生成失败");}
     finally{setCreating(false);}
   }
@@ -142,7 +167,9 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       <label htmlFor="owner-password">密码</label><input id="owner-password" name="password" className="learning-input" type="password" placeholder="请输入密码…" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/>
       <button className="learning-primary" disabled={busy}>{busy?"正在登录…":"登录"}</button></form>{message?<p className="learning-review-message" role="alert">{message} 请检查账户或稍后重试。</p>:null}</section>:
     <div className="learning-review-layout"><aside className="learning-review-sidebar"><div className="learning-review-sidebar-heading"><h2>内容草稿</h2><span>{rows.length} 篇</span></div>
-      <button className="learning-primary" type="button" disabled={busy||creating} onClick={()=>void reload()}>刷新列表</button>
+      {message?<p className="learning-review-message" role="status" aria-live="polite">{message}</p>:null}
+      {!publicationReady?<p className="learning-review-notice">发布功能等待数据库迁移，不影响草稿生成与审核。</p>:null}
+      <button className="learning-primary" type="button" disabled={busy||creating||Boolean(generatingSourceId)} onClick={()=>void reload()}>刷新列表</button>
       <details className="learning-review-import"><summary>手动导入候选 JSON</summary><form onSubmit={createArticleDraft} className="learning-login">
         <label htmlFor="candidate-json">候选作品 JSON</label><textarea id="candidate-json" name="candidate-json" className="learning-input" rows={6} value={candidateJson} onChange={e=>setCandidateJson(e.target.value)} autoComplete="off" spellCheck={false} placeholder='例如：{"source_id":"met:123", …}' />
         <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"生成导入草稿"}</button>
@@ -152,7 +179,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
         <strong>{text(item.title)}</strong>
         <small>{text(item.source_id)} · {text(item.creator)}</small>
         <a href={text(item.source_url)} target="_blank" rel="noreferrer">查看馆藏</a>
-        <button className="learning-primary" type="button" disabled={creating} onClick={()=>void generateCandidate(item)}>生成草稿</button>
+        <button className="learning-primary" type="button" disabled={creating||Boolean(generatingSourceId)} onClick={()=>void generateCandidate(item)}>{generatingSourceId===text(item.source_id)?"正在生成…":"生成草稿"}</button>
       </div>):<p>暂无候选资料。可粘贴候选作品 JSON。</p>}
       <h3>待审核草稿</h3>
       {rows.map(x=><button type="button" className="learning-review-item" aria-pressed={x.id===selected} key={x.id} onClick={()=>setSelected(x.id)}><strong>{text(x.content.title)||x.source_id}</strong><small>{statuses[x.status]??x.status} · v{x.version}</small></button>)}
@@ -174,8 +201,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       <label><input type="checkbox" checked={sourcesOk} disabled={current.status==="approved"} onChange={e=>setSourcesOk(e.target.checked)}/> 已核实历史事实和来源</label>
       <label>审核意见<textarea className="learning-input" maxLength={2000} value={note} disabled={current.status==="approved"} onChange={e=>setNote(e.target.value)} /></label>
       {current.status!=="approved"&&current.status!=="rejected"?<div className="learning-reactions"><button className="learning-primary" disabled={busy} onClick={()=>void decide("approved")}>批准当前版本（不发布）</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("changes_requested")}>退回修改</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("rejected")}>放弃选题</button></div>:null}
-      {current.status==="approved"&&!publishedDrafts[current.id]?<button className="learning-primary" disabled={busy} onClick={()=>void publish()}>发布这个已批准版本</button>:null}
+      {current.status==="approved"&&!publishedDrafts[current.id]?<button className="learning-primary" disabled={busy||!publicationReady} onClick={()=>void publish()}>发布这个已批准版本</button>:null}
       </div></article>}</section></div>}
-    {auth==="ready"&&message?<p className="learning-review-message" role="status" aria-live="polite">{message}</p>:null}
   </div></main>;
 }

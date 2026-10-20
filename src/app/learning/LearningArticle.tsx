@@ -46,7 +46,7 @@ export function LearningArticle({ entry, entries = learningEntries }: { entry: L
         </div>
         </div>
         {visual ? <DeferredDetails visual={visual} /> : null}
-        {!visual && entry.observations?.length ? <div className="learning-details">{entry.observations.map((observation, index) => <section className="learning-reading" key={observation.heading}><p className="learning-kicker">观察 {String(index + 1).padStart(2, "0")}</p><h2>{observation.heading}</h2><p>{observation.body}</p></section>)}</div> : null}
+        {!visual && entry.observations?.length ? <div className="learning-observations">{entry.observations.map((observation, index) => <section className="learning-observation" key={observation.heading}><p className="learning-kicker">观察 {String(index + 1).padStart(2, "0")}</p><h2>{observation.heading}</h2><p>{observation.body}</p></section>)}</div> : null}
         <section className="learning-reading learning-context" aria-labelledby="learning-context-title">
           <p className="learning-kicker">多了解一点</p><h2 id="learning-context-title">它为什么会出现</h2>
           <p>{entry.context}</p>

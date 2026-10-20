@@ -3,10 +3,15 @@
   "seen_ids": [
     "smk:KKS1974-113",
     "artic:6471",
-    "cleveland:156112"
+    "cleveland:156112",
+    "met:49779",
+    "artic:185963",
+    "cleveland:162868",
+    "smk:KKS1974-26/1"
   ],
   "runs": [
-    "runs/2026-10-19.json"
+    "runs/2026-10-19.json",
+    "runs/2026-10-20.json"
   ],
-  "last_research_date": "2026-10-19"
+  "last_research_date": "2026-10-20"
 }

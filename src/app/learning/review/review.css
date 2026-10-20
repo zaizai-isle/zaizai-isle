@@ -1,45 +1,233 @@
+.learning-review-state {
+  display: grid;
+  min-height: 50vh;
+  place-items: center;
+  color: #686868;
+}
 
-.review-layout {display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:start;padding:28px 0 90px}
-.review-list {display:grid;gap:8px;position:sticky;top:20px}
-.review-list h2 {font-size:18px;font-weight:600;margin:0 0 12px}
-.review-list h2 small {font-size:12px;font-weight:400;color:#777}
-.review-list-item {border:1px solid #ddd9cf;background:transparent;text-align:left;border-radius:12px;padding:14px;display:grid;gap:6px}
-.review-list-item strong {font-size:14px;line-height:1.45;font-weight:550}
-.review-list-item span {font-size:12px;color:#777}
-.review-list-item[aria-pressed="true"] {background:#fff;border-color:#777}
-.review-article {max-width:860px;min-width:0;padding-bottom:70px}
-.review-article>h2 {font-size:clamp(26px,3vw,36px);font-weight:600;margin:12px 0 24px;line-height:1.3}
-.review-artwork {margin:0 0 30px}
-.review-artwork img {display:block;max-width:100%;max-height:460px;width:auto;height:auto;object-fit:contain}
-.review-artwork figcaption {margin-top:10px;font-size:12px;color:#666}
-.review-section {padding:18px 0;border-top:1px solid #e1ddd4}
-.review-section h3,.review-controls h3 {font-size:14px;font-weight:600;margin:0 0 12px}
-.review-section p {font-size:15px;line-height:1.85;white-space:pre-wrap}
-.review-sources {padding:18px 0;border-top:1px solid #e1ddd4}
-.review-sources summary {font-size:14px}
-.review-sources pre {font-size:12px;white-space:pre-wrap;word-break:break-all;max-height:350px;overflow:auto}
-.review-controls {border-top:1px solid #e1ddd4;padding-top:24px;display:grid;gap:16px}
-.review-controls label {display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:1.6}
-.review-controls label:has(textarea) {display:grid}
-.review-controls input[type="checkbox"] {margin-top:4px}
-.review-controls textarea {width:100%}
-.review-buttons {display:flex;flex-wrap:wrap;gap:10px}
-.review-message {padding:12px 0 26px;font-size:14px}
-@media(max-width:760px){.review-layout {grid-template-columns:1fr;padding-top:14px}.review-list {position:static}.review-list-item {padding:12px}.review-artwork img{max-height:360px}}
+.learning-review-login {
+  width: min(100%, 460px);
+  margin: clamp(48px, 10vh, 120px) auto;
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid #dfdbd0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, .48);
+}
+.learning-review-login h2 {
+  margin: 8px 0 12px;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 550;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.learning-review-login .learning-login { margin-top: 28px; }
+.learning-review-login .learning-login label,
+.learning-review-import label {
+  font-size: 13px;
+  font-weight: 550;
+}
 
-.learning-review-layout{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:start;padding:20px 0 80px}
-.learning-review-layout aside{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto}
-.learning-review-layout>section{min-width:0}
-.learning-review-layout article h2{font-size:clamp(22px,2.6vw,34px);line-height:1.4;margin:10px 0 22px}
-.learning-review-layout article h3{font-size:15px;font-weight:600;margin-top:22px}
-.learning-review-layout article p{font-size:15px;line-height:1.85;white-space:pre-wrap;margin:12px 0}
-.learning-review-item{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;border:1px solid #dfdbd0;border-radius:10px;padding:12px;margin-top:10px;background:transparent}
-.learning-review-item[aria-pressed=true]{background:#fff;border-color:#888}
-.learning-review-item small{color:#666}
-.learning-review-image{display:block;width:auto;max-width:100%;max-height:500px;object-fit:contain}
-.learning-review-actions{border-top:1px solid #dfdbd0;margin-top:28px;padding-top:20px;display:grid;gap:12px}
-.learning-review-actions label{display:flex;gap:8px;align-items:center}
-.learning-review-actions label:has(textarea){display:grid;justify-items:start}
-.learning-review-layout .learning-login{display:grid;gap:12px;margin:16px 0}
-.learning-review-layout .learning-input{width:100%;resize:vertical;min-width:0}
-@media(max-width:800px){.learning-review-layout{grid-template-columns:1fr}.learning-review-layout aside{position:static;max-height:none}}
+.learning-review-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 860px);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  justify-content: start;
+  padding: 32px 0 88px;
+}
+.learning-review-sidebar {
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px;
+  border: 1px solid #dfdbd0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .36);
+  scrollbar-gutter: stable;
+}
+.learning-review-sidebar-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.learning-review-sidebar-heading h2 {
+  min-width: 0;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.learning-review-sidebar-heading span {
+  color: #686868;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.learning-review-sidebar > h3 {
+  margin: 28px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+.learning-review-import {
+  margin-top: 18px;
+  color: #686868;
+  font-size: 13px;
+}
+.learning-review-import summary { padding: 8px 0; }
+.learning-review-import .learning-login { margin: 12px 0 0; }
+.learning-review-item {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 13px;
+  overflow-wrap: anywhere;
+  border: 1px solid #dfdbd0;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+}
+.learning-review-item strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.learning-review-item small {
+  color: #686868;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.learning-review-item a {
+  width: fit-content;
+  color: #5f5f5f;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.learning-review-item .learning-primary {
+  width: fit-content;
+  margin-top: 4px;
+}
+.learning-review-item[aria-pressed="true"] {
+  border-color: #777;
+  background: #fff;
+}
+
+.learning-review-content {
+  width: 100%;
+  min-width: 0;
+  max-width: 860px;
+  overflow-wrap: anywhere;
+}
+.learning-review-content > p {
+  padding: 40px 0;
+  color: #686868;
+}
+.learning-review-content article > h2 {
+  margin: 10px 0 16px;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 550;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.learning-review-content article > h3,
+.learning-review-content article > section > h3 {
+  margin: 32px 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.learning-review-content article p,
+.learning-review-content article li {
+  max-width: 72ch;
+  margin: 12px 0;
+  font-size: 15px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+}
+.learning-review-content article ul { padding-left: 1.25rem; }
+.learning-review-content article > a {
+  display: inline-block;
+  max-width: 100%;
+  color: #555;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.learning-review-content figure { margin: 28px 0 36px; }
+.learning-review-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+}
+.learning-review-content figcaption {
+  margin-top: 10px;
+  color: #686868;
+  font-size: 12px;
+}
+.learning-review-actions {
+  display: grid;
+  gap: 16px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid #dfdbd0;
+}
+.learning-review-actions label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.learning-review-actions label:has(textarea) { display: grid; }
+.learning-review-actions input[type="checkbox"] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+.learning-review-actions textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.learning-review-actions .learning-reactions { margin: 8px 0 0; }
+.learning-review-message {
+  width: min(100%, 860px);
+  margin: 0 0 32px;
+  padding: 12px 14px;
+  border-left: 3px solid #8e6f3e;
+  background: #eee9df;
+  color: #4f4433;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+@media (max-width: 800px) {
+  .learning-review-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    padding-top: 16px;
+  }
+  .learning-review-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  .learning-review-content article > h2 { font-size: 28px; }
+}
+
+@media (max-width: 480px) {
+  .learning-review-login,
+  .learning-review-sidebar {
+    padding: 18px;
+    border-radius: 14px;
+  }
+}

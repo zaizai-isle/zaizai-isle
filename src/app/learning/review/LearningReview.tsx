@@ -137,17 +137,17 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const c=current?.content??{};
   return <main className="learning-page"><div className="learning-shell">
     <header className="learning-header"><div className="learning-brand"><h1>每日一看 · 内容审核</h1><p>仅岛主账户可以访问草稿与提交审核</p></div><Link href="/learning" className="learning-pill">返回每日一看</Link></header>
-    {auth==="loading"?<p>正在验证岛主身份…</p>:auth==="denied"?<section className="learning-reading"><h2>岛主登录</h2><form className="learning-login" onSubmit={signIn}>
-      <input className="learning-input" type="email" placeholder="邮箱" required autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)}/>
-      <input className="learning-input" type="password" placeholder="密码" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/>
-      <button className="learning-primary" disabled={busy}>登录</button></form></section>:
-    <div className="learning-review-layout"><aside className="learning-reading"><h2>内容草稿（{rows.length}）</h2>
-      <form onSubmit={createArticleDraft} className="learning-login">
-        <label>导入一条候选作品 JSON<textarea className="learning-input" rows={5} value={candidateJson} onChange={e=>setCandidateJson(e.target.value)} placeholder='{"source_id":"met:123","title":"...","source_url":"https://...","image_url":"https://...","review_status":"needs_editorial_review"}' /></label>
-        <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"Agent 生成草稿"}</button>
-      </form>
-      <button className="learning-primary" type="button" onClick={()=>void reload()}>刷新</button>
-      <h3>最新候选作品{researchDate?" · "+researchDate:""}</h3>
+    {auth==="loading"?<div className="learning-review-state"><p>正在验证岛主身份…</p></div>:auth==="denied"?<section className="learning-review-login" aria-labelledby="owner-login-title"><p className="learning-kicker">私人工作区</p><h2 id="owner-login-title">岛主登录</h2><p className="learning-muted">登录后可以生成、审核和发布文章版本。</p><form className="learning-login" onSubmit={signIn}>
+      <label htmlFor="owner-email">邮箱</label><input id="owner-email" name="email" className="learning-input" type="email" placeholder="请输入岛主邮箱…" required autoComplete="username" spellCheck={false} value={email} onChange={e=>setEmail(e.target.value)}/>
+      <label htmlFor="owner-password">密码</label><input id="owner-password" name="password" className="learning-input" type="password" placeholder="请输入密码…" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/>
+      <button className="learning-primary" disabled={busy}>{busy?"正在登录…":"登录"}</button></form>{message?<p className="learning-review-message" role="alert">{message} 请检查账户或稍后重试。</p>:null}</section>:
+    <div className="learning-review-layout"><aside className="learning-review-sidebar"><div className="learning-review-sidebar-heading"><h2>内容草稿</h2><span>{rows.length} 篇</span></div>
+      <button className="learning-primary" type="button" disabled={busy||creating} onClick={()=>void reload()}>刷新列表</button>
+      <details className="learning-review-import"><summary>手动导入候选 JSON</summary><form onSubmit={createArticleDraft} className="learning-login">
+        <label htmlFor="candidate-json">候选作品 JSON</label><textarea id="candidate-json" name="candidate-json" className="learning-input" rows={6} value={candidateJson} onChange={e=>setCandidateJson(e.target.value)} autoComplete="off" spellCheck={false} placeholder='例如：{"source_id":"met:123", …}' />
+        <button className="learning-primary" disabled={creating||!candidateJson.trim()} type="submit">{creating?"生成中…":"生成导入草稿"}</button>
+      </form></details>
+      <h3>最新候选{researchDate?" · "+researchDate:""}</h3>
       {initialCandidates.length?initialCandidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
         <strong>{text(item.title)}</strong>
         <small>{text(item.source_id)} · {text(item.creator)}</small>
@@ -157,7 +157,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       <h3>待审核草稿</h3>
       {rows.map(x=><button type="button" className="learning-review-item" aria-pressed={x.id===selected} key={x.id} onClick={()=>setSelected(x.id)}><strong>{text(x.content.title)||x.source_id}</strong><small>{statuses[x.status]??x.status} · v{x.version}</small></button>)}
       {!rows.length?<p>暂无草稿。采集与文章生成完成后将在此显示。</p>:null}
-    </aside><section className="learning-reading">
+    </aside><section className="learning-review-content">
     {!current?<p>选择一篇草稿</p>:<article><p className="learning-kicker">{statuses[current.status]??current.status} · 版本 {current.version}</p>
       <h2>{text(c.title)||current.source_id}</h2><p className="learning-muted">{text(c.subject)} · {text(c.creator)} · {text(c.era)}</p>
       {publishedDrafts[current.id]?<p className="learning-kicker">已发布 · {publishedDrafts[current.id].slice(0,10)}</p>:null}
@@ -176,6 +176,6 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       {current.status!=="approved"&&current.status!=="rejected"?<div className="learning-reactions"><button className="learning-primary" disabled={busy} onClick={()=>void decide("approved")}>批准当前版本（不发布）</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("changes_requested")}>退回修改</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("rejected")}>放弃选题</button></div>:null}
       {current.status==="approved"&&!publishedDrafts[current.id]?<button className="learning-primary" disabled={busy} onClick={()=>void publish()}>发布这个已批准版本</button>:null}
       </div></article>}</section></div>}
-    {message?<p role="status">{message}</p>:null}
+    {auth==="ready"&&message?<p className="learning-review-message" role="status" aria-live="polite">{message}</p>:null}
   </div></main>;
 }

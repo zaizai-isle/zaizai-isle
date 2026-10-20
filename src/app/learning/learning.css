@@ -2,6 +2,9 @@
 .learning-shell { width: 100%; padding: 0 clamp(28px, 5vw, 96px); }
 .learning-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 80px; }
 .learning-header-heading { display: flex; min-width: 0; align-items: center; gap: 12px; }
+.learning-header-actions { display: flex; flex: none; align-items: center; gap: 16px; }
+.learning-admin-link { color: #747474; font-size: 12px; white-space: nowrap; }
+.learning-admin-link:hover { color: #181818; text-decoration: underline; text-underline-offset: 4px; }
 .learning-back { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1px solid #e0dccd; border-radius: 50%; color: #555; }
 .learning-back:hover { border-color: #181818; color: #181818; }
 .learning-pill { font-size: 13px; color: #4f4f4f; flex-shrink: 0; }
@@ -98,6 +101,8 @@
   .learning-brand h1 { font-size: 16px; }
   .learning-brand p { display: none; }
   .learning-pill { padding: 8px 14px; }
+  .learning-header-actions { gap: 10px; }
+  .learning-admin-link { font-size: 11px; }
   .learning-hero figcaption { font-size: 11px; gap: 16px; }
   .learning-introduction { padding: 0; }
   .learning-lead { font-size: 16px; }

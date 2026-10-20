@@ -16,7 +16,10 @@ export function LearningArticle({ entry }: { entry: LearningEntry }) {
           <Link href="/" className="learning-back" aria-label="返回小岛首页"><ArrowLeft size={16} aria-hidden="true" /></Link>
           <div className="learning-brand"><h1>每日一看</h1><p>看一件作品，留一点感受。</p></div>
         </div>
-        <a href="#learning-history" className="learning-pill">往期内容</a>
+        <nav className="learning-header-actions" aria-label="每日一看页面入口">
+          <Link prefetch={false} href="/learning/review" className="learning-admin-link" aria-label="内容管理与岛主登录">内容管理</Link>
+          <a href="#learning-history" className="learning-pill">往期内容</a>
+        </nav>
       </header>
       <article>
         <div className="learning-opening">

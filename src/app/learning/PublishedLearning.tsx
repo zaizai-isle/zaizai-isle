@@ -11,6 +11,8 @@ type PublicationRow = {
   source_record: Record<string, unknown>;
   content: Record<string, unknown>;
   published_at: string;
+  package_schema_version?: number|null;
+  package_snapshot?: Record<string,unknown>|null;
 };
 
 const text = (value: unknown) => typeof value === "string" ? value : "";
@@ -20,8 +22,11 @@ function sourceLabel(source: string) {
 }
 
 function toEntry(row: PublicationRow): LearningEntry {
-  const record = row.source_record;
-  const content = row.content;
+  const snapshot=row.package_schema_version===2&&row.package_snapshot?row.package_snapshot:null;
+  const record = snapshot&&snapshot.work&&typeof snapshot.work==="object"?snapshot.work as Record<string,unknown>:row.source_record;
+  const content = snapshot&&snapshot.article&&typeof snapshot.article==="object"?snapshot.article as Record<string,unknown>:row.content;
+  const assets=snapshot&&Array.isArray(snapshot.assets)?snapshot.assets as Record<string,unknown>[]:[];
+  const mainAsset=assets.find(asset=>asset.role==="main");
   const rights = record.rights && typeof record.rights === "object" ? record.rights as Record<string, unknown> : {};
   const observations = Array.isArray(content.observations) ? content.observations.flatMap((item) => {
     if (!item || typeof item !== "object") return [];
@@ -41,13 +46,13 @@ function toEntry(row: PublicationRow): LearningEntry {
     context: text(content.history),
     influence: text(content.connection),
     question: text(content.question),
-    sourceLabel: sourceLabel(text(record.source)),
+    sourceLabel: text(record.institution)||sourceLabel(text(record.source)),
     sourceUrl: text(record.source_url),
-    imageUrl: text(record.image_url) || undefined,
-    imageAlt: text(record.title) || text(content.subject) || "馆藏作品",
-    imageCredit: `${sourceLabel(text(record.source))} · ${text(record.title)}`,
-    imageLicense: text(record.rights_label) || (rights.catalog_public_domain ? "Public Domain" : text(rights.source_rights_note)),
-    imageLicenseUrl: text(rights.rights_url),
+    imageUrl: text(mainAsset?.image_url)||text(record.image_url) || undefined,
+    imageAlt: text(mainAsset?.alt)||text(record.title) || text(content.subject) || "馆藏作品",
+    imageCredit: text(mainAsset?.attribution)||`${text(record.institution)||sourceLabel(text(record.source))} · ${text(record.title)}`,
+    imageLicense: text(mainAsset?.rights_statement)||text(record.rights_label) || (rights.catalog_public_domain ? "Public Domain" : text(rights.source_rights_note)),
+    imageLicenseUrl: text(mainAsset?.license_url)||text(rights.rights_url),
     medium: text(record.medium),
     category: "艺术与设计",
     observations,
@@ -67,7 +72,7 @@ export function PublishedLearning({ initialEntry }: { initialEntry: LearningEntr
       const client = getOptionalSupabase();
       if (!client) return;
       const { data, error } = await client.from("daily_learning_publications")
-        .select("id,source_id,source_record,content,published_at")
+        .select("id,source_id,source_record,content,published_at,package_schema_version,package_snapshot")
         .order("published_at", { ascending: false })
         .limit(100);
       if (!active || error || !data?.length) return;

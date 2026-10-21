@@ -54,6 +54,7 @@ test("daily learning: private drafts require owner review and approved versions 
   const draftMigration = await readFile(new URL("../supabase/migrations/20261019110000_daily_learning_drafts_review.sql", import.meta.url), "utf8");
   const publicationMigration = await readFile(new URL("../supabase/migrations/20261020025338_daily_learning_publications.sql", import.meta.url), "utf8");
   const v2Migration = await readFile(new URL("../supabase/migrations/20261020073800_daily_learning_v2_contract.sql", import.meta.url), "utf8");
+  const v2OutcomeMigration = await readFile(new URL("../supabase/migrations/20261021024000_daily_learning_v2_review_outcomes.sql", import.meta.url), "utf8");
   await db.exec(baseMigration);
   await db.exec(draftMigration);
   await db.exec(publicationMigration);
@@ -108,6 +109,7 @@ test("daily learning: private drafts require owner review and approved versions 
 
   await db.exec("reset role");
   await db.exec(v2Migration);
+  await db.exec(v2OutcomeMigration);
   await asUser(owner);
   assert.equal((await db.query("select package_schema_version from public.daily_learning_article_drafts where id=$1", [draftId])).rows[0].package_schema_version, 1);
   assert.equal((await db.query("select count(*)::int as count from public.daily_learning_publications")).rows[0].count, 1);
@@ -150,6 +152,25 @@ test("daily learning: private drafts require owner review and approved versions 
   await assert.rejects(
     db.query("update public.daily_learning_review_decisions set review_note='changed' where draft_id=$1", [v2DraftId]),
     /permission denied|immutable/
+  );
+
+  const returned = await db.query(`
+    insert into public.daily_learning_article_drafts(
+      owner_id, source_id, source_record, content, version,
+      package_schema_version, content_id, content_type, production_status,
+      planning, work_record, claims, assets, quality
+    ) values(
+      $1, 'example:object-3', '{"title":"Example 3"}', $2, 1,
+      2, 'daily-learning:example-03', 'single_artwork', 'awaiting_owner_review',
+      $3, $4, $5, $6, $7
+    ) returning id
+  `, [owner, JSON.stringify(v2Package.article), JSON.stringify(v2Package.planning), JSON.stringify(v2Package.work), JSON.stringify(v2Package.claims), JSON.stringify(v2Package.assets), JSON.stringify(v2Package.quality)]);
+  const returnedDraftId = returned.rows[0].id;
+  await db.query("select public.review_daily_learning_v2($1,'changes_requested','Add another source.')", [returnedDraftId]);
+  assert.equal((await db.query("select status from public.daily_learning_article_drafts where id=$1", [returnedDraftId])).rows[0].status, "changes_requested");
+  await assert.rejects(
+    db.query("select public.review_daily_learning_v2($1,'approved','Retry same version.')", [returnedDraftId]),
+    /not available for owner review/
   );
 
   await asUser(other);

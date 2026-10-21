@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-20T10:19:22+09:00",
-  "research_date": "2026-10-20",
+  "generated_at": "2026-10-21T10:04:16+09:00",
+  "research_date": "2026-10-21",
   "theme": {
-    "observation_code": "A06",
-    "observation_name": "文字、符号与图文关系",
-    "history_node": "H02",
-    "query": "calligraphy",
+    "observation_code": "A07",
+    "observation_name": "信息组织与视觉秩序",
+    "history_node": "H11",
+    "query": "map",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "met:49779",
+      "source_id": "met:827080",
       "source": "met",
-      "title": "Calligraphy",
-      "creator": "Yuan Xilian",
-      "date": "20th century",
-      "medium": "Folding fan mounted as an album leaf; ink on paper",
-      "source_url": "https://www.metmuseum.org/art/collection/search/49779",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/49779",
-      "image_url": "https://images.metmuseum.org/CRDImages/as/web-large/DP-32372-001.jpg",
+      "title": "Map",
+      "creator": "",
+      "date": "18th century",
+      "medium": "Ink on paper",
+      "source_url": "https://www.metmuseum.org/art/collection/search/827080",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/827080",
+      "image_url": "https://images.metmuseum.org/CRDImages/gr/web-large/sftr57372002.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -29,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "artic:185963",
+      "source_id": "artic:2158",
       "source": "artic",
-      "title": "Cauldron",
-      "creator": "China",
-      "date": "Western Zhou dynasty (1046–771 BC ), early 9th century BC",
-      "medium": "Bronze",
-      "source_url": "https://www.artic.edu/artworks/185963",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/185963",
-      "image_url": "https://www.artic.edu/iiif/2/69f25cba-e78d-061b-4cc1-b8fe66b02f28/full/843,/0/default.jpg",
+      "title": "Noah Smith",
+      "creator": "Ralph Earl\nAmerican, 1751–1801",
+      "date": "1798",
+      "medium": "Oil on canvas",
+      "source_url": "https://www.artic.edu/artworks/2158",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/2158",
+      "image_url": "https://www.artic.edu/iiif/2/59bf5216-383d-c2d4-912a-f8cfcbdaa55a/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +46,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:162868",
+      "source_id": "cleveland:152543",
       "source": "cleveland",
-      "title": "Calligraphy in Semi-Cursive Style (xing-caoshu)",
-      "creator": "Yueshan Daozong (Chinese, 1629–1709)",
-      "date": "c. 1660–1709",
-      "medium": "Hanging scroll; ink on paper",
-      "source_url": "https://www.clevelandart.org/art/2003.353",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/162868",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2003.353/2003.353_web.jpg",
+      "title": "Map/Print Case",
+      "creator": "",
+      "date": "late 1800s",
+      "medium": "mahogany and maple with bronze hardware",
+      "source_url": "https://www.clevelandart.org/art/1985.36",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152543",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1985.36/1985.36_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,15 +63,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KKS1974-26/1",
+      "source_id": "smk:KAS162/2",
       "source": "smk",
-      "title": "Blyantsnotater",
-      "creator": "Martinus Rørbye",
-      "date": "1832",
-      "medium": "Pencil",
-      "source_url": "https://open.smk.dk/artwork/image/KKS1974-26/1",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS1974-26/1&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/5q47rs023_pc4-14-06-05_-_001.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Oinomaos",
+      "creator": "Unknown",
+      "date": "",
+      "medium": "Plaster cast",
+      "source_url": "https://open.smk.dk/artwork/image/KAS162/2",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KAS162/2&lang=en",
+      "image_url": "https://api.smk.dk/api/v1/thumbnail/0802d762-2d64-495b-8ab4-aa4ea4c3eea5.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -81,12 +81,14 @@
     }
   ],
   "sources_attempted": [
-    "loc",
     "met",
     "artic",
     "cleveland",
-    "smk"
+    "smk",
+    "loc"
   ],
-  "warnings": [],
+  "warnings": [
+    "loc: API unavailable: https://www.loc.gov/maps/: The read operation timed out"
+  ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

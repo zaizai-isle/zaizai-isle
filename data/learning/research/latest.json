@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-21T10:04:16+09:00",
-  "research_date": "2026-10-21",
+  "generated_at": "2026-10-22T10:01:22+09:00",
+  "research_date": "2026-10-22",
   "theme": {
-    "observation_code": "A07",
-    "observation_name": "信息组织与视觉秩序",
-    "history_node": "H11",
-    "query": "map",
+    "observation_code": "A08",
+    "observation_name": "叙事、象征与情绪",
+    "history_node": "H05",
+    "query": "photograph",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "met:827080",
-      "source": "met",
-      "title": "Map",
-      "creator": "",
-      "date": "18th century",
-      "medium": "Ink on paper",
-      "source_url": "https://www.metmuseum.org/art/collection/search/827080",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/827080",
-      "image_url": "https://images.metmuseum.org/CRDImages/gr/web-large/sftr57372002.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "The Met Open Access; image use requires per-file review"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "artic:2158",
+      "source_id": "artic:11136",
       "source": "artic",
-      "title": "Noah Smith",
-      "creator": "Ralph Earl\nAmerican, 1751–1801",
-      "date": "1798",
-      "medium": "Oil on canvas",
-      "source_url": "https://www.artic.edu/artworks/2158",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/2158",
-      "image_url": "https://www.artic.edu/iiif/2/59bf5216-383d-c2d4-912a-f8cfcbdaa55a/full/843,/0/default.jpg",
+      "title": "The Photographer Sescau",
+      "creator": "Henri de Toulouse-Lautrec\nFrench, 1864-1901",
+      "date": "1896",
+      "medium": "Color lithograph on ivory laid paper, laid down on linen",
+      "source_url": "https://www.artic.edu/artworks/11136",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/11136",
+      "image_url": "https://www.artic.edu/iiif/2/399da367-1274-484a-1e9e-6874f00190d7/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:152543",
+      "source_id": "cleveland:152349",
       "source": "cleveland",
-      "title": "Map/Print Case",
-      "creator": "",
-      "date": "late 1800s",
-      "medium": "mahogany and maple with bronze hardware",
-      "source_url": "https://www.clevelandart.org/art/1985.36",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152543",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1985.36/1985.36_web.jpg",
+      "title": "Untitled",
+      "creator": "Robert Demachy (French, 1859–1936)",
+      "date": "c. 1900–1906",
+      "medium": "gum bichromate print",
+      "source_url": "https://www.clevelandart.org/art/1985.203",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152349",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1985.203/1985.203_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,32 +46,47 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KAS162/2",
+      "source_id": "smk:KKS6290",
       "source": "smk",
-      "title": "Oinomaos",
-      "creator": "Unknown",
-      "date": "",
-      "medium": "Plaster cast",
-      "source_url": "https://open.smk.dk/artwork/image/KAS162/2",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KAS162/2&lang=en",
-      "image_url": "https://api.smk.dk/api/v1/thumbnail/0802d762-2d64-495b-8ab4-aa4ea4c3eea5.jpg",
+      "title": "Fortunen",
+      "creator": "Elias Meyer",
+      "date": "1803",
+      "medium": "Etching",
+      "source_url": "https://open.smk.dk/artwork/image/KKS6290",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS6290&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/3484zk28s_kks6290.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
         "source_rights_note": "SMK public_domain=true; check image record"
       },
       "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "met:302000",
+      "source": "met",
+      "title": "[Young Woman with Beckers Tabletop Stereoscope]",
+      "creator": "Porter Photograph Parlors",
+      "date": "1864–66",
+      "medium": "Albumen silver print from glass negative",
+      "source_url": "https://www.metmuseum.org/art/collection/search/302000",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/302000",
+      "image_url": "https://images.metmuseum.org/CRDImages/ph/web-large/DP265112.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
     }
   ],
   "sources_attempted": [
-    "met",
     "artic",
     "cleveland",
     "smk",
-    "loc"
+    "loc",
+    "met"
   ],
-  "warnings": [
-    "loc: API unavailable: https://www.loc.gov/maps/: The read operation timed out"
-  ],
+  "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

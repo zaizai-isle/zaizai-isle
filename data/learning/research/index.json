@@ -11,12 +11,17 @@
     "met:827080",
     "artic:2158",
     "cleveland:152543",
-    "smk:KAS162/2"
+    "smk:KAS162/2",
+    "artic:11136",
+    "cleveland:152349",
+    "smk:KKS6290",
+    "met:302000"
   ],
   "runs": [
     "runs/2026-10-19.json",
     "runs/2026-10-20.json",
-    "runs/2026-10-21.json"
+    "runs/2026-10-21.json",
+    "runs/2026-10-22.json"
   ],
-  "last_research_date": "2026-10-21"
+  "last_research_date": "2026-10-22"
 }

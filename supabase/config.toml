@@ -1,0 +1,9 @@
+# GitHub Actions sends a GitHub OIDC token, not a Supabase user token.
+# The function performs its own strict issuer, audience, repository, branch,
+# workflow, and event checks before using any privileged credentials.
+[functions.daily-learning-auto]
+verify_jwt = false
+
+# Owner-triggered generation must keep the Supabase JWT gateway check.
+[functions.daily-learning-generate]
+verify_jwt = true

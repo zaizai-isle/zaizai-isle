@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-24T10:12:14+09:00",
-  "research_date": "2026-10-24",
+  "generated_at": "2026-10-25T09:36:48+09:00",
+  "research_date": "2026-10-25",
   "theme": {
-    "observation_code": "A02",
-    "observation_name": "比例与尺度",
-    "history_node": "H01",
-    "query": "portrait",
+    "observation_code": "A03",
+    "observation_name": "色彩与光影",
+    "history_node": "H02",
+    "query": "woodblock",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "smk:kms3824",
-      "source": "smk",
-      "title": "Self-Portrait",
-      "creator": "Ludvig Karsten",
-      "date": "1920",
-      "medium": "Oil on canvas",
-      "source_url": "https://open.smk.dk/artwork/image/kms3824",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=kms3824&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/8w32r997d_kms3824.tif.jp2/full/!1024,/0/default.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "SMK public_domain=true; check image record"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "met:226943",
+      "source_id": "met:229666",
       "source": "met",
-      "title": "Portrait",
-      "creator": "A. Bois",
-      "date": "1855",
-      "medium": "Silk",
-      "source_url": "https://www.metmuseum.org/art/collection/search/226943",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/226943",
-      "image_url": "https://images.metmuseum.org/CRDImages/es/web-large/127800.jpg",
+      "title": "Woodblock",
+      "creator": "",
+      "date": "19th century",
+      "medium": "Wood, metal",
+      "source_url": "https://www.metmuseum.org/art/collection/search/229666",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/229666",
+      "image_url": "https://images.metmuseum.org/CRDImages/es/web-large/DP7326.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "artic:11",
+      "source_id": "artic:7624",
       "source": "artic",
-      "title": "Self-Portrait",
-      "creator": "Walter Shirlaw (American, 1838–1909)",
-      "date": "1878",
-      "medium": "Oil on canvas",
-      "source_url": "https://www.artic.edu/artworks/11",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/11",
-      "image_url": "https://www.artic.edu/iiif/2/7b7a6f39-1cd8-ea2f-9811-18b0e23edac0/full/843,/0/default.jpg",
+      "title": "Komurasaki of the Miuraya and Shirai Gompachi (Miuraya Komurasaki, Shirai Gompachi)",
+      "creator": "Kitagawa Utamaro 喜多川 歌麿\nJapanese, c.1753-1806",
+      "date": "c. 1800",
+      "medium": "Color woodblock print; hashira-e",
+      "source_url": "https://www.artic.edu/artworks/7624",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/7624",
+      "image_url": "https://www.artic.edu/iiif/2/66c4dafb-2f53-f5ac-b676-32cafbe5b6bd/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,15 +46,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:124089",
+      "source_id": "cleveland:161234",
       "source": "cleveland",
-      "title": "Portrait of a Woman",
-      "creator": "Rembrandt van Rijn (Dutch, 1606–1669)",
-      "date": "1635 or earlier",
-      "medium": "oil on wood",
-      "source_url": "https://www.clevelandart.org/art/1944.90",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/124089",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1944.90/1944.90_web.jpg",
+      "title": "Dragon and Orchard",
+      "creator": "Arthur Wesley Dow (American, 1857–1922)",
+      "date": "c. 1908",
+      "medium": "woodblock",
+      "source_url": "https://www.clevelandart.org/art/1999.325.3",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/161234",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1999.325.3/1999.325.3_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -81,11 +64,11 @@
     }
   ],
   "sources_attempted": [
-    "smk",
     "loc",
     "met",
     "artic",
-    "cleveland"
+    "cleveland",
+    "smk"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

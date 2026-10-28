@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-27T10:39:30+09:00",
-  "research_date": "2026-10-27",
+  "generated_at": "2026-10-28T10:50:12+09:00",
+  "research_date": "2026-10-28",
   "theme": {
-    "observation_code": "A05",
-    "observation_name": "材料、结构与功能",
-    "history_node": "H03",
-    "query": "furniture",
+    "observation_code": "A06",
+    "observation_name": "文字、符号与图文关系",
+    "history_node": "H02",
+    "query": "calligraphy",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "artic:186047",
-      "source": "artic",
-      "title": "Sideboard",
-      "creator": "Designed by Edward William Godwin (English, 1833-1886)\nMade by William Watt (English, 1834-1885)\nLondon",
-      "date": "Designed 1867, made c. 1876",
-      "medium": "Ebonized mahogany with glass and silvered brass",
-      "source_url": "https://www.artic.edu/artworks/186047",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/186047",
-      "image_url": "https://www.artic.edu/iiif/2/2bc4d353-e61a-7589-8585-2000a23689bb/full/843,/0/default.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "cleveland:152834",
+      "source_id": "cleveland:151543",
       "source": "cleveland",
-      "title": "Sideboard",
-      "creator": "Joseph Alexis Bailly (American, 1825–1883)",
-      "date": "c. 1855",
-      "medium": "walnut",
-      "source_url": "https://www.clevelandart.org/art/1985.72",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152834",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1985.72/1985.72_web.jpg",
+      "title": "Calligraphy and Painting Party",
+      "creator": "Kawanabe Kyōsai (Japanese, 1831–1889)",
+      "date": "1880",
+      "medium": "hanging scroll; ink and color on paper",
+      "source_url": "https://www.clevelandart.org/art/1983.88",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/151543",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1983.88/1983.88_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,29 +29,63 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KMS1482",
+      "source_id": "smk:KKSnls466/1",
       "source": "smk",
-      "title": "A Telegram",
-      "creator": "Julius Exner",
-      "date": "1893",
-      "medium": "Oil on canvas",
-      "source_url": "https://open.smk.dk/artwork/image/KMS1482",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMS1482&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/jq085p30t_KMS1482.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Forskellige notater",
+      "creator": "Niels Larsen Stevns",
+      "date": "1896",
+      "medium": "Pencil",
+      "source_url": "https://open.smk.dk/artwork/image/KKSnls466/1",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSnls466/1&lang=en",
+      "image_url": "https://api.smk.dk/api/v1/thumbnail/03374dc5-560e-425a-b584-d56bf212d73b.JPG",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
         "source_rights_note": "SMK public_domain=true; check image record"
       },
       "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "met:49786",
+      "source": "met",
+      "title": "Calligraphy",
+      "creator": "Zhang Zhaoyong",
+      "date": "20th century",
+      "medium": "Folding fan mounted as an album leaf; ink on paper",
+      "source_url": "https://www.metmuseum.org/art/collection/search/49786",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/49786",
+      "image_url": "https://images.metmuseum.org/CRDImages/as/web-large/DP-32378-001.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:14849",
+      "source": "artic",
+      "title": "Battle of the Forces of Krishna and Bana, from a copy of the Dispersed Bhagavat Purana",
+      "creator": "India\nDelhi-Agra region, possibly Mathura",
+      "date": "c. 1520–1530",
+      "medium": "Opaque watercolor on paper",
+      "source_url": "https://www.artic.edu/artworks/14849",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/14849",
+      "image_url": "https://www.artic.edu/iiif/2/831534f4-dd88-4100-41b3-0016f19e4d7a/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
     }
   ],
   "sources_attempted": [
-    "artic",
     "cleveland",
     "smk",
     "loc",
-    "met"
+    "met",
+    "artic"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

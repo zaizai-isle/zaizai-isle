@@ -41,3 +41,45 @@ test("daily learning v2 package keeps unresolved evidence out of owner review", 
   assert.equal(result.readyForOwnerReview, false);
   assert.equal(result.blockers.length, 2);
 });
+
+test("daily learning v2 package rejects an observation with a missing image", () => {
+  const invalid = structuredClone(validPackage);
+  invalid.article.observations[0].asset_ids = ["asset-missing"];
+  const result = validateLearningPackageV2(invalid);
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /引用了不存在的图片/);
+});
+
+test("daily learning v2 package accepts a normalized detail crop", () => {
+  const withCrop = structuredClone(validPackage);
+  withCrop.assets[0].crop = { x: 0.2, y: 0.1, width: 0.5, height: 0.6 };
+  const result = validateLearningPackageV2(withCrop);
+  assert.equal(result.valid, true);
+});
+
+test("daily learning v2 package accepts an observation-specific crop", () => {
+  const withCrop = structuredClone(validPackage) as typeof validPackage & {
+    article: { observations: Array<(typeof validPackage.article.observations)[number] & { crop?: { x: number; y: number; width: number; height: number } }> };
+  };
+  withCrop.article.observations[0].crop = { x: 0.1, y: 0.2, width: 0.45, height: 0.5 };
+  const result = validateLearningPackageV2(withCrop);
+  assert.equal(result.valid, true);
+});
+
+test("daily learning v2 package rejects an observation crop outside the source image", () => {
+  const invalid = structuredClone(validPackage) as typeof validPackage & {
+    article: { observations: Array<(typeof validPackage.article.observations)[number] & { crop?: { x: number; y: number; width: number; height: number } }> };
+  };
+  invalid.article.observations[0].crop = { x: 0.75, y: 0.2, width: 0.5, height: 0.5 };
+  const result = validateLearningPackageV2(invalid);
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /observations\[0\]\.crop/);
+});
+
+test("daily learning v2 package rejects a crop outside the source image", () => {
+  const invalid = structuredClone(validPackage);
+  invalid.assets[0].crop = { x: 0.8, y: 0.1, width: 0.5, height: 0.6 };
+  const result = validateLearningPackageV2(invalid);
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /有效矩形/);
+});

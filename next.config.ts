@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "www.loc.gov" },
       { protocol: "https", hostname: "tile.loc.gov" },
       { protocol: "https", hostname: "cdn.loc.gov" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
+      { protocol: "https", hostname: "thumb.wikimedia.org" },
+      { protocol: "https", hostname: "ids.si.edu" },
     ],
   },
   generateBuildId: async () => {

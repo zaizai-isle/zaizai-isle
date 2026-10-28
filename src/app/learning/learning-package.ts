@@ -30,7 +30,7 @@ export type LearningPackageV2 = {
   article: {
     title: string;
     introduction: string;
-    observations: { heading: string; body: string; asset_ids: string[] }[];
+    observations: { heading: string; body: string; asset_ids: string[]; crop?: { x: number; y: number; width: number; height: number } }[];
     history: string;
     connection: string;
     question: string;
@@ -81,6 +81,11 @@ const isHttpUrl = (value: unknown) => {
 };
 const hasOnly = <T extends readonly string[]>(value: unknown, allowed: T): value is T[number] => typeof value === "string" && allowed.includes(value);
 const records = (value: unknown) => Array.isArray(value) && value.every(isRecord);
+const validCrop = (value: unknown) => {
+  if (!isRecord(value) || !["x", "y", "width", "height"].every((field) => Number.isFinite(Number(value[field])))) return false;
+  const { x, y, width, height } = value as Record<string, number>;
+  return x >= 0 && y >= 0 && width > 0 && height > 0 && x + width <= 1 && y + height <= 1;
+};
 
 export function validateLearningPackageV2(input: unknown): LearningPackageValidation {
   const errors: string[] = [];
@@ -116,6 +121,7 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
     else article.observations.forEach((item, index) => {
       if (!isText(item.heading) || !isText(item.body)) errors.push(`article.observations[${index}] 不完整。`);
       if (!Array.isArray(item.asset_ids) || !item.asset_ids.every(isText)) errors.push(`article.observations[${index}].asset_ids 无效。`);
+      if (item.crop !== undefined && !validCrop(item.crop)) errors.push(`article.observations[${index}].crop 必须是 0–1 范围内的有效矩形。`);
     });
   }
 
@@ -130,15 +136,29 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
 
   if (!records(input.assets) || input.assets.length < 1) errors.push("assets 至少包含一张主图。");
   else {
+    const assetIds = new Set<string>();
     const mainAssets = input.assets.filter((asset) => asset.role === "main");
     if (mainAssets.length !== 1) errors.push("必须且只能提供一张主图。");
     input.assets.forEach((asset, index) => {
       for (const field of ["asset_id", "rights_statement", "attribution", "alt"] as const) if (!isText(asset[field])) errors.push(`assets[${index}].${field} 不能为空。`);
+      const assetId = typeof asset.asset_id === "string" ? asset.asset_id : "";
+      if (isText(assetId)) {
+        if (assetIds.has(assetId)) errors.push(`assets[${index}].asset_id 重复。`);
+        assetIds.add(assetId);
+      }
       for (const field of ["image_url", "source_page", "license_url"] as const) if (!isHttpUrl(asset[field])) errors.push(`assets[${index}].${field} 必须是有效网址。`);
       if (!hasOnly(asset.role, ["main", "detail", "comparison"] as const)) errors.push(`assets[${index}].role 无效。`);
       if (!Number.isInteger(asset.width) || Number(asset.width) <= 0 || !Number.isInteger(asset.height) || Number(asset.height) <= 0) errors.push(`assets[${index}] 必须记录有效宽高。`);
       if (!hasOnly(asset.availability_status, ["verified", "needs_review", "blocked"] as const)) errors.push(`assets[${index}].availability_status 无效。`);
+      if (asset.crop !== null) {
+        if (!validCrop(asset.crop)) errors.push(`assets[${index}].crop 必须是 0–1 范围内的有效矩形。`);
+      }
       if (asset.availability_status !== "verified") blockers.push(`图片 ${String(asset.asset_id || index + 1)} 尚未通过可用性核查。`);
+    });
+    if (isRecord(article) && records(article.observations)) article.observations.forEach((observation, observationIndex) => {
+      if (Array.isArray(observation.asset_ids)) observation.asset_ids.forEach((assetId) => {
+        if (typeof assetId === "string" && !assetIds.has(assetId)) errors.push(`article.observations[${observationIndex}] 引用了不存在的图片 ${assetId}。`);
+      });
     });
   }
 

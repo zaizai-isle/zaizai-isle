@@ -106,7 +106,7 @@ const translations: Record<string, string> = {
   'tools.ai.title': '工具箱',
   'tools.ai.subtitle': '日常创作、思考与交付中反复使用的工具。',
   'tools.ai.new_tab': '在新标签页打开',
-  'learning.card.eyebrow': '每日学习',
+  'learning.card.eyebrow': '每日一看',
   'learning.card.question': '今天的问题',
   'learning.card.action': '打开今日内容',
   'tech.title': '生态岩层',

@@ -1,0 +1,177 @@
+{
+  "barragan-roof2-main": {
+    "bytes": 810077,
+    "package": "plan-16-barragan-house-roof2-v2.json",
+    "path": "learning/assets/Luis_Barragan_House_exterior_Roof2.jpg",
+    "sha256": "19265e5c1ad052d4d8f11e14b6e786ad24ab3de69b6aaebb9616a24e39956c7e",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Luis_Barragan_House_exterior_Roof2.jpg"
+  },
+  "braun-sk4-main": {
+    "bytes": 194946,
+    "package": "plan-09-braun-sk4-v2.json",
+    "path": "learning/assets/Braun_SK_4.1.jpg",
+    "sha256": "b869afa4ff4a5d1a4a03c80c1890ec73291ea162fd78e8257f1094544e8328ee",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Braun_SK_4.1.jpg"
+  },
+  "carlton-main": {
+    "bytes": 3404003,
+    "package": "plan-17-carlton-v2.json",
+    "path": "learning/assets/Carlton_Bookcase,_by_Ettore_Sottsass,_1981,_wood_veneer_and_plastic_laminate,_Inv._FNAC_1980,_Musée_des_Arts_Décoratifs,_Paris_(01).png",
+    "sha256": "2162cebe8a862977267b2980c509c0189ce84023d2a8d000dae694453b7458e5",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Carlton_Bookcase%2C_by_Ettore_Sottsass%2C_1981%2C_wood_veneer_and_plastic_laminate%2C_Inv._FNAC_1980%2C_Mus%C3%A9e_des_Arts_D%C3%A9coratifs%2C_Paris_%2801%29.png"
+  },
+  "chm-500004342-05-01-main": {
+    "bytes": 100271,
+    "package": "plan-18-macintosh-gui-v2.json",
+    "path": "learning/assets/500004342-05-01.jpg",
+    "sha256": "1d43ae2d146d456820cd0697ca2d188705d31da4282c47da31c8675713c4b375",
+    "source_url": "https://www.computerhistory.org/revolution/personal-computers/17/303/1200"
+  },
+  "cleveland-156112-main": {
+    "bytes": 330568,
+    "package": "cleveland-156112-v2.json",
+    "path": "learning/assets/cleveland-156112-main.jpg",
+    "sha256": "1229f2898c19ad29aedf1812e21fef17726c916c722b6e436e2e256de2507ead",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1991.45/1991.45_web.jpg"
+  },
+  "hiroshige-1857-comparison": {
+    "bytes": 2040799,
+    "package": "plan-03-vangogh-s0114v1962-v2.json",
+    "path": "learning/assets/Hiroshige,_Sudden_shower_over_Shin-Ohashi_bridge_and_Atake,_1857_expanded.jpg",
+    "sha256": "eeac838fd520e385451477b20327d378d3db6e9d575022a25ddfe5363a683910",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/de/Hiroshige%2C_Sudden_shower_over_Shin-Ohashi_bridge_and_Atake%2C_1857_expanded.jpg"
+  },
+  "iphone-2007-sms-main": {
+    "bytes": 1539111,
+    "package": "plan-19-original-iphone-v2.json",
+    "path": "learning/assets/IPhone_Text_Message_Amber_Alert_1882467856_o.jpg",
+    "sha256": "dd71ad98d94676c7bd18d1df5ff844c33c303420905ebcee5705579475527e33",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/IPhone_Text_Message_Amber_Alert_1882467856_o.jpg"
+  },
+  "loc-2017762891-comparison": {
+    "bytes": 4059791,
+    "package": "plan-05-four-images-related-reading-v2.json",
+    "path": "learning/assets/Migrant_Mother_(LOC_fsa.8b29516).jpg",
+    "sha256": "a680c3d57f16680334c8641d9f9a35ff2b7ec4fb4e7951b6e81829cb533e9bda",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Migrant_Mother_%28LOC_fsa.8b29516%29.jpg"
+  },
+  "loc-2017762891-main": {
+    "bytes": 4059791,
+    "package": "plan-04-loc-2017762891-v2.json",
+    "path": "learning/assets/Migrant_Mother_(LOC_fsa.8b29516).jpg",
+    "sha256": "a680c3d57f16680334c8641d9f9a35ff2b7ec4fb4e7951b6e81829cb533e9bda",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Migrant_Mother_%28LOC_fsa.8b29516%29.jpg"
+  },
+  "london-museum-beck-1933-main": {
+    "bytes": 126178,
+    "package": "plan-14-harry-beck-1933-v2.json",
+    "path": "learning/assets/WagtailSource-Railway-map.width-1136.format-webp.webp",
+    "sha256": "8181a68371b75d3358827f4939ef9429bd324fd3fa3cc44f948c9548983e13b2",
+    "source_url": "https://www.londonmuseum.org.uk/collections/london-stories/harry-beck-revolutionised-tube-map/"
+  },
+  "macintosh-system1-main": {
+    "bytes": 145697,
+    "package": "plan-18-macintosh-gui-v2.json",
+    "path": "learning/assets/macintosh-system-1-desktop.png",
+    "sha256": "1feaab43131adc90d76036358af84add5e9058e803b136e3b4169a24f7436e7f",
+    "source_url": "https://cdn.shopify.com/s/files/1/0533/2089/files/conversational-interfaces-macintosh-gui.png?v=1518467394"
+  },
+  "met-36491-comparison": {
+    "bytes": 623905,
+    "package": "plan-05-four-images-related-reading-v2.json",
+    "path": "learning/assets/met-36491-main.jpg",
+    "sha256": "5e6e88174f8a80832a54a7b14828a0ac936835d3476d33413e9850b3bf95b860",
+    "source_url": "https://images.metmuseum.org/CRDImages/as/original/DP141063.jpg"
+  },
+  "met-36491-main": {
+    "bytes": 623905,
+    "package": "plan-01-met-36491-v2.json",
+    "path": "learning/assets/met-36491-main.jpg",
+    "sha256": "5e6e88174f8a80832a54a7b14828a0ac936835d3476d33413e9850b3bf95b860",
+    "source_url": "https://images.metmuseum.org/CRDImages/as/original/DP141063.jpg"
+  },
+  "met-63385-main": {
+    "bytes": 260646,
+    "package": "plan-02-met-63385-v2.json",
+    "path": "learning/assets/met-63385-main.jpg",
+    "sha256": "fdb8efc85347de9426f0d2291d3aadb8918e7ddb9373e0d706f98992916ea32e",
+    "source_url": "https://images.metmuseum.org/CRDImages/as/original/LC-CP62_001.jpg"
+  },
+  "met-746672-main": {
+    "bytes": 672197,
+    "package": "plan-12-met-746672-v2.json",
+    "path": "learning/assets/met-746672-main.jpg",
+    "sha256": "6c1ff87ea20e04525b6910e806f5c739e8039ca0e6781bd85dc501e22b6ab215",
+    "source_url": "https://images.metmuseum.org/CRDImages/dp/original/DP873187.jpg"
+  },
+  "moma-105963-main": {
+    "bytes": 82402,
+    "package": "plan-11-cassandre-nord-express-v2.json",
+    "path": "learning/assets/Nord Express PV 1927.avif",
+    "sha256": "8b9b0eabb46360837fe26371399825430930794b57756961063023a4d96bd7fe",
+    "source_url": "https://www.moma.org/collection/works/105963"
+  },
+  "moma-3746-main": {
+    "bytes": 895638,
+    "package": "plan-08-anni-albers-3746-v2.json",
+    "path": "learning/assets/截屏2026-10-26 09.44.46.png",
+    "sha256": "7fcb81769f47e70f2752069c5c59bdeef958d93871a29148f9d0c5279d9515d0",
+    "source_url": "https://www.moma.org/collection/works/3746"
+  },
+  "rumsey-14080-058-main": {
+    "bytes": 249892,
+    "package": "plan-13-isotype-merchant-navies-v2.json",
+    "path": "learning/assets/rumsey-14080-058-main.jpg",
+    "sha256": "2ae3796dc4b04903385c213e5a3ffc9e67e7884830bb8bc38d6462cff57a044e",
+    "source_url": "https://media.davidrumsey.com/MediaManager/srvr?mediafile=/Size3/RUMSEY~8~1/185/14080058.jpg"
+  },
+  "smithsonian-1935-23-21-main": {
+    "bytes": 913517,
+    "package": "plan-06-smithsonian-1935-23-21-v2.json",
+    "path": "learning/assets/smithsonian-1935-23-21-main.jpg",
+    "sha256": "10dab018235d3c5f6931e3ff596cdf8bda350b49c8b3ac94009d38fac22bca15",
+    "source_url": "https://ids.si.edu/ids/deliveryService?id=CHSDM-1935-23-21MattFlynn"
+  },
+  "smk-kks1974-113-main": {
+    "bytes": 439773,
+    "package": "smk-KKS1974-113-v2.json",
+    "path": "learning/assets/smk-kks1974-113-main.jpg",
+    "sha256": "0a440e6cdcf0c57b29bbbe8aebef1e609398c8944c5ced9599908c6a388ea783",
+    "source_url": "https://iip-thumb.smk.dk/iiif/jp2/f7623g139_pc4-09-09-04_-_068.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg"
+  },
+  "vangogh-s0114-comparison": {
+    "bytes": 8896521,
+    "package": "plan-05-four-images-related-reading-v2.json",
+    "path": "learning/assets/Brug_in_de_regen_(naar_Hiroshige)_-_s0114V1962_-_Van_Gogh_Museum.jpg",
+    "sha256": "2b5090b948aff80286c5591e254790e31b961431712b45f25044f62cf37c87fa",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Brug_in_de_regen_%28naar_Hiroshige%29_-_s0114V1962_-_Van_Gogh_Museum.jpg"
+  },
+  "vangogh-s0114-main": {
+    "bytes": 8896521,
+    "package": "plan-03-vangogh-s0114v1962-v2.json",
+    "path": "learning/assets/Brug_in_de_regen_(naar_Hiroshige)_-_s0114V1962_-_Van_Gogh_Museum.jpg",
+    "sha256": "2b5090b948aff80286c5591e254790e31b961431712b45f25044f62cf37c87fa",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Brug_in_de_regen_%28naar_Hiroshige%29_-_s0114V1962_-_Van_Gogh_Museum.jpg"
+  },
+  "wassily-chair-cc0-main": {
+    "bytes": 849560,
+    "package": "plan-07-wassily-chair-cc0-v3.json",
+    "path": "learning/assets/wassily-chair-cc0-main.png",
+    "sha256": "f8c7a568c0451984dd0dd82243de825b26a6ecc04c1c34ffe0f0676776c42ccd",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Wassily_Chair_by_Marcel_Breuer%2C_reproduction%2C_1925%2C_chrome_covered_steel_and_belting_leather_-_University_of_Arizona_Museum_of_Art_-_University_of_Arizona_-_Tucson%2C_AZ_-_DSC08026.jpg"
+  },
+  "artic-27992-main": {
+    "path": "learning/assets/artic-27992-main-1280.jpg",
+    "bytes": 517702,
+    "sha256": "ed174090793b6cd21f90de3ea23c8aee8db3ae210e3cf3c038f29524ad3bd078",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg/1280px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg",
+    "package": "2026-10-28-artic-27992-v2-ready.json"
+  },
+  "artic-27992-detail": {
+    "path": "learning/assets/A_Sunday_on_La_Grande_Jatte,_Georges_Seurat,_1884.jpg",
+    "bytes": 5170281,
+    "sha256": "7e8f6f4fb2f7aaa255342603c2e92003986afc78296fd5d18ae1bf553c824e84",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg/3840px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg",
+    "package": "2026-10-28-artic-27992-v2-ready.json"
+  }
+}

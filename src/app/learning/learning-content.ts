@@ -4,6 +4,7 @@ export type LearningReaction = "interesting" | "neutral" | "unclear";
 
 export interface LearningEntry {
   id: string;
+  contentId?: string;
   publishDate: string;
   title: string;
   subject: string;
@@ -16,15 +17,39 @@ export interface LearningEntry {
   sourceLabel: string;
   sourceUrl: string;
   imageUrl?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   imageAlt?: string;
   imageCredit?: string;
   imageLicense?: string;
   imageLicenseUrl?: string;
   medium?: string;
   category?: string;
-  observations?: { heading: string; body: string }[];
+  observations?: { heading: string; body: string; assetIds?: string[]; crop?: LearningImageCrop }[];
+  assets?: LearningArticleAsset[];
   isPublishedRecord?: boolean;
   visualSnapshot?: LearningVisual;
+}
+
+export interface LearningArticleAsset {
+  id: string;
+  role: "main" | "detail" | "comparison";
+  imageUrl: string;
+  sourceUrl: string;
+  width: number;
+  height: number;
+  alt: string;
+  attribution: string;
+  rightsStatement: string;
+  licenseUrl: string;
+  crop?: LearningImageCrop;
+}
+
+export interface LearningImageCrop {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 export const learningEntries: LearningEntry[] = [

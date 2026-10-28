@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { LearningArticle } from "./LearningArticle";
+import { LearningArticleLoading } from "./LearningArticle";
 import { pickInitialEntry } from "./learning-content";
 import { PublishedLearning } from "./PublishedLearning";
 
@@ -11,5 +11,5 @@ function pontianakDate() {
 
 export default function LearningPage() {
   const initialEntry = pickInitialEntry(pontianakDate());
-  return <Suspense fallback={<LearningArticle entry={initialEntry} />}><PublishedLearning initialEntry={initialEntry} /></Suspense>;
+  return <Suspense fallback={<LearningArticleLoading />}><PublishedLearning initialEntry={initialEntry} /></Suspense>;
 }

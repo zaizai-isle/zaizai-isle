@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "research_candidates_only",
+  "generated_at": "2026-10-23T10:03:14+09:00",
+  "research_date": "2026-10-23",
+  "theme": {
+    "observation_code": "A01",
+    "observation_name": "构图与空间",
+    "history_node": "H01",
+    "query": "landscape",
+    "classification_verified": false
+  },
+  "items": [
+    {
+      "source_id": "cleveland:147016",
+      "source": "cleveland",
+      "title": "Virgin and Child in a Landscape",
+      "creator": "Jan Gossaert (Flemish, c. 1475/78–1532)",
+      "date": "1531",
+      "medium": "oil on wood",
+      "source_url": "https://www.clevelandart.org/art/1972.47",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/147016",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1972.47/1972.47_web.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "smk:KMS8575",
+      "source": "smk",
+      "title": "Evening Landscape, Evening Landscape",
+      "creator": "Julius Paulsen",
+      "date": "1886",
+      "medium": "Oil on canvas",
+      "source_url": "https://open.smk.dk/artwork/image/KMS8575",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMS8575&lang=en",
+      "image_url": "https://api.smk.dk/api/v1/thumbnail/a1c414f9-7658-4984-8452-22f9a106cb24.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "met:340468",
+      "source": "met",
+      "title": "Landscape (recto); Landscape (verso)",
+      "creator": "Perugino (Pietro di Cristoforo Vannucci)",
+      "date": "1489–90",
+      "medium": "Brush and brown wash, highlighted with white gouache, on gray-green prepared paper (recto); pen and brown ink on unprepared off-white paper (verso)",
+      "source_url": "https://www.metmuseum.org/art/collection/search/340468",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/340468",
+      "image_url": "https://images.metmuseum.org/CRDImages/dp/web-large/DP811071.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:23119",
+      "source": "artic",
+      "title": "Village Among the Trees",
+      "creator": "Unknown artist\nFlemish, active in Antwerp, mid-16th century",
+      "date": "c. 1560",
+      "medium": "Pen and brown ink, heightened with opaque white watercolor and touches of pink and yellow watercolor, over black chalk, on blue tinted laid paper, laid down on laid paper",
+      "source_url": "https://www.artic.edu/artworks/23119",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/23119",
+      "image_url": "https://www.artic.edu/iiif/2/1e452e34-3a2b-0dca-35c3-c7236c612985/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
+    }
+  ],
+  "sources_attempted": [
+    "cleveland",
+    "smk",
+    "loc",
+    "met",
+    "artic"
+  ],
+  "warnings": [],
+  "notes": "Catalog candidates only. No images saved and no content published."
+}

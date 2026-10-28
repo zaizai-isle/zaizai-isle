@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "research_candidates_only",
+  "generated_at": "2026-10-25T09:36:48+09:00",
+  "research_date": "2026-10-25",
+  "theme": {
+    "observation_code": "A03",
+    "observation_name": "色彩与光影",
+    "history_node": "H02",
+    "query": "woodblock",
+    "classification_verified": false
+  },
+  "items": [
+    {
+      "source_id": "met:229666",
+      "source": "met",
+      "title": "Woodblock",
+      "creator": "",
+      "date": "19th century",
+      "medium": "Wood, metal",
+      "source_url": "https://www.metmuseum.org/art/collection/search/229666",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/229666",
+      "image_url": "https://images.metmuseum.org/CRDImages/es/web-large/DP7326.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:7624",
+      "source": "artic",
+      "title": "Komurasaki of the Miuraya and Shirai Gompachi (Miuraya Komurasaki, Shirai Gompachi)",
+      "creator": "Kitagawa Utamaro 喜多川 歌麿\nJapanese, c.1753-1806",
+      "date": "c. 1800",
+      "medium": "Color woodblock print; hashira-e",
+      "source_url": "https://www.artic.edu/artworks/7624",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/7624",
+      "image_url": "https://www.artic.edu/iiif/2/66c4dafb-2f53-f5ac-b676-32cafbe5b6bd/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "cleveland:161234",
+      "source": "cleveland",
+      "title": "Dragon and Orchard",
+      "creator": "Arthur Wesley Dow (American, 1857–1922)",
+      "date": "c. 1908",
+      "medium": "woodblock",
+      "source_url": "https://www.clevelandart.org/art/1999.325.3",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/161234",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1999.325.3/1999.325.3_web.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
+      },
+      "review_status": "needs_editorial_review"
+    }
+  ],
+  "sources_attempted": [
+    "loc",
+    "met",
+    "artic",
+    "cleveland",
+    "smk"
+  ],
+  "warnings": [],
+  "notes": "Catalog candidates only. No images saved and no content published."
+}

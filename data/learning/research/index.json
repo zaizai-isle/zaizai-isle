@@ -3,10 +3,48 @@
   "seen_ids": [
     "smk:KKS1974-113",
     "artic:6471",
-    "cleveland:156112"
+    "cleveland:156112",
+    "met:49779",
+    "artic:185963",
+    "cleveland:162868",
+    "smk:KKS1974-26/1",
+    "met:827080",
+    "artic:2158",
+    "cleveland:152543",
+    "smk:KAS162/2",
+    "artic:11136",
+    "cleveland:152349",
+    "smk:KKS6290",
+    "met:302000",
+    "cleveland:147016",
+    "smk:KMS8575",
+    "met:340468",
+    "artic:23119",
+    "smk:kms3824",
+    "met:226943",
+    "artic:11",
+    "cleveland:124089",
+    "met:229666",
+    "artic:7624",
+    "cleveland:161234",
+    "artic:186047",
+    "cleveland:152834",
+    "smk:KMS1482",
+    "cleveland:151543",
+    "smk:KKSnls466/1",
+    "met:49786",
+    "artic:14849"
   ],
   "runs": [
-    "runs/2026-10-19.json"
+    "runs/2026-10-19.json",
+    "runs/2026-10-20.json",
+    "runs/2026-10-21.json",
+    "runs/2026-10-22.json",
+    "runs/2026-10-23.json",
+    "runs/2026-10-24.json",
+    "runs/2026-10-25.json",
+    "runs/2026-10-27.json",
+    "runs/2026-10-28.json"
   ],
-  "last_research_date": "2026-10-19"
+  "last_research_date": "2026-10-28"
 }

@@ -24,8 +24,9 @@ env PATH="$PWD/.conda-env/bin:$PATH" npm run lint
 
 - Install Node dependencies with `npm ci` from the project root.
 - Run lint with `npm run lint`.
-- Run local development with `npm run dev -- --webpack`; Turbopack currently fails with a filesystem permission panic on this machine.
-- Run production build with `npm run build -- --webpack`.
+- Run local development with `npm run dev` (the Next.js default Turbopack bundler).
+- Run production build with `npm run build` so local verification matches the GitHub Pages workflow.
+- If Turbopack reports a filesystem permission panic after switching bundlers or builds, move the disposable `.next` directory aside and let Next.js rebuild it before changing filesystem permissions.
 - The production build requires Supabase environment variables in `.env.local`:
 
 ```bash

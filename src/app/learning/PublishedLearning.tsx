@@ -15,6 +15,7 @@ type PublicationRow = {
   published_at: string;
   package_schema_version?: number|null;
   package_snapshot?: Record<string,unknown>|null;
+  display_date?: string|null;
 };
 
 const text = (value: unknown) => typeof value === "string" ? value : "";
@@ -54,7 +55,7 @@ function toEntry(row: PublicationRow): LearningEntry {
   return {
     id: `publication-${row.id}`,
     contentId,
-    publishDate: row.published_at.slice(0, 10),
+    publishDate: row.display_date ?? row.published_at.slice(0, 10),
     title: text(content.title) || text(record.title),
     subject: text(content.subject) || text(record.title),
     creator: text(content.creator) || text(record.creator) || "作者未详",
@@ -94,7 +95,8 @@ export function PublishedLearning({ initialEntry }: { initialEntry: LearningEntr
         return;
       }
       const { data, error } = await client.from("daily_learning_publications")
-        .select("id,source_id,source_record,content,published_at,package_schema_version,package_snapshot")
+        .select("id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot")
+        .order("display_date", { ascending: false })
         .order("published_at", { ascending: false })
         .limit(100);
       if (!active) return;

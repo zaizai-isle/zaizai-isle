@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 type PublicationRow = {
   id: string;
+  display_date: string;
   published_at: string;
   package_schema_version: number | null;
   package_snapshot: Record<string, unknown> | null;
@@ -64,8 +65,9 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
         return;
       }
       const { data, error } = await client.from("daily_learning_publications")
-        .select("id,published_at,package_schema_version,package_snapshot")
+        .select("id,display_date,published_at,package_schema_version,package_snapshot")
         .eq("package_schema_version", 2)
+        .order("display_date", { ascending: false })
         .order("published_at", { ascending: false })
         .limit(1)
         .maybeSingle();

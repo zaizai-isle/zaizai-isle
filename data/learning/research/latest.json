@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-29T10:58:44+09:00",
-  "research_date": "2026-10-29",
+  "generated_at": "2026-10-30T11:11:54+09:00",
+  "research_date": "2026-10-30",
   "theme": {
-    "observation_code": "A07",
-    "observation_name": "信息组织与视觉秩序",
-    "history_node": "H11",
-    "query": "map",
+    "observation_code": "A08",
+    "observation_name": "叙事、象征与情绪",
+    "history_node": "H05",
+    "query": "photograph",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "smk:KKSnls472/42",
-      "source": "smk",
-      "title": "Figurskitser",
-      "creator": "Niels Larsen Stevns",
-      "date": "1906",
-      "medium": "Pencil",
-      "source_url": "https://open.smk.dk/artwork/image/KKSnls472/42",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSnls472/42&lang=en",
-      "image_url": "https://api.smk.dk/api/v1/thumbnail/c67d2320-7a2e-49ce-8547-06a04b9b870e.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "SMK public_domain=true; check image record"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "met:4942",
+      "source_id": "met:302358",
       "source": "met",
-      "title": "Map Case",
-      "creator": "Louis Boudo",
-      "date": "1825",
-      "medium": "Silver",
-      "source_url": "https://www.metmuseum.org/art/collection/search/4942",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/4942",
-      "image_url": "https://images.metmuseum.org/CRDImages/ad/web-large/DP-19198-001.jpg",
+      "title": "[Union Cavalry Soldier with Pistol in Holster]",
+      "creator": "Tappin's Photograph Art Gallery",
+      "date": "1861–65",
+      "medium": "Albumen silver print from glass negative",
+      "source_url": "https://www.metmuseum.org/art/collection/search/302358",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/302358",
+      "image_url": "https://images.metmuseum.org/CRDImages/ph/web-large/DP272321.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "artic:15132",
+      "source_id": "artic:160160",
       "source": "artic",
-      "title": "Sampler (Map)",
-      "creator": "England",
-      "date": "c. 1800",
-      "medium": "",
-      "source_url": "https://www.artic.edu/artworks/15132",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/15132",
-      "image_url": "https://www.artic.edu/iiif/2/bb513b07-82c7-cdd3-cca3-1fe729bc82e5/full/843,/0/default.jpg",
+      "title": "Dance Skirt (photographed with Apron)",
+      "creator": "Yurok or Hupa\nNorthern California coast, United States",
+      "date": "1850–60",
+      "medium": "Deer hide, plant fibers, olivella shell, abalone shell, clamshell, glass beads, and brass",
+      "source_url": "https://www.artic.edu/artworks/160160",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/160160",
+      "image_url": "https://www.artic.edu/iiif/2/52350f74-33ca-7749-f760-e79da40ac4d6/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,29 +46,46 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:423526",
+      "source_id": "cleveland:299529",
       "source": "cleveland",
-      "title": "Nuova pianta di Roma data in luce da Giambattista Nolli l’anno MDCCXLVII, known as La Pianta Grande di Roma",
-      "creator": "Giovanni Battista Nolli (Italian, 1701–1756)",
-      "date": "1748",
-      "medium": "etching and engraving",
-      "source_url": "https://www.clevelandart.org/art/2020.276.15",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/423526",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2020.276.15/2020.276.15_web.jpg",
+      "title": "Untitled (Pair of Portraits)",
+      "creator": "Etienne Carjat (French, 1828–1906)",
+      "date": "1879",
+      "medium": "Photographs on enamel in copper alloy frame with velvet liner",
+      "source_url": "https://www.clevelandart.org/art/2017.8",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/299529",
+      "image_url": "https://openaccess-cdn.clevelandart.org/2017.8/2017.8_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
         "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
       },
       "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "smk:KKSgb10490",
+      "source": "smk",
+      "title": "En Landevej",
+      "creator": "Elias Meyer",
+      "date": "1763-1809",
+      "medium": "Etching",
+      "source_url": "https://open.smk.dk/artwork/image/KKSgb10490",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb10490&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/sq87bx17h_kksgb10490.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review"
     }
   ],
   "sources_attempted": [
-    "smk",
     "loc",
     "met",
     "artic",
-    "cleveland"
+    "cleveland",
+    "smk"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

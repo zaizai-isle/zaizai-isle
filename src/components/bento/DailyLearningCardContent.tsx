@@ -66,6 +66,7 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
       }
       const { data, error } = await client.from("daily_learning_publications")
         .select("id,display_date,published_at,package_schema_version,package_snapshot")
+        .eq("is_visible", true)
         .eq("package_schema_version", 2)
         .order("display_date", { ascending: false })
         .order("published_at", { ascending: false })

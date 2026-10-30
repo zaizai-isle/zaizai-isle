@@ -96,6 +96,7 @@ export function PublishedLearning({ initialEntry }: { initialEntry: LearningEntr
       }
       const { data, error } = await client.from("daily_learning_publications")
         .select("id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot")
+        .eq("is_visible", true)
         .order("display_date", { ascending: false })
         .order("published_at", { ascending: false })
         .limit(100);

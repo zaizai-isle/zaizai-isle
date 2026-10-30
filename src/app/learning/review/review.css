@@ -85,7 +85,8 @@
   font-size: 13px;
 }
 .learning-review-plan > summary,
-.learning-review-import summary { padding: 8px 0; }
+.learning-review-import summary,
+.learning-review-publications > summary { padding: 8px 0; }
 .learning-review-plan-list {
   display: grid;
   gap: 6px;
@@ -173,6 +174,58 @@
 .learning-review-item[aria-pressed="true"] {
   border-color: #777;
   background: #fff;
+}
+
+.learning-review-publications {
+  margin-top: 24px;
+  color: #686868;
+  font-size: 13px;
+}
+.learning-review-publication-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.learning-review-publication {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #dfdbd0;
+  border-radius: 10px;
+}
+.learning-review-publication.is-hidden {
+  border-style: dashed;
+  opacity: .7;
+}
+.learning-review-publication > strong {
+  color: #181818;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.learning-review-publication > small {
+  font-size: 10px;
+  line-height: 1.45;
+}
+.learning-review-publication form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: end;
+}
+.learning-review-publication label {
+  display: grid;
+  gap: 4px;
+  font-size: 10px;
+}
+.learning-review-publication .learning-input {
+  min-width: 0;
+  padding: 7px;
+  font-size: 11px;
+}
+.learning-review-publication .learning-secondary {
+  width: fit-content;
+  padding: 7px 9px;
+  font-size: 11px;
 }
 
 .learning-review-content {

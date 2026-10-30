@@ -4,6 +4,15 @@
 > **确定日期**：2026-10-16  
 > **依据**：[产品定义](./DailyLearning-ProductDefinition-v0.2.md) · [观察体系 A](./DailyLearning-ObservationFramework-A-v0.1.md) · [历史框架 B](./DailyLearning-HistoryFramework-B-v0.1.md) · [内容编辑规范](./DailyLearning-EditorialGuidelines-v0.1.md)
 
+## 2026-10-30 岛主补充：自动入库与发布分开
+
+- 私有草稿自动接收，无需岛主单独批准入库。岛主只决定指定版本是否正式发布。
+- `validateLearningPackageV2.valid=true` 的包即使 `readyForOwnerReview=false`，也应进入私有 `pending_review` / `awaiting_owner_review` 队列。图片许可、可达性、作品匹配或事实证据未解决时，如实保留 `blockers` 和待核状态，供岛主查看、补图与补证。
+- 不将未知或受阻字段伪写为核查通过。结构无效时保存研究并报告错误，不编造必填信息。
+- 既有受阻包优先补入队列，按内容幂等去重。未批准、未发布且尚无正式审核决定的待审核草稿，补图、补证和正文修订直接更新同一行，保留草稿 ID 与 version；只在已锁定或已发布内容修订时新增版本。历史发布快照不覆盖。
+- 审核页直接提供“发布当前版本”；只有发布就绪且岛主点击确认后，才锁定并发布指定版本，无需另做一次人工批准入库。
+- 本节优先于下文将 `ready` 作为入队前提的旧流程；事实与图片就绪检查仍用于正式发布。
+
 ## 1. 运行模式和权限
 
 **采用模式 A：Agent 自主生产，岛主审核后发布。**

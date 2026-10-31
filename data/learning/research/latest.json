@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-10-30T11:11:54+09:00",
-  "research_date": "2026-10-30",
+  "generated_at": "2026-10-31T10:53:59+09:00",
+  "research_date": "2026-10-31",
   "theme": {
-    "observation_code": "A08",
-    "observation_name": "叙事、象征与情绪",
-    "history_node": "H05",
-    "query": "photograph",
+    "observation_code": "A01",
+    "observation_name": "构图与空间",
+    "history_node": "H01",
+    "query": "landscape",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "met:302358",
+      "source_id": "met:10181",
       "source": "met",
-      "title": "[Union Cavalry Soldier with Pistol in Holster]",
-      "creator": "Tappin's Photograph Art Gallery",
-      "date": "1861–65",
-      "medium": "Albumen silver print from glass negative",
-      "source_url": "https://www.metmuseum.org/art/collection/search/302358",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/302358",
-      "image_url": "https://images.metmuseum.org/CRDImages/ph/web-large/DP272321.jpg",
+      "title": "Landscape",
+      "creator": "Ralph Albert Blakelock",
+      "date": "1885–95",
+      "medium": "Oil on canvas",
+      "source_url": "https://www.metmuseum.org/art/collection/search/10181",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/10181",
+      "image_url": "https://images.metmuseum.org/CRDImages/ad/web-large/ap29.35.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -29,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "artic:160160",
+      "source_id": "artic:874",
       "source": "artic",
-      "title": "Dance Skirt (photographed with Apron)",
-      "creator": "Yurok or Hupa\nNorthern California coast, United States",
-      "date": "1850–60",
-      "medium": "Deer hide, plant fibers, olivella shell, abalone shell, clamshell, glass beads, and brass",
-      "source_url": "https://www.artic.edu/artworks/160160",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/160160",
-      "image_url": "https://www.artic.edu/iiif/2/52350f74-33ca-7749-f760-e79da40ac4d6/full/843,/0/default.jpg",
+      "title": "Landscape",
+      "creator": "Jean Charles Cazin (French, 1841–1901)",
+      "date": "c. 1895",
+      "medium": "Oil on canvas",
+      "source_url": "https://www.artic.edu/artworks/874",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/874",
+      "image_url": "https://www.artic.edu/iiif/2/3a34f988-f779-2e96-1786-8945b6b9c87d/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +46,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:299529",
+      "source_id": "cleveland:152006",
       "source": "cleveland",
-      "title": "Untitled (Pair of Portraits)",
-      "creator": "Etienne Carjat (French, 1828–1906)",
-      "date": "1879",
-      "medium": "Photographs on enamel in copper alloy frame with velvet liner",
-      "source_url": "https://www.clevelandart.org/art/2017.8",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/299529",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2017.8/2017.8_web.jpg",
+      "title": "Rocky, Wooded Landscape with a Dell and Weir",
+      "creator": "Thomas Gainsborough (British, 1727–1788)",
+      "date": "c. 1782–1783",
+      "medium": "oil on canvas",
+      "source_url": "https://www.clevelandart.org/art/1984.59",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152006",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1984.59/1984.59_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,15 +63,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KKSgb10490",
+      "source_id": "smk:KMSsp163",
       "source": "smk",
-      "title": "En Landevej",
-      "creator": "Elias Meyer",
-      "date": "1763-1809",
-      "medium": "Etching",
-      "source_url": "https://open.smk.dk/artwork/image/KKSgb10490",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb10490&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/sq87bx17h_kksgb10490.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Wooded Landscape",
+      "creator": "Alexander Keirincx",
+      "date": "1615-1620",
+      "medium": "Oil on copper",
+      "source_url": "https://open.smk.dk/artwork/image/KMSsp163",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMSsp163&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/765375081_KMSsp163_crop.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -81,12 +81,14 @@
     }
   ],
   "sources_attempted": [
-    "loc",
     "met",
     "artic",
     "cleveland",
-    "smk"
+    "smk",
+    "loc"
   ],
-  "warnings": [],
+  "warnings": [
+    "loc: API unavailable: https://www.loc.gov/photos/: HTTP Error 429: Too Many Requests"
+  ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

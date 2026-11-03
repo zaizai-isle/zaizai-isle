@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "research_candidates_only",
+  "generated_at": "2026-11-03T12:45:57+09:00",
+  "research_date": "2026-11-03",
+  "theme": {
+    "observation_code": "A04",
+    "observation_name": "线条、形态与节奏",
+    "history_node": "H10",
+    "query": "poster",
+    "classification_verified": false
+  },
+  "items": [
+    {
+      "source_id": "smk:KKS1982-373",
+      "source": "smk",
+      "title": "Drengeportræt",
+      "creator": "Henry Nielsen",
+      "date": "1932",
+      "medium": "Woodcut, Print",
+      "source_url": "https://open.smk.dk/artwork/image/KKS1982-373",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS1982-373&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/n583xz850_KKS1982_373_crop.tif2.tif.jp2/full/!1024,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "met:399123",
+      "source": "met",
+      "title": "The Sign Poster",
+      "creator": "Anne Claude Philippe de Tubières, comte de Caylus",
+      "date": "1742",
+      "medium": "Etching with some engraving",
+      "source_url": "https://www.metmuseum.org/art/collection/search/399123",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/399123",
+      "image_url": "https://images.metmuseum.org/CRDImages/dp/web-large/DP820467.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:111986",
+      "source": "artic",
+      "title": "Zodiaque (\"La Plume\")",
+      "creator": "Alphonse Marie Mucha\nCzech, 1860-1939",
+      "date": "1896–97",
+      "medium": "Color lithograph from multiple stones on tan wove paper",
+      "source_url": "https://www.artic.edu/artworks/111986",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/111986",
+      "image_url": "https://www.artic.edu/iiif/2/119dba14-acf2-cdcd-e9e6-b9cd38bc3aad/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "cleveland:127812",
+      "source": "cleveland",
+      "title": "Yvette Guilbert",
+      "creator": "Henri de Toulouse-Lautrec (French, 1864–1901)",
+      "date": "c. 1894",
+      "medium": "black crayon",
+      "source_url": "https://www.clevelandart.org/art/1950.455",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/127812",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1950.455/1950.455_web.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
+      },
+      "review_status": "needs_editorial_review"
+    }
+  ],
+  "sources_attempted": [
+    "smk",
+    "loc",
+    "met",
+    "artic",
+    "cleveland"
+  ],
+  "warnings": [],
+  "notes": "Catalog candidates only. No images saved and no content published."
+}

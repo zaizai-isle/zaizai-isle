@@ -173,5 +173,47 @@
     "sha256": "7e8f6f4fb2f7aaa255342603c2e92003986afc78296fd5d18ae1bf553c824e84",
     "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg/3840px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884.jpg",
     "package": "2026-10-28-artic-27992-v2-ready.json"
+  },
+  "cleveland-151543-main-v2": {
+    "path": "learning/assets/cleveland-151543-main-v2.jpg",
+    "bytes": 527551,
+    "sha256": "1b0ab0c542f91500ad2b3105086cbab56523375f09300ca9e5ba2d488eab8fcc",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1983.88/1983.88_web.jpg",
+    "package": "2026-10-30-cleveland-151543-image-update-v2.json"
+  },
+  "cleveland-151543-detail-v2": {
+    "path": "learning/assets/cleveland-151543-full-v2.jpg",
+    "bytes": 702522,
+    "sha256": "7d683c010c9deab9c5a2157be66180fdc04163dfbe20c5bc89f7fed29cd5c6c9",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1983.88/1983.88_full.tif",
+    "package": "2026-10-30-cleveland-151543-image-update-v2.json"
+  },
+  "artic-6471-main-v2": {
+    "path": "learning/assets/1957.453 - Cylinder Desk and Bookcase.jpg",
+    "bytes": 444278,
+    "sha256": "04a39e88e020dd5371a1721850991b19907cf7b81abc1d9f5b7a853015d350ee",
+    "source_url": "https://www.artic.edu/iiif/2/37c1e8e6-49d5-8a86-a0cb-a5e8f5aef5f7/full/843,/0/default.jpg",
+    "package": "2026-10-30-artic-6471-image-update-v2.json"
+  },
+  "met-302358-main-owner": {
+    "path": "learning/assets/met-302358-main-owner.jpg",
+    "bytes": 581084,
+    "sha256": "eca465141bead50a783da6865b9e261aa4e6104293c516bcfb8cec6e9d05a703",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Union_Cavalry_Soldier_with_Pistol_in_Holster_-_MET_DP272321.jpg",
+    "package": "2026-11-02-met-302358-owner-image-update.json"
+  },
+  "met-449537-main-owner": {
+    "path": "learning/assets/met-449537-main-owner.jpg",
+    "bytes": 661338,
+    "sha256": "2405982c74c85be75473aac644ee551fa4ece30ef857cd40eda5767ed5bc94f9",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Mihrab_%28Prayer_Niche%29_MET_DP235035.jpg",
+    "package": "2026-11-02-met-449537-owner-image-update.json"
+  },
+  "met-449537-detail-owner": {
+    "path": "learning/assets/met-449537-full-owner.jpg",
+    "bytes": 597838,
+    "sha256": "f465c0c10945496973955f20fcefc28e03ae795e75671e51c9340d6c36dfd7a8",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Mihrab_%28Prayer_Niche%29_MET_DP235035.jpg",
+    "package": "2026-11-02-met-449537-owner-image-update.json"
   }
 }

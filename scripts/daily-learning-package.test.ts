@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { validateLearningPackageV2 } from "../src/app/learning/learning-package";
+import { validateLearningPackageForPublication, validateLearningPackageV2 } from "../src/app/learning/learning-package";
 
 const validPackage = {
   schema_version: 2,
@@ -40,6 +40,25 @@ test("daily learning v2 package keeps unresolved evidence out of owner review", 
   assert.equal(result.valid, true);
   assert.equal(result.readyForOwnerReview, false);
   assert.equal(result.blockers.length, 2);
+});
+
+test("daily learning v2 package allows owner publication when a valid main image exists", () => {
+  const blocked = structuredClone(validPackage);
+  blocked.claims[0].verification_status = "needs_review";
+  blocked.assets[0].availability_status = "needs_review";
+  blocked.quality.checks[0].status = "needs_review";
+  blocked.quality.blockers = ["来源仍待核。"];
+  const result = validateLearningPackageForPublication(blocked);
+  assert.equal(result.publishable, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test("daily learning v2 package rejects publication without a structurally valid main image", () => {
+  const invalid = structuredClone(validPackage);
+  invalid.assets[0].image_url = "";
+  const result = validateLearningPackageForPublication(invalid);
+  assert.equal(result.publishable, false);
+  assert.match(result.errors.join(" "), /image_url/);
 });
 
 test("daily learning v2 package rejects an observation with a missing image", () => {

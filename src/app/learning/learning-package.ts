@@ -73,6 +73,11 @@ export type LearningPackageValidation = {
   value?: LearningPackageV2;
 };
 
+export type LearningPackagePublicationValidation = {
+  publishable: boolean;
+  errors: string[];
+};
+
 const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const isText = (value: unknown, minimum = 1) => typeof value === "string" && value.trim().length >= minimum;
 const isHttpUrl = (value: unknown) => {
@@ -175,4 +180,14 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
 
   const uniqueBlockers = [...new Set(blockers)];
   return { valid: errors.length === 0, readyForOwnerReview: errors.length === 0 && uniqueBlockers.length === 0, errors, blockers: uniqueBlockers, value: errors.length === 0 ? input as LearningPackageV2 : undefined };
+}
+
+export function validateLearningPackageForPublication(input: unknown): LearningPackagePublicationValidation {
+  const validation = validateLearningPackageV2(input);
+  if (!validation.valid || !validation.value) return { publishable: false, errors: validation.errors };
+
+  const mainAsset = validation.value.assets.find((asset) => asset.role === "main");
+  if (!mainAsset) return { publishable: false, errors: ["正式发布必须包含一张主图。"] };
+
+  return { publishable: true, errors: [] };
 }

@@ -215,5 +215,12 @@
     "sha256": "f465c0c10945496973955f20fcefc28e03ae795e75671e51c9340d6c36dfd7a8",
     "source_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Mihrab_%28Prayer_Niche%29_MET_DP235035.jpg",
     "package": "2026-11-02-met-449537-owner-image-update.json"
+  },
+  "met-316393-main-owner": {
+    "path": "learning/assets/met-316393-main-owner.jpg",
+    "bytes": 430901,
+    "sha256": "65de51477ea0247fd775c2306ba4bd76310b1f3de2d496916a2e4720b9f43e89",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Plaque-_Warrior_and_Attendants_MET_DT1231.jpg",
+    "package": "2026-11-04-met-316393-owner-image-update.json"
   }
 }

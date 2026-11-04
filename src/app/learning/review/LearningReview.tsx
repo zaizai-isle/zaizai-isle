@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getIslandOwnerClient } from "@/lib/island-owner-client";
 import { verifyIslandOwner } from "../learning-repository";
-import { validateLearningPackageV2, type LearningPackageV2 } from "../learning-package";
+import { validateLearningPackageForPublication, validateLearningPackageV2, type LearningPackageV2 } from "../learning-package";
 import type { LearningArticleAsset, LearningEntry } from "../learning-content";
 import { LearningArticleContent } from "../LearningArticleContent";
 import { learningAssetUrl } from "../learning-asset-cache";
@@ -37,6 +37,10 @@ type LearningReviewProps = {
 
 function draftValidation(draft: Draft) {
   return validateLearningPackageV2({schema_version:draft.package_schema_version,content_id:draft.content_id,content_type:draft.content_type,planning:draft.planning,work:draft.work_record,article:draft.content,claims:draft.claims,assets:draft.assets,quality:draft.quality});
+}
+
+function draftPublicationValidation(draft: Draft) {
+  return validateLearningPackageForPublication({schema_version:draft.package_schema_version,content_id:draft.content_id,content_type:draft.content_type,planning:draft.planning,work:draft.work_record,article:draft.content,claims:draft.claims,assets:draft.assets,quality:draft.quality});
 }
 
 function publicationTitle(publication:Publication) {
@@ -107,6 +111,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const [importing,setImporting]=useState(false);
   const current=rows.find(x=>x.id===selected);
   const currentValidation=current?.package_schema_version===2?draftValidation(current):null;
+  const currentPublicationValidation=current?.package_schema_version===2?draftPublicationValidation(current):null;
   const pendingDrafts=rows.filter(draft=>!publishedDrafts[draft.id]&&(
     (draft.status==="pending_review"&&draft.production_status==="awaiting_owner_review")
     || (draft.status==="approved"&&draft.production_status==="owner_approved")
@@ -171,7 +176,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     if(!current)return;
     if(current.package_schema_version!==2){setMessage("旧格式草稿不符合当前规范。请由 Codex 生成 v2 新版本。");return;}
     if(current.production_status!=="awaiting_owner_review"){setMessage("当前版本不在待岛主审核状态。");return;}
-    if(decision==="approved"&&!draftValidation(current).readyForOwnerReview){setMessage("请先补齐图片与证据，再发布新版本。");return;}
+    if(decision==="approved"&&!draftPublicationValidation(current).publishable){setMessage("请先补齐有效主图，再发布当前版本。");return;}
     if(decision==="changes_requested"&&!note.trim()){setMessage("请填写修改意见。");return;}
     if(!window.confirm(decision==="approved"?"批准当前 v2 版本？批准后不可修改。此操作不会发布。":"确认提交审核决定？"))return;
     setBusy(true);setMessage("");
@@ -185,9 +190,11 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
     if(!publicationReady){setMessage("发布表尚未部署。草稿生成和审核可以继续，正式发布暂不可用。");return;}
     if(!current||current.package_schema_version!==2||publishedDrafts[current.id])return;
     if(!["awaiting_owner_review","owner_approved"].includes(current.production_status)||!["pending_review","approved"].includes(current.status))return;
-    const validation=draftValidation(current);
-    if(!validation.readyForOwnerReview){setMessage(`发布前仍需处理：${[...validation.errors,...validation.blockers].join("；")}`);return;}
-    if(!window.confirm(`正式发布 ${text(current.content.title)||current.source_id} v${current.version}？发布记录不可修改或删除。`))return;
+    const publicationValidation=draftPublicationValidation(current);
+    if(!publicationValidation.publishable){setMessage(`发布前仍需处理：${publicationValidation.errors.join("；")}`);return;}
+    const unresolvedCount=currentValidation?[...currentValidation.errors,...currentValidation.blockers].length:0;
+    const unresolvedNotice=unresolvedCount?`当前仍有 ${unresolvedCount} 项待核事项，它们会保留在发布快照中。`:"";
+    if(!window.confirm(`正式发布 ${text(current.content.title)||current.source_id} v${current.version}？${unresolvedNotice}发布记录不可修改或删除。`))return;
     setBusy(true);setMessage("");
     try{
       const owner=await verifyIslandOwner();
@@ -296,7 +303,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       {!publicationReady?<p className="learning-review-notice">发布功能等待数据库迁移，不影响草稿生成与审核。</p>:null}
       <button className="learning-primary" type="button" disabled={busy||importing} onClick={()=>void reload()}>刷新列表</button>
       <details className="learning-review-plan" open><summary>待发布草稿（{pendingDrafts.length}）</summary><div className="learning-review-plan-list">
-        {pendingDrafts.map(draft=><button type="button" key={draft.id} className="learning-review-plan-item" aria-pressed={draft.id===selected} onClick={()=>setSelected(draft.id)}><span>v{draft.version}</span><strong>{text(draft.content.title)||text(draft.work_record?.title)||draft.source_id}</strong><small>{productionStatuses[draft.production_status]??statuses[draft.status]??draft.status}{draft.package_schema_version===2&&!draftValidation(draft).readyForOwnerReview?" · 待补图或补证":""}</small></button>)}
+        {pendingDrafts.map(draft=>{const publicationValidation=draft.package_schema_version===2?draftPublicationValidation(draft):null;const validation=draft.package_schema_version===2?draftValidation(draft):null;return <button type="button" key={draft.id} className="learning-review-plan-item" aria-pressed={draft.id===selected} onClick={()=>setSelected(draft.id)}><span>v{draft.version}</span><strong>{text(draft.content.title)||text(draft.work_record?.title)||draft.source_id}</strong><small>{productionStatuses[draft.production_status]??statuses[draft.status]??draft.status}{publicationValidation&&!publicationValidation.publishable?" · 缺少有效主图":validation&&!validation.readyForOwnerReview?" · 有待核事项":""}</small></button>})}
         {!pendingDrafts.length?<p className="learning-muted">目前没有待发布草稿。</p>:null}
       </div></details>
       <h3>最新候选{researchDate?" · "+researchDate:""}</h3>
@@ -322,14 +329,14 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
       {!isV2?<p className="learning-review-message">旧格式仅供追溯，不能继续通过当前规范批准或发布。请生成 v2 新版本。</p>:null}
       <div className="learning-review-published-preview"><LearningArticleContent entry={previewEntry} responseMode="preview" /></div>
       <article className="learning-review-inspection"><header><p className="learning-kicker">仅审核页显示</p><h2>策划、证据与审核</h2></header>
-      {isV2&&currentValidation&&!currentValidation.readyForOwnerReview?<section className="learning-review-gap-blockers"><h3>待补图或补证</h3><p>草稿已自动入库。补齐下列事项后直接更新此草稿，再决定是否发布。</p><ul>{[...currentValidation.errors,...currentValidation.blockers].map((item,index)=><li key={index}>{item}</li>)}</ul></section>:null}
+      {isV2&&currentValidation&&!currentValidation.readyForOwnerReview?<section className="learning-review-gap-blockers"><h3>待核事项</h3><p>以下事项供发布前判断。草稿结构有效且包含主图时，不阻断岛主发布。</p><ul>{[...currentValidation.errors,...currentValidation.blockers].map((item,index)=><li key={index}>{item}</li>)}</ul></section>:null}
       {isV2?<section><h3>策划与规范映射</h3><p>{text(planning.primary_observation_theme)} · {text(planning.primary_observation_method)} · {text(planning.primary_history_node)} · {text(planning.connection_type)}</p><p><strong>核心发现：</strong>{text(planning.core_discovery)}</p><p><strong>选题理由：</strong>{text(planning.selection_reason)}</p></section>:null}
       {isV2?<section><h3>关键论断</h3><ul>{current.claims?.map(claim=><li key={text(claim.claim_id)}><strong>{text(claim.kind)} · {text(claim.verification_status)}</strong>：{text(claim.text)}</li>)}</ul><h3>自动质检</h3><ul>{Array.isArray(quality.checks)?quality.checks.map((check,index)=><li key={index}>{text((check as Record<string,unknown>).check_id)} · {text((check as Record<string,unknown>).status)}：{text((check as Record<string,unknown>).note)}</li>):null}</ul></section>:null}
       {Array.isArray(c.editorial_caveats)?<section><h3>Agent 不确定事项</h3><ul>{c.editorial_caveats.map((v,i)=><li key={i}>{text(v)}</li>)}</ul></section>:null}
       <div className="learning-review-actions">{!isV2?<><label><input type="checkbox" checked={imageRights} disabled onChange={e=>setImageRights(e.target.checked)}/> 旧格式图片核查记录</label>
       <label><input type="checkbox" checked={sourcesOk} disabled onChange={e=>setSourcesOk(e.target.checked)}/> 旧格式史实核查记录</label></>:null}
       <label>审核意见<textarea className="learning-input" maxLength={2000} value={note} disabled={current.status==="approved"} onChange={e=>setNote(e.target.value)} /></label>
-      {isV2&&current.production_status==="awaiting_owner_review"&&current.status==="pending_review"?<div className="learning-reactions"><button className="learning-primary" disabled={busy||!publicationReady||!currentValidation?.readyForOwnerReview} onClick={()=>void publish()}>发布当前版本</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("changes_requested")}>退回并要求新版本</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("rejected")}>放弃选题</button></div>:null}
+      {isV2&&current.production_status==="awaiting_owner_review"&&current.status==="pending_review"?<div className="learning-reactions"><button className="learning-primary" disabled={busy||!publicationReady||!currentPublicationValidation?.publishable} onClick={()=>void publish()}>发布当前版本</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("changes_requested")}>退回并要求新版本</button><button className="learning-primary" disabled={busy} onClick={()=>void decide("rejected")}>放弃选题</button></div>:null}
       {isV2&&current.production_status==="owner_approved"&&!publishedDrafts[current.id]?<button className="learning-primary" disabled={busy||!publicationReady} onClick={()=>void publish()}>发布这个已批准版本</button>:null}
       </div></article></>}</section></div>}
   </div></main>;

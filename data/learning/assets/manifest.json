@@ -226,6 +226,13 @@
     "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Plaque-_Warrior_and_Attendants_MET_DT1231.jpg",
     "package": "2026-11-04-met-316393-owner-image-update.json"
   },
+  "met-316393-detail-owner": {
+    "path": "learning/assets/met-316393-detail-owner.webp",
+    "bytes": 468822,
+    "sha256": "d6d4d1b4bad4e02d57e9f37129ee682110ba6e2ef43f16a779dc4374a6f23cb5",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Plaque-_Warrior_and_Attendants_MET_DT1231.jpg",
+    "package": "2026-11-05-met-316393-detail-deployed.json"
+  },
   "met-436528-main-dp346474": {
     "path": "learning/assets/met-436528-main-owner.jpg",
     "bytes": 447931,

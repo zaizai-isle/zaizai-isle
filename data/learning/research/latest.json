@@ -1,26 +1,43 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-04T11:46:33+09:00",
-  "research_date": "2026-11-04",
+  "generated_at": "2026-11-05T11:55:35+09:00",
+  "research_date": "2026-11-05",
   "theme": {
-    "observation_code": "A05",
-    "observation_name": "材料、结构与功能",
-    "history_node": "H03",
-    "query": "furniture",
+    "observation_code": "A06",
+    "observation_name": "文字、符号与图文关系",
+    "history_node": "H02",
+    "query": "calligraphy",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "artic:105105",
+      "source_id": "met:929087",
+      "source": "met",
+      "title": "Calligraphy",
+      "creator": "Gwan Yong-un",
+      "date": "19th century",
+      "medium": "Hanging scroll; ink on satin",
+      "source_url": "https://www.metmuseum.org/art/collection/search/929087",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/929087",
+      "image_url": "https://images.metmuseum.org/CRDImages/as/web-large/DP-44210-002.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:108845",
       "source": "artic",
-      "title": "Cabinet",
-      "creator": "Herter Brothers (American, 1864–1906)\nNew York",
-      "date": "1878–80",
-      "medium": "Rosewood with ebonized cherry, maple, walnut, satinwood, marquetry of various woods, brass, gilding, and paint",
-      "source_url": "https://www.artic.edu/artworks/105105",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/105105",
-      "image_url": "https://www.artic.edu/iiif/2/63610c6d-4b70-6623-6069-c86a6eeff766/full/843,/0/default.jpg",
+      "title": "Page from a Copy of the Qur'an",
+      "creator": "Spain",
+      "date": "13th/14th century",
+      "medium": "Ink, colors, and gold on vellum",
+      "source_url": "https://www.artic.edu/artworks/108845",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/108845",
+      "image_url": "https://www.artic.edu/iiif/2/2dbb733a-3563-e73c-c608-3a09bd2f5628/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -29,15 +46,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:170257",
+      "source_id": "cleveland:162869",
       "source": "cleveland",
-      "title": "Desk and Bookcase",
-      "creator": "John Townsend (American, 1732–1809)",
-      "date": "c. 1780–95",
-      "medium": "\"Plum pudding\" mahogany, red cedar, chestnut, white pine, brass",
-      "source_url": "https://www.clevelandart.org/art/2012.43",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/170257",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2012.43/2012.43_web.jpg",
+      "title": "Calligraphy in Semi-Cursive Style (xing-caoshu)",
+      "creator": "Yueshan Daozong (Chinese, 1629–1709)",
+      "date": "c. 1660–1709",
+      "medium": "hanging scroll; ink on paper",
+      "source_url": "https://www.clevelandart.org/art/2003.354",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/162869",
+      "image_url": "https://openaccess-cdn.clevelandart.org/2003.354/2003.354_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +63,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KMS2078",
+      "source_id": "smk:KKS19996/47",
       "source": "smk",
-      "title": "A Grocer's Shop in Flekkefjord",
-      "creator": "August Jacobsen",
-      "date": "1894-1909",
-      "medium": "Oil on canvas",
-      "source_url": "https://open.smk.dk/artwork/image/KMS2078",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMS2078&lang=en",
-      "image_url": "https://api.smk.dk/api/v1/thumbnail/21a86d1f-bdac-4cac-b73a-16d2dcb44b9a.jpg",
+      "title": "Rejsedagbog",
+      "creator": "Johan Thomas Lundbye",
+      "date": "1845",
+      "medium": "Pen, grey and brown ink. Text only",
+      "source_url": "https://open.smk.dk/artwork/image/KKS19996/47",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS19996/47&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/sj139428g_KKS19996-47.TIF.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -64,11 +81,11 @@
     }
   ],
   "sources_attempted": [
-    "loc",
     "met",
     "artic",
     "cleveland",
-    "smk"
+    "smk",
+    "loc"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

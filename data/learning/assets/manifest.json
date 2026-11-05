@@ -199,6 +199,9 @@
     "path": "learning/assets/met-302358-main-owner.jpg",
     "bytes": 581084,
     "sha256": "eca465141bead50a783da6865b9e261aa4e6104293c516bcfb8cec6e9d05a703",
+    "thumbnail_path": "learning/assets/met-302358-thumb-owner.webp",
+    "thumbnail_bytes": 18822,
+    "thumbnail_sha256": "fe57a7d9b91ca2e5ae0e7230069159bd7d5d4bcd83a1c5e6a06217866f15f4b1",
     "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Union_Cavalry_Soldier_with_Pistol_in_Holster_-_MET_DP272321.jpg",
     "package": "2026-11-02-met-302358-owner-image-update.json"
   },
@@ -222,5 +225,15 @@
     "sha256": "65de51477ea0247fd775c2306ba4bd76310b1f3de2d496916a2e4720b9f43e89",
     "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Plaque-_Warrior_and_Attendants_MET_DT1231.jpg",
     "package": "2026-11-04-met-316393-owner-image-update.json"
+  },
+  "met-436528-main-dp346474": {
+    "path": "learning/assets/met-436528-main-owner.jpg",
+    "bytes": 447931,
+    "sha256": "296d7e8486996ba468f637a92bb869d111298730750fbfaa9976807c09a128c6",
+    "thumbnail_path": "learning/assets/met-436528-thumb-owner.webp",
+    "thumbnail_bytes": 49584,
+    "thumbnail_sha256": "71ee11ab454d240e06466a91826dcf9fcf5db97e66657b0d6d159cf098128aed",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Irises_MET_DP346474.jpg/3840px-Irises_MET_DP346474.jpg",
+    "package": "2026-11-05-met-436528-owner-image-update.json"
   }
 }

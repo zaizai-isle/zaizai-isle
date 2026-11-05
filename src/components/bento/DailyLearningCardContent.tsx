@@ -1,7 +1,7 @@
 "use client";
 
 import type { LearningEntry } from "@/app/learning/learning-content";
-import { learningAssetUrl } from "@/app/learning/learning-asset-cache";
+import { learningThumbnailUrl } from "@/app/learning/learning-asset-cache";
 import { TranslatedText } from "@/components/TranslatedText";
 import { ArrowUpRight, BookOpen } from "lucide-react";
 import Image from "next/image";
@@ -20,6 +20,8 @@ type CardEntry = Pick<LearningEntry, "title" | "subject" | "creator" | "era"> & 
   href: string;
   imageUrl?: string;
   imageAlt: string;
+  imageWidth?: number;
+  imageHeight?: number;
 };
 
 const text = (value: unknown) => typeof value === "string" ? value : "";
@@ -38,8 +40,10 @@ function publicationToCard(row: PublicationRow): CardEntry | null {
     subject: text(work.title),
     creator: text(work.creator) || "作者未详",
     era: text(work.date),
-    imageUrl: mainAsset ? learningAssetUrl(text(mainAsset.asset_id), text(mainAsset.image_url)) : undefined,
+    imageUrl: mainAsset ? learningThumbnailUrl(text(mainAsset.asset_id), text(mainAsset.image_url)) : undefined,
     imageAlt: text(mainAsset?.alt) || text(work.title) || title,
+    imageWidth: typeof mainAsset?.width === "number" ? mainAsset.width : undefined,
+    imageHeight: typeof mainAsset?.height === "number" ? mainAsset.height : undefined,
     href: `/learning?entry=publication-${row.id}`,
   };
 }
@@ -108,6 +112,8 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
     </div>;
   }
 
+  const isPortrait = Boolean(entry.imageWidth && entry.imageHeight && entry.imageHeight > entry.imageWidth);
+
   return <>
     <div className="flex items-center justify-between gap-4">
       <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">
@@ -118,14 +124,14 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
         <ArrowUpRight aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0" />
       </Link>
     </div>
-    <div className="mt-3 grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_48%] items-center gap-4">
+    <div className={`mt-3 grid min-h-0 flex-1 items-center gap-4 ${isPortrait ? "grid-cols-[minmax(0,1fr)_36%]" : "grid-cols-[minmax(0,1fr)_48%]"}`}>
       <div className="min-w-0">
         <h2 className="line-clamp-2 text-balance text-lg font-medium leading-snug tracking-[-0.025em] text-white sm:text-xl">{entry.title}</h2>
         <p className="mt-2 line-clamp-1 text-xs leading-5 text-white/60">{entry.subject} · {entry.creator}</p>
         <p className="mt-1 line-clamp-1 font-mono text-[9px] tracking-[0.12em] text-white/35">{entry.era}</p>
       </div>
-      <div className="relative h-28 min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] sm:h-32">
-        <Image src={entry.imageUrl || fallbackImage} alt={entry.imageAlt} fill sizes="(max-width: 640px) 46vw, 240px" className="object-cover object-center" loading="lazy" unoptimized={entry.imageUrl?.startsWith("https://")} />
+      <div data-image-orientation={isPortrait ? "portrait" : "landscape"} className={`relative min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] ${isPortrait ? "h-32 sm:h-36" : "h-28 sm:h-32"}`}>
+        <Image src={entry.imageUrl || fallbackImage} alt={entry.imageAlt} fill sizes={isPortrait ? "(max-width: 640px) 34vw, 180px" : "(max-width: 640px) 46vw, 240px"} className={isPortrait ? "object-contain object-center" : "object-cover object-center"} loading="lazy" unoptimized={entry.imageUrl?.startsWith("https://")} />
       </div>
     </div>
   </>;

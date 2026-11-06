@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-05T11:55:35+09:00",
-  "research_date": "2026-11-05",
+  "generated_at": "2026-11-06T11:55:43+09:00",
+  "research_date": "2026-11-06",
   "theme": {
-    "observation_code": "A06",
-    "observation_name": "文字、符号与图文关系",
-    "history_node": "H02",
-    "query": "calligraphy",
+    "observation_code": "A07",
+    "observation_name": "信息组织与视觉秩序",
+    "history_node": "H11",
+    "query": "map",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "met:929087",
-      "source": "met",
-      "title": "Calligraphy",
-      "creator": "Gwan Yong-un",
-      "date": "19th century",
-      "medium": "Hanging scroll; ink on satin",
-      "source_url": "https://www.metmuseum.org/art/collection/search/929087",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/929087",
-      "image_url": "https://images.metmuseum.org/CRDImages/as/web-large/DP-44210-002.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "The Met Open Access; image use requires per-file review"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "artic:108845",
+      "source_id": "artic:196347",
       "source": "artic",
-      "title": "Page from a Copy of the Qur'an",
-      "creator": "Spain",
-      "date": "13th/14th century",
-      "medium": "Ink, colors, and gold on vellum",
-      "source_url": "https://www.artic.edu/artworks/108845",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/108845",
-      "image_url": "https://www.artic.edu/iiif/2/2dbb733a-3563-e73c-c608-3a09bd2f5628/full/843,/0/default.jpg",
+      "title": "Plan of Chicago, Chicago, Illinois, Diagram Showing City Growth",
+      "creator": "Daniel Hudson Burnham (American, 1846-1912)\nEdward Herbert Bennett (American, born England, 1874-1954)",
+      "date": "1909",
+      "medium": "Colored ink, paint, and wash on a printed map",
+      "source_url": "https://www.artic.edu/artworks/196347",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/196347",
+      "image_url": "https://www.artic.edu/iiif/2/8da8a9e1-48f7-9bc1-982a-2206dae4f522/full/843,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "cleveland:162869",
+      "source_id": "cleveland:423518",
       "source": "cleveland",
-      "title": "Calligraphy in Semi-Cursive Style (xing-caoshu)",
-      "creator": "Yueshan Daozong (Chinese, 1629–1709)",
-      "date": "c. 1660–1709",
-      "medium": "hanging scroll; ink on paper",
-      "source_url": "https://www.clevelandart.org/art/2003.354",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/162869",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2003.354/2003.354_web.jpg",
+      "title": "Nuova pianta di Roma data in luce da Giambattista Nolli l’anno MDCCXLVII, known as La Pianta Grande di Roma",
+      "creator": "Giovanni Battista Nolli (Italian, 1701–1756)",
+      "date": "1748",
+      "medium": "etching and engraving",
+      "source_url": "https://www.clevelandart.org/art/2020.276.10",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/423518",
+      "image_url": "https://openaccess-cdn.clevelandart.org/2020.276.10/2020.276.10_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,29 +46,46 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KKS19996/47",
+      "source_id": "smk:KKSgb8354/20",
       "source": "smk",
-      "title": "Rejsedagbog",
-      "creator": "Johan Thomas Lundbye",
-      "date": "1845",
-      "medium": "Pen, grey and brown ink. Text only",
-      "source_url": "https://open.smk.dk/artwork/image/KKS19996/47",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS19996/47&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/sj139428g_KKS19996-47.TIF.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Æbleblomster",
+      "creator": "Agnes Slott-Møller",
+      "date": "1900",
+      "medium": "Drawing",
+      "source_url": "https://open.smk.dk/artwork/image/KKSgb8354/20",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb8354/20&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/rr172183n_KKSgb8354_crop.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
         "source_rights_note": "SMK public_domain=true; check image record"
       },
       "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "met:228716",
+      "source": "met",
+      "title": "Embroidered map sampler",
+      "creator": "",
+      "date": "late 18th–early 19th century",
+      "medium": "Silk embroidery on silk",
+      "source_url": "https://www.metmuseum.org/art/collection/search/228716",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/228716",
+      "image_url": "https://images.metmuseum.org/CRDImages/es/web-large/DP7747.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
     }
   ],
   "sources_attempted": [
-    "met",
     "artic",
     "cleveland",
     "smk",
-    "loc"
+    "loc",
+    "met"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

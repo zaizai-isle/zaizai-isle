@@ -63,7 +63,11 @@
     "met:929087",
     "artic:108845",
     "cleveland:162869",
-    "smk:KKS19996/47"
+    "smk:KKS19996/47",
+    "artic:196347",
+    "cleveland:423518",
+    "smk:KKSgb8354/20",
+    "met:228716"
   ],
   "runs": [
     "runs/2026-10-19.json",
@@ -82,7 +86,8 @@
     "runs/2026-11-02.json",
     "runs/2026-11-03.json",
     "runs/2026-11-04.json",
-    "runs/2026-11-05.json"
+    "runs/2026-11-05.json",
+    "runs/2026-11-06.json"
   ],
-  "last_research_date": "2026-11-05"
+  "last_research_date": "2026-11-06"
 }

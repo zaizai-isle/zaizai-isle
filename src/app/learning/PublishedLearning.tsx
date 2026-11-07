@@ -9,11 +9,11 @@ import type { PublicationSummaryRow } from "./learning-publication-entry";
 type PublishedState =
   | { kind: "loading" }
   | { kind: "unavailable" }
-  | { kind: "empty"; recent: PublicationSummaryRow[] }
-  | { kind: "article"; entry: LearningEntry; recent: PublicationSummaryRow[] };
+  | { kind: "empty"; recent: LearningEntry[] }
+  | { kind: "article"; entry: LearningEntry; recent: LearningEntry[] };
 
-// 精选/历史卡片只渲染标题与日期，纯字段映射，留在本文件避免把素材清单带进初始模块图。
-function summaryToEntry(row: PublicationSummaryRow): LearningEntry {
+// 精选/历史卡片渲染标题、日期与主图缩略；素材清单只在数据回来后动态导入，不进初始模块图。
+function summaryToEntry(row: PublicationSummaryRow, imageUrl?: string): LearningEntry {
   const title = row.title || "未命名作品";
   return {
     id: `publication-${row.id}`,
@@ -30,8 +30,21 @@ function summaryToEntry(row: PublicationSummaryRow): LearningEntry {
     sourceLabel: "",
     sourceUrl: "",
     category: "艺术与设计",
+    imageUrl,
     isPublishedRecord: true,
   };
+}
+
+// 摘要行的主图缩略：优先本地清单缩略，回退远端 image_url。
+async function withThumbs(rows: PublicationSummaryRow[]): Promise<LearningEntry[]> {
+  if (!rows.length) return [];
+  const { learningThumbnailUrl } = await import("./learning-asset-cache");
+  return rows.map((row) => {
+    const main = (row.assets ?? []).find((asset) => asset.role === "main");
+    const assetId = typeof main?.asset_id === "string" ? main.asset_id : "";
+    const remote = typeof main?.image_url === "string" ? main.image_url : "";
+    return summaryToEntry(row, assetId || remote ? learningThumbnailUrl(assetId, remote) : undefined);
+  });
 }
 
 export function PublishedLearning() {
@@ -65,11 +78,11 @@ export function PublishedLearning() {
           return;
         }
 
-        // 当日全文与往期精选并行请求；两者都只读 is_visible 行。
+        // 当日全文与往期列表并行请求；两者都只读 is_visible 行。
         const today = pontianakToday();
         const [todayResult, recentResult] = await Promise.allSettled([
           fetchTodayPublishedPublication(today),
-          listRecentPublicationSummaries(today, 5),
+          listRecentPublicationSummaries(today).then(withThumbs),
         ]);
         if (!active) return;
         if (todayResult.status === "rejected") {
@@ -96,8 +109,9 @@ export function PublishedLearning() {
 
   if (state.kind === "loading") return <LearningArticleLoading />;
   if (state.kind === "unavailable") return <LearningPublicationUnavailable />;
-  if (state.kind === "empty") return <LearningTodayEmpty recent={state.recent.map(summaryToEntry)} />;
+  if (state.kind === "empty") return <LearningTodayEmpty recent={state.recent} />;
 
-  const entries = [...state.recent.map(summaryToEntry), ...learningEntries];
+  // 发布表就是完整往期档案；有往期时不再混入旧的硬编码静态选题（与已发布内容重复）。
+  const entries = state.recent.length ? state.recent : learningEntries;
   return <LearningArticle entry={state.entry} entries={entries} />;
 }

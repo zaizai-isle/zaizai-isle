@@ -81,7 +81,8 @@ export async function saveLearningResponse(entryId: string, reaction: LearningRe
 // ---------------------------------------------------------------------------
 
 /** 列表/精选只需要标题与日期，不再整行拉取 source_record/content/package_snapshot。 */
-export const PUBLICATION_SUMMARY_COLUMNS = "id,content_id,display_date,published_at,title:content->>title,subject:content->>subject";
+/** 列表/精选取精简列 + 主图所需的最小素材信息（role/asset_id/image_url 由快照 assets 带出）。 */
+export const PUBLICATION_SUMMARY_COLUMNS = "id,content_id,display_date,published_at,title:content->>title,subject:content->>subject,assets:package_snapshot->assets";
 
 /** 详情页渲染需要的完整发布快照（仅单行）。 */
 export const PUBLICATION_FULL_COLUMNS = "id,content_id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot";
@@ -108,8 +109,8 @@ export async function fetchTodayPublishedPublication(today = pontianakToday()): 
   return (data as PublicationRow[] | null)?.[0] ?? null;
 }
 
-/** 往期精选：今天之前最近 limit 篇，只取精简列。 */
-export async function listRecentPublicationSummaries(today = pontianakToday(), limit = 5): Promise<PublicationSummaryRow[]> {
+/** 往期列表：今天之前的可见发布，默认拉满一屏可滚动的量。 */
+export async function listRecentPublicationSummaries(today = pontianakToday(), limit = 30): Promise<PublicationSummaryRow[]> {
   const client = getOptionalSupabase();
   if (!client) throw new Error("Supabase 未配置，无法读取往期精选。");
   const { data, error } = await client

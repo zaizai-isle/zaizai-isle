@@ -53,7 +53,9 @@ export function LearningPublicationUnavailable() {
 export type LearningPickItem = { id: string; contentId?: string; publishDate: string; title: string };
 
 export function learningEntryHref(item: { id: string; contentId?: string; isPublishedRecord?: boolean }) {
-  if (item.contentId) return `/learning/${encodeURIComponent(item.contentId)}`;
+  // 静态导出构建期会按发布表生成全部深链页面；dev 里服务端拉不到库时深链会报缺参错误，
+  // 因此仅生产构建使用 content_id 深链，dev 走 ?entry= 客户端解析（同样只读 is_visible 行）。
+  if (item.contentId && process.env.NODE_ENV === "production") return `/learning/${encodeURIComponent(item.contentId)}`;
   return item.isPublishedRecord ? `/learning?entry=${encodeURIComponent(item.id)}` : `/learning/${item.id}`;
 }
 

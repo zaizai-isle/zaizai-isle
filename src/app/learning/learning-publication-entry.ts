@@ -24,6 +24,7 @@ export type PublicationSummaryRow = {
   published_at: string;
   title?: string | null;
   subject?: string | null;
+  assets?: Array<{ role?: string; asset_id?: string; image_url?: string }> | null;
 };
 
 const text = (value: unknown) => typeof value === "string" ? value : "";

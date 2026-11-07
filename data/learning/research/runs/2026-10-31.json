@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "research_candidates_only",
+  "generated_at": "2026-10-31T10:53:59+09:00",
+  "research_date": "2026-10-31",
+  "theme": {
+    "observation_code": "A01",
+    "observation_name": "构图与空间",
+    "history_node": "H01",
+    "query": "landscape",
+    "classification_verified": false
+  },
+  "items": [
+    {
+      "source_id": "met:10181",
+      "source": "met",
+      "title": "Landscape",
+      "creator": "Ralph Albert Blakelock",
+      "date": "1885–95",
+      "medium": "Oil on canvas",
+      "source_url": "https://www.metmuseum.org/art/collection/search/10181",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/10181",
+      "image_url": "https://images.metmuseum.org/CRDImages/ad/web-large/ap29.35.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "The Met Open Access; image use requires per-file review"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:874",
+      "source": "artic",
+      "title": "Landscape",
+      "creator": "Jean Charles Cazin (French, 1841–1901)",
+      "date": "c. 1895",
+      "medium": "Oil on canvas",
+      "source_url": "https://www.artic.edu/artworks/874",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/874",
+      "image_url": "https://www.artic.edu/iiif/2/3a34f988-f779-2e96-1786-8945b6b9c87d/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "cleveland:152006",
+      "source": "cleveland",
+      "title": "Rocky, Wooded Landscape with a Dell and Weir",
+      "creator": "Thomas Gainsborough (British, 1727–1788)",
+      "date": "c. 1782–1783",
+      "medium": "oil on canvas",
+      "source_url": "https://www.clevelandart.org/art/1984.59",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/152006",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1984.59/1984.59_web.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Cleveland Museum of Art share_license_status=CC0"
+      },
+      "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "smk:KMSsp163",
+      "source": "smk",
+      "title": "Wooded Landscape",
+      "creator": "Alexander Keirincx",
+      "date": "1615-1620",
+      "medium": "Oil on copper",
+      "source_url": "https://open.smk.dk/artwork/image/KMSsp163",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMSsp163&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/765375081_KMSsp163_crop.tif.jp2/full/!1024,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review"
+    }
+  ],
+  "sources_attempted": [
+    "met",
+    "artic",
+    "cleveland",
+    "smk",
+    "loc"
+  ],
+  "warnings": [
+    "loc: API unavailable: https://www.loc.gov/photos/: HTTP Error 429: Too Many Requests"
+  ],
+  "notes": "Catalog candidates only. No images saved and no content published."
+}

@@ -18,6 +18,7 @@ type PublicationRow = {
 };
 
 type CardEntry = Pick<LearningEntry, "title" | "subject" | "creator" | "era"> & {
+  href: string;
   imageUrl?: string;
   imageAlt: string;
   imageWidth?: number;
@@ -44,6 +45,7 @@ function publicationToCard(row: PublicationRow): CardEntry | null {
     imageAlt: text(mainAsset?.alt) || text(work.title) || title,
     imageWidth: typeof mainAsset?.width === "number" ? mainAsset.width : undefined,
     imageHeight: typeof mainAsset?.height === "number" ? mainAsset.height : undefined,
+    href: `/learning?entry=publication-${row.id}`,
   };
 }
 
@@ -91,7 +93,7 @@ export function DailyLearningCardContent() {
         <BookOpen aria-hidden="true" className="h-3.5 w-3.5" />
         <TranslatedText translationKey="learning.card.eyebrow" />
       </p>
-      <Link href="/learning" target="_blank" rel="noopener noreferrer" aria-label={entry ? `打开每日一看：${entry.title}` : "打开每日一看"} className="group grid h-5 w-5 shrink-0 place-items-center rounded-full text-white/55 transition-[border-color,color,background-color] hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+      <Link href={entry?.href ?? "/learning"} target="_blank" rel="noopener noreferrer" aria-label={entry ? `打开每日一看：${entry.title}` : "打开每日一看"} className="group grid h-5 w-5 shrink-0 place-items-center rounded-full text-white/55 transition-[border-color,color,background-color] hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
         <ArrowUpRight aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0" />
       </Link>
     </div>

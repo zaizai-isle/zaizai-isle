@@ -45,22 +45,12 @@ export function LearningPublicationUnavailable() {
         <p>可以稍后再试，或先看看其他内容。</p>
         <Link href="/learning">返回每日一看</Link>
       </section>
-      <ArchiveCta />
       <footer className="learning-footer">ZAIZAI ISLE<span>每天一点，慢慢看见。</span></footer>
     </div>
   </main>;
 }
 
-// 往期是独立合集页（/learning/archive），文章页只留入口，不再内嵌往期列表。
-function ArchiveCta() {
-  return <section className="learning-archive-cta" aria-labelledby="learning-archive-cta-title">
-    <div>
-      <h2 id="learning-archive-cta-title">往期合集</h2>
-      <p>错过的这里可以补看。</p>
-    </div>
-    <Link href="/learning/archive" className="learning-pill">浏览全部往期 →</Link>
-  </section>;
-}
+// 页头吸顶（sticky），"往期内容"入口常驻头部，正文底部不再放合集入口。
 
 // R7 诚实空状态：今天没有新内容时如实说明，不回退旧稿正文。
 export function LearningTodayEmpty() {
@@ -72,7 +62,6 @@ export function LearningTodayEmpty() {
         <h2>今天没有新内容</h2>
         <p>下一篇还在打磨，明天再来看看吧。</p>
       </section>
-      <ArchiveCta />
       <footer className="learning-footer">ZAIZAI ISLE<span>每天一点，慢慢看见。</span></footer>
     </div>
   </main>;
@@ -83,7 +72,6 @@ export function LearningArticle({ entry }: { entry: LearningEntry }) {
     <div className="learning-shell">
       <LearningHeader />
       <LearningArticleContent entry={entry} />
-      <ArchiveCta />
       <footer className="learning-footer">ZAIZAI ISLE<span>每天一点，慢慢看见。</span></footer>
     </div>
   </main>;

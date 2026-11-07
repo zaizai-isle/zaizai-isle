@@ -1,6 +1,6 @@
 .learning-page { background: #f5f4f0; color: #181818; min-height: 100vh; color-scheme: light; }
 .learning-shell { width: 100%; padding: 0 clamp(28px, 5vw, 96px); }
-.learning-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 80px; }
+.learning-header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 80px; background: #f5f4f0; border-bottom: 1px solid #e7e5df; }
 .learning-header-heading { display: flex; min-width: 0; align-items: center; gap: 12px; }
 .learning-header-actions { display: flex; flex: none; align-items: center; gap: 16px; }
 .learning-admin-link { color: #747474; font-size: 12px; white-space: nowrap; }
@@ -119,9 +119,6 @@
 .learning-archive-skeleton-bar { display: block; height: 14px; border-radius: 999px; background: #e8e5df; }
 .learning-archive-skeleton-bar-short { width: 60%; }
 .learning-archive-no-image { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; border-radius: 4px; background: #eceae4; margin-bottom: 20px; }
-.learning-archive-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: clamp(40px, 5vw, 72px) 0; border-top: 1px solid #e7e5df; }
-.learning-archive-cta h2 { font-size: 22px; font-weight: 400; }
-.learning-archive-cta p { padding-top: 8px; font-size: 13px; color: #686868; }
 .learning-footer { display: flex; justify-content: space-between; gap: 24px; padding: 28px 0; font-size: 11px; color: #686868; letter-spacing: .08em; }
 .learning-unavailable { padding: 64px 0; }
 .learning-unavailable p, .learning-unavailable h2 { margin-bottom: 20px; }

@@ -125,6 +125,21 @@ export async function listRecentPublicationSummaries(today = pontianakToday(), l
   return (data as PublicationSummaryRow[] | null) ?? [];
 }
 
+/** 往期合集：全部可见发布（含今天），精简列 + 主图信息，供 /learning/archive 使用。 */
+export async function listAllPublicationSummaries(limit = 1000): Promise<PublicationSummaryRow[]> {
+  const client = getOptionalSupabase();
+  if (!client) throw new Error("Supabase 未配置，无法读取往期合集。");
+  const { data, error } = await client
+    .from("daily_learning_publications")
+    .select(PUBLICATION_SUMMARY_COLUMNS)
+    .eq("is_visible", true)
+    .order("display_date", { ascending: false })
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (error) throw new Error("往期合集读取失败。");
+  return (data as PublicationSummaryRow[] | null) ?? [];
+}
+
 /** 按 publication id 读取完整行，兼容旧的 /learning?entry=publication-<id> 深链。 */
 export async function fetchPublishedPublicationById(id: string): Promise<PublicationRow | null> {
   const client = getOptionalSupabase();

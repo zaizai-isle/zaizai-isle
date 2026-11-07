@@ -93,3 +93,44 @@ export function publicationRowToEntry(row: PublicationRow): LearningEntry {
     isPublishedRecord: true,
   };
 }
+
+/** 往期合集卡片只需要标题/日期/主图：摘要行 → 轻量 LearningEntry（纯字段映射）。 */
+export function summaryToEntry(row: PublicationSummaryRow, imageUrl?: string): LearningEntry {
+  const title = row.title || "未命名作品";
+  return {
+    id: `publication-${row.id}`,
+    contentId: row.content_id || undefined,
+    publishDate: row.display_date ?? row.published_at.slice(0, 10),
+    title,
+    subject: row.subject || title,
+    era: "",
+    summary: "",
+    context: "",
+    influence: "",
+    question: "",
+    creator: "",
+    sourceLabel: "",
+    sourceUrl: "",
+    category: "艺术与设计",
+    imageUrl,
+    isPublishedRecord: true,
+  };
+}
+
+/** 摘要行主图缩略：优先本地清单缩略，回退远端 image_url。素材清单动态导入，不进调用方初始模块图。 */
+export async function withThumbs(rows: PublicationSummaryRow[]): Promise<LearningEntry[]> {
+  if (!rows.length) return [];
+  const { learningThumbnailUrl } = await import("./learning-asset-cache");
+  return rows.map((row) => {
+    const main = (row.assets ?? []).find((asset) => asset.role === "main");
+    const assetId = typeof main?.asset_id === "string" ? main.asset_id : "";
+    const remote = typeof main?.image_url === "string" ? main.image_url : "";
+    return summaryToEntry(row, assetId || remote ? learningThumbnailUrl(assetId, remote) : undefined);
+  });
+}
+
+/** 文章链接：生产静态导出用 content_id 深链（构建期已按发布表生成）；dev 走 ?entry= 客户端解析。 */
+export function learningEntryHref(item: { id: string; contentId?: string; isPublishedRecord?: boolean }) {
+  if (item.contentId && process.env.NODE_ENV === "production") return `/learning/${encodeURIComponent(item.contentId)}`;
+  return item.isPublishedRecord ? `/learning?entry=${encodeURIComponent(item.id)}` : `/learning/${item.id}`;
+}

@@ -48,3 +48,8 @@ next-env.d.ts
 
 # Private Codex-produced review packages. Import through the owner review page.
 /.codex-output/learning-drafts/
+
+# 未引用的大体量原始扫描件 / 本地临时目录
+public/learning/assets/CMA_1983.88_full.tif
+scripts/__pycache__/
+.tmp-design-ref/

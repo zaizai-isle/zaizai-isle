@@ -55,6 +55,8 @@ export type LearningPackageV2 = {
     alt: string;
     crop: null | { x: number; y: number; width: number; height: number };
     availability_status: "verified" | "needs_review" | "blocked";
+    rights_status: "risk" | "open" | "open-commons" | "unverified";
+    rights_note?: string;
   }[];
   quality: {
     editorial_guideline_version: string;
@@ -73,6 +75,11 @@ export type LearningPackageValidation = {
   value?: LearningPackageV2;
 };
 
+export type LearningPackagePublicationValidation = {
+  publishable: boolean;
+  errors: string[];
+};
+
 const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const isText = (value: unknown, minimum = 1) => typeof value === "string" && value.trim().length >= minimum;
 const isHttpUrl = (value: unknown) => {
@@ -86,6 +93,8 @@ const validCrop = (value: unknown) => {
   const { x, y, width, height } = value as Record<string, number>;
   return x >= 0 && y >= 0 && width > 0 && height > 0 && x + width <= 1 && y + height <= 1;
 };
+const forbiddenReaderTerms = ["审核中", "待审核", "待审", "pending_review", "awaiting_owner_review", "草稿", "draft", "TODO", "FIXME"] as const;
+const forbiddenReaderHit = (value: unknown) => typeof value === "string" ? forbiddenReaderTerms.find((term) => value.toLowerCase().includes(term.toLowerCase())) : undefined;
 
 export function validateLearningPackageV2(input: unknown): LearningPackageValidation {
   const errors: string[] = [];
@@ -138,7 +147,10 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
   else {
     const assetIds = new Set<string>();
     const mainAssets = input.assets.filter((asset) => asset.role === "main");
-    if (mainAssets.length !== 1) errors.push("必须且只能提供一张主图。");
+    if (mainAssets.length !== 1) {
+      errors.push("必须且只能提供一张主图。");
+      blockers.push(`主图必须恰好一张，当前 ${mainAssets.length} 张。`);
+    }
     input.assets.forEach((asset, index) => {
       for (const field of ["asset_id", "rights_statement", "attribution", "alt"] as const) if (!isText(asset[field])) errors.push(`assets[${index}].${field} 不能为空。`);
       const assetId = typeof asset.asset_id === "string" ? asset.asset_id : "";
@@ -150,6 +162,8 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
       if (!hasOnly(asset.role, ["main", "detail", "comparison"] as const)) errors.push(`assets[${index}].role 无效。`);
       if (!Number.isInteger(asset.width) || Number(asset.width) <= 0 || !Number.isInteger(asset.height) || Number(asset.height) <= 0) errors.push(`assets[${index}] 必须记录有效宽高。`);
       if (!hasOnly(asset.availability_status, ["verified", "needs_review", "blocked"] as const)) errors.push(`assets[${index}].availability_status 无效。`);
+      if (!hasOnly(asset.rights_status, ["risk", "open", "open-commons", "unverified"] as const)) blockers.push(`assets[${index}].rights_status 必须为 risk、open、open-commons 或 unverified。`);
+      else if ((asset.rights_status === "risk" || asset.rights_status === "unverified") && !isText(asset.rights_note)) blockers.push(`assets[${index}].rights_status 为 ${asset.rights_status} 时 rights_note 必填。`);
       if (asset.crop !== null) {
         if (!validCrop(asset.crop)) errors.push(`assets[${index}].crop 必须是 0–1 范围内的有效矩形。`);
       }
@@ -173,6 +187,25 @@ export function validateLearningPackageV2(input: unknown): LearningPackageValida
     if (!Array.isArray(quality.human_review_items) || !quality.human_review_items.every(isText)) errors.push("quality.human_review_items 无效。");
   }
 
+  const readerTextPaths: [string, unknown][] = [];
+  if (isRecord(work)) for (const field of ["title", "creator", "date", "medium", "institution"] as const) readerTextPaths.push([`work.${field}`, work[field]]);
+  if (isRecord(article)) {
+    for (const field of ["title", "introduction", "history", "connection", "question"] as const) readerTextPaths.push([`article.${field}`, article[field]]);
+    if (records(article.observations)) article.observations.forEach((item, index) => readerTextPaths.push([`article.observations[${index}].heading`, item.heading], [`article.observations[${index}].body`, item.body]));
+  }
+  if (records(input.assets)) input.assets.forEach((asset, index) => { for (const field of ["alt", "attribution", "rights_statement"] as const) readerTextPaths.push([`assets[${index}].${field}`, asset[field]]); });
+  readerTextPaths.forEach(([path, value]) => { const hit = forbiddenReaderHit(value); if (hit) blockers.push(`读者可见文本 ${path} 含内部状态词「${hit}」。`); });
+
   const uniqueBlockers = [...new Set(blockers)];
   return { valid: errors.length === 0, readyForOwnerReview: errors.length === 0 && uniqueBlockers.length === 0, errors, blockers: uniqueBlockers, value: errors.length === 0 ? input as LearningPackageV2 : undefined };
+}
+
+export function validateLearningPackageForPublication(input: unknown): LearningPackagePublicationValidation {
+  const validation = validateLearningPackageV2(input);
+  if (!validation.valid || !validation.value) return { publishable: false, errors: validation.errors };
+
+  const mainAsset = validation.value.assets.find((asset) => asset.role === "main");
+  if (!mainAsset) return { publishable: false, errors: ["正式发布必须包含一张主图。"] };
+
+  return { publishable: true, errors: [] };
 }

@@ -50,6 +50,38 @@ export function LearningPublicationUnavailable() {
   </main>;
 }
 
+export type LearningPickItem = { id: string; contentId?: string; publishDate: string; title: string };
+
+export function learningEntryHref(item: { id: string; contentId?: string; isPublishedRecord?: boolean }) {
+  if (item.contentId) return `/learning/${encodeURIComponent(item.contentId)}`;
+  return item.isPublishedRecord ? `/learning?entry=${encodeURIComponent(item.id)}` : `/learning/${item.id}`;
+}
+
+// R7 诚实空状态：今天没有新内容时如实说明，下方给往期精选，不回退旧稿正文。
+export function LearningTodayEmpty({ recent }: { recent: LearningPickItem[] }) {
+  return <main className="learning-page">
+    <div className="learning-shell">
+      <LearningHeader />
+      <section className="learning-unavailable">
+        <p className="learning-kicker">每日一看</p>
+        <h2>今天没有新内容</h2>
+        <p>下一篇还在打磨，明天再来看看吧。</p>
+      </section>
+      <section className="learning-history" aria-labelledby="learning-picks-title">
+        <div className="learning-section-heading"><h2 id="learning-picks-title">往期精选</h2><p>错过的这里可以补看。</p></div>
+        {recent.length ? <ul className="learning-picks-list">{recent.map((item) => (
+          <li key={item.id}><Link prefetch={false} href={learningEntryHref(item)}>
+            <time dateTime={item.publishDate}>{item.publishDate.replaceAll("-", ".")}</time>
+            <h3>{item.title}</h3>
+            <span aria-hidden="true">↗</span>
+          </Link></li>
+        ))}</ul> : <p className="learning-muted">往期精选暂时列不出来，稍后再来看看。</p>}
+      </section>
+      <footer className="learning-footer">ZAIZAI ISLE<span>每天一点，慢慢看见。</span></footer>
+    </div>
+  </main>;
+}
+
 export function LearningArticle({ entry, entries = learningEntries }: { entry: LearningEntry; entries?: LearningEntry[] }) {
   return <main className="learning-page">
     <div className="learning-shell">
@@ -60,7 +92,7 @@ export function LearningArticle({ entry, entries = learningEntries }: { entry: L
         <div className="learning-history-grid">{entries.filter((item) => item.isPublishedRecord || illustratedEntryIds.includes(item.id)).map((item) => {
           const image = learningVisuals[item.id];
           const historyImage = image ? learningImagePath(image.asset, "small") : item.imageUrl;
-          const href = item.isPublishedRecord ? `/learning?entry=${encodeURIComponent(item.id)}` : `/learning/${item.id}`;
+          const href = learningEntryHref(item);
           return <Link prefetch={false} href={href} key={item.id} aria-current={entry.id === item.id ? "page" : undefined} className="learning-history-link">
             {historyImage ? <Image src={historyImage} width={480} height={image ? Math.round(480 * image.height / image.width) : 480} alt={item.subject} loading="lazy" /> : null}
             <span className="learning-kicker">{image?.category ?? item.category ?? "艺术与设计"} · {item.publishDate}</span><h3>{item.subject}</h3><p>{item.title}</p>

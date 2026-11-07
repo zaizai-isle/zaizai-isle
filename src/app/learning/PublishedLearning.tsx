@@ -2,124 +2,102 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { LearningArticle, LearningArticleLoading, LearningPublicationUnavailable } from "./LearningArticle";
-import { learningEntries, type LearningArticleAsset, type LearningEntry } from "./learning-content";
-import { learningAssetUrl } from "./learning-asset-cache";
-import { learningDetailCrop } from "./learning-detail-decisions";
+import { LearningArticle, LearningArticleLoading, LearningPublicationUnavailable, LearningTodayEmpty } from "./LearningArticle";
+import { learningEntries, type LearningEntry } from "./learning-content";
+import type { PublicationSummaryRow } from "./learning-publication-entry";
 
-type PublicationRow = {
-  id: string;
-  source_id: string;
-  source_record: Record<string, unknown>;
-  content: Record<string, unknown>;
-  published_at: string;
-  package_schema_version?: number|null;
-  package_snapshot?: Record<string,unknown>|null;
-  display_date?: string|null;
-};
+type PublishedState =
+  | { kind: "loading" }
+  | { kind: "unavailable" }
+  | { kind: "empty"; recent: PublicationSummaryRow[] }
+  | { kind: "article"; entry: LearningEntry; recent: PublicationSummaryRow[] };
 
-const text = (value: unknown) => typeof value === "string" ? value : "";
-
-function sourceLabel(source: string) {
-  return ({ smk: "SMK 丹麦国家美术馆", artic: "Art Institute of Chicago", cleveland: "Cleveland Museum of Art", met: "The Metropolitan Museum of Art", loc: "Library of Congress" } as Record<string, string>)[source] || source || "馆藏机构";
-}
-
-function toEntry(row: PublicationRow): LearningEntry {
-  const snapshot=row.package_schema_version===2&&row.package_snapshot?row.package_snapshot:null;
-  const record = snapshot&&snapshot.work&&typeof snapshot.work==="object"?snapshot.work as Record<string,unknown>:row.source_record;
-  const content = snapshot&&snapshot.article&&typeof snapshot.article==="object"?snapshot.article as Record<string,unknown>:row.content;
-  const contentId = snapshot ? text(snapshot.content_id) : "";
-  const assets=snapshot&&Array.isArray(snapshot.assets)?snapshot.assets as Record<string,unknown>[]:[];
-  const mainAsset=assets.find(asset=>asset.role==="main");
-  const rights = record.rights && typeof record.rights === "object" ? record.rights as Record<string, unknown> : {};
-  const observations = Array.isArray(content.observations) ? content.observations.flatMap((item, observationIndex) => {
-    if (!item || typeof item !== "object") return [];
-    const value = item as Record<string, unknown>;
-    const heading = text(value.heading);
-    const body = text(value.body);
-    const assetIds = Array.isArray(value.asset_ids) ? value.asset_ids.filter((assetId): assetId is string => typeof assetId === "string") : [];
-    const rawCrop = value.crop && typeof value.crop === "object" ? value.crop as Record<string, unknown> : null;
-    const crop = rawCrop ? { x: Number(rawCrop.x), y: Number(rawCrop.y), width: Number(rawCrop.width), height: Number(rawCrop.height) } : learningDetailCrop(contentId, observationIndex);
-    return heading && body ? [{ heading, body, assetIds, crop }] : [];
-  }) : [];
-  const articleAssets: LearningArticleAsset[] = assets.flatMap((asset) => {
-    const id = text(asset.asset_id);
-    const imageUrl = text(asset.image_url);
-    const sourceUrl = text(asset.source_page);
-    const role = asset.role;
-    if (!id || !imageUrl || !sourceUrl || !["main", "detail", "comparison"].includes(String(role))) return [];
-    const rawCrop = asset.crop && typeof asset.crop === "object" ? asset.crop as Record<string, unknown> : null;
-    const crop = rawCrop ? { x: Number(rawCrop.x), y: Number(rawCrop.y), width: Number(rawCrop.width), height: Number(rawCrop.height) } : undefined;
-    return [{ id, role: role as LearningArticleAsset["role"], imageUrl: learningAssetUrl(id, imageUrl), sourceUrl, width: Number(asset.width) || 1024, height: Number(asset.height) || 1024, alt: text(asset.alt) || text(record.title), attribution: text(asset.attribution), rightsStatement: text(asset.rights_statement), licenseUrl: text(asset.license_url), crop }];
-  });
+// 精选/历史卡片只渲染标题与日期，纯字段映射，留在本文件避免把素材清单带进初始模块图。
+function summaryToEntry(row: PublicationSummaryRow): LearningEntry {
+  const title = row.title || "未命名作品";
   return {
     id: `publication-${row.id}`,
-    contentId,
+    contentId: row.content_id || undefined,
     publishDate: row.display_date ?? row.published_at.slice(0, 10),
-    title: text(content.title) || text(record.title),
-    subject: text(content.subject) || text(record.title),
-    creator: text(content.creator) || text(record.creator) || "作者未详",
-    era: text(content.era) || text(record.date),
-    summary: text(content.introduction),
-    context: text(content.history),
-    influence: text(content.connection),
-    question: text(content.question),
-    sourceLabel: text(record.institution)||sourceLabel(text(record.source)),
-    sourceUrl: text(record.source_url),
-    imageUrl: mainAsset ? learningAssetUrl(text(mainAsset.asset_id), text(mainAsset.image_url)) : text(record.image_url) || undefined,
-    imageWidth: Number(mainAsset?.width)||Number(record.image_width)||1024,
-    imageHeight: Number(mainAsset?.height)||Number(record.image_height)||1024,
-    imageAlt: text(mainAsset?.alt)||text(record.title) || text(content.subject) || "馆藏作品",
-    imageCredit: text(mainAsset?.attribution)||`${text(record.institution)||sourceLabel(text(record.source))} · ${text(record.title)}`,
-    imageLicense: text(mainAsset?.rights_statement)||text(record.rights_label) || (rights.catalog_public_domain ? "Public Domain" : text(rights.source_rights_note)),
-    imageLicenseUrl: text(mainAsset?.license_url)||text(rights.rights_url),
-    medium: text(record.medium),
+    title,
+    subject: row.subject || title,
+    era: "",
+    summary: "",
+    context: "",
+    influence: "",
+    question: "",
+    creator: "",
+    sourceLabel: "",
+    sourceUrl: "",
     category: "艺术与设计",
-    observations,
-    assets: articleAssets,
     isPublishedRecord: true,
   };
 }
 
-export function PublishedLearning({ initialEntry }: { initialEntry: LearningEntry }) {
+export function PublishedLearning() {
   const searchParams = useSearchParams();
   const requested = searchParams.get("entry");
-  const [publishedEntries, setPublishedEntries] = useState<LearningEntry[] | null>(null);
+  const [state, setState] = useState<PublishedState>({ kind: "loading" });
 
   useEffect(() => {
     let active = true;
-    void import("@/lib/supabaseClient").then(async ({ getOptionalSupabase }) => {
-      const client = getOptionalSupabase();
-      if (!client) {
-        if (active) setPublishedEntries([]);
-        return;
+    void (async () => {
+      // 数据层与完整正文映射保持动态导入：supabase-js 与素材清单不进入初始模块图。
+      const { getOptionalSupabase, fetchTodayPublishedPublication, fetchPublishedPublicationById, listRecentPublicationSummaries, pontianakToday } = await import("./learning-repository");
+      try {
+        const client = getOptionalSupabase();
+        if (!client) {
+          if (active) setState({ kind: "unavailable" });
+          return;
+        }
+
+        // 旧深链兼容：/learning?entry=publication-<id> 或 ?entry=<静态选题 id>。
+        if (requested) {
+          if (requested.startsWith("publication-")) {
+            const { publicationRowToEntry } = await import("./learning-publication-entry");
+            const row = await fetchPublishedPublicationById(requested.slice("publication-".length));
+            if (!active) return;
+            setState(row ? { kind: "article", entry: publicationRowToEntry(row), recent: [] } : { kind: "unavailable" });
+            return;
+          }
+          const selected = learningEntries.find((item) => item.id === requested);
+          if (active) setState(selected ? { kind: "article", entry: selected, recent: [] } : { kind: "unavailable" });
+          return;
+        }
+
+        // 当日全文与往期精选并行请求；两者都只读 is_visible 行。
+        const today = pontianakToday();
+        const [todayResult, recentResult] = await Promise.allSettled([
+          fetchTodayPublishedPublication(today),
+          listRecentPublicationSummaries(today, 5),
+        ]);
+        if (!active) return;
+        if (todayResult.status === "rejected") {
+          console.warn("[learning] 今日内容读取失败，显示不可用状态（不回退旧稿）。", todayResult.reason);
+          setState({ kind: "unavailable" });
+          return;
+        }
+        const recent = recentResult.status === "fulfilled" ? recentResult.value : [];
+        if (recentResult.status === "rejected") console.warn("[learning] 往期精选读取失败，列表暂时为空。", recentResult.reason);
+        if (todayResult.value) {
+          const { publicationRowToEntry } = await import("./learning-publication-entry");
+          if (active) setState({ kind: "article", entry: publicationRowToEntry(todayResult.value), recent });
+          return;
+        }
+        // 诚实空状态：今天没有已发布内容，不展示旧稿正文。
+        if (active) setState({ kind: "empty", recent });
+      } catch (error) {
+        console.warn("[learning] 已发布内容读取失败，显示不可用状态（不回退旧稿）。", error);
+        if (active) setState({ kind: "unavailable" });
       }
-      const { data, error } = await client.from("daily_learning_publications")
-        .select("id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot")
-        .eq("is_visible", true)
-        .order("display_date", { ascending: false })
-        .order("published_at", { ascending: false })
-        .limit(100);
-      if (!active) return;
-      if (error || !data?.length) {
-        setPublishedEntries([]);
-        return;
-      }
-      const published = (data as PublicationRow[]).map(toEntry);
-      setPublishedEntries(published);
-    }).catch(() => {
-      if (active) setPublishedEntries([]);
-    });
+    })();
     return () => { active = false; };
-  }, []);
+  }, [requested]);
 
-  if (publishedEntries === null) return <LearningArticleLoading />;
+  if (state.kind === "loading") return <LearningArticleLoading />;
+  if (state.kind === "unavailable") return <LearningPublicationUnavailable />;
+  if (state.kind === "empty") return <LearningTodayEmpty recent={state.recent.map(summaryToEntry)} />;
 
-  const entries = [...publishedEntries, ...learningEntries];
-  if (requested) {
-    const selected = entries.find((item) => item.id === requested);
-    return selected ? <LearningArticle entry={selected} entries={entries} /> : <LearningPublicationUnavailable />;
-  }
-
-  return <LearningArticle entry={publishedEntries[0] ?? initialEntry} entries={entries} />;
+  const entries = [...state.recent.map(summaryToEntry), ...learningEntries];
+  return <LearningArticle entry={state.entry} entries={entries} />;
 }

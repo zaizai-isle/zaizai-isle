@@ -50,6 +50,41 @@ def get_json(url: str) -> dict[str, Any]:
     raise RuntimeError(f"API unavailable: {url.split('?')[0]}: {last_error}")
 
 
+REACH_LOG = OUT / "source-reachability.json"
+
+
+def probe_url(url: str) -> dict[str, Any]:
+    """R3 可达性探测：取前 1KB 验证真实图片可达，不可达来源不选入当日包。"""
+    last: Exception | None = None
+    for attempt in range(2):
+        try:
+            request = Request(url, headers={**HEADERS, "Range": "bytes=0-1023"})
+            with urlopen(request, timeout=15) as response:
+                response.read(1024)
+                return {"ok": True, "status": response.status}
+        except (HTTPError, URLError, TimeoutError) as error:
+            last = error
+            if attempt == 0:
+                time.sleep(1)
+    return {"ok": False, "status": getattr(last, "code", None), "reason": str(last)[:160]}
+
+
+def probe_candidates(items: list[dict[str, Any]], warnings: list[str]) -> list[dict[str, Any]]:
+    log = json.loads(REACH_LOG.read_text(encoding="utf-8")) if REACH_LOG.exists() else {}
+    reachable: list[dict[str, Any]] = []
+    for item in items:
+        url = item.get("image_url", "")
+        result = probe_url(url)
+        log[url] = {"checked_at": datetime.now(TZ).isoformat(), **result}
+        if result["ok"]:
+            item["reachability"] = result
+            reachable.append(item)
+        else:
+            warnings.append(f"unreachable image dropped: {url[:100]} ({result.get('reason') or result.get('status')})")
+    REACH_LOG.write_text(json.dumps(log, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return reachable
+
+
 def first_text(value: Any) -> str:
     if isinstance(value, str):
         return value.strip()
@@ -277,6 +312,11 @@ def main() -> int:
             print(warning, file=sys.stderr)
         return 1
     items = items[:MAX_ITEMS]
+    # R3 可达性前置：主图不可达的候选不进当日包（规则 v1 §四）
+    items = probe_candidates(items, warnings)
+    if not items:
+        print("All candidates unreachable; nothing selected.", file=sys.stderr)
+        return 1
     record = {
         "schema_version": 1,
         "status": "research_candidates_only",

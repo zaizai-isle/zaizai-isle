@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 730" font-family="Kaiti SC, STKaiti, serif">
+<rect width="600" height="730" fill="#FBF6E7"/>
+<g transform="rotate(2.5 300 380)"><rect x="118" y="52" width="420" height="560" rx="10" fill="#F3EAD3" stroke="#C9BFA6" stroke-width="1.5"/></g>
+<g transform="rotate(-1 300 380)"><rect x="98" y="64" width="420" height="560" rx="10" fill="#EFE6CC" stroke="#C9BFA6" stroke-width="1.5"/></g>
+<g transform="rotate(-2 300 380)">
+<rect x="80" y="70" width="440" height="560" rx="8" fill="#E9CFA8" stroke="#C09A66" stroke-width="1.5"/>
+<path d="M 80 70 l 34 0 l -14 14 Z" fill="#B5544B" opacity=".8"/>
+<path d="M 80 70 l 0 34 l 14 -14 Z" fill="#B5544B" opacity=".8"/>
+<path d="M 520 70 l -34 0 l 14 14 Z" fill="#B5544B" opacity=".8"/>
+<path d="M 520 70 l 0 34 l 14 14 Z" fill="#B5544B" opacity=".8"/>
+<path d="M 112 108 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 5.8 5.8 0 0 1 11.6 0 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 6.2 6.2 0 0 1 0 12.5 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 5.8 5.8 0 0 1 -11.6 0 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 a 6.2 6.2 0 0 1 0 -12.5 Z" fill="#8FB3CE" stroke="#FFFFFF" stroke-width="2"/>
+<rect x="146" y="134" width="60" height="78" rx="8" fill="#B5544B"/>
+<rect x="154" y="124" width="44" height="16" rx="6" fill="#B5544B"/>
+<rect x="160" y="130" width="32" height="5" rx="2.5" fill="#FBF6E7"/>
+<rect x="162" y="164" width="28" height="16" rx="3" fill="#FBF6E7" opacity=".9"/>
+<text x="176.0" y="244" text-anchor="middle" font-size="22" font-weight="bold" fill="#FFFFFF">84</text>
+<text x="176.0" y="126" text-anchor="middle" font-size="11" letter-spacing="2" fill="#FFFFFF">POST</text>
+<g transform="rotate(-12 300 150)" opacity=".82">
+<path d="M 150.0,128.0 L 153.0,131.5 L 156.0,133.0 L 159.0,131.5 L 162.0,128.0 L 165.0,124.5 L 168.0,123.0 L 171.0,124.5 L 174.0,128.0 L 177.0,131.5 L 180.0,133.0 L 183.0,131.5 L 186.0,128.0 L 189.0,124.5 L 192.0,123.0 L 195.0,124.5 L 198.0,128.0 L 201.0,131.5 L 204.0,133.0 L 207.0,131.5 L 210.0,128.0 L 213.0,124.5 L 216.0,123.0 L 219.0,124.5 L 222.0,128.0 L 225.0,131.5 L 228.0,133.0 L 231.0,131.5 L 234.0,128.0 L 237.0,124.5 L 240.0,123.0 L 243.0,124.5 L 246.0,128.0 L 249.0,131.5 L 252.0,133.0 L 255.0,131.5 L 258.0,128.0 L 261.0,124.5 L 264.0,123.0 L 267.0,124.5 L 270.0,128.0" stroke="#B5544B" stroke-width="2.5" fill="none"/>
+<path d="M 150.0,148.0 L 153.0,151.5 L 156.0,153.0 L 159.0,151.5 L 162.0,148.0 L 165.0,144.5 L 168.0,143.0 L 171.0,144.5 L 174.0,148.0 L 177.0,151.5 L 180.0,153.0 L 183.0,151.5 L 186.0,148.0 L 189.0,144.5 L 192.0,143.0 L 195.0,144.5 L 198.0,148.0 L 201.0,151.5 L 204.0,153.0 L 207.0,151.5 L 210.0,148.0 L 213.0,144.5 L 216.0,143.0 L 219.0,144.5 L 222.0,148.0 L 225.0,151.5 L 228.0,153.0 L 231.0,151.5 L 234.0,148.0 L 237.0,144.5 L 240.0,143.0 L 243.0,144.5 L 246.0,148.0 L 249.0,151.5 L 252.0,153.0 L 255.0,151.5 L 258.0,148.0 L 261.0,144.5 L 264.0,143.0 L 267.0,144.5 L 270.0,148.0" stroke="#B5544B" stroke-width="2.5" fill="none"/>
+<ellipse cx="330" cy="140" rx="62" ry="40" fill="none" stroke="#B5544B" stroke-width="3"/>
+<ellipse cx="330" cy="140" rx="52" ry="31" fill="none" stroke="#B5544B" stroke-width="1.2"/>
+<text x="330" y="132" text-anchor="middle" font-size="15" fill="#B5544B" letter-spacing="1">再再岛</text>
+<text x="330" y="154" text-anchor="middle" font-size="14" fill="#B5544B">2025.10.01</text>
+</g>
+<g transform="rotate(9 430 260)">
+<rect x="372" y="212" width="120" height="190" rx="10" fill="none" stroke="#4A6B8A" stroke-width="3"/>
+<path d="M 388 240 l 26 10 l -26 10 l 6 -10 Z" fill="#4A6B8A"/>
+<text x="432" y="290" text-anchor="middle" font-size="17" fill="#4A6B8A" font-weight="bold">CHINA</text>
+<text x="432" y="312" text-anchor="middle" font-size="13" fill="#4A6B8A">大理 Dali</text>
+<text x="432" y="340" text-anchor="middle" font-size="15" fill="#4A6B8A" font-weight="bold">2025</text>
+<path d="M 384 360 h 96 M 384 372 h 96" stroke="#4A6B8A" stroke-width="1.5" stroke-dasharray="4 4"/>
+</g>
+<g transform="rotate(-6 160 300)">
+<path d="M 160 262 L 196 322 L 124 322 Z" fill="none" stroke="#7A5C8F" stroke-width="3" stroke-linejoin="round"/>
+<path d="M 148 310 l 8 -12 l 6 8 l 8 -14 l 10 18" stroke="#7A5C8F" stroke-width="2" fill="none" stroke-linejoin="round"/>
+<text x="160" y="318" text-anchor="middle" font-size="12" fill="#7A5C8F" font-weight="bold">25</text>
+</g>
+<path d="M 84.0,420.0 L 94.8,420.2 L 105.6,420.4 L 116.4,420.5 L 127.2,420.7 L 138.0,420.8 L 148.8,420.9 L 159.6,421.0 L 170.4,421.1 L 181.2,421.1 L 192.0,421.1 L 202.8,421.0 L 213.6,420.9 L 224.4,420.7 L 235.2,420.5 L 246.0,420.2 L 256.8,419.9 L 267.6,419.5 L 278.4,419.1 L 289.2,418.6 L 300.0,418.0 L 310.8,417.4 L 321.6,416.7 L 332.4,415.9 L 343.2,415.1 L 354.0,414.2 L 364.8,413.3 L 375.6,412.3 L 386.4,411.3 L 397.2,410.2 L 408.0,409.1 L 418.8,407.9 L 429.6,406.7 L 440.4,405.4 L 451.2,404.1 L 462.0,402.8 L 472.8,401.5 L 483.6,400.1 L 494.4,398.8 L 505.2,397.4 L 516.0,396.0" stroke="#A9744F" stroke-width="3" fill="none"/>
+<path d="M 84.0,426.0 L 94.8,426.2 L 105.6,426.4 L 116.4,426.5 L 127.2,426.7 L 138.0,426.8 L 148.8,426.9 L 159.6,427.0 L 170.4,427.1 L 181.2,427.1 L 192.0,427.1 L 202.8,427.0 L 213.6,426.9 L 224.4,426.7 L 235.2,426.5 L 246.0,426.2 L 256.8,425.9 L 267.6,425.5 L 278.4,425.1 L 289.2,424.6 L 300.0,424.0 L 310.8,423.4 L 321.6,422.7 L 332.4,421.9 L 343.2,421.1 L 354.0,420.2 L 364.8,419.3 L 375.6,418.3 L 386.4,417.3 L 397.2,416.2 L 408.0,415.1 L 418.8,413.9 L 429.6,412.7 L 440.4,411.4 L 451.2,410.1 L 462.0,408.8 L 472.8,407.5 L 483.6,406.1 L 494.4,404.8 L 505.2,403.4 L 516.0,402.0" stroke="#8A5A3B" stroke-width="1.6" fill="none" stroke-dasharray="6 5"/>
+<text x="120" y="500" font-size="34" fill="#33414F" transform="rotate(-1 120 500)">第一次一个人旅行&#9757;&#65039;</text>
+<text x="128" y="556" font-size="34" fill="#33414F" transform="rotate(-.6 128 556)">看到了洱海的日出</text>
+<text x="492" y="470" font-size="12" letter-spacing="3" fill="#33414F" opacity=".6" writing-mode="tb">zaizai isle</text>
+</g>
+<g>
+<path d="M 46 596 L 554 588 L 560 700 L 40 706 Z" fill="#D9B98C" stroke="#B08A5C" stroke-width="1.5"/>
+<path d="M 46 596 L 554 588 L 548 612 L 52 618 Z" fill="#C9A876"/>
+<g transform="translate(96 618)" stroke="#2A2622" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 2 14 C 0 2 14 -4 26 2 C 34 -8 46 -6 48 4 C 50 12 44 18 36 18 L 38 26 C 36 34 24 38 14 32 C 6 28 3 22 2 14 Z"/>
+<path d="M 44 8 L 66 12 C 70 14 70 20 64 22 L 46 20"/>
+<circle cx="34" cy="8" r="1.6" fill="#2A2622"/>
+<path d="M 14 36 l -2 14 M 26 36 l 1 14 M 10 50 h 8 M 24 50 h 8"/>
+<path d="M 12 -2 C 16 -10 30 -12 36 -4 M 8 0 h 32"/>
+</g>
+<text x="420" y="668" text-anchor="middle" font-size="40" fill="#2A2622" font-weight="bold">再再</text>
+</g>
+</svg>

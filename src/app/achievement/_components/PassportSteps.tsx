@@ -175,6 +175,7 @@ interface AchievementCreatorProps {
   photoUrl: string;
   fileError: string;
   previewError: string;
+  contentError: string;
   exportState: "idle" | "exporting" | "success" | "error";
   saveState: "idle" | "saving" | "success" | "error";
   saveError: string;
@@ -189,7 +190,7 @@ interface AchievementCreatorProps {
   onRestart: () => void;
 }
 
-export function AchievementCreator({ draft, category, photoUrl, fileError, previewError, exportState, saveState, saveError, isEditing, canvasRef, onCategoryChange, onDraftChange, onPhotoChange, onRemovePhoto, onSave, onExport, onRestart }: AchievementCreatorProps) {
+export function AchievementCreator({ draft, category, photoUrl, fileError, previewError, contentError, exportState, saveState, saveError, isEditing, canvasRef, onCategoryChange, onDraftChange, onPhotoChange, onRemovePhoto, onSave, onExport, onRestart }: AchievementCreatorProps) {
   const [inspirationOpen, setInspirationOpen] = useState(false);
   const [selectedInspirationId, setSelectedInspirationId] = useState<string | undefined>(draft.achievementId);
   const inspirationTriggerRef = useRef<HTMLButtonElement>(null);
@@ -299,8 +300,9 @@ export function AchievementCreator({ draft, category, photoUrl, fileError, previ
         <aside className="lg:min-h-0">
           <figure><div className="grid min-h-72 place-items-center"><canvas ref={canvasRef} aria-label={`${draft.title || "人生凭证"}实时预览`} className="max-h-[520px] w-auto max-w-full shadow-[0_18px_45px_rgba(32,38,36,0.2)] lg:max-h-[calc(100dvh-250px)]" /></div><figcaption className="mt-2 flex items-center justify-between gap-4 font-mono text-[11px] tracking-[0.08em] text-[#686d68]"><span>这一程，确实发生过</span><span>LIFE PASSPORT</span></figcaption></figure>
           {previewError ? <p role="alert" className="mt-3 text-sm text-[#a02f28]">{previewError}</p> : null}
-          <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center"><button type="button" onClick={onRestart} className="flex h-11 items-center justify-center gap-2 px-3 text-sm text-[#5f6560] hover:text-[#263b35]"><RotateCcw className="h-3.5 w-3.5" />重新填写</button><div className="flex flex-col gap-2 sm:flex-row sm:justify-end"><button type="button" disabled={!draft.title.trim() || exportState === "exporting" || Boolean(previewError)} onClick={onExport} className="achievement-handwriting journal-topic relative flex h-10 items-center justify-center gap-2 px-4 text-base text-[#526b45] hover:text-[#263b35] disabled:cursor-not-allowed disabled:opacity-45">{exportState === "exporting" ? "正在生成…" : "下载 PNG"}<Download className="h-4 w-4" /></button><button type="button" disabled={!draft.title.trim() || saveState === "saving" || Boolean(previewError)} onClick={onSave} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-base font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{saveState === "saving" ? "正在收入护照…" : isEditing ? "更新这枚印章" : "保存到我的护照"}<BookMarked className="h-4 w-4" /></button></div></div>
+          <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center"><button type="button" onClick={onRestart} className="flex h-11 items-center justify-center gap-2 px-3 text-sm text-[#5f6560] hover:text-[#263b35]"><RotateCcw className="h-3.5 w-3.5" />重新填写</button><div className="flex flex-col gap-2 sm:flex-row sm:justify-end"><button type="button" disabled={!draft.title.trim() || exportState === "exporting" || Boolean(previewError)} onClick={onExport} className="achievement-handwriting journal-topic relative flex h-10 items-center justify-center gap-2 px-4 text-base text-[#526b45] hover:text-[#263b35] disabled:cursor-not-allowed disabled:opacity-45">{exportState === "exporting" ? "正在生成…" : "下载 PNG"}<Download className="h-4 w-4" /></button><button type="button" disabled={!draft.title.trim() || saveState === "saving" || Boolean(previewError) || Boolean(contentError)} onClick={onSave} className="journal-ink-button flex h-10 items-center justify-center gap-2 bg-[#263b35] px-5 text-base font-semibold text-[#f2f0e8] hover:bg-[#526b45] disabled:cursor-not-allowed disabled:bg-[#929792]">{saveState === "saving" ? "正在收入护照…" : isEditing ? "更新这枚印章" : "保存到我的护照"}<BookMarked className="h-4 w-4" /></button></div></div>
           <p className="mt-2 text-right text-xs text-[#686d68]">{cloudPassportEnabled ? "保存会将记录及照片上传到私密云端护照；下载 PNG 只生成图片。" : "记录仅保存在当前浏览器，清理浏览器数据会丢失。"}</p>
+          {contentError ? <p role="alert" className="mt-2 text-right text-sm text-[#a02f28]">{contentError}保存已暂时停用，下载 PNG 不受影响。</p> : null}
           {saveState === "success" ? <p role="status" className="mt-2 text-right text-sm text-[#526b45]">{cloudPassportEnabled ? "这枚印章已保存到云端。请在我的护照中下载恢复密钥。" : "这枚印章已保存到当前浏览器。"}<Link href="/achievement/passport" className="ml-2 underline underline-offset-4">打开我的护照</Link></p> : null}
           {saveState === "error" ? <p role="alert" className="mt-2 text-right text-sm text-[#a02f28]">{saveError}</p> : null}
           {exportState === "success" ? <p role="status" className="mt-2 text-right text-sm text-[#526b45]">人生凭证已开始下载。</p> : null}

@@ -67,6 +67,8 @@ export function DailyNoteCard() {
 
       <Link
         href="/daily"
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={language === "zh" ? "打开今天的小岛日签" : "Open today's isle daily note"}
         className="relative z-10 flex h-full min-h-[192px] flex-col p-5 focus-visible:rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
       >

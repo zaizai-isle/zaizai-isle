@@ -30,7 +30,7 @@ export default function WorksPreviewModal({ project, onClose }: { project: Built
         </div>
         <div className="p-4 border-t border-gray-100 bg-white shrink-0 space-y-3">
           <p className="text-sm leading-6 text-gray-600">{t(project.descriptionKey)}</p>
-          <Link href={project.href} target={project.external ? "_blank" : undefined} rel={project.external ? "noopener noreferrer" : undefined} className="w-full py-3 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-all active:scale-[0.98] shadow-lg">
+          <Link href={project.href} target="_blank" rel="noopener noreferrer" className="w-full py-3 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-all active:scale-[0.98] shadow-lg">
             <span>{t("page.works.view")}</span>
             {project.external ? <ExternalLink className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
           </Link>

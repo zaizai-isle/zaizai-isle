@@ -248,7 +248,8 @@ export default function AchievementPage() {
           category={category}
           photoUrl={photoUrl}
           fileError={fileError}
-          previewError={editError || previewError}
+          previewError={previewError}
+          contentError={editError}
           exportState={exportState}
           saveState={saveState}
           saveError={saveError}

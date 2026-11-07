@@ -1,43 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-06T11:55:43+09:00",
-  "research_date": "2026-11-06",
+  "generated_at": "2026-11-07T11:25:39+09:00",
+  "research_date": "2026-11-07",
   "theme": {
-    "observation_code": "A07",
-    "observation_name": "信息组织与视觉秩序",
-    "history_node": "H11",
-    "query": "map",
+    "observation_code": "A08",
+    "observation_name": "叙事、象征与情绪",
+    "history_node": "H05",
+    "query": "photograph",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "artic:196347",
-      "source": "artic",
-      "title": "Plan of Chicago, Chicago, Illinois, Diagram Showing City Growth",
-      "creator": "Daniel Hudson Burnham (American, 1846-1912)\nEdward Herbert Bennett (American, born England, 1874-1954)",
-      "date": "1909",
-      "medium": "Colored ink, paint, and wash on a printed map",
-      "source_url": "https://www.artic.edu/artworks/196347",
-      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/196347",
-      "image_url": "https://www.artic.edu/iiif/2/8da8a9e1-48f7-9bc1-982a-2206dae4f522/full/843,/0/default.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
-      },
-      "review_status": "needs_editorial_review"
-    },
-    {
-      "source_id": "cleveland:423518",
+      "source_id": "cleveland:670285",
       "source": "cleveland",
-      "title": "Nuova pianta di Roma data in luce da Giambattista Nolli l’anno MDCCXLVII, known as La Pianta Grande di Roma",
-      "creator": "Giovanni Battista Nolli (Italian, 1701–1756)",
-      "date": "1748",
-      "medium": "etching and engraving",
-      "source_url": "https://www.clevelandart.org/art/2020.276.10",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/423518",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2020.276.10/2020.276.10_web.jpg",
+      "title": "The d’Orléans Family during a Fête Champêtre at Orléans House",
+      "creator": "Camille Silvy (French, 1834–1910)",
+      "date": "1864",
+      "medium": "Enameled photograph in original metal frame",
+      "source_url": "https://www.clevelandart.org/art/2024.9",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/670285",
+      "image_url": "https://openaccess-cdn.clevelandart.org/2024.9/2024.9_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -46,15 +29,15 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "smk:KKSgb8354/20",
+      "source_id": "smk:KKSgb12611",
       "source": "smk",
-      "title": "Æbleblomster",
-      "creator": "Agnes Slott-Møller",
-      "date": "1900",
-      "medium": "Drawing",
-      "source_url": "https://open.smk.dk/artwork/image/KKSgb8354/20",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb8354/20&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/rr172183n_KKSgb8354_crop.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Ubekendt kvindeportræt",
+      "creator": "Andreas Flint",
+      "date": "1767-1824",
+      "medium": "Copper engraving",
+      "source_url": "https://open.smk.dk/artwork/image/KKSgb12611",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb12611&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/k643b4214_kksgb12611.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -63,29 +46,46 @@
       "review_status": "needs_editorial_review"
     },
     {
-      "source_id": "met:228716",
+      "source_id": "met:301976",
       "source": "met",
-      "title": "Embroidered map sampler",
-      "creator": "",
-      "date": "late 18th–early 19th century",
-      "medium": "Silk embroidery on silk",
-      "source_url": "https://www.metmuseum.org/art/collection/search/228716",
-      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/228716",
-      "image_url": "https://images.metmuseum.org/CRDImages/es/web-large/DP7747.jpg",
+      "title": "Alonzo H. Sterrett, Late Adjutant, Fortieth U.S. Infantry",
+      "creator": "Hall & Company's Photograph Gallery",
+      "date": "July 27, 1865",
+      "medium": "Albumen silver print from glass negative",
+      "source_url": "https://www.metmuseum.org/art/collection/search/301976",
+      "catalog_api_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/301976",
+      "image_url": "https://images.metmuseum.org/CRDImages/ph/web-large/DP265081.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
         "source_rights_note": "The Met Open Access; image use requires per-file review"
       },
       "review_status": "needs_editorial_review"
+    },
+    {
+      "source_id": "artic:31707",
+      "source": "artic",
+      "title": "General George Armstrong Custer",
+      "creator": "Brady's National Photographic Portrait Galleries\nAmerican, 20th century",
+      "date": "1860/76",
+      "medium": "Albumen print (carte-de-visite)",
+      "source_url": "https://www.artic.edu/artworks/31707",
+      "catalog_api_url": "https://api.artic.edu/api/v1/artworks/31707",
+      "image_url": "https://www.artic.edu/iiif/2/f2958dbb-8bf9-1803-9889-94c3d60d3e2a/full/843,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "Art Institute of Chicago public-domain catalog record"
+      },
+      "review_status": "needs_editorial_review"
     }
   ],
   "sources_attempted": [
-    "artic",
     "cleveland",
     "smk",
     "loc",
-    "met"
+    "met",
+    "artic"
   ],
   "warnings": [],
   "notes": "Catalog candidates only. No images saved and no content published."

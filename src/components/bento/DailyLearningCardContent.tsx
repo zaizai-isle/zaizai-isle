@@ -59,7 +59,8 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
     imageAlt: fallbackEntry.subject,
     href: "/learning",
   };
-  const [entry, setEntry] = useState<CardEntry | null>(null);
+  // 与其他卡片一致：先渲染构建期兜底内容，拉到最新发布后无缝替换，不用骨架占位。
+  const [entry, setEntry] = useState<CardEntry>(fallback);
 
   useEffect(() => {
     let active = true;
@@ -92,26 +93,6 @@ export function DailyLearningCardContent({ fallbackEntry, fallbackImage }: { fal
     // stable for the lifetime of this mounted card.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (!entry) {
-    return <div className="flex h-full flex-col" role="status" aria-label="正在加载今天的每日一看">
-      <div className="flex items-center justify-between gap-4">
-        <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">
-          <BookOpen aria-hidden="true" className="h-3.5 w-3.5" />
-          <TranslatedText translationKey="learning.card.eyebrow" />
-        </p>
-        <span aria-hidden="true" className="h-10 w-10 rounded-full border border-white/10 bg-white/[0.04]" />
-      </div>
-      <div className="mt-3 grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-start gap-4" aria-hidden="true">
-        <div className="min-w-0 space-y-3">
-          <div className="h-5 w-full rounded-full bg-white/10" />
-          <div className="h-5 w-4/5 rounded-full bg-white/10" />
-          <div className="h-3 w-3/5 rounded-full bg-white/[0.06]" />
-        </div>
-        <div className="h-24 w-36 rounded-2xl border border-white/10 bg-white/[0.05]" />
-      </div>
-    </div>;
-  }
 
   const isPortrait = Boolean(entry.imageWidth && entry.imageHeight && entry.imageHeight > entry.imageWidth);
 

@@ -548,5 +548,21 @@
     "thumb_path": "learning/thumb/met-436528-main-dp346474.webp",
     "thumb_bytes": 58874,
     "thumb_sha256": "e356cd1ac1420c524f949605c42a9021416225bd64446b62c220759fea83a86f"
+  },
+  "cleveland-1928-173-main": {
+    "path": "learning/assets/1920px-Clevelandart_1928.173.jpg",
+    "bytes": 534437,
+    "sha256": "a664ed80e4297e8dec9267c5340745fcb71b9504abbca77082e3fe1b0763dc12",
+    "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Clevelandart_1928.173.jpg",
+    "package": "draft:cleveland-1928-173 (岛主 2026-11-07 手动补图)",
+    "rights_status": "open",
+    "rights_note": "Cleveland Museum of Art CC0（Commons 文件页登记，Gift of John L. Severance, 1928.173）",
+    "original_sha256": "a664ed80e4297e8dec9267c5340745fcb71b9504abbca77082e3fe1b0763dc12",
+    "reading_path": "learning/reading/cleveland-1928-173-main.webp",
+    "reading_bytes": 113150,
+    "reading_sha256": "9f5f3f76e559dd8fead1f04031d4cacfb05a52a8ff5a0eccb753d8a4d99533f1",
+    "thumb_path": "learning/thumb/cleveland-1928-173-main.webp",
+    "thumb_bytes": 16708,
+    "thumb_sha256": "c86e36976d28bcbaa37c6f79c0ab15de23cef0b2f6021db26da8265315685b18"
   }
 }

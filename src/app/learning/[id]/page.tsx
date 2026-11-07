@@ -23,7 +23,10 @@ export async function generateStaticParams() {
 export const dynamicParams = false;
 
 export default async function LearningEntryPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  // content_id 含 ":"，静态导出/预渲染时路由参数可能以 %3A 编码形态传入，先解码再查库。
+  let id = rawId;
+  try { id = decodeURIComponent(rawId); } catch { /* 保留原值 */ }
   // 兼容映射：先按旧的静态选题 id 解析，再按发布表 content_id 解析。
   const staticEntry = learningEntries.find((item) => item.id === id);
   if (staticEntry) return <LearningArticle entry={staticEntry} />;

@@ -24,13 +24,13 @@ export function LearningArticleLoading() {
     <div className="learning-shell">
       <LearningHeader />
       <section className="learning-loading" role="status" aria-label="正在加载每日一看">
+        <div className="learning-loading-artwork" aria-hidden="true" />
         <div className="learning-loading-copy" aria-hidden="true">
           <span />
           <h2><span /><span /></h2>
           <p><span /><span /></p>
           <div><span /><span /><span /></div>
         </div>
-        <div className="learning-loading-artwork" aria-hidden="true" />
       </section>
     </div>
   </main>;

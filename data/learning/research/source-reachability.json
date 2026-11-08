@@ -1,1 +1,24 @@
-{}
+{
+  "https://api.smk.dk/api/v1/thumbnail/e049d865-d259-4922-ad0d-f64f8741b943.jpg": {
+    "checked_at": "2026-11-08T10:55:21.651704+09:00",
+    "ok": true,
+    "status": 206
+  },
+  "https://images.metmuseum.org/CRDImages/dp/web-large/DP815958.jpg": {
+    "checked_at": "2026-11-08T10:55:22.890059+09:00",
+    "ok": false,
+    "status": 406,
+    "reason": "HTTP Error 406: Not Acceptable"
+  },
+  "https://www.artic.edu/iiif/2/18092196-50ae-3ff1-9205-1b3110e966c3/full/843,/0/default.jpg": {
+    "checked_at": "2026-11-08T10:55:24.144256+09:00",
+    "ok": false,
+    "status": 403,
+    "reason": "HTTP Error 403: Forbidden"
+  },
+  "https://openaccess-cdn.clevelandart.org/2014.12/2014.12_web.jpg": {
+    "checked_at": "2026-11-08T10:55:24.218233+09:00",
+    "ok": true,
+    "status": 206
+  }
+}

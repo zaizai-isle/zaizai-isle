@@ -20,5 +20,30 @@
     "checked_at": "2026-11-08T10:55:24.218233+09:00",
     "ok": true,
     "status": 206
+  },
+  "daily-learning:cleveland-670285": {
+    "checked_at": "2026-11-08T02:16:00.168Z",
+    "ok": false,
+    "reason": "no source_url"
+  },
+  "daily-learning:smk-kksgb12611": {
+    "checked_at": "2026-11-08T02:16:00.169Z",
+    "ok": false,
+    "reason": "no source_url"
+  },
+  "https://openaccess-cdn.clevelandart.org/2024.9/2024.9_print.jpg": {
+    "checked_at": "2026-11-08T02:25:08.739Z",
+    "ok": true,
+    "status": 206
+  },
+  "https://iip-thumb.smk.dk/iiif/jp2/k643b4214_kksgb12611.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg": {
+    "checked_at": "2026-11-08T02:19:12.416Z",
+    "ok": false,
+    "reason": "The operation was aborted due to timeout"
+  },
+  "https://iip-thumb.smk.dk/iiif/jp2/w3763752c_kksgb12611.tif.jp2/full/!1024,/0/default.jpg": {
+    "checked_at": "2026-11-08T02:25:15.831Z",
+    "ok": true,
+    "status": 200
   }
 }

@@ -62,10 +62,11 @@ for (const file of files) {
     blocked++; continue;
   }
 
-  // R3 主图可达性
+  // R3 主图可达性（v2 包资产字段为 image_url）
   const main = (pkg.assets ?? []).find((a) => a.role === 'main') ?? (pkg.assets ?? [])[0];
-  const probeRes = await probe(main?.source_url);
-  reachLog[main?.source_url ?? id] = { checked_at: new Date().toISOString(), ...probeRes };
+  const mainUrl = main?.image_url ?? main?.source_page;
+  const probeRes = await probe(mainUrl);
+  reachLog[mainUrl ?? id] = { checked_at: new Date().toISOString(), ...probeRes };
   if (!probeRes.ok) {
     console.log(`✗ ${id}: 主图不可达 (${probeRes.status ?? probeRes.reason})，跳过入库`);
     blocked++; continue;

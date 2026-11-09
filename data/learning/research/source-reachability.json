@@ -1,6 +1,6 @@
 {
   "https://api.smk.dk/api/v1/thumbnail/e049d865-d259-4922-ad0d-f64f8741b943.jpg": {
-    "checked_at": "2026-11-08T10:55:21.651704+09:00",
+    "checked_at": "2026-11-09T01:06:41.139Z",
     "ok": true,
     "status": 206
   },
@@ -45,5 +45,10 @@
     "checked_at": "2026-11-08T02:25:15.831Z",
     "ok": true,
     "status": 200
+  },
+  "https://openaccess-cdn.clevelandart.org/2014.12/2014.12_print.jpg": {
+    "checked_at": "2026-11-09T01:06:37.503Z",
+    "ok": true,
+    "status": 206
   }
 }

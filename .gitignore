@@ -53,3 +53,4 @@ next-env.d.ts
 public/learning/assets/CMA_1983.88_full.tif
 scripts/__pycache__/
 .tmp-design-ref/
+.codex-output/

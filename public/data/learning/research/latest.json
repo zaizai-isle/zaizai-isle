@@ -1,47 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-08T10:55:15+09:00",
-  "research_date": "2026-11-08",
+  "generated_at": "2026-11-09T11:07:47+09:00",
+  "research_date": "2026-11-09",
   "theme": {
-    "observation_code": "A01",
-    "observation_name": "构图与空间",
+    "observation_code": "A02",
+    "observation_name": "比例与尺度",
     "history_node": "H01",
-    "query": "landscape",
+    "query": "portrait",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "smk:KMSsp430",
-      "source": "smk",
-      "title": "Italian Landscape, Southern Landscape",
-      "creator": "Jan Both",
-      "date": "1633-1652",
-      "medium": "Oil on canvas",
-      "source_url": "https://open.smk.dk/artwork/image/KMSsp430",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMSsp430&lang=en",
-      "image_url": "https://api.smk.dk/api/v1/thumbnail/e049d865-d259-4922-ad0d-f64f8741b943.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "SMK public_domain=true; check image record"
-      },
-      "review_status": "needs_editorial_review",
-      "reachability": {
-        "ok": true,
-        "status": 206
-      }
-    },
-    {
-      "source_id": "cleveland:171296",
+      "source_id": "cleveland:102578",
       "source": "cleveland",
-      "title": "Vale of Kashmir",
-      "creator": "Robert S. Duncanson (American, 1821–1872)",
-      "date": "1867",
+      "title": "Portrait of Dora Wheeler",
+      "creator": "William Merritt Chase (American, 1849–1916)",
+      "date": "1882–83",
       "medium": "oil on canvas",
-      "source_url": "https://www.clevelandart.org/art/2014.12",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/171296",
-      "image_url": "https://openaccess-cdn.clevelandart.org/2014.12/2014.12_web.jpg",
+      "source_url": "https://www.clevelandart.org/art/1921.1239",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/102578",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1921.1239/1921.1239_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -52,19 +31,39 @@
         "ok": true,
         "status": 206
       }
+    },
+    {
+      "source_id": "smk:KMS553",
+      "source": "smk",
+      "title": "Portrait of a Young Man",
+      "creator": "Giorgione",
+      "date": "1492-1510",
+      "medium": "Oil on canvas",
+      "source_url": "https://open.smk.dk/artwork/image/KMS553",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMS553&lang=en",
+      "image_url": "https://api.smk.dk/api/v1/thumbnail/9737cfec-d9f2-4165-8675-85be8a73f115.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review",
+      "reachability": {
+        "ok": true,
+        "status": 206
+      }
     }
   ],
   "sources_attempted": [
-    "smk",
     "loc",
     "met",
     "artic",
-    "cleveland"
+    "cleveland",
+    "smk"
   ],
   "warnings": [
-    "loc: API unavailable: https://www.loc.gov/photos/: HTTP Error 403: Forbidden",
-    "unreachable image dropped: https://images.metmuseum.org/CRDImages/dp/web-large/DP815958.jpg (HTTP Error 406: Not Acceptable)",
-    "unreachable image dropped: https://www.artic.edu/iiif/2/18092196-50ae-3ff1-9205-1b3110e966c3/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
+    "unreachable image dropped: https://images.metmuseum.org/CRDImages/es/web-large/17619.jpg (HTTP Error 406: Not Acceptable)",
+    "unreachable image dropped: https://www.artic.edu/iiif/2/c95d58bf-fe9e-e5bb-2c71-ab8bad984759/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
   ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

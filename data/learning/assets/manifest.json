@@ -111,6 +111,22 @@
     "thumb_path": "learning/thumb/chm-500004342-05-01-main.webp",
     "thumb_sha256": "32269e563cd21de146a8108b73f0316058463d459698753b9fbdeaf8c5378b32"
   },
+  "cleveland-102578-main": {
+    "bytes": 8166601,
+    "original_sha256": "3d56c1e2d4703702e839141eb2c6a529b2aefdcd601eecad4011234d7f12caca",
+    "package": "research-2026-11-10-cleveland-102578/package-v2.json",
+    "path": "learning/assets/cleveland-102578-print.jpg",
+    "reading_bytes": 223634,
+    "reading_path": "learning/reading/cleveland-102578-main.webp",
+    "reading_sha256": "509f6e05a408f13900715cc285285904bef4012c2b2e4f0470afc0d09ad59f96",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（3400×3254）。",
+    "rights_status": "open",
+    "sha256": "3d56c1e2d4703702e839141eb2c6a529b2aefdcd601eecad4011234d7f12caca",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1921.1239/1921.1239_print.jpg",
+    "thumb_bytes": 29438,
+    "thumb_path": "learning/thumb/cleveland-102578-main.webp",
+    "thumb_sha256": "085a3eca1ca04791e423c91816adf3004aa6e07a0de4b2198b1a9723946bb6a6"
+  },
   "cleveland-151543-detail-v2": {
     "bytes": 702522,
     "original_sha256": "7d683c010c9deab9c5a2157be66180fdc04163dfbe20c5bc89f7fed29cd5c6c9",
@@ -564,6 +580,22 @@
     "thumb_bytes": 6294,
     "thumb_path": "learning/thumb/smk-kksgb12611-main.webp",
     "thumb_sha256": "167f9ea7711ae67f4f48b8d072e6108fb3096f7e681e73bb3f7f71c03fe120b5"
+  },
+  "smk-kms553-main": {
+    "bytes": 206322,
+    "original_sha256": "20aa0048b38322af755d939d5f021de7b3690d1687c37c517bc314df00d2a6cd",
+    "package": "research-2026-11-10-smk-kms553/package-v2.json",
+    "path": "learning/assets/smk-kms553-1600.jpg",
+    "reading_bytes": 142906,
+    "reading_path": "learning/reading/smk-kms553-main.webp",
+    "reading_sha256": "d5ccb36cab88eca76f2f6841591355b796922a921890c42f5fd381222c297ce2",
+    "rights_note": "SMK本件登记public_domain=true（PDM 1.0）；图像来自馆方API缩略图端点（1208×1600），已下载解码核验。",
+    "rights_status": "open",
+    "sha256": "20aa0048b38322af755d939d5f021de7b3690d1687c37c517bc314df00d2a6cd",
+    "source_url": "https://api.smk.dk/api/v1/thumbnail/9737cfec-d9f2-4165-8675-85be8a73f115.jpg",
+    "thumb_bytes": 23314,
+    "thumb_path": "learning/thumb/smk-kms553-main.webp",
+    "thumb_sha256": "4c5c6e883412559f842c833ba898758b6f19f30e9234fc36ee6d25d3c93de269"
   },
   "smk-kmssp430-main": {
     "bytes": 101383,

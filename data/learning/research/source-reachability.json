@@ -69,7 +69,12 @@
     "status": 206
   },
   "https://api.smk.dk/api/v1/thumbnail/9737cfec-d9f2-4165-8675-85be8a73f115.jpg": {
-    "checked_at": "2026-11-09T11:08:06.183105+09:00",
+    "checked_at": "2026-11-10T01:13:43.660Z",
+    "ok": true,
+    "status": 206
+  },
+  "https://openaccess-cdn.clevelandart.org/1921.1239/1921.1239_print.jpg": {
+    "checked_at": "2026-11-10T01:13:40.192Z",
     "ok": true,
     "status": 206
   }

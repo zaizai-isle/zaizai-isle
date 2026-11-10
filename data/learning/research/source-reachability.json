@@ -77,5 +77,22 @@
     "checked_at": "2026-11-10T01:13:40.192Z",
     "ok": true,
     "status": 206
+  },
+  "https://images.metmuseum.org/CRDImages/es/web-large/DP7577.jpg": {
+    "checked_at": "2026-11-10T13:23:58.243061+09:00",
+    "ok": false,
+    "status": 406,
+    "reason": "HTTP Error 406: Not Acceptable"
+  },
+  "https://www.artic.edu/iiif/2/629b0026-a66a-aeaa-5c63-e86d2dadc1af/full/843,/0/default.jpg": {
+    "checked_at": "2026-11-10T13:23:59.509312+09:00",
+    "ok": false,
+    "status": 403,
+    "reason": "HTTP Error 403: Forbidden"
+  },
+  "https://openaccess-cdn.clevelandart.org/1999.325.2/1999.325.2_web.jpg": {
+    "checked_at": "2026-11-10T13:23:59.742851+09:00",
+    "ok": true,
+    "status": 206
   }
 }

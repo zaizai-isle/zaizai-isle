@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-09T11:07:47+09:00",
-  "research_date": "2026-11-09",
+  "generated_at": "2026-11-10T13:23:45+09:00",
+  "research_date": "2026-11-10",
   "theme": {
-    "observation_code": "A02",
-    "observation_name": "比例与尺度",
-    "history_node": "H01",
-    "query": "portrait",
+    "observation_code": "A03",
+    "observation_name": "色彩与光影",
+    "history_node": "H02",
+    "query": "woodblock",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "cleveland:102578",
+      "source_id": "cleveland:161233",
       "source": "cleveland",
-      "title": "Portrait of Dora Wheeler",
-      "creator": "William Merritt Chase (American, 1849–1916)",
-      "date": "1882–83",
-      "medium": "oil on canvas",
-      "source_url": "https://www.clevelandart.org/art/1921.1239",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/102578",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1921.1239/1921.1239_web.jpg",
+      "title": "Dragon and Orchard",
+      "creator": "Arthur Wesley Dow (American, 1857–1922)",
+      "date": "c. 1908",
+      "medium": "woodblock",
+      "source_url": "https://www.clevelandart.org/art/1999.325.2",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/161233",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1999.325.2/1999.325.2_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -31,39 +31,18 @@
         "ok": true,
         "status": 206
       }
-    },
-    {
-      "source_id": "smk:KMS553",
-      "source": "smk",
-      "title": "Portrait of a Young Man",
-      "creator": "Giorgione",
-      "date": "1492-1510",
-      "medium": "Oil on canvas",
-      "source_url": "https://open.smk.dk/artwork/image/KMS553",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KMS553&lang=en",
-      "image_url": "https://api.smk.dk/api/v1/thumbnail/9737cfec-d9f2-4165-8675-85be8a73f115.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "SMK public_domain=true; check image record"
-      },
-      "review_status": "needs_editorial_review",
-      "reachability": {
-        "ok": true,
-        "status": 206
-      }
     }
   ],
   "sources_attempted": [
-    "loc",
     "met",
     "artic",
     "cleveland",
-    "smk"
+    "smk",
+    "loc"
   ],
   "warnings": [
-    "unreachable image dropped: https://images.metmuseum.org/CRDImages/es/web-large/17619.jpg (HTTP Error 406: Not Acceptable)",
-    "unreachable image dropped: https://www.artic.edu/iiif/2/c95d58bf-fe9e-e5bb-2c71-ab8bad984759/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
+    "unreachable image dropped: https://images.metmuseum.org/CRDImages/es/web-large/DP7577.jpg (HTTP Error 406: Not Acceptable)",
+    "unreachable image dropped: https://www.artic.edu/iiif/2/629b0026-a66a-aeaa-5c63-e86d2dadc1af/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
   ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

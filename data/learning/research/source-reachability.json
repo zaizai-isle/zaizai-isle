@@ -94,5 +94,15 @@
     "checked_at": "2026-11-10T13:23:59.742851+09:00",
     "ok": true,
     "status": 206
+  },
+  "https://openaccess-cdn.clevelandart.org/1999.325.2/1999.325.2_print.jpg": {
+    "checked_at": "2026-11-11T01:13:20.139Z",
+    "ok": true,
+    "status": 206
+  },
+  "https://openaccess-cdn.clevelandart.org/1980.292/1980.292_print.jpg": {
+    "checked_at": "2026-11-11T01:13:22.201Z",
+    "ok": true,
+    "status": 206
   }
 }

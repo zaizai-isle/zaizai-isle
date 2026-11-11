@@ -127,6 +127,22 @@
     "thumb_path": "learning/thumb/cleveland-102578-main.webp",
     "thumb_sha256": "085a3eca1ca04791e423c91816adf3004aa6e07a0de4b2198b1a9723946bb6a6"
   },
+  "cleveland-150088-main": {
+    "bytes": 5385394,
+    "original_sha256": "8696db164ef86b14d5be69437aa3642f5ee142d114afd4a5b81d2f49560564f6",
+    "package": "research-2026-11-11-cleveland-150088/package-v2.json",
+    "path": "learning/assets/cleveland-150088-print.jpg",
+    "reading_bytes": 93854,
+    "reading_path": "learning/reading/cleveland-150088-main.webp",
+    "reading_sha256": "95d7788fe3c333cf7842f1a557c295b7c3e5927799de9dee7225756c5b20b774",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（2527×3400）。",
+    "rights_status": "open",
+    "sha256": "8696db164ef86b14d5be69437aa3642f5ee142d114afd4a5b81d2f49560564f6",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1980.292/1980.292_print.jpg",
+    "thumb_bytes": 7966,
+    "thumb_path": "learning/thumb/cleveland-150088-main.webp",
+    "thumb_sha256": "9dd3ef3286b45d77aa2787e6ba20a18404f1d169b1467b3c93fb3a6756a33416"
+  },
   "cleveland-151543-detail-v2": {
     "bytes": 702522,
     "original_sha256": "7d683c010c9deab9c5a2157be66180fdc04163dfbe20c5bc89f7fed29cd5c6c9",
@@ -174,6 +190,22 @@
     "thumb_bytes": 31440,
     "thumb_path": "learning/thumb/cleveland-156112-main.webp",
     "thumb_sha256": "15e714b10e3a54d764e29ded0e93709104439973688d5995d799a50c02fb0af4"
+  },
+  "cleveland-161233-main": {
+    "bytes": 3417875,
+    "original_sha256": "7f721418ed18f27c943d8d9be19ce5c94333ac11aa62cd61ff7fe6bee958a86e",
+    "package": "research-2026-11-11-cleveland-161233/package-v2.json",
+    "path": "learning/assets/cleveland-161233-print.jpg",
+    "reading_bytes": 347704,
+    "reading_path": "learning/reading/cleveland-161233-main.webp",
+    "reading_sha256": "99cd36c5f940445d1830cb1fdd4283039358d56f73a9bd8eaa600069135cc782",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；图像为雕刻木版本身的馆方摄影（2494×3400），已下载解码核验。",
+    "rights_status": "open",
+    "sha256": "7f721418ed18f27c943d8d9be19ce5c94333ac11aa62cd61ff7fe6bee958a86e",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1999.325.2/1999.325.2_print.jpg",
+    "thumb_bytes": 15860,
+    "thumb_path": "learning/thumb/cleveland-161233-main.webp",
+    "thumb_sha256": "e655637715370a8b35c55f4f59cddeea1d4515f29af2f308d0c8281e70c361fc"
   },
   "cleveland-171296-main": {
     "bytes": 1681360,

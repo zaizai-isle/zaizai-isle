@@ -104,5 +104,21 @@
     "checked_at": "2026-11-11T01:13:22.201Z",
     "ok": true,
     "status": 206
+  },
+  "https://www.artic.edu/iiif/2/1d82da66-d99e-f4f6-d5fc-56b22b6678ba/full/843,/0/default.jpg": {
+    "checked_at": "2026-11-11T11:20:41.573431+09:00",
+    "ok": false,
+    "status": 403,
+    "reason": "HTTP Error 403: Forbidden"
+  },
+  "https://openaccess-cdn.clevelandart.org/1934.29/1934.29_web.jpg": {
+    "checked_at": "2026-11-11T11:20:41.805022+09:00",
+    "ok": true,
+    "status": 206
+  },
+  "https://iip-thumb.smk.dk/iiif/jp2/05741w340_KKS9153.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg": {
+    "checked_at": "2026-11-11T11:20:43.301636+09:00",
+    "ok": true,
+    "status": 200
   }
 }

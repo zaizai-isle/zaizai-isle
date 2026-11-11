@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-10T13:23:45+09:00",
-  "research_date": "2026-11-10",
+  "generated_at": "2026-11-11T11:19:31+09:00",
+  "research_date": "2026-11-11",
   "theme": {
-    "observation_code": "A03",
-    "observation_name": "色彩与光影",
-    "history_node": "H02",
-    "query": "woodblock",
+    "observation_code": "A04",
+    "observation_name": "线条、形态与节奏",
+    "history_node": "H10",
+    "query": "poster",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "cleveland:161233",
+      "source_id": "cleveland:114684",
       "source": "cleveland",
-      "title": "Dragon and Orchard",
-      "creator": "Arthur Wesley Dow (American, 1857–1922)",
-      "date": "c. 1908",
-      "medium": "woodblock",
-      "source_url": "https://www.clevelandart.org/art/1999.325.2",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/161233",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1999.325.2/1999.325.2_web.jpg",
+      "title": "Virgin and Child",
+      "creator": "Hans Memling (Netherlandish, 1494)",
+      "date": "c. 1470–80",
+      "medium": "oil on wood",
+      "source_url": "https://www.clevelandart.org/art/1934.29",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/114684",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1934.29/1934.29_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -31,18 +31,39 @@
         "ok": true,
         "status": 206
       }
+    },
+    {
+      "source_id": "smk:KKS9153",
+      "source": "smk",
+      "title": "Mlle Bécat at the Café Ambassadeurs",
+      "creator": "Edgar Degas",
+      "date": "1873-1876",
+      "medium": "Lithograph",
+      "source_url": "https://open.smk.dk/artwork/image/KKS9153",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS9153&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/05741w340_KKS9153.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review",
+      "reachability": {
+        "ok": true,
+        "status": 200
+      }
     }
   ],
   "sources_attempted": [
-    "met",
     "artic",
     "cleveland",
     "smk",
-    "loc"
+    "loc",
+    "met"
   ],
   "warnings": [
-    "unreachable image dropped: https://images.metmuseum.org/CRDImages/es/web-large/DP7577.jpg (HTTP Error 406: Not Acceptable)",
-    "unreachable image dropped: https://www.artic.edu/iiif/2/629b0026-a66a-aeaa-5c63-e86d2dadc1af/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
+    "loc: API unavailable: https://www.loc.gov/photos/: The read operation timed out",
+    "unreachable image dropped: https://www.artic.edu/iiif/2/1d82da66-d99e-f4f6-d5fc-56b22b6678ba/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
   ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

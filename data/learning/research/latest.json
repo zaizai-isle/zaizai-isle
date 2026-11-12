@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-11T11:19:31+09:00",
-  "research_date": "2026-11-11",
+  "generated_at": "2026-11-12T12:27:44+09:00",
+  "research_date": "2026-11-12",
   "theme": {
-    "observation_code": "A04",
-    "observation_name": "线条、形态与节奏",
-    "history_node": "H10",
-    "query": "poster",
+    "observation_code": "A05",
+    "observation_name": "材料、结构与功能",
+    "history_node": "H03",
+    "query": "furniture",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "cleveland:114684",
+      "source_id": "cleveland:160089",
       "source": "cleveland",
-      "title": "Virgin and Child",
-      "creator": "Hans Memling (Netherlandish, 1494)",
-      "date": "c. 1470–80",
-      "medium": "oil on wood",
-      "source_url": "https://www.clevelandart.org/art/1934.29",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/114684",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1934.29/1934.29_web.jpg",
+      "title": "Fire Screen",
+      "creator": "Herter Brothers (American)",
+      "date": "c. 1878–80",
+      "medium": "gilded wood, painted and gilded wood panels, brocaded silk, embossed paper",
+      "source_url": "https://www.clevelandart.org/art/1997.58",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/160089",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1997.58/1997.58_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -33,15 +33,15 @@
       }
     },
     {
-      "source_id": "smk:KKS9153",
+      "source_id": "smk:KKSgb2950/36",
       "source": "smk",
-      "title": "Mlle Bécat at the Café Ambassadeurs",
-      "creator": "Edgar Degas",
-      "date": "1873-1876",
-      "medium": "Lithograph",
-      "source_url": "https://open.smk.dk/artwork/image/KKS9153",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS9153&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/05741w340_KKS9153.tif.reconstructed.tif.jp2/full/!1024,/0/default.jpg",
+      "title": "Consolida ajacis (have-ridderspore)",
+      "creator": "Hans Simon Holtzbecker",
+      "date": "1649-1659",
+      "medium": "Gouache on parchment",
+      "source_url": "https://open.smk.dk/artwork/image/KKSgb2950/36",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb2950/36&lang=en",
+      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/js956m62h_KKSgb2950-36.tif.jp2/full/!1024,/0/default.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -55,15 +55,14 @@
     }
   ],
   "sources_attempted": [
-    "artic",
     "cleveland",
     "smk",
     "loc",
-    "met"
+    "met",
+    "artic"
   ],
   "warnings": [
-    "loc: API unavailable: https://www.loc.gov/photos/: The read operation timed out",
-    "unreachable image dropped: https://www.artic.edu/iiif/2/1d82da66-d99e-f4f6-d5fc-56b22b6678ba/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
+    "unreachable image dropped: https://www.artic.edu/iiif/2/be169735-ea1c-7440-c438-bafd24021119/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
   ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

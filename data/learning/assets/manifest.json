@@ -127,6 +127,22 @@
     "thumb_path": "learning/thumb/cleveland-102578-main.webp",
     "thumb_sha256": "085a3eca1ca04791e423c91816adf3004aa6e07a0de4b2198b1a9723946bb6a6"
   },
+  "cleveland-114684-main": {
+    "bytes": 7559139,
+    "original_sha256": "e756ee46553f51efcc009b2200cd5ffe2adebc047e03523a9dc754e26727e54a",
+    "package": "research-2026-11-12-cleveland-114684/package-v2.json",
+    "path": "learning/assets/cleveland-114684-print.jpg",
+    "reading_bytes": 341314,
+    "reading_path": "learning/reading/cleveland-114684-main.webp",
+    "reading_sha256": "ef95e22d35a30f5f9df22124fe7b0a77d5c0371d884319938af3183138afdd06",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（2379×3400）。",
+    "rights_status": "open",
+    "sha256": "e756ee46553f51efcc009b2200cd5ffe2adebc047e03523a9dc754e26727e54a",
+    "source_url": "https://openaccess-cdn.clevelandart.org/1934.29/1934.29_print.jpg",
+    "thumb_bytes": 29894,
+    "thumb_path": "learning/thumb/cleveland-114684-main.webp",
+    "thumb_sha256": "f3c2c39dec68afe75db0a3ca9414acb5277ca0924182aae71170ad3f81fdb3ed"
+  },
   "cleveland-150088-main": {
     "bytes": 5385394,
     "original_sha256": "8696db164ef86b14d5be69437aa3642f5ee142d114afd4a5b81d2f49560564f6",
@@ -596,6 +612,22 @@
     "thumb_bytes": 36594,
     "thumb_path": "learning/thumb/smk-kks1974-113-main.webp",
     "thumb_sha256": "ce68933de52c218f80e82e69e10cb41ca18471d1ef0c0b577126cdcdc00a9ab3"
+  },
+  "smk-kks9153-main": {
+    "bytes": 12091830,
+    "original_sha256": "1fb9d2c8835cdb9fa88b3c82adb6b30052ef028266c173af41a11bf12a922ed1",
+    "package": "research-2026-11-12-smk-kks9153/package-v2.json",
+    "path": "learning/assets/smk-kks9153-full.jpg",
+    "reading_bytes": 343786,
+    "reading_path": "learning/reading/smk-kks9153-main.webp",
+    "reading_sha256": "094cf1dc888e8c92ab2159319aac3341f251e985df9e07c3c22a28ffde5f099c",
+    "rights_note": "丹麦国家美术馆SMK本件登记public_domain=true（PDM 1.0）；经api.smk.dk下载端点获取并解码核验（3456×3718）。",
+    "rights_status": "open",
+    "sha256": "1fb9d2c8835cdb9fa88b3c82adb6b30052ef028266c173af41a11bf12a922ed1",
+    "source_url": "https://api.smk.dk/api/v1/download/W3siaW1nX3VybCI6Imh0dHBzOi8vaWlwLnNtay5kay9paWlmL2pwMi8wNTc0MXczNDBfS0tTOTE1My50aWYucmVjb25zdHJ1Y3RlZC50aWYuanAyL2Z1bGwvZnVsbC8wL25hdGl2ZS5qcGciLCJwdWJsaWNfZG9tYWluIjp0cnVlLCJvYmplY3RfbnVtYmVyIjoiS0tTOTE1MyIsIm51bSI6IiJ9XQ==/KKS9153.jpg",
+    "thumb_bytes": 40470,
+    "thumb_path": "learning/thumb/smk-kks9153-main.webp",
+    "thumb_sha256": "1e42210cc75839eaddd3c0f74f4d70bca8610dc5cc1b09b72c02e4061d33a40a"
   },
   "smk-kksgb12611-main": {
     "bytes": 83239,

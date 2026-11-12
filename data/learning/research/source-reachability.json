@@ -120,5 +120,15 @@
     "checked_at": "2026-11-11T11:20:43.301636+09:00",
     "ok": true,
     "status": 200
+  },
+  "https://openaccess-cdn.clevelandart.org/1934.29/1934.29_print.jpg": {
+    "checked_at": "2026-11-12T01:07:17.434Z",
+    "ok": true,
+    "status": 206
+  },
+  "https://api.smk.dk/api/v1/download/W3siaW1nX3VybCI6Imh0dHBzOi8vaWlwLnNtay5kay9paWlmL2pwMi8wNTc0MXczNDBfS0tTOTE1My50aWYucmVjb25zdHJ1Y3RlZC50aWYuanAyL2Z1bGwvZnVsbC8wL25hdGl2ZS5qcGciLCJwdWJsaWNfZG9tYWluIjp0cnVlLCJvYmplY3RfbnVtYmVyIjoiS0tTOTE1MyIsIm51bSI6IiJ9XQ==/KKS9153.jpg": {
+    "checked_at": "2026-11-12T01:07:23.352Z",
+    "ok": true,
+    "status": 206
   }
 }

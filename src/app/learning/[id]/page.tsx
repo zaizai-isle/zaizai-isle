@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { learningEntries } from "../learning-content";
 import { LearningArticle } from "../LearningArticle";
 import { fetchPublishedPublicationByContentId, listPublishedContentIds } from "../learning-repository";
+import { readLearningAssetsFromDisk } from "../learning-asset-manifest.server";
 import { publicationRowToEntry } from "../learning-publication-entry";
 
 // R8 深链统一：详情页以发布表的 content_id 为准（如 daily-learning:plan-07-…）。
@@ -33,9 +34,9 @@ export default async function LearningEntryPage({ params }: { params: Promise<{ 
 
   let entry;
   try {
-    const row = await fetchPublishedPublicationByContentId(id);
+    const [row, assets] = await Promise.all([fetchPublishedPublicationByContentId(id), readLearningAssetsFromDisk()]);
     if (!row) notFound();
-    entry = publicationRowToEntry(row);
+    entry = publicationRowToEntry(row, assets);
   } catch (error) {
     console.warn(`[learning] 详情页按 content_id "${id}" 读取发布内容失败，本页输出 404。`, error);
     notFound();

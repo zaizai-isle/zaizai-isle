@@ -54,3 +54,10 @@ public/learning/assets/CMA_1983.88_full.tif
 scripts/__pycache__/
 .tmp-design-ref/
 .codex-output/
+
+# 学习原图本地归档（访客层只留 public/learning/thumb + reading）
+learning-assets-archive/
+
+# 研究候选数据已迁往 Supabase Storage（learning-research 桶），git 不再托管
+data/learning/research/
+public/data/

@@ -1,5 +1,5 @@
 const DEFAULT_GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta';
-const DEFAULT_REPLICATE_IMAGE_MODEL = 'black-forest-labs/flux-kontext-dev';
+const DEFAULT_PROXY_IMAGE_MODEL = '@cf/black-forest-labs/flux-2-klein-4b';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -11,9 +11,7 @@ function deriveSupabaseFunctionBaseUrl(): string {
 
   try {
     const url = new URL(SUPABASE_URL);
-    const projectRef = url.hostname.split('.')[0];
-    if (!projectRef) return '';
-    return `${url.protocol}//${projectRef}.functions.supabase.co/banana-ai`;
+    return `${url.origin}/functions/v1/banana-ai`;
   } catch {
     return '';
   }
@@ -36,7 +34,7 @@ export const BANANA_AI_BASE_URL =
 export const BANANA_IMAGE_MODEL =
   process.env.NEXT_PUBLIC_BANANA_IMAGE_MODEL ||
   (BANANA_AI_PROVIDER === 'proxy'
-    ? DEFAULT_REPLICATE_IMAGE_MODEL
+    ? DEFAULT_PROXY_IMAGE_MODEL
     : process.env.NEXT_PUBLIC_GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image-preview');
 export const BANANA_VISION_MODEL =
   process.env.NEXT_PUBLIC_BANANA_VISION_MODEL ||

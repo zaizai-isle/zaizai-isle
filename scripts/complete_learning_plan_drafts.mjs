@@ -195,7 +195,7 @@ for (const [index, value] of packages.entries()) {
   console.log(`created ${filenames[index]}`);
 }
 
-const manifestPath = resolve(root, "data/learning/assets/manifest.json");
+const manifestPath = resolve(root, "public/learning/manifest.json");
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const localAssets = [
   ["moma-3746-main", "截屏2026-10-26 09.44.46.png", plan08Asset.image_url, filenames[0]],
@@ -209,4 +209,4 @@ for (const [assetId, filename, sourceUrl, packageName] of localAssets) {
   manifest[assetId] = { bytes: statSync(absolute).size, package: packageName, path: `learning/assets/${filename}`, sha256: createHash("sha256").update(bytes).digest("hex"), source_url: sourceUrl };
 }
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-console.log("updated data/learning/assets/manifest.json");
+console.log("updated public/learning/manifest.json");

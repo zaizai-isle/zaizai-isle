@@ -2,6 +2,9 @@ name: Deploy GH Pages
 on:
   push:
     branches: [ main ]
+    # 研究候选数据已迁往 Supabase Storage（机器人直写，不再进 git）；此处只忽略文档提交。
+    paths-ignore:
+      - "docs/**"
   workflow_dispatch:
 
 permissions:

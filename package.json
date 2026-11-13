@@ -8,6 +8,7 @@
     "start": "next start",
     "capture": "node scripts/capture.mjs",
     "test:passport-storage": "tsx --test scripts/life-passport-storage.test.ts",
+    "test:banana-ai": "tsx --test scripts/banana-ai-function.test.ts",
     "vr:core-build": "node scripts/visual-regression-core-build.mjs",
     "vr:core-build:update": "node scripts/visual-regression-core-build.mjs --update",
     "lint": "eslint",

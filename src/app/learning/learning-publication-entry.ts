@@ -2,7 +2,7 @@
 // Shared by the client list (PublishedLearning) and the static detail route ([id]/page.tsx);
 // keep it free of "use client" and browser APIs so both sides can import it.
 import type { LearningArticleAsset, LearningEntry } from "./learning-content";
-import { learningAssetUrl } from "./learning-asset-cache";
+import { learningAssetUrl, type LearningAssetMap } from "./learning-asset-cache";
 import { learningDetailCrop } from "./learning-detail-decisions";
 
 export type PublicationRow = {
@@ -37,7 +37,7 @@ export function publicationDisplayDate(row: { display_date?: string | null; publ
   return row.display_date ?? row.published_at.slice(0, 10);
 }
 
-export function publicationRowToEntry(row: PublicationRow): LearningEntry {
+export function publicationRowToEntry(row: PublicationRow, assetMap: LearningAssetMap | null): LearningEntry {
   const snapshot = row.package_schema_version === 2 && row.package_snapshot ? row.package_snapshot : null;
   const record = snapshot && snapshot.work && typeof snapshot.work === "object" ? snapshot.work as Record<string, unknown> : row.source_record;
   const content = snapshot && snapshot.article && typeof snapshot.article === "object" ? snapshot.article as Record<string, unknown> : row.content;
@@ -63,7 +63,7 @@ export function publicationRowToEntry(row: PublicationRow): LearningEntry {
     if (!id || !imageUrl || !sourceUrl || !["main", "detail", "comparison"].includes(String(role))) return [];
     const rawCrop = asset.crop && typeof asset.crop === "object" ? asset.crop as Record<string, unknown> : null;
     const crop = rawCrop ? { x: Number(rawCrop.x), y: Number(rawCrop.y), width: Number(rawCrop.width), height: Number(rawCrop.height) } : undefined;
-    return [{ id, role: role as LearningArticleAsset["role"], imageUrl: learningAssetUrl(id, imageUrl), sourceUrl, width: Number(asset.width) || 1024, height: Number(asset.height) || 1024, alt: text(asset.alt) || text(record.title), attribution: text(asset.attribution), rightsStatement: text(asset.rights_statement), licenseUrl: text(asset.license_url), crop }];
+    return [{ id, role: role as LearningArticleAsset["role"], imageUrl: learningAssetUrl(assetMap, id, imageUrl), sourceUrl, width: Number(asset.width) || 1024, height: Number(asset.height) || 1024, alt: text(asset.alt) || text(record.title), attribution: text(asset.attribution), rightsStatement: text(asset.rights_statement), licenseUrl: text(asset.license_url), crop }];
   });
   return {
     id: `publication-${row.id}`,
@@ -79,7 +79,7 @@ export function publicationRowToEntry(row: PublicationRow): LearningEntry {
     question: text(content.question),
     sourceLabel: text(record.institution) || sourceLabel(text(record.source)),
     sourceUrl: text(record.source_url),
-    imageUrl: mainAsset ? learningAssetUrl(text(mainAsset.asset_id), text(mainAsset.image_url)) : text(record.image_url) || undefined,
+    imageUrl: mainAsset ? learningAssetUrl(assetMap, text(mainAsset.asset_id), text(mainAsset.image_url)) : text(record.image_url) || undefined,
     imageWidth: Number(mainAsset?.width) || Number(record.image_width) || 1024,
     imageHeight: Number(mainAsset?.height) || Number(record.image_height) || 1024,
     imageAlt: text(mainAsset?.alt) || text(record.title) || text(content.subject) || "馆藏作品",
@@ -120,12 +120,13 @@ export function summaryToEntry(row: PublicationSummaryRow, imageUrl?: string): L
 /** 摘要行主图缩略：优先本地清单缩略，回退远端 image_url。素材清单动态导入，不进调用方初始模块图。 */
 export async function withThumbs(rows: PublicationSummaryRow[]): Promise<LearningEntry[]> {
   if (!rows.length) return [];
-  const { learningThumbnailUrl } = await import("./learning-asset-cache");
+  const { learningThumbnailUrl, loadLearningAssets } = await import("./learning-asset-cache");
+  const assets = await loadLearningAssets();
   return rows.map((row) => {
     const main = (row.assets ?? []).find((asset) => asset.role === "main");
     const assetId = typeof main?.asset_id === "string" ? main.asset_id : "";
     const remote = typeof main?.image_url === "string" ? main.image_url : "";
-    return summaryToEntry(row, assetId || remote ? learningThumbnailUrl(assetId, remote) : undefined);
+    return summaryToEntry(row, assetId || remote ? learningThumbnailUrl(assets, assetId, remote) : undefined);
   });
 }
 

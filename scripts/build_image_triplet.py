@@ -16,7 +16,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "data" / "learning" / "assets" / "manifest.json"
+MANIFEST = ROOT / "public" / "learning" / "manifest.json"
 PUBLIC = ROOT / "public"
 READING_DIR = PUBLIC / "learning" / "reading"
 THUMB_DIR = PUBLIC / "learning" / "thumb"
@@ -58,7 +58,10 @@ def encode_under_budget(img: Image.Image, max_bytes: int, out: Path) -> int:
 
 
 def process(asset_id: str, entry: dict, force: bool) -> dict | None:
-    src = PUBLIC / entry["path"]
+    # 原图已迁至 learning-assets-archive/（仓库根）；兼容旧的 public 相对路径。
+    src = ROOT / entry["path"]
+    if not src.exists():
+        src = PUBLIC / entry["path"]
     if not src.exists():
         raise FileNotFoundError(f"{asset_id}: 原图缺失 {entry['path']}")
     rights = entry.get("rights_status")

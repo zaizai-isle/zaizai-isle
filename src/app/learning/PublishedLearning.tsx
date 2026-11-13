@@ -31,10 +31,10 @@ export function PublishedLearning() {
         // 旧深链兼容：/learning?entry=publication-<id> 或 ?entry=<静态选题 id>。
         if (requested) {
           if (requested.startsWith("publication-")) {
-            const { publicationRowToEntry } = await import("./learning-publication-entry");
-            const row = await fetchPublishedPublicationById(requested.slice("publication-".length));
+            const [{ publicationRowToEntry }, { loadLearningAssets }] = await Promise.all([import("./learning-publication-entry"), import("./learning-asset-cache")]);
+            const [row, assets] = await Promise.all([fetchPublishedPublicationById(requested.slice("publication-".length)), loadLearningAssets()]);
             if (!active) return;
-            setState(row ? { kind: "article", entry: publicationRowToEntry(row) } : { kind: "unavailable" });
+            setState(row ? { kind: "article", entry: publicationRowToEntry(row, assets) } : { kind: "unavailable" });
             return;
           }
           const selected = learningEntries.find((item) => item.id === requested);
@@ -47,8 +47,8 @@ export function PublishedLearning() {
         const todayRow = await fetchTodayPublishedPublication(today);
         if (!active) return;
         if (todayRow) {
-          const { publicationRowToEntry } = await import("./learning-publication-entry");
-          setState({ kind: "article", entry: publicationRowToEntry(todayRow) });
+          const [{ publicationRowToEntry }, { loadLearningAssets }] = await Promise.all([import("./learning-publication-entry"), import("./learning-asset-cache")]);
+          setState({ kind: "article", entry: publicationRowToEntry(todayRow, await loadLearningAssets()) });
           return;
         }
         // 诚实空状态：今天没有已发布内容，不展示旧稿正文。

@@ -14,8 +14,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DRAFTS = ROOT / ".codex-output" / "learning-drafts"
-PUBLIC_DIR = ROOT / "public" / "learning" / "assets"
-MANIFEST_PATH = ROOT / "data" / "learning" / "assets" / "manifest.json"
+# 原图不再进 public/（访客层只留 thumb/reading）；原图落本地归档目录（已 gitignore）。
+ARCHIVE_DIR = ROOT / "learning-assets-archive"
+MANIFEST_PATH = ROOT / "public" / "learning" / "manifest.json"
 MAX_EDGE = 1800
 MAX_DOWNLOAD_BYTES = 40 * 1024 * 1024
 ALLOWED_CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
@@ -79,7 +80,7 @@ def main() -> int:
     parser.add_argument("--refresh", action="store_true")
     parser.add_argument("--asset-id", action="append", default=[], help="Cache only the named asset id; may be repeated.")
     args = parser.parse_args()
-    PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
     manifest = json.loads(MANIFEST_PATH.read_text()) if MANIFEST_PATH.exists() else {}
     failures: list[str] = []
@@ -88,10 +89,10 @@ def main() -> int:
         if args.asset_id and asset_id not in args.asset_id:
             continue
         existing = manifest.get(asset_id)
-        if not args.refresh and isinstance(existing, dict) and existing.get("source_url") == image_url and (ROOT / "public" / existing.get("path", "")).is_file():
+        if not args.refresh and isinstance(existing, dict) and existing.get("source_url") == image_url and (ROOT / existing.get("path", "")).is_file():
             print(f"cached  {asset_id}")
             continue
-        matching = next((value for value in manifest.values() if isinstance(value, dict) and value.get("source_url") == image_url and (ROOT / "public" / value.get("path", "")).is_file()), None)
+        matching = next((value for value in manifest.values() if isinstance(value, dict) and value.get("source_url") == image_url and (ROOT / value.get("path", "")).is_file()), None)
         if not args.refresh and matching:
             manifest[asset_id] = {**matching, "package": package_name}
             MANIFEST_PATH.write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
@@ -102,11 +103,12 @@ def main() -> int:
                 temp_path = Path(temp_dir) / "source"
                 extension = download(image_url, temp_path)
                 output_name = f"{safe_name(asset_id)}{extension}"
-                output_path = PUBLIC_DIR / output_name
+                output_path = ARCHIVE_DIR / output_name
                 resize(temp_path, output_path)
             payload = output_path.read_bytes()
             manifest[asset_id] = {
-                "path": f"learning/assets/{output_name}",
+                "path": f"learning-assets-archive/{output_name}",
+                "original_url": image_url,
                 "source_url": image_url,
                 "sha256": hashlib.sha256(payload).hexdigest(),
                 "bytes": len(payload),

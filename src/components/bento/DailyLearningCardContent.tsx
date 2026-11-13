@@ -1,7 +1,7 @@
 "use client";
 
 import type { LearningEntry } from "@/app/learning/learning-content";
-import { learningThumbnailUrl } from "@/app/learning/learning-asset-cache";
+import { learningThumbnailUrl, loadLearningAssets, type LearningAssetMap } from "@/app/learning/learning-asset-cache";
 import { TranslatedText } from "@/components/TranslatedText";
 import { ArrowUpRight, BookOpen } from "lucide-react";
 import Image from "next/image";
@@ -27,7 +27,7 @@ type CardEntry = Pick<LearningEntry, "title" | "subject" | "creator" | "era"> & 
 
 const text = (value: unknown) => typeof value === "string" ? value : "";
 
-function publicationToCard(row: PublicationRow): CardEntry | null {
+function publicationToCard(row: PublicationRow, assetMap: LearningAssetMap | null): CardEntry | null {
   if (row.package_schema_version !== 2 || !row.package_snapshot) return null;
   const snapshot = row.package_snapshot;
   const article = snapshot.article && typeof snapshot.article === "object" ? snapshot.article as Record<string, unknown> : {};
@@ -41,7 +41,7 @@ function publicationToCard(row: PublicationRow): CardEntry | null {
     subject: text(work.title),
     creator: text(work.creator) || "作者未详",
     era: text(work.date),
-    imageUrl: mainAsset ? learningThumbnailUrl(text(mainAsset.asset_id), text(mainAsset.image_url)) : undefined,
+    imageUrl: mainAsset ? learningThumbnailUrl(assetMap, text(mainAsset.asset_id), text(mainAsset.image_url)) : undefined,
     imageAlt: text(mainAsset?.alt) || text(work.title) || title,
     imageWidth: typeof mainAsset?.width === "number" ? mainAsset.width : undefined,
     imageHeight: typeof mainAsset?.height === "number" ? mainAsset.height : undefined,
@@ -57,7 +57,7 @@ export function DailyLearningCardContent() {
 
   useEffect(() => {
     let active = true;
-    void import("@/lib/supabaseClient").then(async ({ getOptionalSupabase }) => {
+    void Promise.all([import("@/lib/supabaseClient"), loadLearningAssets()]).then(async ([{ getOptionalSupabase }, assetMap]) => {
       const client = getOptionalSupabase();
       if (!client) {
         if (active) setFailed(true);
@@ -76,7 +76,7 @@ export function DailyLearningCardContent() {
         setFailed(true);
         return;
       }
-      const published = publicationToCard(data as PublicationRow);
+      const published = publicationToCard(data as PublicationRow, assetMap);
       if (published) setEntry(published);
       else setFailed(true);
     }).catch(() => {

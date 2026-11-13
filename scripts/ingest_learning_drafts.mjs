@@ -48,7 +48,16 @@ async function probe(url) {
   } catch (e) { return { ok: false, reason: String(e.cause?.code ?? e.message) }; }
 }
 
-const reachLog = existsSync(REACH_LOG) ? JSON.parse(readFileSync(REACH_LOG, 'utf8')) : {};
+// 可达性缓存以 Supabase Storage 为准（机器人直写），拉不到再回退本地旧副本；写只写本地。
+let reachLog = {};
+const reachUrl = `${(env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/$/, '')}/storage/v1/object/public/learning-research/source-reachability.json`;
+if (env.NEXT_PUBLIC_SUPABASE_URL) {
+  try {
+    const res = await fetch(reachUrl, { signal: AbortSignal.timeout(15000) });
+    if (res.ok) reachLog = await res.json();
+  } catch { /* Storage 不可达：回退本地缓存 */ }
+}
+if (!Object.keys(reachLog).length && existsSync(REACH_LOG)) reachLog = JSON.parse(readFileSync(REACH_LOG, 'utf8'));
 let inserted = 0, blocked = 0;
 
 for (const file of files) {

@@ -1,5 +1,8 @@
 const REPLICATE_API_BASE_URL = 'https://api.replicate.com/v1';
 const DEFAULT_REPLICATE_IMAGE_MODEL = 'black-forest-labs/flux-kontext-dev';
+const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4/accounts';
+const DEFAULT_CLOUDFLARE_IMAGE_MODEL = '@cf/black-forest-labs/flux-2-klein-4b';
+const DEFAULT_CLOUDFLARE_VISION_MODEL = '@cf/moondream/moondream3.1-9B-A2B';
 const TERMINAL_STATUSES = new Set(['succeeded', 'failed', 'canceled']);
 
 const corsHeaders = {
@@ -18,6 +21,10 @@ type BananaRequest = {
   question?: string;
   image_description?: string;
   imageDescription?: string;
+  image_width?: number;
+  imageWidth?: number;
+  image_height?: number;
+  imageHeight?: number;
 };
 
 type Prediction = {
@@ -27,6 +34,16 @@ type Prediction = {
   urls?: {
     get?: string;
   };
+};
+
+type ImageProvider = 'cloudflare' | 'replicate';
+
+type CloudflareResponse<T> = {
+  result?: T;
+  success?: boolean;
+  errors?: Array<{
+    message?: string;
+  }>;
 };
 
 function jsonResponse(body: unknown, status = 200) {
@@ -69,6 +86,130 @@ function getImageDataUrl(body: BananaRequest) {
   }
 
   return `data:${mimeType};base64,${imageBase64}`;
+}
+
+function getCloudflareConfig() {
+  const accountId = Deno.env.get('CLOUDFLARE_ACCOUNT_ID');
+  const apiToken = Deno.env.get('CLOUDFLARE_API_TOKEN');
+
+  if (!accountId || !apiToken) {
+    throw new Error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN in Supabase function secrets');
+  }
+
+  return { accountId, apiToken };
+}
+
+function base64ToBlob(base64: string, mimeType: string) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], { type: mimeType });
+}
+
+function getCloudflareError<T>(response: CloudflareResponse<T>, status: number) {
+  return response.errors?.map((error) => error.message).filter(Boolean).join('; ') || String(status);
+}
+
+function getImageProvider(): ImageProvider {
+  const configuredProvider = Deno.env.get('BANANA_IMAGE_PROVIDER')?.toLowerCase();
+
+  if (configuredProvider === 'cloudflare' || configuredProvider === 'replicate') {
+    return configuredProvider;
+  }
+
+  return Deno.env.get('CLOUDFLARE_ACCOUNT_ID') && Deno.env.get('CLOUDFLARE_API_TOKEN')
+    ? 'cloudflare'
+    : 'replicate';
+}
+
+async function runCloudflareImageEdit(body: BananaRequest) {
+  const { accountId, apiToken } = getCloudflareConfig();
+  const model = Deno.env.get('CLOUDFLARE_IMAGE_MODEL') || DEFAULT_CLOUDFLARE_IMAGE_MODEL;
+  const prompt = body.prompt || 'Transform the image into a surreal banana-themed version.';
+  const imageBase64 = body.image_base64 || body.imageBase64;
+  const mimeType = body.mime_type || body.mimeType || 'image/webp';
+  if (!imageBase64) throw new Error('Missing image_base64');
+
+  const form = new FormData();
+  form.append('prompt', prompt);
+  form.append('input_image_0', base64ToBlob(imageBase64, mimeType), 'banana-input.webp');
+  form.append('width', String(body.image_width || body.imageWidth || 1024));
+  form.append('height', String(body.image_height || body.imageHeight || 1024));
+
+  const response = await fetch(`${CLOUDFLARE_API_BASE_URL}/${accountId}/ai/run/${model}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+    body: form,
+  });
+
+  const result = await response.json() as CloudflareResponse<{ image?: string }>;
+  if (!response.ok || result.success === false) {
+    throw new Error(`Cloudflare image edit failed: ${getCloudflareError(result, response.status)}`);
+  }
+
+  const generatedImage = result.result?.image;
+  if (!generatedImage) {
+    throw new Error('Cloudflare did not return image data');
+  }
+
+  return {
+    image_base64: generatedImage,
+    mime_type: 'image/png',
+  };
+}
+
+async function runCloudflareVision(body: BananaRequest) {
+  const { accountId, apiToken } = getCloudflareConfig();
+  const model = Deno.env.get('CLOUDFLARE_VISION_MODEL') || DEFAULT_CLOUDFLARE_VISION_MODEL;
+  const question = body.question || '请详细描述这张图片的内容，包括主要物体、场景、颜色等信息。';
+
+  const response = await fetch(`${CLOUDFLARE_API_BASE_URL}/${accountId}/ai/run/${model}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      task: 'query',
+      image: getImageDataUrl(body),
+      question,
+      reasoning: false,
+      max_tokens: 512,
+      stream: false,
+    }),
+  });
+
+  const result = await response.json() as CloudflareResponse<unknown>;
+  if (!response.ok || result.success === false) {
+    throw new Error(`Cloudflare vision failed: ${getCloudflareError(result, response.status)}`);
+  }
+
+  const extractAnswer = (value: unknown, depth = 0): string | undefined => {
+    if (typeof value === 'string') return value;
+    if (!value || typeof value !== 'object' || depth > 2) return undefined;
+
+    const record = value as Record<string, unknown>;
+    for (const key of ['answer', 'response', 'caption', 'description', 'result']) {
+      const answer = extractAnswer(record[key], depth + 1);
+      if (answer) return answer;
+    }
+    return undefined;
+  };
+
+  const answer = extractAnswer(result.result);
+  if (!answer) {
+    const resultKeys = result.result && typeof result.result === 'object'
+      ? Object.keys(result.result).join(',')
+      : typeof result.result;
+    throw new Error(`Cloudflare vision did not return an answer (result keys: ${resultKeys})`);
+  }
+  return { text: answer };
 }
 
 function getOutputUrl(output: unknown): string {
@@ -123,7 +264,7 @@ async function runReplicateImageEdit(body: BananaRequest) {
     throw new Error('Missing REPLICATE_API_TOKEN in Supabase function secrets');
   }
 
-  const model = Deno.env.get('REPLICATE_IMAGE_MODEL') || body.model || DEFAULT_REPLICATE_IMAGE_MODEL;
+  const model = Deno.env.get('REPLICATE_IMAGE_MODEL') || DEFAULT_REPLICATE_IMAGE_MODEL;
   const prompt = body.prompt || 'Transform the image into a surreal banana-themed version.';
   const inputImage = getImageDataUrl(body);
 
@@ -171,6 +312,14 @@ async function runReplicateImageEdit(body: BananaRequest) {
   };
 }
 
+async function runImageEdit(body: BananaRequest) {
+  if (getImageProvider() === 'cloudflare') {
+    return runCloudflareImageEdit(body);
+  }
+
+  return runReplicateImageEdit(body);
+}
+
 function createFallbackDescription(body: BananaRequest) {
   const question = body.question ? `问题：${body.question}` : '';
 
@@ -210,10 +359,13 @@ Deno.serve(async (request) => {
     const body = await request.json() as BananaRequest;
 
     if (task === 'bananaify') {
-      return jsonResponse(await runReplicateImageEdit(body));
+      return jsonResponse(await runImageEdit(body));
     }
 
     if (task === 'understand') {
+      if (getImageProvider() === 'cloudflare') {
+        return jsonResponse(await runCloudflareVision(body));
+      }
       return jsonResponse(createFallbackDescription(body));
     }
 

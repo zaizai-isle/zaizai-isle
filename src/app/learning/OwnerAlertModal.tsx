@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { learningResearchPoolUrl } from "./learning-research-pool";
 
 const DISMISS_KEY = "daily-learning-owner-alert-dismissed";
 // 与 @/lib/island-owner-client 的 DAILY_LEARNING_SESSION_KEY 保持一致；
@@ -25,8 +26,9 @@ function daysBetween(from: string, to: string) {
 
 async function fetchResearchPool(): Promise<{ dryDays: number; poolIssue: string }> {
   try {
-    const basePath = window.location.pathname.startsWith("/zaizai-isle") ? "/zaizai-isle" : "";
-    const response = await fetch(`${basePath}/data/learning/research/latest.json`, { cache: "no-store" });
+    const url = learningResearchPoolUrl();
+    if (!url) return { dryDays: 0, poolIssue: "未配置 Supabase 地址" };
+    const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) return { dryDays: 0, poolIssue: "无法读取，采集任务可能未运行" };
     const data = await response.json() as { status?: unknown; research_date?: unknown };
     if (typeof data.status !== "string" || data.status !== "research_candidates_only") return { dryDays: 0, poolIssue: `状态异常（${String(data.status ?? "缺失")}）` };

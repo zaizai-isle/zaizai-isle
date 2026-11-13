@@ -12,7 +12,7 @@ import { Sparkles, Download } from 'lucide-react';
 import { uploadImage, createBananaWork } from '@/lib/db/bananaApi';
 import {
   bananaifyImage,
-  fileToBase64,
+  prepareImageForAi,
   submitImageUnderstanding,
   pollImageUnderstanding,
 } from '@/lib/bananaApi';
@@ -52,11 +52,13 @@ export default function BananaHomePage() {
 
       setProgressText('正在进行香蕉化处理（这可能需要1-2分钟）...');
       setProgress(20);
-      const base64 = await fileToBase64(selectedFile);
-      let mimeType = selectedFile.type;
-      if (!mimeType || mimeType === '') mimeType = 'image/jpeg';
-
-      const bananaBase64 = await bananaifyImage(base64, mimeType);
+      const aiInput = await prepareImageForAi(selectedFile);
+      const bananaBase64 = await bananaifyImage(
+        aiInput.base64,
+        aiInput.mimeType,
+        aiInput.outputWidth,
+        aiInput.outputHeight
+      );
       setProgress(50);
 
       setProgressText('保存香蕉化图片...');

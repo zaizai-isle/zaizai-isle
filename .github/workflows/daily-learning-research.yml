@@ -7,11 +7,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: daily-learning-research
   cancel-in-progress: false
+
+env:
+  SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  BUCKET: learning-research
 
 jobs:
   collect:
@@ -22,18 +26,44 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Pull prior state from Supabase Storage
+        env:
+          SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_URL" || { echo "missing NEXT_PUBLIC_SUPABASE_URL"; exit 1; }
+          test -n "$SERVICE_KEY" || { echo "missing SUPABASE_SERVICE_ROLE_KEY"; exit 1; }
+          mkdir -p data/learning/research/runs
+          # 去重索引与可达性缓存是机器人的跨运行状态；不存在则视为首次运行。
+          for obj in index.json source-reachability.json; do
+            code=$(curl --silent --show-error --output "data/learning/research/$obj" --write-out '%{http_code}' \
+              "$SUPABASE_URL/storage/v1/object/public/$BUCKET/$obj" || echo "000")
+            if [ "$code" = "200" ]; then echo "restored $obj"; else rm -f "data/learning/research/$obj"; echo "no prior $obj (http $code)"; fi
+          done
+
       - name: Collect public museum candidates
         run: python scripts/collect_learning_research.py
-      - name: Mirror latest pool for same-origin fetch
+
+      - name: Publish research JSON to Supabase Storage
+        env:
+          SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          mkdir -p public/data/learning/research
-          cp data/learning/research/latest.json public/data/learning/research/latest.json
-      - name: Commit research files
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/learning/research/ public/data/learning/research/latest.json
-          if ! git diff --cached --quiet; then
-            git commit -m 'chore(learning): collect daily public museum candidates'
-            git push
-          fi
+          set -euo pipefail
+          upload() { # $1 = local path, $2 = object path
+            curl --fail-with-body --silent --show-error --retry 3 -X PUT \
+              "$SUPABASE_URL/storage/v1/object/$BUCKET/$2" \
+              --header "Authorization: Bearer $SERVICE_KEY" \
+              --header "apikey: $SERVICE_KEY" \
+              --header "Content-Type: application/json" \
+              --header "x-upsert: true" \
+              --data-binary "@$1"
+            echo "uploaded $2"
+          }
+          upload data/learning/research/latest.json "latest.json"
+          upload data/learning/research/index.json "index.json"
+          upload data/learning/research/source-reachability.json "source-reachability.json"
+          for run in data/learning/research/runs/*.json; do
+            [ -e "$run" ] || continue
+            upload "$run" "runs/$(basename "$run")"
+          done

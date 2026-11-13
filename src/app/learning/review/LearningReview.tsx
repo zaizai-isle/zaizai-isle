@@ -6,7 +6,7 @@ import { verifyIslandOwner } from "../learning-repository";
 import { validateLearningPackageForPublication, validateLearningPackageV2, type LearningPackageV2 } from "../learning-package";
 import type { LearningArticleAsset, LearningEntry } from "../learning-content";
 import { LearningArticleContent } from "../LearningArticleContent";
-import { learningAssetUrl } from "../learning-asset-cache";
+import { learningOriginalUrl, loadLearningAssets, type LearningAssetMap } from "../learning-asset-cache";
 import { learningDetailCrop } from "../learning-detail-decisions";
 
 type Draft = {
@@ -49,7 +49,7 @@ function publicationTitle(publication:Publication) {
   return text(snapshotArticle?.title)||text(publication.content.title)||"未命名内容";
 }
 
-function draftToEntry(draft: Draft): LearningEntry {
+function draftToEntry(draft: Draft, assets: LearningAssetMap | null): LearningEntry {
   const content=draft.content??{};
   const work=draft.package_schema_version===2&&draft.work_record?draft.work_record:draft.source_record;
   const contentId=draft.content_id??"";
@@ -68,7 +68,7 @@ function draftToEntry(draft: Draft): LearningEntry {
     if(!id||!imageUrl||!sourceUrl||!["main","detail","comparison"].includes(String(role)))return [];
     const rawCrop=asset.crop&&typeof asset.crop==="object"?asset.crop as Record<string,unknown>:null;
     const crop=rawCrop?{x:Number(rawCrop.x),y:Number(rawCrop.y),width:Number(rawCrop.width),height:Number(rawCrop.height)}:undefined;
-    return [{id,role:role as LearningArticleAsset["role"],imageUrl:learningAssetUrl(id,imageUrl),sourceUrl,width:Number(asset.width)||1024,height:Number(asset.height)||1024,alt:text(asset.alt)||text(work.title),attribution:text(asset.attribution),rightsStatement:text(asset.rights_statement),licenseUrl:text(asset.license_url),crop}];
+    return [{id,role:role as LearningArticleAsset["role"],imageUrl:learningOriginalUrl(assets,id,imageUrl),sourceUrl,width:Number(asset.width)||1024,height:Number(asset.height)||1024,alt:text(asset.alt)||text(work.title),attribution:text(asset.attribution),rightsStatement:text(asset.rights_statement),licenseUrl:text(asset.license_url),crop}];
   });
   return {
     id:`draft-${draft.id}`,
@@ -85,7 +85,7 @@ function draftToEntry(draft: Draft): LearningEntry {
     question:text(content.question),
     sourceLabel:text(work.institution)||text(work.source)||"作品来源",
     sourceUrl:text(work.source_url)||text(draft.source_record.source_url),
-    imageUrl:mainAsset?learningAssetUrl(text(mainAsset.asset_id),text(mainAsset.image_url)):text(draft.source_record.image_url)||undefined,
+    imageUrl:mainAsset?learningOriginalUrl(assets,text(mainAsset.asset_id),text(mainAsset.image_url)):text(draft.source_record.image_url)||undefined,
     imageWidth:Number(mainAsset?.width)||Number(draft.source_record.image_width)||1024,
     imageHeight:Number(mainAsset?.height)||Number(draft.source_record.image_height)||1024,
     imageAlt:text(mainAsset?.alt)||text(draft.source_record.image_alt)||text(work.title)||"候选作品",
@@ -99,6 +99,8 @@ function draftToEntry(draft: Draft): LearningEntry {
 }
 export function LearningReview({initialCandidates,researchDate}:LearningReviewProps) {
   const [auth,setAuth]=useState<"loading"|"denied"|"ready">("loading");
+  const [assetMap,setAssetMap]=useState<LearningAssetMap|null>(null);
+  useEffect(()=>{let active=true;void loadLearningAssets().then(map=>{if(active)setAssetMap(map)});return()=>{active=false};},[]);
   const [email,setEmail]=useState(""); const [password,setPassword]=useState("");
   const [rows,setRows]=useState<Draft[]>([]); const [selected,setSelected]=useState("");
   const [note,setNote]=useState(""); const [imageRights,setImageRights]=useState(false);
@@ -305,7 +307,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
   const planning=current?.planning??{};
   const quality=current?.quality??{};
   const isV2=current?.package_schema_version===2;
-  const previewEntry=current?draftToEntry(current):null;
+  const previewEntry=current?draftToEntry(current,assetMap):null;
   return <main className="learning-page"><div className="learning-shell">
     <header className="learning-header"><div className="learning-brand"><h1>每日一看 · 内容审核</h1><p>仅岛主账户可以访问草稿与提交审核</p></div><Link href="/learning" className="learning-pill">返回每日一看</Link></header>
     {auth==="loading"?<div className="learning-review-state"><p>正在验证岛主身份…</p></div>:auth==="denied"?<section className="learning-review-login" aria-labelledby="owner-login-title"><p className="learning-kicker">私人工作区</p><h2 id="owner-login-title">岛主登录</h2><p className="learning-muted">登录后可以生成、审核和发布文章版本。</p><form className="learning-login" onSubmit={signIn}>

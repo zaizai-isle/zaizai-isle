@@ -23,19 +23,70 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
-// 将图片文件转换为 Base64
-export async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const result = reader.result as string;
-      // 去掉 data:image/xxx;base64, 前缀
-      const base64 = result.split(',')[1];
-      resolve(base64);
+type AiImageInput = {
+  base64: string;
+  mimeType: string;
+  outputWidth: number;
+  outputHeight: number;
+};
+
+const AI_INPUT_MAX_DIMENSION = 512;
+const AI_OUTPUT_MAX_DIMENSION = 1024;
+const AI_OUTPUT_MIN_DIMENSION = 256;
+
+function roundToMultipleOf16(value: number): number {
+  return Math.round(value / 16) * 16;
+}
+
+// Cloudflare FLUX 的参考图限制为 512x512；只生成 AI 专用副本，不降低图库原图质量。
+export async function prepareImageForAi(file: File): Promise<AiImageInput> {
+  const bitmap = await createImageBitmap(file);
+
+  try {
+    const inputScale = Math.min(1, AI_INPUT_MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
+    const inputWidth = Math.max(1, Math.round(bitmap.width * inputScale));
+    const inputHeight = Math.max(1, Math.round(bitmap.height * inputScale));
+    const canvas = document.createElement('canvas');
+    canvas.width = inputWidth;
+    canvas.height = inputHeight;
+
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('无法创建图片处理上下文');
+    context.drawImage(bitmap, 0, 0, inputWidth, inputHeight);
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (result) => result ? resolve(result) : reject(new Error('图片转换失败')),
+        'image/webp',
+        0.85
+      );
+    });
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = () => reject(reader.error || new Error('图片读取失败'));
+      reader.readAsDataURL(blob);
+    });
+
+    const outputScale = AI_OUTPUT_MAX_DIMENSION / Math.max(bitmap.width, bitmap.height);
+    const outputWidth = Math.max(
+      AI_OUTPUT_MIN_DIMENSION,
+      roundToMultipleOf16(bitmap.width * outputScale)
+    );
+    const outputHeight = Math.max(
+      AI_OUTPUT_MIN_DIMENSION,
+      roundToMultipleOf16(bitmap.height * outputScale)
+    );
+
+    return {
+      base64: dataUrl.split(',')[1],
+      mimeType: 'image/webp',
+      outputWidth,
+      outputHeight,
     };
-    reader.onerror = (error) => reject(error);
-  });
+  } finally {
+    bitmap.close();
+  }
 }
 
 const BANANAIFY_PROMPT = `核心指令：基于输入图像的构图和光影，进行全面的、像素级的语义内容替换。将输入图像中所有识别出的对象，替换为香蕉形态的物体。
@@ -104,7 +155,9 @@ async function bananaifyWithGemini(
 
 async function bananaifyWithProxy(
   imageBase64: string,
-  mimeType: string
+  mimeType: string,
+  outputWidth?: number,
+  outputHeight?: number
 ): Promise<string> {
   const response = await fetch(buildProxyUrl('bananaify'), {
     method: 'POST',
@@ -113,10 +166,11 @@ async function bananaifyWithProxy(
       ...getAuthHeaders(),
     },
     body: JSON.stringify({
-      model: BANANA_IMAGE_MODEL,
       prompt: BANANAIFY_PROMPT,
       image_base64: imageBase64,
       mime_type: mimeType,
+      image_width: outputWidth,
+      image_height: outputHeight,
     }),
   });
 
@@ -218,10 +272,12 @@ async function understandImageWithProxy(
 // ─────────────────────────────────────────────
 export async function bananaifyImage(
   imageBase64: string,
-  mimeType: string
+  mimeType: string,
+  outputWidth?: number,
+  outputHeight?: number
 ): Promise<string> {
   if (BANANA_AI_PROVIDER === 'proxy') {
-    return bananaifyWithProxy(imageBase64, mimeType);
+    return bananaifyWithProxy(imageBase64, mimeType, outputWidth, outputHeight);
   }
 
   if (BANANA_AI_PROVIDER === 'gemini') {

@@ -1,26 +1,47 @@
 {
   "schema_version": 1,
   "status": "research_candidates_only",
-  "generated_at": "2026-11-12T12:27:44+09:00",
-  "research_date": "2026-11-12",
+  "generated_at": "2026-11-13T11:58:57+09:00",
+  "research_date": "2026-11-13",
   "theme": {
-    "observation_code": "A05",
-    "observation_name": "材料、结构与功能",
-    "history_node": "H03",
-    "query": "furniture",
+    "observation_code": "A06",
+    "observation_name": "文字、符号与图文关系",
+    "history_node": "H02",
+    "query": "calligraphy",
     "classification_verified": false
   },
   "items": [
     {
-      "source_id": "cleveland:160089",
+      "source_id": "smk:KKS13446/237",
+      "source": "smk",
+      "title": "Nodeblad",
+      "creator": "Joseph Leopold Eybler",
+      "date": "1796",
+      "medium": "Pen and brown ink",
+      "source_url": "https://open.smk.dk/artwork/image/KKS13446/237",
+      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKS13446/237&lang=en",
+      "image_url": "https://api.smk.dk/api/v1/thumbnail/cb82e592-f0fc-47dd-abcf-212b160f6bf0.jpg",
+      "rights": {
+        "catalog_public_domain": true,
+        "image_permission_verified": false,
+        "source_rights_note": "SMK public_domain=true; check image record"
+      },
+      "review_status": "needs_editorial_review",
+      "reachability": {
+        "ok": true,
+        "status": 206
+      }
+    },
+    {
+      "source_id": "cleveland:125581",
       "source": "cleveland",
-      "title": "Fire Screen",
-      "creator": "Herter Brothers (American)",
-      "date": "c. 1878–80",
-      "medium": "gilded wood, painted and gilded wood panels, brocaded silk, embossed paper",
-      "source_url": "https://www.clevelandart.org/art/1997.58",
-      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/160089",
-      "image_url": "https://openaccess-cdn.clevelandart.org/1997.58/1997.58_web.jpg",
+      "title": "Calligraphy",
+      "creator": "Basavana (Indian, active c. 1560–1600)",
+      "date": "c. 1596",
+      "medium": "Gum tempera, ink, and gold on paper",
+      "source_url": "https://www.clevelandart.org/art/1947.502.b",
+      "catalog_api_url": "https://openaccess-api.clevelandart.org/api/artworks/125581",
+      "image_url": "https://openaccess-cdn.clevelandart.org/1947.502.b/1947.502.b_web.jpg",
       "rights": {
         "catalog_public_domain": true,
         "image_permission_verified": false,
@@ -31,38 +52,18 @@
         "ok": true,
         "status": 206
       }
-    },
-    {
-      "source_id": "smk:KKSgb2950/36",
-      "source": "smk",
-      "title": "Consolida ajacis (have-ridderspore)",
-      "creator": "Hans Simon Holtzbecker",
-      "date": "1649-1659",
-      "medium": "Gouache on parchment",
-      "source_url": "https://open.smk.dk/artwork/image/KKSgb2950/36",
-      "catalog_api_url": "https://api.smk.dk/api/v1/art/?object_number=KKSgb2950/36&lang=en",
-      "image_url": "https://iip-thumb.smk.dk/iiif/jp2/js956m62h_KKSgb2950-36.tif.jp2/full/!1024,/0/default.jpg",
-      "rights": {
-        "catalog_public_domain": true,
-        "image_permission_verified": false,
-        "source_rights_note": "SMK public_domain=true; check image record"
-      },
-      "review_status": "needs_editorial_review",
-      "reachability": {
-        "ok": true,
-        "status": 200
-      }
     }
   ],
   "sources_attempted": [
-    "cleveland",
     "smk",
     "loc",
     "met",
-    "artic"
+    "artic",
+    "cleveland"
   ],
   "warnings": [
-    "unreachable image dropped: https://www.artic.edu/iiif/2/be169735-ea1c-7440-c438-bafd24021119/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
+    "unreachable image dropped: https://images.metmuseum.org/CRDImages/as/web-large/1977_375_50ab_label_strip_sf.JPG (HTTP Error 406: Not Acceptable)",
+    "unreachable image dropped: https://www.artic.edu/iiif/2/d16965d9-eb50-a0aa-c896-ac05f9479bcd/full/843,/0/default.jpg (HTTP Error 403: Forbidden)"
   ],
   "notes": "Catalog candidates only. No images saved and no content published."
 }

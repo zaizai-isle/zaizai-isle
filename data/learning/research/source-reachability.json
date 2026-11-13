@@ -146,5 +146,27 @@
     "ok": false,
     "status": 403,
     "reason": "HTTP Error 403: Forbidden"
+  },
+  "https://api.smk.dk/api/v1/thumbnail/cb82e592-f0fc-47dd-abcf-212b160f6bf0.jpg": {
+    "checked_at": "2026-11-13T11:59:18.691076+09:00",
+    "ok": true,
+    "status": 206
+  },
+  "https://images.metmuseum.org/CRDImages/as/web-large/1977_375_50ab_label_strip_sf.JPG": {
+    "checked_at": "2026-11-13T11:59:20.197426+09:00",
+    "ok": false,
+    "status": 406,
+    "reason": "HTTP Error 406: Not Acceptable"
+  },
+  "https://www.artic.edu/iiif/2/d16965d9-eb50-a0aa-c896-ac05f9479bcd/full/843,/0/default.jpg": {
+    "checked_at": "2026-11-13T11:59:21.443077+09:00",
+    "ok": false,
+    "status": 403,
+    "reason": "HTTP Error 403: Forbidden"
+  },
+  "https://openaccess-cdn.clevelandart.org/1947.502.b/1947.502.b_web.jpg": {
+    "checked_at": "2026-11-13T11:59:21.678881+09:00",
+    "ok": true,
+    "status": 206
   }
 }

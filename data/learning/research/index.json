@@ -80,7 +80,9 @@
     "cleveland:114684",
     "smk:KKS9153",
     "cleveland:160089",
-    "smk:KKSgb2950/36"
+    "smk:KKSgb2950/36",
+    "smk:KKS13446/237",
+    "cleveland:125581"
   ],
   "runs": [
     "runs/2026-10-19.json",
@@ -106,7 +108,8 @@
     "runs/2026-11-09.json",
     "runs/2026-11-10.json",
     "runs/2026-11-11.json",
-    "runs/2026-11-12.json"
+    "runs/2026-11-12.json",
+    "runs/2026-11-13.json"
   ],
-  "last_research_date": "2026-11-12"
+  "last_research_date": "2026-11-13"
 }

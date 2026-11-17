@@ -152,6 +152,22 @@
     "thumb_path": "learning/thumb/cleveland-114684-main.webp",
     "thumb_sha256": "f3c2c39dec68afe75db0a3ca9414acb5277ca0924182aae71170ad3f81fdb3ed"
   },
+  "cleveland-147016-main": {
+    "bytes": 2643198,
+    "original_sha256": "5c55edbbe6038ceeee5fe443a33f8e0978259bfedebb427b6757065be470a3f9",
+    "original_url": "https://openaccess-cdn.clevelandart.org/1972.47/1972.47_print.jpg",
+    "package": "research-2026-11-17-cleveland-147016/package-v2.json",
+    "path": "learning-assets-archive/cleveland-147016-print.jpg",
+    "reading_bytes": 351418,
+    "reading_path": "learning/reading/cleveland-147016-main.webp",
+    "reading_sha256": "a81d7f37e7ff53011cb7cf3b33a955cff081fe9803b41f1f81804ebbcc69e342",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（1536×1931）。",
+    "rights_status": "open",
+    "sha256": "5c55edbbe6038ceeee5fe443a33f8e0978259bfedebb427b6757065be470a3f9",
+    "thumb_bytes": 31686,
+    "thumb_path": "learning/thumb/cleveland-147016-main.webp",
+    "thumb_sha256": "3828b77c21284f5e69fea3814e9ae3f7247fa930c7aa49b63031455055760cbf"
+  },
   "cleveland-150088-main": {
     "bytes": 5385394,
     "original_sha256": "8696db164ef86b14d5be69437aa3642f5ee142d114afd4a5b81d2f49560564f6",
@@ -701,6 +717,22 @@
     "thumb_bytes": 23314,
     "thumb_path": "learning/thumb/smk-kms553-main.webp",
     "thumb_sha256": "4c5c6e883412559f842c833ba898758b6f19f30e9234fc36ee6d25d3c93de269"
+  },
+  "smk-kms8575-main": {
+    "bytes": 122750,
+    "original_sha256": "e4519df710d029120a3e2f0c95983fdfbccb11018852dd236a12d29c39a882fc",
+    "original_url": "https://api.smk.dk/api/v1/thumbnail/a1c414f9-7658-4984-8452-22f9a106cb24.jpg",
+    "package": "research-2026-11-17-smk-kms8575/package-v2.json",
+    "path": "learning-assets-archive/smk-kms8575-full.jpg",
+    "reading_bytes": 51732,
+    "reading_path": "learning/reading/smk-kms8575-main.webp",
+    "reading_sha256": "d238c26203fcb5450800076adb0fc4051fde6a38db8206e9bdc519d4fb30000f",
+    "rights_note": "丹麦国家美术馆SMK本件登记public_domain=true（PDM 1.0）；download端点持续500，归档取自api.smk.dk thumbnail端点1600×1042版本，已解码核验。",
+    "rights_status": "open",
+    "sha256": "e4519df710d029120a3e2f0c95983fdfbccb11018852dd236a12d29c39a882fc",
+    "thumb_bytes": 7884,
+    "thumb_path": "learning/thumb/smk-kms8575-main.webp",
+    "thumb_sha256": "5e409a7365e0e1fcc59c62a158944e9084f0c6ee66ede5056681c6d1713c69e5"
   },
   "smk-kmssp430-main": {
     "bytes": 101383,

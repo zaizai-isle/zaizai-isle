@@ -184,6 +184,22 @@
     "thumb_path": "learning/thumb/cleveland-147016-main.webp",
     "thumb_sha256": "3828b77c21284f5e69fea3814e9ae3f7247fa930c7aa49b63031455055760cbf"
   },
+  "cleveland-148282-main": {
+    "bytes": 4155829,
+    "original_sha256": "e0388ad64f69bef6db4ef1d2d81c81f5e0cfebb7d5d21aea73f74b9353ec8ffd",
+    "original_url": "https://openaccess-cdn.clevelandart.org/1975.254/1975.254_print.jpg",
+    "package": "research-2026-11-19-cleveland-148282/package-v2.json",
+    "path": "learning-assets-archive/cleveland-148282-print.jpg",
+    "reading_bytes": 317358,
+    "reading_path": "learning/reading/cleveland-148282-main.webp",
+    "reading_sha256": "eb2ef916d515dfc538f248a790b8ab23de0768d78dfdd6ed002c0dcdd705850b",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（3400×3114）。",
+    "rights_status": "open",
+    "sha256": "e0388ad64f69bef6db4ef1d2d81c81f5e0cfebb7d5d21aea73f74b9353ec8ffd",
+    "thumb_bytes": 28378,
+    "thumb_path": "learning/thumb/cleveland-148282-main.webp",
+    "thumb_sha256": "bf017906313dab806d5d70ca188770b4293f5b83cbb5a5a056bedecd5e273f20"
+  },
   "cleveland-150088-main": {
     "bytes": 5385394,
     "original_sha256": "8696db164ef86b14d5be69437aa3642f5ee142d114afd4a5b81d2f49560564f6",

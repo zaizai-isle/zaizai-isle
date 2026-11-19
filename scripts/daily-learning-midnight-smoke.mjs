@@ -49,9 +49,26 @@ for (const row of future) {
   if (deep.length) failures.push(`未来稿深链仍可按 id 读到：${row.id}`);
 }
 
+// 匿名直访线上文章链接：未来稿链接不得服务端渲染正文。
+// 新构建=无正文兼容壳（可）；尚未部署新构建时旧正文页会命中正文标记 → 记为链接级泄漏。
+const siteBase = (env.LEARNING_SITE_URL || "https://zaizai-isle.github.io/zaizai-isle").replace(/\/$/, "");
+const bodyMarker = "查看作品资料"; // LearningArticle 的正文区标记，兼容壳与 404 都不含它
+for (const row of future) {
+  if (!row.content_id) continue;
+  const link = `${siteBase}/learning/${encodeURIComponent(row.content_id)}/`;
+  try {
+    const res = await fetch(link, { cache: "no-store" });
+    if (res.status === 404) { console.log(`未来稿文章链接匿名不可读（404）：${row.content_id}`); continue; }
+    const html = await res.text();
+    if (html.includes(bodyMarker)) failures.push(`未来稿文章链接仍服务端渲染正文：${link}`);
+    else console.log(`未来稿文章链接为兼容壳/空态：${row.content_id}（HTTP ${res.status}）`);
+  } catch (error) {
+    console.warn(`（文章链接核验跳过：${link} —— ${error instanceof Error ? error.message : String(error)}；请在可联网环境复跑。）`);
+  }
+}
+
 // 已过午夜的可读性：找最近一条已到期可见行（岛主 SQL 或机器人写入的成品行）。
-const readable = await rest(`select=id,content_id,display_date,content->>title&is_visible=eq.true&order=display_date.desc&limit=1`);
-if (!readable.length) {
+const readable = await rest(`select=id,content_id,display_date,content->>title&is_visible=eq.true&order=display_date.desc&limit=1`);if (!readable.length) {
   console.log("（当前无可见发布行，跳过可读性正面验证。）");
 } else {
   const row = readable[0];

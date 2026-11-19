@@ -115,13 +115,13 @@ NEXT_PUBLIC_BANANA_IMAGE_MODEL=@cf/black-forest-labs/flux-2-klein-4b
 
 1. Revoke the leaked Gemini key in Google AI Studio (create a new one only if you still want the direct fallback path; the proxy does not need it).
 2. Delete the `NEXT_PUBLIC_GEMINI_API_KEY` entry from GitHub → Settings → Secrets and variables → Actions.
-3. Verify the revocation from any network that can reach Google (this workspace's outbound to Google is blocked, so the agent cannot run it for you):
+3. Verify the revocation (exit 0 = revoked, 1 = still live, 2 = network unreachable):
 
    ```bash
-   curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=OLD_KEY"
+   NODE_USE_ENV_PROXY=1 HTTPS_PROXY=http://127.0.0.1:7897 node scripts/verify-gemini-key-revoked.mjs
    ```
 
-   An HTTP `403`/`400` with `API_KEY_INVALID` (or "API key not valid") means the leaked key is dead. A `200` means it still works and must be revoked.
+   `127.0.0.1:7897` is this Mac's system proxy port (adjust if yours differs, or drop both vars on a network that reaches Google directly). An HTTP `403`/`400` with `API_KEY_INVALID` (or "API key not valid") means the leaked key is dead. A `200` means it still works and must be revoked.
 
 The `audit:export` gate guarantees no future build can bake any vendor key back into `out/`.
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getIslandOwnerClient } from "@/lib/island-owner-client";
 import { verifyIslandOwner } from "../learning-repository";
 import { pontianakToday } from "../pontianak-date";
+import { loadResearchPoolState, type ResearchPoolState } from "../research-pool-data";
 import { validateLearningPackageForPublication, validateLearningPackageV2, type LearningPackageV2 } from "../learning-package";
 import type { LearningArticleAsset, LearningEntry } from "../learning-content";
 import { LearningArticleContent } from "../LearningArticleContent";
@@ -31,10 +32,9 @@ type Publication = {
   is_visible: boolean; content: Record<string,unknown>;
   package_snapshot: Record<string,unknown>|null;
 };
-type LearningReviewProps = {
-  initialCandidates: Record<string, unknown>[];
-  researchDate: string;
-};
+
+// 候选池纯运行时读取（research-pool-data，与岛主提醒共用）：
+// 机器人直写 latest.json，刷新审核页即见新候选，无需构建或部署。
 
 function draftValidation(draft: Draft) {
   return validateLearningPackageV2({schema_version:draft.package_schema_version,content_id:draft.content_id,content_type:draft.content_type,planning:draft.planning,work:draft.work_record,article:draft.content,claims:draft.claims,assets:draft.assets,quality:draft.quality});
@@ -104,10 +104,11 @@ function draftToEntry(draft: Draft, assets: LearningAssetMap | null): LearningEn
     assets:articleAssets
   };
 }
-export function LearningReview({initialCandidates,researchDate}:LearningReviewProps) {
+export function LearningReview() {
   const [auth,setAuth]=useState<"loading"|"denied"|"ready">("loading");
   const [assetMap,setAssetMap]=useState<LearningAssetMap|null>(null);
-  useEffect(()=>{let active=true;void loadLearningAssets().then(map=>{if(active)setAssetMap(map)});return()=>{active=false};},[]);
+  const [pool,setPool]=useState<ResearchPoolState>({candidates:[],researchDate:"",dryDays:0,poolIssue:""});
+  useEffect(()=>{let active=true;void Promise.all([loadLearningAssets(),loadResearchPoolState()]).then(([map,state])=>{if(!active)return;setAssetMap(map);setPool(state)});return()=>{active=false};},[]);
   const [email,setEmail]=useState(""); const [password,setPassword]=useState("");
   const [rows,setRows]=useState<Draft[]>([]); const [selected,setSelected]=useState("");
   const [note,setNote]=useState(""); const [imageRights,setImageRights]=useState(false);
@@ -329,8 +330,9 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
         {pendingDrafts.map(draft=>{const publicationValidation=draft.package_schema_version===2?draftPublicationValidation(draft):null;const validation=draft.package_schema_version===2?draftValidation(draft):null;return <button type="button" key={draft.id} className="learning-review-plan-item" aria-pressed={draft.id===selected} onClick={()=>setSelected(draft.id)}><span>v{draft.version}</span><strong>{text(draft.content.title)||text(draft.work_record?.title)||draft.source_id}</strong><small>{productionStatuses[draft.production_status]??statuses[draft.status]??draft.status}{publicationValidation&&!publicationValidation.publishable?" · 缺少有效主图":validation&&!validation.readyForOwnerReview?" · 有待核事项":""}</small></button>})}
         {!pendingDrafts.length?<p className="learning-muted">目前没有待发布草稿。</p>:null}
       </div></details>
-      <h3>最新候选{researchDate?" · "+researchDate:""}</h3>
-      {initialCandidates.length?initialCandidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
+      <h3>最新候选{pool.researchDate?" · "+pool.researchDate:""}</h3>
+      {pool.poolIssue?<p className="learning-muted">候选池{pool.poolIssue}{pool.dryDays>0?`（距上次采集已 ${pool.dryDays} 天）`:""}。</p>:null}
+      {pool.candidates.length?pool.candidates.map(item=><div key={text(item.source_id)} className="learning-review-item">
         <strong>{text(item.title)}</strong>
         <small>{text(item.source_id)} · {text(item.creator)}</small>
         <a href={text(item.source_url)} target="_blank" rel="noreferrer">查看馆藏</a>

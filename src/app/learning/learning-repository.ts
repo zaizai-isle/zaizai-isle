@@ -88,7 +88,8 @@ export const PUBLICATION_SUMMARY_COLUMNS = "id,content_id,display_date,published
 export const PUBLICATION_FULL_COLUMNS = "id,content_id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot";
 
 /** “今天”一律以 Asia/Pontianak 时区判断，与 display_date 的写入口径一致。 */
-export { pontianakToday } from "./pontianak-date";
+import { pontianakToday } from "./pontianak-date";
+export { pontianakToday };
 
 /** 当日已发布内容；查不到返回 null（调用方必须走诚实空状态，不得回退旧稿）。 */
 export async function fetchTodayPublishedPublication(today = pontianakToday()): Promise<PublicationRow | null> {

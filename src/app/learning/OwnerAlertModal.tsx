@@ -1,44 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { learningResearchPoolUrl } from "./learning-research-pool";
+import { loadResearchPoolState } from "./research-pool-data";
 
 const DISMISS_KEY = "daily-learning-owner-alert-dismissed";
 // 与 @/lib/island-owner-client 的 DAILY_LEARNING_SESSION_KEY 保持一致；
 // 此处用字面量做零依赖的匿名快速判断，避免把 supabase-js 拉进初始包。
 const OWNER_SESSION_KEY = "daily-learning-owner-session";
-const DRY_THRESHOLD_DAYS = 3;
 
 type OwnerAlert = { pendingCount: number; dryDays: number; poolIssue: string };
-
-function pontianakToday() {
-  const parts = new Intl.DateTimeFormat("en", { timeZone: "Asia/Pontianak", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
-  const value = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  return `${value.year}-${value.month}-${value.day}`;
-}
-
-function daysBetween(from: string, to: string) {
-  const start = Date.parse(`${from}T00:00:00Z`);
-  const end = Date.parse(`${to}T00:00:00Z`);
-  if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
-  return Math.max(0, Math.round((end - start) / 86_400_000));
-}
-
-async function fetchResearchPool(): Promise<{ dryDays: number; poolIssue: string }> {
-  try {
-    const url = learningResearchPoolUrl();
-    if (!url) return { dryDays: 0, poolIssue: "未配置 Supabase 地址" };
-    const response = await fetch(url, { cache: "no-store" });
-    if (!response.ok) return { dryDays: 0, poolIssue: "无法读取，采集任务可能未运行" };
-    const data = await response.json() as { status?: unknown; research_date?: unknown };
-    if (typeof data.status !== "string" || data.status !== "research_candidates_only") return { dryDays: 0, poolIssue: `状态异常（${String(data.status ?? "缺失")}）` };
-    if (typeof data.research_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(data.research_date)) return { dryDays: 0, poolIssue: "缺少采集日期" };
-    const dryDays = daysBetween(data.research_date, pontianakToday()) ?? 0;
-    return dryDays >= DRY_THRESHOLD_DAYS ? { dryDays, poolIssue: "已干涸" } : { dryDays: 0, poolIssue: "" };
-  } catch {
-    return { dryDays: 0, poolIssue: "无法读取，采集任务可能未运行" };
-  }
-}
 
 export function OwnerAlertModal() {
   const [alert, setAlert] = useState<OwnerAlert | null>(null);
@@ -57,7 +27,7 @@ export function OwnerAlertModal() {
             .from("daily_learning_article_drafts")
             .select("id", { count: "exact", head: true })
             .eq("status", "pending_review"),
-          fetchResearchPool(),
+          loadResearchPoolState(),
         ]);
         if (!live) return;
         const pendingCount = draftResult.error ? 0 : draftResult.count ?? 0;

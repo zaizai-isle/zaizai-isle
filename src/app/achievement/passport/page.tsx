@@ -92,7 +92,7 @@ function StampThumb({ stamp }: { stamp: StampRecord }) {
           <small className="font-mono text-[10px] tracking-[0.14em] text-[#686d68]">{stamp.date}</small>
         </div>
       ) : null}
-      {/* eslint-disable-next-line /next/no-img-element -- 缩略图是 IndexedDB/云端 blob object URL，next/image 无法处理 blob: */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- 缩略图是 IndexedDB/云端 blob object URL，next/image 无法处理 blob: */}
       {state.status === "ready" ? <img src={state.url} alt={`${stamp.title}缩略图`} loading="lazy" decoding="async" className="h-full w-full bg-[#f5f3ec] object-cover" /> : null}
       {state.status === "error" ? (
         <div className="grid h-full w-full place-content-center gap-2 bg-[#f5f3ec] p-3 text-center text-xs text-[#686d68]">
@@ -297,7 +297,7 @@ export default function PassportPage() {
           <div className="m-auto h-[calc(100dvh-1.5rem)] max-h-[calc(100dvh-1.5rem)] aspect-[9/16] sm:h-[calc(100dvh-3rem)] sm:max-h-[calc(100dvh-3rem)]">
             {dialogPoster.status === "loading" ? <div role="status" className="grid h-full w-full place-content-center bg-[#f5f3ec] text-sm text-[#686d68]">正在为这枚印章排版海报…</div> : null}
             {dialogPoster.status === "error" ? <div role="alert" className="grid h-full w-full place-content-center gap-3 bg-[#f5f3ec] p-6 text-center text-sm text-[#a02f28]"><p>{dialogPoster.message}</p><button type="button" className="underline underline-offset-2" onClick={() => setPosterAttempt((value) => value + 1)}>重试排版</button></div> : null}
-            {/* eslint-disable-next-line /next/no-img-element -- 海报是 canvas 导出的 blob object URL，next/image 无法处理 blob: */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- 海报是 canvas 导出的 blob object URL，next/image 无法处理 blob: */}
             {dialogPoster.status === "ready" ? <img src={dialogPoster.url} alt={`${selectedStamp.title}人生印章海报`} className="h-full w-full bg-[#f5f3ec] object-contain shadow-[0_18px_60px_rgba(0,0,0,.42)]" /> : null}
           </div>
         </div>

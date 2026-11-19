@@ -1,11 +1,9 @@
 // bananaApi.ts
-// 香蕉图相关 AI 调用
+// 香蕉图相关 AI 调用。供应商调用只走 Supabase Edge Function 代理，
+// 前端不接触任何供应商凭证；额度由代理端按 request_id 幂等扣减。
 
 import {
-  BANANA_AI_PROVIDER,
-  BANANA_IMAGE_MODEL,
   BANANA_VISION_MODEL,
-  buildGeminiGenerateUrl,
   buildProxyUrl,
   getAuthHeaders,
   parseAiError,
@@ -64,7 +62,7 @@ export async function prepareImageForAi(file: File): Promise<AiImageInput> {
     const dataUrl = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(reader.error || new Error('图片读取失败'));
+      reader.onerror = () => reject(new Error('图片读取失败'));
       reader.readAsDataURL(blob);
     });
 
@@ -103,54 +101,60 @@ const BANANAIFY_PROMPT = `核心指令：基于输入图像的构图和光影，
    - 光影保持：严格保持输入图像的原始光源方向、强度和环境反射。
    - 成熟度随机：在同一张图像中，随机使用不同成熟度的香蕉纹理（新鲜的黄皮、带黑斑的熟皮、略带绿色的未熟皮），增加荒谬感和视觉丰富性。`;
 
-async function bananaifyWithGemini(
-  imageBase64: string,
-  mimeType: string
-): Promise<string> {
-  const response = await fetch(
-    buildGeminiGenerateUrl(BANANA_IMAGE_MODEL),
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                inline_data: {
-                  mime_type: mimeType,
-                  data: imageBase64,
-                },
-              },
-              { text: BANANAIFY_PROMPT },
-            ],
-          },
-        ],
-        generationConfig: {
-          responseModalities: ['IMAGE'],
+function newRequestId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // 非安全上下文兜底：仍保持同一逻辑请求内的 id 稳定
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// 一次逻辑请求 = 一个 request_id。仅网络层失败时重试，且复用同一 request_id，
+// 代理端据此保证同一请求只消耗一次额度。HTTP 业务错误（含额度用尽 429）不重试。
+async function postProxy(task: 'bananaify' | 'understand', payload: Record<string, unknown>, fallback: string) {
+  const url = buildProxyUrl(task);
+  const requestId = newRequestId();
+  let lastNetworkError: unknown;
+
+  for (let attempt = 0; attempt <= 1; attempt += 1) {
+    let response: Response;
+
+    try {
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
         },
-      }),
+        body: JSON.stringify({ ...payload, request_id: requestId }),
+      });
+    } catch (error) {
+      lastNetworkError = error;
+      if (attempt === 0) {
+        await wait(600);
+        continue;
+      }
+      throw error;
     }
-  );
 
-  if (!response.ok) {
-    throw await parseAiError(response, '香蕉化处理失败');
+    if (!response.ok) {
+      throw await parseAiError(response, fallback);
+    }
+
+    return response.json() as Promise<Record<string, unknown>>;
   }
 
-  const data = await response.json();
-  const parts = data?.candidates?.[0]?.content?.parts ?? [];
-
-  // 优先找图片数据
-  for (const part of parts) {
-    if (part.inlineData?.data) {
-      return part.inlineData.data;
-    }
-    // 兼容两种字段名
-    if (part.inline_data?.data) {
-      return part.inline_data.data;
-    }
-  }
-  throw new Error('AI 未返回图片，请稍后重试');
+  throw lastNetworkError instanceof Error
+    ? lastNetworkError
+    : new Error(`${fallback}：网络请求失败`);
 }
 
 async function bananaifyWithProxy(
@@ -159,32 +163,23 @@ async function bananaifyWithProxy(
   outputWidth?: number,
   outputHeight?: number
 ): Promise<string> {
-  const response = await fetch(buildProxyUrl('bananaify'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({
+  const data = await postProxy(
+    'bananaify',
+    {
       prompt: BANANAIFY_PROMPT,
       image_base64: imageBase64,
       mime_type: mimeType,
       image_width: outputWidth,
       image_height: outputHeight,
-    }),
-  });
-
-  if (!response.ok) {
-    throw await parseAiError(response, '香蕉化处理失败');
-  }
-
-  const data = await response.json();
+    },
+    '香蕉化处理失败'
+  );
   const imageBase64Result = data?.image_base64 || data?.imageBase64;
   if (!imageBase64Result) {
     throw new Error('AI 代理未返回 image_base64');
   }
 
-  return imageBase64Result;
+  return imageBase64Result as string;
 }
 
 async function imageUrlToBase64(imageUrl: string): Promise<{
@@ -200,71 +195,24 @@ async function imageUrlToBase64(imageUrl: string): Promise<{
   return { base64, mimeType };
 }
 
-async function understandImageWithGemini(
-  imageUrl: string,
-  question: string
-): Promise<string> {
-  const { base64, mimeType } = await imageUrlToBase64(imageUrl);
-
-  const response = await fetch(
-    buildGeminiGenerateUrl(BANANA_VISION_MODEL),
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                inline_data: { mime_type: mimeType, data: base64 },
-              },
-              {
-                text: question,
-              },
-            ],
-          },
-        ],
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    throw await parseAiError(response, '图片理解失败');
-  }
-
-  const data = await response.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('图片理解结果为空');
-  return text;
-}
-
 async function understandImageWithProxy(
   imageUrl: string,
   question: string
 ): Promise<string> {
   const { base64, mimeType } = await imageUrlToBase64(imageUrl);
-  const response = await fetch(buildProxyUrl('understand'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify({
+  const data = await postProxy(
+    'understand',
+    {
       model: BANANA_VISION_MODEL,
       question,
       image_base64: base64,
       mime_type: mimeType,
-    }),
-  });
-
-  if (!response.ok) {
-    throw await parseAiError(response, '图片理解失败');
-  }
-
-  const data = await response.json();
+    },
+    '图片理解失败'
+  );
   const text = data?.text || data?.description;
   if (!text) throw new Error('AI 代理未返回 text');
-  return text;
+  return String(text);
 }
 
 // ─────────────────────────────────────────────
@@ -276,15 +224,7 @@ export async function bananaifyImage(
   outputWidth?: number,
   outputHeight?: number
 ): Promise<string> {
-  if (BANANA_AI_PROVIDER === 'proxy') {
-    return bananaifyWithProxy(imageBase64, mimeType, outputWidth, outputHeight);
-  }
-
-  if (BANANA_AI_PROVIDER === 'gemini') {
-    return bananaifyWithGemini(imageBase64, mimeType);
-  }
-
-  throw new Error('暂不支持该 AI provider，请使用 gemini 或 proxy');
+  return bananaifyWithProxy(imageBase64, mimeType, outputWidth, outputHeight);
 }
 
 // ─────────────────────────────────────────────
@@ -294,15 +234,7 @@ export async function understandImage(
   imageUrl: string,
   question = '请详细描述这张图片的内容，包括主要物体、场景、颜色等信息。'
 ): Promise<string> {
-  if (BANANA_AI_PROVIDER === 'proxy') {
-    return understandImageWithProxy(imageUrl, question);
-  }
-
-  if (BANANA_AI_PROVIDER === 'gemini') {
-    return understandImageWithGemini(imageUrl, question);
-  }
-
-  throw new Error('暂不支持该 AI provider，请使用 gemini 或 proxy');
+  return understandImageWithProxy(imageUrl, question);
 }
 
 // ─────────────────────────────────────────────

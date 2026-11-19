@@ -98,19 +98,18 @@ The endpoint should return normalized `WeatherData` JSON.
 
 ## Banana AI API (Optional)
 
-The banana image flow defaults to a Supabase Edge Function proxy when Supabase is configured. The proxy uses Cloudflare Workers AI for free-tier image editing and vision analysis, and uses the existing Replicate provider when Cloudflare is not configured.
+The banana image flow is proxy-only: the frontend talks exclusively to the Supabase Edge Function, and no vendor credential (Gemini, Cloudflare, Replicate) may ever be inlined into the static export. The proxy uses Cloudflare Workers AI for free-tier image editing and vision analysis, and falls back to the Replicate provider when Cloudflare is not configured.
 
 ```bash
-NEXT_PUBLIC_BANANA_AI_PROVIDER=proxy
 NEXT_PUBLIC_BANANA_AI_BASE_URL=https://your-project-ref.supabase.co/functions/v1/banana-ai
 NEXT_PUBLIC_BANANA_AI_API_KEY=your_supabase_anon_key
 NEXT_PUBLIC_BANANA_IMAGE_MODEL=@cf/black-forest-labs/flux-2-klein-4b
 ```
 
-- `NEXT_PUBLIC_BANANA_AI_PROVIDER`: `proxy` for the Supabase function, or `gemini` for Gemini-compatible APIs.
 - `NEXT_PUBLIC_BANANA_AI_BASE_URL`: optional when `NEXT_PUBLIC_SUPABASE_URL` is set; the frontend can derive the function URL.
 - `NEXT_PUBLIC_BANANA_AI_API_KEY`: optional when `NEXT_PUBLIC_SUPABASE_ANON_KEY` is set; used only to invoke the Supabase function.
 - `NEXT_PUBLIC_BANANA_IMAGE_MODEL`: frontend model label. The proxy selects its actual model from private function secrets.
+- The old direct-Gemini mode was removed because it leaked a vendor key into the public bundle. `npm run audit:export` scans `out/` for vendor credentials and fails the release on any hit.
 
 Deploy the function after setting these private Supabase Edge Function secrets:
 
@@ -127,8 +126,19 @@ CLOUDFLARE_API_TOKEN=your_cloudflare_workers_ai_token
 
 Optional secrets are `BANANA_IMAGE_PROVIDER=cloudflare`, `CLOUDFLARE_IMAGE_MODEL=@cf/black-forest-labs/flux-2-klein-4b`, and `CLOUDFLARE_VISION_MODEL=@cf/moondream/moondream3.1-9B-A2B`. To switch back to Replicate, set `BANANA_IMAGE_PROVIDER=replicate`, `REPLICATE_API_TOKEN`, and optionally `REPLICATE_IMAGE_MODEL=black-forest-labs/flux-kontext-dev`.
 
+Daily vendor quota — apply `supabase/migrations/20261119090000_banana_ai_quota.sql` in the SQL Editor, then set these function secrets:
+
+```text
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+BANANA_QUOTA_PER_CLIENT=20
+BANANA_QUOTA_DAILY_GLOBAL=300
+```
+
+Quota is consumed atomically before every vendor call (UTC day windows; per authenticated user or per client IP, plus one global budget). Clients send a stable `request_id` per logical request, so retries never double-charge. When any tier is exhausted the function answers `429 quota_exhausted` without touching the vendor; if the quota backend is unreachable it fails closed with `503`.
+
 The proxy accepts normalized frontend calls:
 
-- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/bananaify`, expects `{ "image_base64": "..." }`.
-- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/understand`, expects `{ "text": "..." }`.
-- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/analysis`, expects `{ "text": "..." }`.
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/bananaify`, expects `{ "image_base64": "...", "request_id": "uuid" }`.
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/understand`, expects `{ "image_base64": "...", "request_id": "uuid" }`.
+- `POST {NEXT_PUBLIC_BANANA_AI_BASE_URL}/analysis`, expects `{ "text": "..." }` (static report; no vendor call, no quota).

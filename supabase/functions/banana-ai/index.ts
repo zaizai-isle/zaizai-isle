@@ -14,6 +14,7 @@ const corsHeaders = {
 type BananaRequest = {
   model?: string;
   prompt?: string;
+  request_id?: string;
   image_base64?: string;
   imageBase64?: string;
   mime_type?: string;
@@ -124,6 +125,124 @@ function getImageProvider(): ImageProvider {
   return Deno.env.get('CLOUDFLARE_ACCOUNT_ID') && Deno.env.get('CLOUDFLARE_API_TOKEN')
     ? 'cloudflare'
     : 'replicate';
+}
+
+// ─────────────────────────────────────────────
+// 额度控制：所有会产生供应商调用的请求，先经 Supabase 原子扣额；
+// 额度用尽或校验失败一律不再调用供应商（fail-closed）。
+// ─────────────────────────────────────────────
+type QuotaConfig = {
+  baseUrl: string;
+  serviceKey: string;
+  perClient: number;
+  global: number;
+};
+
+function getQuotaConfig(): QuotaConfig | null {
+  const baseUrl = Deno.env.get('SUPABASE_URL') || Deno.env.get('SUPABASE_INTERNAL_API_URL');
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!baseUrl || !serviceKey) {
+    // 本地/未配置环境保持直连行为；生产必须配置额度 secrets。
+    return null;
+  }
+
+  return {
+    baseUrl: baseUrl.replace(/\/$/, ''),
+    serviceKey,
+    perClient: Number(Deno.env.get('BANANA_QUOTA_PER_CLIENT') || '20'),
+    global: Number(Deno.env.get('BANANA_QUOTA_DAILY_GLOBAL') || '300'),
+  };
+}
+
+function parseUuid(value: unknown): string | null {
+  return typeof value === 'string' &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)
+    ? value
+    : null;
+}
+
+async function sha256Hex(text: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+function extractUserId(authorization: string): string | null {
+  const token = authorization.replace(/^Bearer\s+/i, '');
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+
+  try {
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (
+      payload?.role === 'authenticated' &&
+      typeof payload.sub === 'string' &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.sub)
+    ) {
+      return payload.sub;
+    }
+  } catch {
+    // 非法 JWT：按匿名访客计
+  }
+  return null;
+}
+
+function clientIp(request: Request): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const first = forwarded ? forwarded.split(',')[0].trim() : '';
+  return first || request.headers.get('cf-connecting-ip') || 'unknown';
+}
+
+async function enforceQuota(request: Request, body: BananaRequest): Promise<Response | null> {
+  const quota = getQuotaConfig();
+  if (!quota) return null;
+
+  const userId = extractUserId(request.headers.get('Authorization') || '');
+  const scope = userId ? `user:${userId}` : `ip:${(await sha256Hex(clientIp(request))).slice(0, 32)}`;
+
+  let response: Response;
+  try {
+    response = await fetch(`${quota.baseUrl}/rest/v1/rpc/consume_banana_ai_quota`, {
+      method: 'POST',
+      headers: {
+        apikey: quota.serviceKey,
+        Authorization: `Bearer ${quota.serviceKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        p_tiers: [
+          { scope, limit: quota.perClient },
+          { scope: 'global', limit: quota.global },
+        ],
+        p_request_id: parseUuid(body.request_id),
+      }),
+    });
+  } catch {
+    return jsonResponse({ error: { message: '额度校验服务暂不可用，请稍后重试。' } }, 503);
+  }
+
+  if (!response.ok) {
+    return jsonResponse({ error: { message: '额度校验服务暂不可用，请稍后重试。' } }, 503);
+  }
+
+  const outcome = await response.json() as {
+    ok?: boolean;
+    exhausted_scope?: string;
+    remaining?: Record<string, number>;
+  };
+  if (outcome.ok !== true) {
+    return jsonResponse({
+      error: {
+        message: '今天的小岛算力额度已经用完，明天再来尝一根香蕉。',
+        quota_exhausted: true,
+        exhausted_scope: outcome.exhausted_scope ?? null,
+        remaining: outcome.remaining ?? null,
+      },
+    }, 429);
+  }
+
+  return null;
 }
 
 async function runCloudflareImageEdit(body: BananaRequest) {
@@ -359,11 +478,15 @@ Deno.serve(async (request) => {
     const body = await request.json() as BananaRequest;
 
     if (task === 'bananaify') {
+      const denied = await enforceQuota(request, body);
+      if (denied) return denied;
       return jsonResponse(await runImageEdit(body));
     }
 
     if (task === 'understand') {
       if (getImageProvider() === 'cloudflare') {
+        const denied = await enforceQuota(request, body);
+        if (denied) return denied;
         return jsonResponse(await runCloudflareVision(body));
       }
       return jsonResponse(createFallbackDescription(body));

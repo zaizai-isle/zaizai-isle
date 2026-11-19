@@ -44,7 +44,8 @@ function walkHtml(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, entry.name);
     if (entry.isDirectory()) found.push(...walkHtml(p));
-    else if (entry.name.endsWith(".html")) found.push(p);
+    // RSC 负载（.txt/.rsc）就是客户端路由缓存的形态，与 HTML、JSON 一并纳入残留扫描。
+    else if (/\.(html|txt|rsc|json)$/.test(entry.name)) found.push(p);
   }
   return found;
 }
@@ -108,4 +109,4 @@ for (const { path, fingerprints: phrases } of fingerprints) {
   }
 }
 assert.equal(leaked.length, 0, `旧正文残留：\n${leaked.map((l) => `  ${l.file} ← ${l.phrase}`).join("\n")}`);
-console.log(`正文残留扫描通过：${allHtml.length} 个 HTML，0 条旧正文指纹命中。`);
+console.log(`正文残留扫描通过：${allHtml.length} 个产物文件（HTML+RSC 负载+JSON），0 条旧正文指纹命中。`);

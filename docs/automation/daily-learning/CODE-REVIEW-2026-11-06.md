@@ -71,7 +71,7 @@
 | R5 | 受限/水印/截图类图片禁止进入 `public/`；私有预览走 DB 快照。 | B2 |
 | R6 | 失败通知分级：0 候选（静默）/部分源失败（记录）/全部失败或校验失败（通知岛主）。 | M5 |
 | R7 | 空队列时读者端显示"今天没有新内容"，禁止静默回退旧稿。 | M3 |
-| R8 | 深链统一为 `/learning/<publication-id>`，`?entry=` 退役。 | B4 |
+| R8 | 深链统一为 `/learning/<publication-id>`，`?entry=` 退役。**【2026-11-19 已反转：统一回 `/learning?entry=…`，`/learning/<id>/` 降级为无正文兼容跳转壳，见 decisions.md 与 MIDNIGHT-VERIFICATION.md。】** | B4 |
 
 ## 五、建议修复顺序
 

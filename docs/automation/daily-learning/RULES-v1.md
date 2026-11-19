@@ -68,7 +68,7 @@
 
 ## 八、深链与展示（R8）
 
-- 统一深链格式 `/learning/<content_id>`，`generateStaticParams` 构建时从发布表拉全量 + `dynamicParams=true` 兜底新发布走 ISR/客户端回退（静态导出架构下的具体方案实施时定）
+- 【2026-11-19 修订】公开阅读统一走 `/learning?entry=…`（首页、合集、共享链接同一条路）；`/learning/<content_id>/` 仅保留 `dynamicParams=false` 的兼容跳转壳（构建时枚举发布表 anon 可读行），壳内零正文。午夜门禁（Asia/Pontianak）见 MIDNIGHT-VERIFICATION.md
 - 首页只放缩略图（≤60KB），原图永不进首页 bundle
 - 审核通知深链直达当日两篇，不用岛主翻列表
 

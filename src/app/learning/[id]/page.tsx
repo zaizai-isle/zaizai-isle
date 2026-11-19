@@ -1,18 +1,15 @@
-import { notFound } from "next/navigation";
 import { learningEntries } from "../learning-content";
-import { LearningArticle } from "../LearningArticle";
-import { fetchPublishedPublicationByContentId, listPublishedContentIds } from "../learning-repository";
-import { readLearningAssetsFromDisk } from "../learning-asset-manifest.server";
-import { publicationRowToEntry } from "../learning-publication-entry";
+import { listPublishedContentIds } from "../learning-repository";
+import LearningEntryRedirect from "../LearningEntryRedirect";
 
-// R8 深链统一：详情页以发布表的 content_id 为准（如 daily-learning:plan-07-…）。
-// 旧的 5 个硬编码静态选题 id 继续生成页面并原样解析，旧链接不 404。
-// 静态导出已知限制：两次构建之间新发布的 content_id 深链会 404，
-// 直到下一次构建把它生成出来（本站每日有部署重建，窗口 ≤ 1 天）。
+// 兼容入口（阶段②收敛）：上一版公开过的 /learning/<id>/ 路径全部保留为纯跳转壳，
+// 只把访客替换到统一的 /learning?entry=… 阅读入口，构建产物不再包含任何正文页。
+// 枚举=5 个历史静态选题 id + 构建时 anon 可读（已展示且已过 Asia/Pontianak 午夜）的
+// content_id——即上一版真正对外可读过的正文路径；未来稿的旧深链在到点前本就不可读，
+// 到点后下一次每日构建自动补上兼容壳，入口链接（?entry=）则无需构建即时生效。
 export async function generateStaticParams() {
   const staticParams = learningEntries.map(({ id }) => ({ id }));
   try {
-    // 构建时从 Supabase 拉全量已发布 content_id（anon key 可读该表）。
     const contentIds = await listPublishedContentIds();
     const seen = new Set(staticParams.map((param) => param.id));
     return [...staticParams, ...contentIds.filter((id) => !seen.has(id)).map((id) => ({ id }))];
@@ -23,23 +20,10 @@ export async function generateStaticParams() {
 }
 export const dynamicParams = false;
 
-export default async function LearningEntryPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function LearningCompatPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: rawId } = await params;
-  // content_id 含 ":"，静态导出/预渲染时路由参数可能以 %3A 编码形态传入，先解码再查库。
+  // content_id 含 ":"，静态导出/预渲染时路由参数以 %3A 编码形态传入，解码后原样传给入口。
   let id = rawId;
   try { id = decodeURIComponent(rawId); } catch { /* 保留原值 */ }
-  // 兼容映射：先按旧的静态选题 id 解析，再按发布表 content_id 解析。
-  const staticEntry = learningEntries.find((item) => item.id === id);
-  if (staticEntry) return <LearningArticle entry={staticEntry} />;
-
-  let entry;
-  try {
-    const [row, assets] = await Promise.all([fetchPublishedPublicationByContentId(id), readLearningAssetsFromDisk()]);
-    if (!row) notFound();
-    entry = publicationRowToEntry(row, assets);
-  } catch (error) {
-    console.warn(`[learning] 详情页按 content_id "${id}" 读取发布内容失败，本页输出 404。`, error);
-    notFound();
-  }
-  return <LearningArticle entry={entry} />;
+  return <LearningEntryRedirect entry={id} />;
 }

@@ -213,3 +213,84 @@ test("daily learning: private drafts require owner review and approved versions 
   assert.equal((await db.query("select * from public.daily_learning_publications")).rows.length, 1);
   await db.close();
 });
+
+test("daily learning: scheduled rows unlock at Asia/Pontianak local midnight, owners keep preview", async () => {
+  const db = new PGlite();
+  await db.exec(`
+    create role anon; create role authenticated;
+    create schema auth; create table auth.users(id uuid primary key);
+    insert into auth.users values('${owner}'),('${other}');
+    create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+    grant usage on schema auth to authenticated,anon;
+    grant execute on function auth.uid() to authenticated,anon;
+  `);
+  for (const file of [
+    "20261014113109_daily_learning_v01.sql",
+    "20261019110000_daily_learning_drafts_review.sql",
+    "20261020025338_daily_learning_publications.sql",
+    "20261020073800_daily_learning_v2_contract.sql",
+    "20261021024000_daily_learning_v2_review_outcomes.sql",
+    "20261030045838_daily_learning_mutable_pending_drafts.sql",
+    "20261030022602_add_daily_learning_display_dates.sql",
+    "20261030063615_manage_daily_learning_publications.sql",
+    "20261119120000_daily_learning_midnight_visibility.sql",
+  ]) {
+    await db.exec(await readFile(new URL(`../supabase/migrations/${file}`, import.meta.url), "utf8"));
+  }
+  async function asUser(id, role = "authenticated") {
+    await db.exec(`reset role; set role ${role}`);
+    await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id]);
+  }
+  async function publish(sourceId) {
+    // v2 合约后 RLS 只放行 v2 包发布；此处以管理员直插模拟自动发布 RPC 落库的成品行，
+    // 被测对象是午夜读策略本身，角色切换后的 select/update 仍走完整 RLS。
+    await db.exec("reset role");
+    const draft = await db.query(`
+      insert into public.daily_learning_article_drafts(owner_id,source_id,source_record,content)
+      values($1,$2,'{"title":"W"}','{"title":"D"}') returning id
+    `, [owner, sourceId]);
+    const pub = await db.query(`
+      insert into public.daily_learning_publications(owner_id,draft_id,source_id,draft_version,source_record,content)
+      values($1,$2,$3,1,'{"title":"W"}','{"title":"D"}') returning id
+    `, [owner, draft.rows[0].id, sourceId]);
+    return pub.rows[0].id;
+  }
+
+  const pastId = await publish("smk:past");
+  const todayId = await publish("smk:today");
+  const futureId = await publish("smk:future");
+
+  await db.exec("reset role");
+  await db.query("update public.daily_learning_publications set display_date=(now() at time zone 'Asia/Pontianak')::date - 1 where id=$1", [pastId]);
+  await db.query("update public.daily_learning_publications set display_date=(now() at time zone 'Asia/Pontianak')::date + 1 where id=$1", [futureId]);
+
+  async function anonVisibleIds() {
+    await asUser("", "anon");
+    return (await db.query("select id from public.daily_learning_publications order by display_date")).rows.map((row) => row.id);
+  }
+
+  assert.deepEqual(await anonVisibleIds(), [pastId, todayId], "午夜前：未来定时稿对访客不可读");
+
+  // 当地午夜到点：岛主把展示日期翻到今天，访客立即可读——全程无需构建。
+  await asUser(owner);
+  await db.query("update public.daily_learning_publications set display_date=(now() at time zone 'Asia/Pontianak')::date where id=$1", [futureId]);
+  assert.deepEqual(await anonVisibleIds(), [pastId, todayId, futureId], "午夜后：定时稿对访客可读");
+
+  // 下架：原链接与列表都不再出正文，仅岛主仍可见。
+  await asUser(owner);
+  await db.query("update public.daily_learning_publications set is_visible=false where id=$1", [todayId]);
+  assert.deepEqual(await anonVisibleIds(), [pastId, futureId]);
+
+  // 非岛主的登录用户（如护照匿名账号）同样受午夜与下架约束；岛主保留全量预览。
+  await asUser(other);
+  assert.deepEqual(
+    (await db.query("select id from public.daily_learning_publications order by display_date")).rows.map((row) => row.id),
+    [pastId, futureId]
+  );
+  await asUser(owner);
+  assert.equal((await db.query("select id from public.daily_learning_publications")).rows.length, 3);
+
+  await asUser("", "anon");
+  assert.equal((await db.query("select id from public.daily_learning_publications where id=$1", [todayId])).rows.length, 0, "下架行对访客彻底隐身");
+  await db.close();
+});

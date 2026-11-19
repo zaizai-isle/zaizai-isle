@@ -20,7 +20,7 @@ export function PublishedLearning() {
     let active = true;
     void (async () => {
       // 数据层与完整正文映射保持动态导入：supabase-js 与素材清单不进入初始模块图。
-      const { getOptionalSupabase, fetchTodayPublishedPublication, fetchPublishedPublicationById, pontianakToday } = await import("./learning-repository");
+      const { getOptionalSupabase, fetchTodayPublishedPublication, fetchPublishedPublicationById, fetchPublishedPublicationByContentId, pontianakToday } = await import("./learning-repository");
       try {
         const client = getOptionalSupabase();
         if (!client) {
@@ -28,17 +28,25 @@ export function PublishedLearning() {
           return;
         }
 
-        // 旧深链兼容：/learning?entry=publication-<id> 或 ?entry=<静态选题 id>。
+        // 统一入口：/learning?entry=publication-<id>、?entry=<静态选题 id>、
+        // 或 ?entry=<content_id>（/learning/<content_id>/ 兼容页跳转而来）。
         if (requested) {
+          const [{ publicationRowToEntry }, { loadLearningAssets }] = await Promise.all([import("./learning-publication-entry"), import("./learning-asset-cache")]);
           if (requested.startsWith("publication-")) {
-            const [{ publicationRowToEntry }, { loadLearningAssets }] = await Promise.all([import("./learning-publication-entry"), import("./learning-asset-cache")]);
             const [row, assets] = await Promise.all([fetchPublishedPublicationById(requested.slice("publication-".length)), loadLearningAssets()]);
             if (!active) return;
             setState(row ? { kind: "article", entry: publicationRowToEntry(row, assets) } : { kind: "unavailable" });
             return;
           }
           const selected = learningEntries.find((item) => item.id === requested);
-          if (active) setState(selected ? { kind: "article", entry: selected } : { kind: "unavailable" });
+          if (selected) {
+            if (active) setState({ kind: "article", entry: selected });
+            return;
+          }
+          const assets = await loadLearningAssets();
+          const rowByContent = await fetchPublishedPublicationByContentId(requested);
+          if (!active) return;
+          setState(rowByContent ? { kind: "article", entry: publicationRowToEntry(rowByContent, assets) } : { kind: "unavailable" });
           return;
         }
 

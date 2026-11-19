@@ -130,8 +130,8 @@ export async function withThumbs(rows: PublicationSummaryRow[]): Promise<Learnin
   });
 }
 
-/** 文章链接：生产静态导出用 content_id 深链（构建期已按发布表生成）；dev 走 ?entry= 客户端解析。 */
-export function learningEntryHref(item: { id: string; contentId?: string; isPublishedRecord?: boolean }) {
-  if (item.contentId && process.env.NODE_ENV === "production") return `/learning/${encodeURIComponent(item.contentId)}`;
-  return item.isPublishedRecord ? `/learning?entry=${encodeURIComponent(item.id)}` : `/learning/${item.id}`;
+/** 文章链接统一走 /learning?entry=… 阅读入口（首页、合集、共享链接同一条路）；
+ *  /learning/<id>/ 只为上一版已公开路径保留兼容跳转，不再承载正文。 */
+export function learningEntryHref(item: { id: string }) {
+  return `/learning?entry=${encodeURIComponent(item.id)}`;
 }

@@ -88,11 +88,7 @@ export const PUBLICATION_SUMMARY_COLUMNS = "id,content_id,display_date,published
 export const PUBLICATION_FULL_COLUMNS = "id,content_id,source_id,source_record,content,published_at,display_date,package_schema_version,package_snapshot";
 
 /** “今天”一律以 Asia/Pontianak 时区判断，与 display_date 的写入口径一致。 */
-export function pontianakToday(now = new Date()) {
-  const parts = new Intl.DateTimeFormat("en", { timeZone: "Asia/Pontianak", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now);
-  const value = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  return `${value.year}-${value.month}-${value.day}`;
-}
+export { pontianakToday } from "./pontianak-date";
 
 /** 当日已发布内容；查不到返回 null（调用方必须走诚实空状态，不得回退旧稿）。 */
 export async function fetchTodayPublishedPublication(today = pontianakToday()): Promise<PublicationRow | null> {

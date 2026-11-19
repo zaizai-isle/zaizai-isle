@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getIslandOwnerClient } from "@/lib/island-owner-client";
 import { verifyIslandOwner } from "../learning-repository";
+import { pontianakToday } from "../pontianak-date";
 import { validateLearningPackageForPublication, validateLearningPackageV2, type LearningPackageV2 } from "../learning-package";
 import type { LearningArticleAsset, LearningEntry } from "../learning-content";
 import { LearningArticleContent } from "../LearningArticleContent";
@@ -47,6 +48,12 @@ function publicationTitle(publication:Publication) {
   const article=publication.package_snapshot?.article;
   const snapshotArticle=article&&typeof article==="object"?article as Record<string,unknown>:null;
   return text(snapshotArticle?.title)||text(publication.content.title)||"未命名内容";
+}
+
+// 岛主预览用发布行状态：展示中但展示日期在未来（Asia/Pontianak）的，对访客尚未到可读午夜。
+function publicationStatusLabel(publication:Publication) {
+  if(!publication.is_visible)return "已下架";
+  return publication.display_date>pontianakToday()?`定时·${publication.display_date}可读`:"展示中";
 }
 
 function draftToEntry(draft: Draft, assets: LearningAssetMap | null): LearningEntry {
@@ -330,7 +337,7 @@ export function LearningReview({initialCandidates,researchDate}:LearningReviewPr
         <span className="learning-review-awaiting">等待 Codex 研究与起草</span>
       </div>):<p>暂无候选资料。可粘贴候选作品 JSON。</p>}
       <details className="learning-review-publications" open><summary>往期内容（{publications.length}）</summary><div className="learning-review-publication-list">
-        {publications.map(publication=><article key={publication.id} className={`learning-review-publication${publication.is_visible?"":" is-hidden"}`}><strong>{publicationTitle(publication)}</strong><small>{publication.is_visible?"展示中":"已下架"} · 实际发布 {publication.published_at.slice(0,10)}</small><form onSubmit={event=>void changeDisplayDate(event,publication.id)}><label>展示日期<input className="learning-input" type="date" name="display_date" defaultValue={publication.display_date} required /></label><button className="learning-secondary" type="submit" disabled={busy}>保存日期</button></form><button className="learning-secondary" type="button" disabled={busy} onClick={()=>void setPublicationVisibility(publication)}>{publication.is_visible?"下架":"恢复展示"}</button></article>)}
+        {publications.map(publication=><article key={publication.id} className={`learning-review-publication${publication.is_visible?"":" is-hidden"}`}><strong>{publicationTitle(publication)}</strong><small>{publicationStatusLabel(publication)} · 实际发布 {publication.published_at.slice(0,10)}</small><form onSubmit={event=>void changeDisplayDate(event,publication.id)}><label>展示日期<input className="learning-input" type="date" name="display_date" defaultValue={publication.display_date} required /></label><button className="learning-secondary" type="submit" disabled={busy}>保存日期</button></form><button className="learning-secondary" type="button" disabled={busy} onClick={()=>void setPublicationVisibility(publication)}>{publication.is_visible?"下架":"恢复展示"}</button></article>)}
       </div></details>
       <details className="learning-review-plan"><summary>草稿历史（{draftHistory.length} 个版本）</summary><div className="learning-review-plan-list">
         {draftHistory.map(draft=><button type="button" key={draft.id} className="learning-review-plan-item" aria-pressed={draft.id===selected} onClick={()=>setSelected(draft.id)}><span>v{draft.version}</span><strong>{text(draft.content.title)||text(draft.work_record?.title)||draft.source_id}</strong><small>{publishedDrafts[draft.id]?"已发布":statuses[draft.status]??draft.status}</small></button>)}

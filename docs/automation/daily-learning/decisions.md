@@ -60,3 +60,18 @@
 - 发布方式：审核通过后自动发布（扩展 review_daily_learning_v2 RPC 原子写发布记录）
 - 通知形态：岛主打开站点时站内弹窗
 - 完整规则见 RULES-v1.md
+
+## 2026-11-19 · 每日一看入口收敛 + 午夜门禁（阶段②）
+
+- **入口统一（反转 R8）**：首页、往期合集、共享链接一律 `/learning?entry=…`；
+  历史 `/learning/<id>/` 全部替换为无正文兼容跳转壳（覆盖上一版已公开的 48 条
+  路径，含 5 个静态选题）。构建产物只含外壳与兼容映射，正文一律运行时读
+  Supabase；下架/未来稿在入口端只会得到诚实空态，前进/后退/刷新均重新查询，
+  站内无 Service Worker、无正文缓存路径。验收：`node scripts/verify-learning-compat.mjs`。
+- **午夜门禁（数据库层）**：anon/非岛主只读 `is_visible 且 display_date ≤
+  Asia/Pontianak 当地今天`（迁移 `20261119120000_daily_learning_midnight_visibility.sql`）；
+  岛主保留全量预览。定时稿到点可读、下架即时失效，均无需构建。PGlite 用例
+  （`scripts/daily-learning-cloud.test.mjs` 第 3 案）+ 在线匿名核验
+  （`scripts/daily-learning-midnight-smoke.mjs`）双保险；上线步骤见
+  `docs/automation/daily-learning/MIDNIGHT-VERIFICATION.md`。
+- **审核状态三态**：审核页发布行显示 展示中 / 定时·<日期>可读 / 已下架。

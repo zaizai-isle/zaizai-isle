@@ -699,6 +699,22 @@
     "thumb_path": "learning/thumb/smk-kks1974-113-main.webp",
     "thumb_sha256": "ce68933de52c218f80e82e69e10cb41ca18471d1ef0c0b577126cdcdc00a9ab3"
   },
+  "smk-kks1982-373-main": {
+    "bytes": 1880898,
+    "original_sha256": "f20d019f6e915e26229e6601a5f12ff4207dea33a23aef76c213199d0017f854",
+    "original_url": "https://api.smk.dk/api/v1/download/W3siaW1nX3VybCI6Imh0dHBzOi8vaWlwLnNtay5kay9paWlmL2pwMi9uNTgzeHo4NTBfS0tTMTk4Ml8zNzNfY3JvcC50aWYyLnRpZi5qcDIvZnVsbC9mdWxsLzAvbmF0aXZlLmpwZyIsInB1YmxpY19kb21haW4iOnRydWUsIm9iamVjdF9udW1iZXIiOiJLS1MxOTgyLTM3MyIsIm51bSI6IiJ9XQ==/KKS1982-373.jpg",
+    "package": "research-2026-11-20-smk-kks1982-373/package-v2.json",
+    "path": "learning-assets-archive/smk-kks1982-373-full.jpg",
+    "reading_bytes": 304606,
+    "reading_path": "learning/reading/smk-kks1982-373-main.webp",
+    "reading_sha256": "bda550652c30ae7f8cb101e6fbc55fd5397648eaea7a2812541388bf3de515c5",
+    "rights_note": "丹麦国家美术馆SMK本件登记public_domain=true（PDM 1.0）；download端点native版本1366×2116，已解码核验。",
+    "rights_status": "open",
+    "sha256": "f20d019f6e915e26229e6601a5f12ff4207dea33a23aef76c213199d0017f854",
+    "thumb_bytes": 27816,
+    "thumb_path": "learning/thumb/smk-kks1982-373-main.webp",
+    "thumb_sha256": "e168706950bf59b1023eab7cc03b971f22a698094a3f74fd021ec9573ed9159b"
+  },
   "smk-kks9153-main": {
     "bytes": 12091830,
     "original_sha256": "1fb9d2c8835cdb9fa88b3c82adb6b30052ef028266c173af41a11bf12a922ed1",

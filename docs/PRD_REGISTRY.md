@@ -25,7 +25,7 @@
 | [人生护照版本规划](/zaizai-isle/docs/prd/LifePassportRoadmap) | `/achievement` 的独立功能版本路线 | Active · Passport v0.2.2 |
 | [人生护照下一阶段范围草案](/zaizai-isle/docs/prd/LifePassportNextPhase) | 云端持久化优先，浏览功能后续 | Active · 实施中 |
 | [小岛日签规格](/zaizai-isle/docs/prd/IsleDaily-v0.1) | `/daily` 的当前能力、内容规则与边界 | Active · Daily v0.1 |
-| [每日学习模块草案](/zaizai-isle/docs/prd/DailyLearning-v0.1) | 每日一则艺术史或设计史内容、私人反馈与积累方式 | Draft · 未开发 |
+| [每日一看产品定义](/zaizai-isle/docs/prd/DailyLearning-ProductDefinition-v0.2) | 作品观察、私人反馈与积累方式 | Active |
 | [岛主账户与私人数据方案](/zaizai-isle/docs/prd/IslandOwnerAccount) | 人生护照与每日学习共用的永久岛主身份、匿名访客边界 | Draft · 未开发 |
 | [资产优化计划](/zaizai-isle/docs/prd/AssetOptimizationPlan) | 静态导出下的图片与天气图标策略 | Maintained |
 

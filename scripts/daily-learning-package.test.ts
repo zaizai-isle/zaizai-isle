@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { validateLearningPackageForPublication, validateLearningPackageV2 } from "../src/app/learning/learning-package";
+import { type LearningPackageV2, validateLearningPackageForPublication, validateLearningPackageV2 } from "../src/app/learning/learning-package";
 
-const validPackage = {
+const validPackage: LearningPackageV2 = {
   schema_version: 2,
   content_id: "daily-learning:example-01",
   content_type: "single_artwork",

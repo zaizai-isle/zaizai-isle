@@ -111,9 +111,9 @@ NEXT_PUBLIC_BANANA_IMAGE_MODEL=@cf/black-forest-labs/flux-2-klein-4b
 - `NEXT_PUBLIC_BANANA_IMAGE_MODEL`: frontend model label. The proxy selects its actual model from private function secrets.
 - The old direct-Gemini mode was removed because it leaked a vendor key into the public bundle. `npm run audit:export` scans `out/` for vendor credentials and fails the release on any hit.
 
-**Credential stop-loss runbook (one-time, by the island owner — the app is already safe without it):**
+**Credential revocation runbook**
 
-1. Revoke the leaked Gemini key in Google AI Studio (create a new one only if you still want the direct fallback path; the proxy does not need it).
+1. Revoke the leaked Gemini key in Google AI Studio. Banana uses the proxy and requires no Gemini key.
 2. Delete the `NEXT_PUBLIC_GEMINI_API_KEY` entry from GitHub → Settings → Secrets and variables → Actions.
 3. Verify the revocation (exit 0 = revoked, 1 = still live, 2 = network unreachable):
 
@@ -123,7 +123,7 @@ NEXT_PUBLIC_BANANA_IMAGE_MODEL=@cf/black-forest-labs/flux-2-klein-4b
 
    `127.0.0.1:7897` is this Mac's system proxy port (adjust if yours differs, or drop both vars on a network that reaches Google directly). An HTTP `403`/`400` with `API_KEY_INVALID` (or "API key not valid") means the leaked key is dead. A `200` means it still works and must be revoked.
 
-The `audit:export` gate guarantees no future build can bake any vendor key back into `out/`.
+Pages runs `audit:export` and `verify:learning-compat` before uploading `out/`. The first checks for known credential patterns and locally configured secret values when available. The second checks the tracked legacy links and scans prerendered output for old article fingerprints.
 
 Deploy the function after setting these private Supabase Edge Function secrets:
 
@@ -149,7 +149,7 @@ BANANA_QUOTA_PER_CLIENT=20
 BANANA_QUOTA_DAILY_GLOBAL=300
 ```
 
-Quota is consumed atomically before every vendor call (UTC day windows; per authenticated user or per client IP, plus one global budget). Clients send a stable `request_id` per logical request, so retries never double-charge. When any tier is exhausted the function answers `429 quota_exhausted` without touching the vendor; if the quota backend is unreachable it fails closed with `503`.
+Quota is reserved atomically before submitting a vendor job. It uses UTC daily limits, one per authenticated user or client IP and one global limit. Only the first request with a given `request_id` may submit a job. A repeat receives `409 duplicate_request`, even if the original response was lost. The proxy does not store image results for replay. Starting a new attempt generates a new ID and uses quota. The proxy returns `429 quota_exhausted` when a limit is reached and `503` when quota cannot be checked.
 
 The proxy accepts normalized frontend calls:
 

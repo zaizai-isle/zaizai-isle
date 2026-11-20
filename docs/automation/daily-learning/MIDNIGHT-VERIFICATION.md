@@ -51,5 +51,9 @@ env PATH="$PWD/.conda-env/bin:$PATH" npm run build
 env PATH="$PWD/.conda-env/bin:$PATH" node scripts/verify-learning-compat.mjs
 ```
 
-通过标准：以发布表实际旧链接清单（当前 48 条）逐条有跳转壳；
-`out/` 全部 HTML 中旧正文指纹残留 0 条。
+通过标准：2026-11-19 迁移时的 48 条旧链接全部导出为正确的跳转壳，
+HTML、RSC 和 JSON 预渲染产物的旧正文指纹命中数为 0。清单和指纹均在仓库中，
+检查无需访问 Supabase。新文章统一使用 `/learning?entry=…`。
+
+清单由五条静态选题和 43 条发布 ID 组成。发布 ID 取自 11 月 19 日迁移验收时的
+发布记录，并与保留的 Pages 导出逐条核对。下架时保留跳转壳，阅读入口根据当前权限显示空态。

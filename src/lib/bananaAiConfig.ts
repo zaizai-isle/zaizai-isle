@@ -21,8 +21,6 @@ function deriveSupabaseFunctionBaseUrl(): string {
 
 const SUPABASE_FUNCTION_BASE_URL = deriveSupabaseFunctionBaseUrl();
 
-// 兼容旧导出名：provider 恒为 proxy；'gemini' 直连模式已因凭证泄露移除。
-export const BANANA_AI_PROVIDER = 'proxy';
 export const BANANA_AI_API_KEY =
   process.env.NEXT_PUBLIC_BANANA_AI_API_KEY || SUPABASE_ANON_KEY || '';
 export const BANANA_AI_BASE_URL =

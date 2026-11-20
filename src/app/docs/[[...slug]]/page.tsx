@@ -136,33 +136,38 @@ const extractHeadings = (content: string): Heading[] => content
     return { level, text, id: slugify(text) };
   });
 
-export async function generateStaticParams() {
-  const docsDir = path.join(process.cwd(), 'docs');
-  const files: string[] = [];
+// Publish the product library and its curated historical references. Other
+// repository Markdown can contain operating details and stays out of Pages.
+const publicDocFiles = new Set([
+  'PRODUCT_DOCUMENTATION.md',
+  'PRD_REGISTRY.md',
+  'archive/ImplementationPlan-v1.2.6.md',
+  'archive/PRD-001-v1.0.md',
+  'archive/PRD-002-v1.2.md',
+  'prd/AssetOptimizationPlan.md',
+  'prd/DailyLearning-EditorialGuidelines-v0.1.md',
+  'prd/DailyLearning-HistoryFramework-B-v0.1.md',
+  'prd/DailyLearning-ObservationFramework-A-v0.1.md',
+  'prd/DailyLearning-ProductDefinition-v0.2.md',
+  'prd/IslandOwnerAccount.md',
+  'prd/IsleDaily-v0.1.md',
+  'prd/LifePassportCloudDeployment.md',
+  'prd/LifePassportNextPhase.md',
+  'prd/LifePassportRoadmap.md',
+  'prd/PerformanceContract.md',
+  'prd/Product.md',
+  'prd/ReleaseChecklist.md',
+  'prd/VersionUpgradePlan.md',
+  ...milestoneDefinitions.flatMap(({ file }) => file ? [file] : []),
+]);
 
-  function getFiles(dir: string, base = '') {
-    const items = fs.readdirSync(dir);
-    items.forEach(item => {
-      const fullPath = path.join(dir, item);
-      const relativePath = path.join(base, item);
-      if (fs.statSync(fullPath).isDirectory()) {
-        getFiles(fullPath, relativePath);
-      } else if (item.endsWith('.md')) {
-        files.push(relativePath);
-      }
-    });
-  }
+export const dynamicParams = false;
 
-  if (fs.existsSync(docsDir)) {
-    getFiles(docsDir);
-  }
-
-  // Generate paths for all MD files, plus the base /docs path
-  const params = files.map(file => ({
-    slug: file.replace('.md', '').split(path.sep)
-  }));
-
-  return [...params, { slug: [] }];
+export function generateStaticParams() {
+  return [
+    { slug: [] },
+    ...Array.from(publicDocFiles, (file) => ({ slug: file.slice(0, -3).split('/') })),
+  ];
 }
 
 export default async function DocsPage({ params }: Props) {
@@ -176,7 +181,7 @@ export default async function DocsPage({ params }: Props) {
 
   const filePath = path.join(process.cwd(), 'docs', targetFile);
 
-  if (!fs.existsSync(filePath)) {
+  if (!publicDocFiles.has(targetFile) || !fs.existsSync(filePath)) {
     return (
       <div className="flex flex-col items-center justify-center h-[93vh] bg-white rounded-3xl">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">文档未找到</h1>

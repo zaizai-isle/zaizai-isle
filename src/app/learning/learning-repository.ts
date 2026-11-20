@@ -106,22 +106,6 @@ export async function fetchTodayPublishedPublication(today = pontianakToday()): 
   return (data as PublicationRow[] | null)?.[0] ?? null;
 }
 
-/** 往期列表：今天之前的可见发布，默认拉满一屏可滚动的量。 */
-export async function listRecentPublicationSummaries(today = pontianakToday(), limit = 30): Promise<PublicationSummaryRow[]> {
-  const client = getOptionalSupabase();
-  if (!client) throw new Error("Supabase 未配置，无法读取往期精选。");
-  const { data, error } = await client
-    .from("daily_learning_publications")
-    .select(PUBLICATION_SUMMARY_COLUMNS)
-    .eq("is_visible", true)
-    .lt("display_date", today)
-    .order("display_date", { ascending: false })
-    .order("published_at", { ascending: false })
-    .limit(limit);
-  if (error) throw new Error("往期精选读取失败。");
-  return (data as PublicationSummaryRow[] | null) ?? [];
-}
-
 /** 往期合集：全部可见发布（含今天），精简列 + 主图信息，供 /learning/archive 使用。 */
 export async function listAllPublicationSummaries(limit = 1000): Promise<PublicationSummaryRow[]> {
   const client = getOptionalSupabase();
@@ -151,7 +135,7 @@ export async function fetchPublishedPublicationById(id: string): Promise<Publica
   return (data as PublicationRow | null) ?? null;
 }
 
-/** 按 content_id 读取最新一次可见发布，供详情页静态生成使用。 */
+/** 按 content_id 读取最新一次可见发布，供旧链接跳转后的运行时阅读使用。 */
 export async function fetchPublishedPublicationByContentId(contentId: string): Promise<PublicationRow | null> {
   const client = getOptionalSupabase();
   if (!client) throw new Error("Supabase 未配置，无法读取这篇内容。");
@@ -164,20 +148,4 @@ export async function fetchPublishedPublicationByContentId(contentId: string): P
     .limit(1);
   if (error) throw new Error("这篇内容读取失败。");
   return (data as PublicationRow[] | null)?.[0] ?? null;
-}
-
-/** 构建期用：全量已发布且可见的 content_id（去重），供 generateStaticParams 生成深链页面。 */
-export async function listPublishedContentIds(): Promise<string[]> {
-  const client = getOptionalSupabase();
-  if (!client) throw new Error("Supabase 未配置，无法枚举已发布内容。");
-  const { data, error } = await client
-    .from("daily_learning_publications")
-    .select("content_id")
-    .eq("is_visible", true)
-    .order("display_date", { ascending: false })
-    .order("published_at", { ascending: false })
-    .limit(1000);
-  if (error) throw new Error("已发布内容枚举失败。");
-  const ids = (data as Array<{ content_id: string | null }> | null) ?? [];
-  return [...new Set(ids.map((row) => row.content_id).filter((id): id is string => typeof id === "string" && id.length > 0))];
 }

@@ -37,6 +37,7 @@ Zaizai Isle 是一个可长期维护、可继续生长、可承载个人变化�
 *   **Social Heart**（社交组件 / 联络互动）
 *   **Core Build**（构建面板 / 运行、稳定与形成状态）
 *   **Built Structures**（被选择保留的岛内外结构）
+*   **每日一看**（当日作品与往期阅读）
 *   **Living Traces**（天气、日签、留言与访问痕迹）
 
 Tech Stack 与 Node Traces 不再占据主岛首页。Life Passport 由 Built Structures 收纳；已停止服务的外部应用不保留入口。AI Hub 作为“岛主常用工具箱”呈现，Image Compressor 是其中的岛内工具。
@@ -72,7 +73,7 @@ Tech Stack 与 Node Traces 不再占据主岛首页。Life Passport 由 Built St
 ### 🌱 Current Forming｜当前形成
 **定位**：简短呈现岛主近期真实关注，允许尚在寻找开始的方法。
 *   使用岛主提供的事实，按实际素材决定结构；不强制生成感悟、问题或鲸头鹳台词。
-*   当前确认的关注是艺术史与设计史：想理解今天的审美与设计方式怎样形成，正在考虑如何学习和记录。
+*   当前的关注是艺术史与设计史。岛主通过「每日一看」观察具体作品，记录今天的审美与设计方式如何形成。
 *   展示名称、文案和是否独占卡片待设计。现有“先站一会儿”及 AI 文案待替换。
 *   随真实关注变化低频更新；记录积累后再评估详细入口，不要求为网站持续生产内容。
 
@@ -121,13 +122,21 @@ Tech Stack 与 Node Traces 不再占据主岛首页。Life Passport 由 Built St
 *   展示当前形成与稳定化中的真实建设，并记录最近建设脉冲。
 *   下一轮移至更靠后、紧凑的位置，保留进度条，不与身份和作品争夺首层注意力。
 
-### 🌱 每日学习｜规划中的私人积累模块
-**状态**：产品草案，尚未开发，也不属于当前首页能力。
-*   每天提供一则约两分钟的艺术史或设计史内容，减少挑选与开始的负担。
-*   保存「有意思」「没感觉」「没看懂」及可选文字反馈，用于回看认识如何变化。
-*   每日学习与人生护照共用永久岛主身份；人生护照同时保留访客匿名路径，两类业务数据彼此独立。
-*   第一阶段由 Codex 辅助准备少量内容，验证闭环后再讨论定时生成。
-*   详细范围见 [每日学习模块 v0.1 产品草案](/zaizai-isle/docs/prd/DailyLearning-v0.1)。
+### 🌱 每日一看｜作品观察与私人积累
+
+从一件艺术或设计作品出发，花几分钟观察它的细节与来历。
+
+*   首页卡片进入[每日一看](/zaizai-isle/learning/)。当天没有公开内容时会明确提示，访客可以去[往期合集](/zaizai-isle/learning/archive/)翻阅。
+*   岛主审核草稿并安排展示日期。已发布的定时稿从展示日的当地午夜（`Asia/Pontianak`）起公开，历史文章链接会跳转到统一阅读入口。
+*   读者可以留下「有意思」「没感觉」「没看懂」和可选的文字。访客记录保存在当前浏览器，岛主登录后可同步自己的反馈。
+*   详细范围见 [每日一看产品定义](/zaizai-isle/docs/prd/DailyLearning-ProductDefinition-v0.2)。
+
+### 🍌 Everything is Banana｜图片香蕉化
+
+在 [Everything is Banana](/zaizai-isle/banana/) 上传图片，生成香蕉主题的版本。
+
+*   人生护照也提供照片香蕉化，供制印时选用。
+*   生成受每日使用额度限制。额度用尽时会显示提示，当天无法继续生成。
 
 ---
 
@@ -144,7 +153,7 @@ Tech Stack 与 Node Traces 不再占据主岛首页。Life Passport 由 Built St
 
 **Document Status**
 *   **Current Version**: V1.4.5 (Homepage Loading Optimization)
-*   **Last Updated**: 2026-10-14
+*   **Last Updated**: 2026-11-20
 *   **Author**: Isle System
 
 ---

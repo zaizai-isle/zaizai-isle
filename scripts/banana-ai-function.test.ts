@@ -26,15 +26,14 @@ const functionReady = import(edgeFunctionModule);
 
 test('bananaify uses Cloudflare image editing and preserves the frontend response contract', async () => {
   await functionReady;
-  secrets.clear();
-  secrets.set('CLOUDFLARE_ACCOUNT_ID', 'test-account');
-  secrets.set('CLOUDFLARE_API_TOKEN', 'test-cloudflare-token');
+  configureQuota('5', '10');
 
   const originalFetch = globalThis.fetch;
   let requestUrl = '';
   let requestBody: FormData | undefined;
 
   globalThis.fetch = async (input, init) => {
+    if (String(input).startsWith('https://sb.test/')) return Response.json({ ok: true, duplicate: false });
     requestUrl = String(input);
     requestBody = init?.body as FormData;
 
@@ -81,14 +80,13 @@ test('bananaify uses Cloudflare image editing and preserves the frontend respons
 
 test('understand uses Cloudflare vision analysis', async () => {
   await functionReady;
-  secrets.clear();
-  secrets.set('CLOUDFLARE_ACCOUNT_ID', 'test-account');
-  secrets.set('CLOUDFLARE_API_TOKEN', 'test-cloudflare-token');
+  configureQuota('5', '10');
 
   const originalFetch = globalThis.fetch;
   let requestBody: Record<string, unknown> | undefined;
 
-  globalThis.fetch = async (_input, init) => {
+  globalThis.fetch = async (input, init) => {
+    if (String(input).startsWith('https://sb.test/')) return Response.json({ ok: true, duplicate: false });
     requestBody = JSON.parse(String(init?.body));
     return Response.json({
       success: true,
@@ -141,7 +139,7 @@ async function createQuotaDb() {
 
 type RpcCall = { url: string; headers: Record<string, string>; body: Record<string, unknown> };
 
-function installQuotaFetch(db: PGlite, counters: { vendor: number; rpc: RpcCall[] }, rpcMode: 'ok' | 'down' = 'ok') {
+function installQuotaFetch(db: PGlite, counters: { vendor: number; rpc: RpcCall[] }, mode: 'ok' | 'down' | 'vendor-error' = 'ok') {
   const originalFetch = globalThis.fetch;
 
   globalThis.fetch = async (input, init) => {
@@ -153,10 +151,10 @@ function installQuotaFetch(db: PGlite, counters: { vendor: number; rpc: RpcCall[
       );
       const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
       counters.rpc.push({ url, headers, body });
-      if (rpcMode === 'down') {
+      if (mode === 'down') {
         return new Response('quota backend unavailable', { status: 500 });
       }
-      const result = await db.query(
+      const result = await db.query<{ outcome: unknown }>(
         'select public.consume_banana_ai_quota($1::jsonb, $2::uuid) as outcome',
         [JSON.stringify(body.p_tiers), body.p_request_id ?? null]
       );
@@ -165,6 +163,7 @@ function installQuotaFetch(db: PGlite, counters: { vendor: number; rpc: RpcCall[
 
     if (url.startsWith('https://api.cloudflare.com/')) {
       counters.vendor += 1;
+      if (mode === 'vendor-error') throw new Error('Vendor response lost');
       return Response.json({ success: true, result: { image: 'generated-image-base64' } });
     }
 
@@ -226,7 +225,9 @@ test('quota: 并发打满后不再调用供应商，且不会超扣', async (t) 
     Array.from({ length: 10 }, () => handler!(bananaifyRequest()))
   );
   const statuses = await Promise.all(responses.map((r) => r.status));
-  const bodies = await Promise.all(responses.map((r) => r.json() as Promise<Record<string, never>>));
+  const bodies = await Promise.all(responses.map((r) => r.json() as Promise<{
+    error?: { quota_exhausted: boolean; message: string };
+  }>));
 
   const okCount = statuses.filter((s) => s === 200).length;
   const denied = responses.filter((r) => r.status === 429).length;
@@ -240,7 +241,7 @@ test('quota: 并发打满后不再调用供应商，且不会超扣', async (t) 
   await t.test('denied responses carry the quota_exhausted contract', () => {
     const first = bodies.find((_, i) => statuses[i] === 429);
     assert.equal(first?.error?.quota_exhausted, true);
-    assert.match(first?.error?.message, /额度已经用完/);
+    assert.match(first?.error?.message ?? '', /额度已经用完/);
   });
 
   await t.test('quota windows never overshoot the limits', async () => {
@@ -255,7 +256,7 @@ test('quota: 并发打满后不再调用供应商，且不会超扣', async (t) 
   await db.close();
 });
 
-test('quota: 同一请求并发重试只消耗一次额度', async (t) => {
+test('quota: 同一请求的并发重试只扣一次且只调用一次供应商', async (t) => {
   const db = await createQuotaDb();
   configureQuota('2', '10');
   const counters = { vendor: 0, rpc: [] as RpcCall[] };
@@ -265,10 +266,11 @@ test('quota: 同一请求并发重试只消耗一次额度', async (t) => {
   const responses = await Promise.all(
     Array.from({ length: 5 }, () => handler!(bananaifyRequest(requestId)))
   );
-  const statuses = responses.map((r) => r.status);
-
-  await t.test('all retries of the same request_id are allowed', () => {
-    assert.deepEqual(statuses, [200, 200, 200, 200, 200]);
+  await t.test('only the reservation winner is allowed to call the vendor', async () => {
+    assert.deepEqual(responses.map((r) => r.status).sort(), [200, 409, 409, 409, 409]);
+    assert.equal(counters.vendor, 1);
+    const duplicate = responses.find((r) => r.status === 409);
+    assert.equal((await duplicate?.json()).error.duplicate_request, true);
   });
 
   await t.test('quota is consumed exactly once for five retries', async () => {
@@ -282,20 +284,21 @@ test('quota: 同一请求并发重试只消耗一次额度', async (t) => {
     assert.equal((await handler!(bananaifyRequest())).status, 200);
     const denied = await handler!(bananaifyRequest());
     assert.equal(denied.status, 429);
-    assert.equal(counters.vendor, 6, '拒绝的请求不得触发供应商调用（5 重试 + 1 个用掉最后额度的新请求）');
+    assert.equal(counters.vendor, 2);
   });
   restore();
   await db.close();
 });
 
-test('quota: 已扣减的请求在额度耗尽后重试仍可完成，未经扣减的请求不得调用供应商', async () => {
+test('quota: 供应商响应丢失后仍拒绝重复调用，额度用尽后拒绝新请求', async (t) => {
   const db = await createQuotaDb();
   configureQuota('1', '10');
   const counters = { vendor: 0, rpc: [] as RpcCall[] };
-  const restore = installQuotaFetch(db, counters);
+  const restore = installQuotaFetch(db, counters, 'vendor-error');
+  t.after(async () => { restore(); await db.close(); });
 
   const paidRequestId = crypto.randomUUID();
-  assert.equal((await handler!(bananaifyRequest(paidRequestId))).status, 200);
+  assert.equal((await handler!(bananaifyRequest(paidRequestId))).status, 500);
   assert.equal(counters.vendor, 1);
 
   const starved = await handler!(bananaifyRequest());
@@ -303,13 +306,11 @@ test('quota: 已扣减的请求在额度耗尽后重试仍可完成，未经扣�
   assert.equal(counters.vendor, 1, '未扣减成功的请求不得调用供应商');
 
   const retry = await handler!(bananaifyRequest(paidRequestId));
-  assert.equal(retry.status, 200, '已消耗过额度的请求重试不得被额度拒绝');
-  assert.equal(counters.vendor, 2);
+  assert.equal(retry.status, 409);
+  assert.equal(counters.vendor, 1);
 
   const rows = await windows(db);
   assert.equal(rows.find((r) => r.scope === 'global')?.used, 1, '重试不重复扣额');
-  restore();
-  await db.close();
 });
 
 test('quota: 额度校验后端不可用时 fail-closed，不调用供应商', async () => {
@@ -357,7 +358,7 @@ test('quota: 额度按登录用户与匿名访客分档；SQL 层拒绝匿名直
   await db.close();
 });
 
-test('quota: 未配置额度后端时保持旧直通行为（开发环境）', async () => {
+test('quota: 未配置额度后端时拒绝供应商调用', async () => {
   secrets.clear();
   secrets.set('CLOUDFLARE_ACCOUNT_ID', 'test-account');
   secrets.set('CLOUDFLARE_API_TOKEN', 'test-cloudflare-token');
@@ -372,10 +373,13 @@ test('quota: 未配置额度后端时保持旧直通行为（开发环境）', a
     throw new Error(`unexpected fetch: ${String(input)}`);
   };
 
-  const response = await handler!(bananaifyRequest());
-  assert.equal(response.status, 200);
-  assert.equal(counters.vendor, 1);
-  globalThis.fetch = originalFetch;
+  try {
+    const response = await handler!(bananaifyRequest());
+    assert.equal(response.status, 503);
+    assert.equal(counters.vendor, 0);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test('quota 迁移与护照共存：同一库内匿名登录仍能保存与恢复', async () => {
@@ -399,28 +403,28 @@ test('quota 迁移与护照共存：同一库内匿名登录仍能保存与恢�
   await db.exec(await readFile(new URL(QUOTA_MIGRATION, import.meta.url), 'utf8'));
 
   // 先消耗一次香蕉额度（service_role 路径），再验证护照匿名会话不受影响
-  const consumed = await db.query(
+  const consumed = await db.query<{ o: { ok: boolean } }>(
     `select public.consume_banana_ai_quota('[{"scope":"ip:2222","limit":5}]'::jsonb, null) as o`
   );
-  assert.equal((consumed.rows[0].o as { ok?: boolean }).ok, true);
+  assert.equal(consumed.rows[0].o.ok, true);
 
   await db.exec('reset role; set role authenticated');
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [passportUser]);
   const secret = 'e'.repeat(64);
-  const create = await db.query(
+  const create = await db.query<{ r: { id: string } }>(
     'select public.life_passport_api($1,$2::jsonb) as r',
     ['create', JSON.stringify({ passportId, secret })]
   );
-  assert.equal((create.rows[0].r as { id: string }).id, passportId);
+  assert.equal(create.rows[0].r.id, passportId);
 
   const draft = { title: '额度上线当天', date: '2026-11-19', category: '生活', icon: '✦', note: '', location: '', style: 'classic', texture: 'original', experimentalFilter: 'ascii' };
-  const saved = await db.query(
+  const saved = await db.query<{ r: { record: { title: string } } }>(
     'select public.life_passport_api($1,$2::jsonb) as r',
     ['save', JSON.stringify({ passportId, id: 'stamp-q', draft, operation: crypto.randomUUID() })]
   );
-  assert.equal((saved.rows[0].r as { record: { title: string } }).record.title, draft.title);
+  assert.equal(saved.rows[0].r.record.title, draft.title);
 
-  const listed = await db.query('select public.life_passport_api($1,$2::jsonb) as r', ['list', JSON.stringify({ passportId })]);
-  assert.equal((listed.rows[0].r as unknown[]).length, 1);
+  const listed = await db.query<{ r: unknown[] }>('select public.life_passport_api($1,$2::jsonb) as r', ['list', JSON.stringify({ passportId })]);
+  assert.equal(listed.rows[0].r.length, 1);
   await db.close();
 });

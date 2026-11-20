@@ -118,7 +118,7 @@ function wait(ms: number) {
 }
 
 // 一次逻辑请求 = 一个 request_id。仅网络层失败时重试，且复用同一 request_id，
-// 代理端据此保证同一请求只消耗一次额度。HTTP 业务错误（含额度用尽 429）不重试。
+// 代理用此 ID 阻止重复扣额和重复调用供应商。HTTP 业务错误不自动重试。
 async function postProxy(task: 'bananaify' | 'understand', payload: Record<string, unknown>, fallback: string) {
   const url = buildProxyUrl(task);
   const requestId = newRequestId();

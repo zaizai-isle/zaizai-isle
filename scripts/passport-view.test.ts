@@ -2,9 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { loadStampPoster, loadStampThumb } from "../src/app/achievement/passport-view-data";
 
-const blob = (tag: string) => ({ tag } as unknown as Blob);
+const tags = new WeakMap<Blob, string>();
+const blob = (tag: string) => {
+  const value = new Blob();
+  tags.set(value, tag);
+  return value;
+};
 const urls: string[] = [];
-const createUrl = (b: Blob) => { const u = `blob:${(b as { tag: string }).tag}`; urls.push(u); return u; };
+const createUrl = (b: Blob) => { const u = `blob:${tags.get(b)}`; urls.push(u); return u; };
 
 test("passport thumbs: 一张坏图只坏一张，其余记录照常出缩略图", async () => {
   const stamps = [

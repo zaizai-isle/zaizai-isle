@@ -2,9 +2,9 @@ name: Deploy GH Pages
 on:
   push:
     branches: [ main ]
-    # 研究候选数据已迁往 Supabase Storage（机器人直写，不再进 git）；此处只忽略文档提交。
+    # Automation runbooks are not part of the public documentation routes.
     paths-ignore:
-      - "docs/**"
+      - "docs/automation/**"
   workflow_dispatch:
 
 permissions:
@@ -29,7 +29,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          clean: false
       
       - uses: actions/setup-node@v4
         with:
@@ -37,8 +36,13 @@ jobs:
           cache: npm
       
       - run: npm ci
+      - run: npm run lint
+      - run: npm run test:banana-ai
+      - run: npm run test:daily-learning
       
       - run: npm run build
+      - run: npm run audit:export
+      - run: npm run verify:learning-compat
       
       - uses: actions/upload-pages-artifact@v3
         with:

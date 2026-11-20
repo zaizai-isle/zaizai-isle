@@ -141,10 +141,7 @@ type QuotaConfig = {
 function getQuotaConfig(): QuotaConfig | null {
   const baseUrl = Deno.env.get('SUPABASE_URL') || Deno.env.get('SUPABASE_INTERNAL_API_URL');
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!baseUrl || !serviceKey) {
-    // 本地/未配置环境保持直连行为；生产必须配置额度 secrets。
-    return null;
-  }
+  if (!baseUrl || !serviceKey) return null;
 
   return {
     baseUrl: baseUrl.replace(/\/$/, ''),
@@ -196,14 +193,20 @@ function clientIp(request: Request): string {
 
 async function enforceQuota(request: Request, body: BananaRequest): Promise<Response | null> {
   const quota = getQuotaConfig();
-  if (!quota) return null;
+  const unavailable = () => jsonResponse({ error: { message: '额度校验服务暂不可用，请稍后重试。' } }, 503);
+  if (!quota) return unavailable();
 
   const userId = extractUserId(request.headers.get('Authorization') || '');
   const scope = userId ? `user:${userId}` : `ip:${(await sha256Hex(clientIp(request))).slice(0, 32)}`;
 
-  let response: Response;
+  let outcome: {
+    ok?: boolean;
+    duplicate?: boolean;
+    exhausted_scope?: string;
+    remaining?: Record<string, number>;
+  };
   try {
-    response = await fetch(`${quota.baseUrl}/rest/v1/rpc/consume_banana_ai_quota`, {
+    const response = await fetch(`${quota.baseUrl}/rest/v1/rpc/consume_banana_ai_quota`, {
       method: 'POST',
       headers: {
         apikey: quota.serviceKey,
@@ -218,20 +221,13 @@ async function enforceQuota(request: Request, body: BananaRequest): Promise<Resp
         p_request_id: parseUuid(body.request_id),
       }),
     });
+    if (!response.ok) return unavailable();
+    outcome = await response.json();
   } catch {
-    return jsonResponse({ error: { message: '额度校验服务暂不可用，请稍后重试。' } }, 503);
+    return unavailable();
   }
 
-  if (!response.ok) {
-    return jsonResponse({ error: { message: '额度校验服务暂不可用，请稍后重试。' } }, 503);
-  }
-
-  const outcome = await response.json() as {
-    ok?: boolean;
-    exhausted_scope?: string;
-    remaining?: Record<string, number>;
-  };
-  if (outcome.ok !== true) {
+  if (outcome?.ok === false && outcome.exhausted_scope) {
     return jsonResponse({
       error: {
         message: '今天的小岛算力额度已经用完，明天再来尝一根香蕉。',
@@ -242,7 +238,18 @@ async function enforceQuota(request: Request, body: BananaRequest): Promise<Resp
     }, 429);
   }
 
-  return null;
+  // The existing reservation may already have reached the vendor, even if its
+  // response was lost. Never issue another paid call for that reservation.
+  if (outcome?.ok === true && outcome.duplicate === true) {
+    return jsonResponse({
+      error: {
+        message: '这次请求已提交。如果没有收到结果，请手动再发起一次。',
+        duplicate_request: true,
+      },
+    }, 409);
+  }
+
+  return outcome?.ok === true && outcome.duplicate === false ? null : unavailable();
 }
 
 async function runCloudflareImageEdit(body: BananaRequest) {

@@ -251,6 +251,22 @@
     "thumb_path": "learning/thumb/cleveland-151543-main-v2.webp",
     "thumb_sha256": "d183b5d78070c02c375362854b6ceb470157fc98af45c5e6fe98f7d012432e56"
   },
+  "cleveland-152006-main": {
+    "bytes": 5406612,
+    "original_sha256": "e089d66679b230124384e86120df963b53d178b4a52c9841cc85aa35af79db6e",
+    "original_url": "https://openaccess-cdn.clevelandart.org/1984.59/1984.59_print.jpg",
+    "package": "research-2026-11-25-cleveland-152006/package-v2.json",
+    "path": "learning-assets-archive/cleveland-152006-print.jpg",
+    "reading_bytes": 79254,
+    "reading_path": "learning/reading/cleveland-152006-main.webp",
+    "reading_sha256": "2a60fbe9b496980107bebf5b6245b2ec276861689ba669a0c6795651294436b4",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（3400×2603）。",
+    "rights_status": "open",
+    "sha256": "e089d66679b230124384e86120df963b53d178b4a52c9841cc85aa35af79db6e",
+    "thumb_bytes": 10946,
+    "thumb_path": "learning/thumb/cleveland-152006-main.webp",
+    "thumb_sha256": "f13ab108a60c7e3188cd6a0fcecade8349b2082ce31db0881487d7e290598c6a"
+  },
   "cleveland-156112-main": {
     "bytes": 330568,
     "original_sha256": "1229f2898c19ad29aedf1812e21fef17726c916c722b6e436e2e256de2507ead",
@@ -829,6 +845,22 @@
     "thumb_bytes": 7884,
     "thumb_path": "learning/thumb/smk-kms8575-main.webp",
     "thumb_sha256": "5e409a7365e0e1fcc59c62a158944e9084f0c6ee66ede5056681c6d1713c69e5"
+  },
+  "smk-kmssp163-main": {
+    "bytes": 420954,
+    "original_sha256": "a1a92b0446e6d11a6c611f995d39536e0bb163544b1bc820d08c870f1a9d2fd8",
+    "original_url": "https://iip-thumb.smk.dk/iiif/jp2/765375081_KMSsp163_crop.tif.jp2/full/!1600,/0/default.jpg",
+    "package": "research-2026-11-25-smk-kmssp163/package-v2.json",
+    "path": "learning-assets-archive/smk-kmssp163-full.jpg",
+    "reading_bytes": 128534,
+    "reading_path": "learning/reading/smk-kmssp163-main.webp",
+    "reading_sha256": "ee975017c8ff63dd45c3908c5e4b4abdba0c0ac003b02d910f31b079bd2396ee",
+    "rights_note": "丹麦国家美术馆SMK本件登记public_domain=true（PDM 1.0）；native端点延迟过高无法核验，存档与主图改用iip-thumb端点1600×1241版本，已解码核验。",
+    "rights_status": "open",
+    "sha256": "a1a92b0446e6d11a6c611f995d39536e0bb163544b1bc820d08c870f1a9d2fd8",
+    "thumb_bytes": 16734,
+    "thumb_path": "learning/thumb/smk-kmssp163-main.webp",
+    "thumb_sha256": "58342f85e1356e82bea6011aff0bc0fce9381cf0b6647a629ecf20c0e91e5bad"
   },
   "smk-kmssp430-main": {
     "bytes": 101383,

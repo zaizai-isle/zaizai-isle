@@ -879,6 +879,22 @@
     "thumb_path": "learning/thumb/smk-kmssp430-main.webp",
     "thumb_sha256": "f2332e76ed9d4b78d9b8dfe740afe0b3b3c71665c1132ac007e54cf4c5eb4711"
   },
+  "smk-kmssp73-main": {
+    "bytes": 236612,
+    "original_sha256": "3e262fb9b90f240c3869968b4c151a8ae6fe6151fd2871f2861da6b214be1d17",
+    "original_url": "https://api.smk.dk/api/v1/thumbnail/3520fce7-b702-4dee-a24e-0d595fa65430.jpg",
+    "package": "research-2026-11-26-smk-kmssp73/package-v2.json",
+    "path": "learning-assets-archive/smk-kmssp73-full.jpg",
+    "reading_bytes": 53860,
+    "reading_path": "learning/reading/smk-kmssp73-main.webp",
+    "reading_sha256": "216668a1c2bef22731c4d7efc326ce5ddfa2881a35a00aeba3ae4ebaf6b98e0d",
+    "rights_note": "丹麦国家美术馆SMK本件登记public_domain=true（PDM 1.0）；API仅返回thumbnail端点823×1000，已下载解码核验；阅读图不放大，按823宽原尺寸编码。",
+    "rights_status": "open",
+    "sha256": "3e262fb9b90f240c3869968b4c151a8ae6fe6151fd2871f2861da6b214be1d17",
+    "thumb_bytes": 17446,
+    "thumb_path": "learning/thumb/smk-kmssp73-main.webp",
+    "thumb_sha256": "96c32bc40fbf4c90fa4532456f8975ccf3c91f5baf0dc310aaa03c658d042830"
+  },
   "vangogh-s0114-comparison": {
     "bytes": 8896521,
     "original_sha256": "2b5090b948aff80286c5591e254790e31b961431712b45f25044f62cf37c87fa",

@@ -301,6 +301,22 @@
     "thumb_path": "learning/thumb/cleveland-161233-main.webp",
     "thumb_sha256": "e655637715370a8b35c55f4f59cddeea1d4515f29af2f308d0c8281e70c361fc"
   },
+  "cleveland-161234-main": {
+    "bytes": 3760530,
+    "original_sha256": "1ed364f1d2633ccf6c40cee518b19acf66243b6e193845dd52ca9f7194374de8",
+    "original_url": "https://openaccess-cdn.clevelandart.org/1999.325.3/1999.325.3_print.jpg",
+    "package": "research-2026-11-27-cleveland-161234/package-v2.json",
+    "path": "learning-assets-archive/cleveland-161234-print.jpg",
+    "reading_bytes": 317078,
+    "reading_path": "learning/reading/cleveland-161234-main.webp",
+    "reading_sha256": "92fcfa6a7c091628d5bb5db30d62cafd69b4db94da2130ee72101555de8598c9",
+    "rights_note": "克利夫兰艺术博物馆开放数据API本件登记share_license_status=CC0；已下载解码核验（2525×3400，图为多夫自刻木刻印版本身）。",
+    "rights_status": "open",
+    "sha256": "1ed364f1d2633ccf6c40cee518b19acf66243b6e193845dd52ca9f7194374de8",
+    "thumb_bytes": 19844,
+    "thumb_path": "learning/thumb/cleveland-161234-main.webp",
+    "thumb_sha256": "6960bd8db93692e3742f78030098bdceeb30e80a2ef926ba5ce5d06b7e441eb1"
+  },
   "cleveland-171296-main": {
     "bytes": 1681360,
     "original_sha256": "a91fa600f6da51b555cd99c8db23d9b295f67eecc8e9fa47868323002730316d",
